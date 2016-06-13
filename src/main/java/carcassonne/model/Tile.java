@@ -29,7 +29,7 @@ public class Tile {
      * @return the terrain type.
      */
     public TerrainType getTerrainType(GridDirection direction) {
-        switch (direction) {
+        switch (direction) { //TODO use terrain map?
             case UP: return top;
             case RIGHT: return right;
             case DOWN: return bottom;
