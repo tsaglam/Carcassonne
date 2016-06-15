@@ -3,8 +3,8 @@ package carcassonne.model;
 import java.util.List;
 
 /**
- * @author Timur Saglam 
  * The playing grid class.
+ * @author Timur Saglam 
  */
 public class Grid {
     private int width;
