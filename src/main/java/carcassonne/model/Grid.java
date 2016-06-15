@@ -1,6 +1,3 @@
-/**
- * 
- */
 package carcassonne.model;
 
 import java.util.List;
@@ -12,10 +9,12 @@ import java.util.List;
 public class Grid {
     private int width;
     private int height;
-    private Tile tile[][];
-
+    private Tile[][] tile;
+    
     /**
      * Basic constructor
+     * @param width is the grid width.
+     * @param height is the grid height.
      */
     public Grid(int width, int height) {
         this.width = width;
@@ -26,9 +25,9 @@ public class Grid {
     /**
      * Safe getter for tiles.
      * 
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @return the tile.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @return the tile
      * @throws IllegalArgumentException if the requested tile is out of grid.
      */
     public Tile getTile(int x, int y) {
@@ -38,16 +37,34 @@ public class Grid {
         throw new IllegalArgumentException("tile coordinates are out of grid");
     }
 
+    /**
+     * TODO
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @return true if occupied
+     */
     public boolean isOccupied(int x, int y) {
         // TODO method has to be implemented!
         return false;
     }
 
+    /**
+     * Checks whether the grid is full.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @return true if full.
+     */
     public boolean isFull(int x, int y) {
         // TODO method has to be implemented!
         return false;
     }
 
+    /**
+     * TODO
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @return the list of neighbours
+     */
     public List<Tile> getNeighbours(int x, int y) {
         // TODO method has to be implemented!
         return null;

@@ -1,5 +1,9 @@
 package carcassonne.model;
 
+/**
+ * @author Timur Saglam
+ * The tile of a grid.
+ */
 public class Tile {
     TerrainType top;
     TerrainType right;
