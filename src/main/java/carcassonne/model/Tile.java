@@ -29,13 +29,10 @@ public class Tile {
     /**
      * return the terrain type on the tile in the specific direction.
      * @param direction is the specific direction.
-     * @return the terrain type. TerrainType.OTHER if there is a problem with the
+     * @return the terrain type.
      */
-    public TerrainType getTerrainType(GridDirection direction) {
-        if (terrainMap.containsKey(direction)) {
-            return terrainMap.get(direction);
-        }
-        return TerrainType.OTHER;
+    public TerrainType getTerrainAt(GridDirection direction) {
+        return terrainMap.get(direction);
     }
 
     /**
@@ -45,7 +42,7 @@ public class Tile {
      * @return true if connected, false if not.
      */
     public boolean isConnected(GridDirection from, GridDirection to) {
-        TerrainType middle = getTerrainType(GridDirection.MIDDLE);
-        return getTerrainType(from).equals(middle) && getTerrainType(to).equals(middle);
+        TerrainType middle = getTerrainAt(GridDirection.MIDDLE);
+        return getTerrainAt(from).equals(middle) && getTerrainAt(to).equals(middle);
     }
 }
