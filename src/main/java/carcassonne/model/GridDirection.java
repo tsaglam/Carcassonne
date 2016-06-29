@@ -4,5 +4,5 @@ package carcassonne.model;
  * enum for the grid directions.
  */
 public enum GridDirection {
-    UP, RIGHT, DOWN, LEFT, MIDDLE
+    TOP, RIGHT, BOTTOM, LEFT, MIDDLE
 }

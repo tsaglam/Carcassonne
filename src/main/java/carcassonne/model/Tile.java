@@ -1,16 +1,14 @@
 package carcassonne.model;
 
+import java.util.HashMap;
+
 /**
  * The tile of a grid.
  * @author Timur Saglam
  */
 public class Tile {
-    TerrainType top;
-    TerrainType right;
-    TerrainType bottom;
-    TerrainType left;
-    TerrainType middle;
-    
+    HashMap<GridDirection, TerrainType> terrainMap;
+
     /**
      * Simple constructor.
      * @param top is the top terrain type.
@@ -20,29 +18,26 @@ public class Tile {
      * @param middle is the middle terrain type.
      */
     public Tile(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle) {
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
-        this.left = left;
-        this.middle = middle;
+        terrainMap = new HashMap<GridDirection, TerrainType>(5);
+        terrainMap.put(GridDirection.TOP, top);
+        terrainMap.put(GridDirection.RIGHT, right);
+        terrainMap.put(GridDirection.BOTTOM, bottom);
+        terrainMap.put(GridDirection.LEFT, left);
+        terrainMap.put(GridDirection.MIDDLE, middle);
     }
-    
+
     /**
-     * return the terrain type on the tile i  the specific direction.
+     * return the terrain type on the tile in the specific direction.
      * @param direction is the specific direction.
-     * @return the terrain type.
+     * @return the terrain type. TerrainType.OTHER if there is a problem with the
      */
     public TerrainType getTerrainType(GridDirection direction) {
-        switch (direction) { //TODO use terrain map?
-            case UP: return top;
-            case RIGHT: return right;
-            case DOWN: return bottom;
-            case LEFT: return left;
-            case MIDDLE: return middle;
-            default: throw new IllegalArgumentException("Unknown grid direction.");
+        if (terrainMap.containsKey(direction)) {
+            return terrainMap.get(direction);
         }
+        return TerrainType.OTHER;
     }
-    
+
     /**
      * Checks whether two parts of a tile are connected through same terrain.
      * @param from is the part to check from.
@@ -50,6 +45,7 @@ public class Tile {
      * @return true if connected, false if not.
      */
     public boolean isConnected(GridDirection from, GridDirection to) {
+        TerrainType middle = getTerrainType(GridDirection.MIDDLE);
         return getTerrainType(from).equals(middle) && getTerrainType(to).equals(middle);
     }
 }
