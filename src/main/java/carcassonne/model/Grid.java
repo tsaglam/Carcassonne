@@ -82,7 +82,7 @@ public class Grid {
         List<Tile> list = new LinkedList<Tile>();
         for (GridDirection direction : GridDirection.values()) {
             if (direction == GridDirection.TOP_RIGHT) {
-                break;
+                break; // skip indirect neighbors.
             }
             if (getNeighbour(x, y, direction) != null) {
                 list.add(getNeighbour(x, y, direction));
@@ -100,13 +100,23 @@ public class Grid {
     public List<Tile> getNeighbors(int x, int y) {
         List<Tile> list = new LinkedList<Tile>();
         for (GridDirection direction : GridDirection.values()) {
+            if (direction == GridDirection.MIDDLE) {
+                break; // skip middle.
+            }
             if (getNeighbour(x, y, direction) != null) {
                 list.add(getNeighbour(x, y, direction));
             }
         }
         return list;
     }
-    
+
+    /**
+     * Returns a specific neighbor of a tile if the neighbor exists.
+     * @param x is the tiles x coordinate
+     * @param y is the tiles y coordinate
+     * @param dir is the direction where the neighbor should be
+     * @return the neighbor, or null if it does not exist.
+     */
     public Tile getNeighbour(int x, int y, GridDirection dir) {
         // changes the x coordinate according to direction:
         if (dir == GridDirection.TOP_RIGHT || dir == GridDirection.RIGHT || dir == GridDirection.BOTTOM_RIGHT) {
@@ -128,16 +138,25 @@ public class Grid {
     }
 
     /**
-     * Creates a list of tiles that are connected to a specific tile with the terrain 
-     * in a specific direction on the tile.
+     * Creates a list of tiles that are connected to a specific tile with the terrain in a specific
+     * direction on the tile.
      * @param x is the x coordinate
      * @param y is the y coordinate
      * @return the list of connected tiles.
      */
-    public List<Tile> getConnectedTiles(int x, int y, GridDirection connectedFrom) {
+    public List<Tile> getConnectedTiles(int x, int y, GridDirection from) {
         List<Tile> list = new LinkedList<Tile>();
-        //TODO implement me
-        return null;
+        for (GridDirection to : GridDirection.values()) {
+            if (to == GridDirection.BOTTOM_RIGHT) { // only check direct neighbors.
+                break; // break after direct neighbors.
+            }
+            if (tile[x][y].isConnected(from, to) && from != to) { // if connected
+                if (getNeighbour(x, y, to) != null) { // if is on grid
+                    list.add(getNeighbour(x, y, to));
+                }
+            }
+        }
+        return list;
     }
 
     /**
