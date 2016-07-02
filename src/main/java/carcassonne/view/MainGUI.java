@@ -1,6 +1,8 @@
 package carcassonne.view;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,9 +14,10 @@ import javax.swing.JPanel;
 public class MainGUI extends JPanel {
 
     private static final long serialVersionUID = -8750891542665009043L;
-    JFrame mainFrame;
-    MainMenuBar menuBar;
-
+    private JFrame mainFrame;
+    private MainMenuBar menuBar;
+    private Graphics g;
+    
     /**
      * Basic constructor.
      */
@@ -31,6 +34,11 @@ public class MainGUI extends JPanel {
         mainFrame.setLocationRelativeTo(null);
         setBackground(new Color(165, 200, 245)); // background color
 
+    }
+    
+    private void draw(Image image, int x, int y) {
+        g = getGraphics();
+        g.drawImage(image, x, y , this);
     }
 
     /**
