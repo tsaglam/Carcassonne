@@ -7,7 +7,8 @@ import java.util.HashMap;
  * @author Timur Saglam
  */
 public class Tile {
-    HashMap<GridDirection, TerrainType> terrainMap;
+    private HashMap<GridDirection, TerrainType> terrainMap;
+    private Boolean tag;
 
     /**
      * Simple constructor.
@@ -24,6 +25,7 @@ public class Tile {
         terrainMap.put(GridDirection.BOTTOM, bottom);
         terrainMap.put(GridDirection.LEFT, left);
         terrainMap.put(GridDirection.MIDDLE, middle);
+        tag = false;
     }
 
     /**
@@ -44,5 +46,21 @@ public class Tile {
     public boolean isConnected(GridDirection from, GridDirection to) {
         TerrainType middle = getTerrainAt(GridDirection.MIDDLE);
         return getTerrainAt(from).equals(middle) && getTerrainAt(to).equals(middle);
+    }
+
+    /**
+     * Checks whether this tile was already tagged. This is used for the structure checks.
+     * @return true if tagged.
+     */
+    public Boolean isTagged() {
+        return tag;
+    }
+
+    /**
+     * Sets the tag of the tile.
+     * @param value is the value the tag gets set to.
+     */
+    public void setTag(Boolean value) {
+        tag = value;
     }
 }
