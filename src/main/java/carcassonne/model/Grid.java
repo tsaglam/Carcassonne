@@ -80,17 +80,15 @@ public class Grid {
      */
     public List<Tile> getDirectNeighbors(int x, int y) {
         List<Tile> list = new LinkedList<Tile>();
-        addIfValid(x, y - 1, list); // add UP
-        addIfValid(x + 1, y, list); // add RIGHT
-        addIfValid(x, y + 1, list); // add DOWN
-        addIfValid(x - 1, y, list); // add LEFT
-        return list;
-    }
-
-    private void addIfValid(int x, int y, List<Tile> list) {
-        if (isOnGrid(x, y)) { // if the tile is valid.
-            list.add(tile[x][y]); // add it to a specific list.
+        for (GridDirection direction : GridDirection.values()) {
+            if (direction == GridDirection.TOP_RIGHT) {
+                break;
+            }
+            if (getNeighbour(x, y, direction) != null) {
+                list.add(getNeighbour(x, y, direction));
+            }
         }
+        return list;
     }
 
     /**
@@ -100,12 +98,46 @@ public class Grid {
      * @return the list of neighbors
      */
     public List<Tile> getNeighbors(int x, int y) {
-        List<Tile> list = getDirectNeighbors(x, y); // list with direct neighbors.
-        addIfValid(x + 1, y - 1, list); // add UP RIGHT
-        addIfValid(x + 1, y + 1, list); // add DOWN RIGHT
-        addIfValid(x - 1, y + 1, list); // add DOWN LEFT
-        addIfValid(x - 1, y - 1, list); // add UP LEFT
+        List<Tile> list = new LinkedList<Tile>();
+        for (GridDirection direction : GridDirection.values()) {
+            if (getNeighbour(x, y, direction) != null) {
+                list.add(getNeighbour(x, y, direction));
+            }
+        }
         return list;
+    }
+    
+    public Tile getNeighbour(int x, int y, GridDirection dir) {
+        // changes the x coordinate according to direction:
+        if (dir == GridDirection.TOP_RIGHT || dir == GridDirection.RIGHT || dir == GridDirection.BOTTOM_RIGHT) {
+            x++;
+        } else if (dir == GridDirection.TOP_LEFT || dir == GridDirection.LEFT || dir == GridDirection.BOTTOM_LEFT) {
+            x--;
+        }
+        // changes the y coordinate according to direction:
+        if (dir == GridDirection.BOTTOM_LEFT || dir == GridDirection.BOTTOM || dir == GridDirection.BOTTOM_RIGHT) {
+            y++;
+        } else if (dir == GridDirection.TOP_LEFT || dir == GridDirection.TOP || dir == GridDirection.TOP_RIGHT) {
+            y--;
+        }
+        // return calculated neighbor if valid:
+        if (isOnGrid(x, y)) {
+            return tile[x][y];
+        }
+        return null;  // return null if tile not placed or not on grid.
+    }
+
+    /**
+     * Creates a list of tiles that are connected to a specific tile with the terrain 
+     * in a specific direction on the tile.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @return the list of connected tiles.
+     */
+    public List<Tile> getConnectedTiles(int x, int y, GridDirection connectedFrom) {
+        List<Tile> list = new LinkedList<Tile>();
+        //TODO implement me
+        return null;
     }
 
     /**
