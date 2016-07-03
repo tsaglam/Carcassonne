@@ -80,10 +80,7 @@ public class Grid {
      */
     public List<Tile> getDirectNeighbors(int x, int y) {
         List<Tile> list = new LinkedList<Tile>();
-        for (GridDirection direction : GridDirection.values()) {
-            if (direction == GridDirection.TOP_RIGHT) {
-                break; // skip indirect neighbors.
-            }
+        for (GridDirection direction : GridDirection.directNeighbors()) {
             if (getNeighbour(x, y, direction) != null) {
                 list.add(getNeighbour(x, y, direction));
             }
@@ -99,10 +96,7 @@ public class Grid {
      */
     public List<Tile> getNeighbors(int x, int y) {
         List<Tile> list = new LinkedList<Tile>();
-        for (GridDirection direction : GridDirection.values()) {
-            if (direction == GridDirection.MIDDLE) {
-                break; // skip middle.
-            }
+        for (GridDirection direction : GridDirection.neighbors()) {
             if (getNeighbour(x, y, direction) != null) {
                 list.add(getNeighbour(x, y, direction));
             }
@@ -146,10 +140,7 @@ public class Grid {
      */
     public List<Tile> getConnectedTiles(int x, int y, GridDirection from) {
         List<Tile> list = new LinkedList<Tile>();
-        for (GridDirection to : GridDirection.values()) {
-            if (to == GridDirection.BOTTOM_RIGHT) { // only check direct neighbors.
-                break; // break after direct neighbors.
-            }
+        for (GridDirection to : GridDirection.directNeighbors()) {
             if (tile[x][y].isConnected(from, to) && from != to) { // if connected
                 if (getNeighbour(x, y, to) != null) { // if is on grid
                     list.add(getNeighbour(x, y, to));
@@ -170,6 +161,30 @@ public class Grid {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Getter for the grid width.
+     * @return the width
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * Getter for the grid height.
+     * @return the height
+     */
+    public int getHeight() {
+        return height;
+    }
+
+    /**
+     * Access to a tile of the grid itself.
+     * @return the tile
+     */
+    public Tile at(int x, int y) {
+        return tile[x][y];
     }
 
 }
