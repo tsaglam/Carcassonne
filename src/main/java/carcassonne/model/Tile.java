@@ -1,5 +1,6 @@
 package carcassonne.model;
 
+import java.awt.Image;
 import java.util.HashMap;
 
 /**
@@ -8,6 +9,7 @@ import java.util.HashMap;
  */
 public class Tile {
     private HashMap<GridDirection, TerrainType> terrainMap;
+    private Image image;
     private Boolean tag;
 
     /**
@@ -62,5 +64,12 @@ public class Tile {
      */
     public void setTag(Boolean value) {
         tag = value;
+    }
+
+    /**
+     * @return the image of the tile.
+     */
+    public Image getImage() {
+        return image;
     }
 }
