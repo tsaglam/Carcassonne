@@ -24,17 +24,20 @@ public class Grid {
     }
 
     /**
-     * Safe getter for tiles.
+     * Tries to place a tile on a spot on the grid.
      * @param x is the x coordinate
      * @param y is the y coordinate
-     * @return the tile
-     * @throws IllegalArgumentException if the requested tile is out of grid.
+     * @param tile is the tile to place
+     * @return true if it was successful, false if spot is occupied.
      */
-    public Tile getTile(int x, int y) {
-        if (x > 0 && x < width && y > 0 && y < height) {
-            return tile[x][x];
+    public boolean place(int x, int y, Tile tile) {
+        checkCoordinates(x, y);
+        if (isOccupied(x, y)) {
+            return false; // tile cant be placed, spot is occupied.
+        } else {
+            this.tile[x][y] = tile;
+            return true; // tile was successfully placed.
         }
-        throw new IllegalArgumentException("tile coordinates are out of grid");
     }
 
     /**
@@ -44,6 +47,7 @@ public class Grid {
      * @return true if occupied
      */
     public boolean isOccupied(int x, int y) {
+        checkCoordinates(x, y);
         return tile[x][y] != null;
     }
 
@@ -54,6 +58,7 @@ public class Grid {
      * @return true if free
      */
     public boolean isFree(int x, int y) {
+        checkCoordinates(x, y);
         return tile[x][y] == null;
     }
 
@@ -79,6 +84,7 @@ public class Grid {
      * @return the list of neighbors
      */
     public List<Tile> getDirectNeighbors(int x, int y) {
+        checkCoordinates(x, y);
         List<Tile> list = new LinkedList<Tile>();
         for (GridDirection direction : GridDirection.directNeighbors()) {
             if (getNeighbour(x, y, direction) != null) {
@@ -95,6 +101,7 @@ public class Grid {
      * @return the list of neighbors
      */
     public List<Tile> getNeighbors(int x, int y) {
+        checkCoordinates(x, y);
         List<Tile> list = new LinkedList<Tile>();
         for (GridDirection direction : GridDirection.neighbors()) {
             if (getNeighbour(x, y, direction) != null) {
@@ -136,9 +143,11 @@ public class Grid {
      * direction on the tile.
      * @param x is the x coordinate
      * @param y is the y coordinate
+     * @param from is the direction the tile is connected from
      * @return the list of connected tiles.
      */
     public List<Tile> getConnectedTiles(int x, int y, GridDirection from) {
+        checkCoordinates(x, y);
         List<Tile> list = new LinkedList<Tile>();
         for (GridDirection to : GridDirection.directNeighbors()) {
             if (tile[x][y].isConnected(from, to) && from != to) { // if connected
@@ -164,6 +173,17 @@ public class Grid {
     }
 
     /**
+     * TODO comment me.
+     * @param x
+     * @param y
+     */
+    public void checkCoordinates(int x, int y) {
+        if (!isOnGrid(x, y)) {
+            throw new IllegalArgumentException("tile coordinates are out of grid");
+        }
+    }
+
+    /**
      * Getter for the grid width.
      * @return the width
      */
@@ -180,10 +200,14 @@ public class Grid {
     }
 
     /**
-     * Access to a tile of the grid itself.
+     * Safe getter for tiles.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
      * @return the tile
+     * @throws IllegalArgumentException if the requested tile is out of grid.
      */
-    public Tile at(int x, int y) {
+    public Tile getTile(int x, int y) {
+        checkCoordinates(x, y);
         return tile[x][y];
     }
 
