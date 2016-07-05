@@ -1,7 +1,10 @@
-package carcassonne.model;
+package carcassonne.model.tile;
 
 import java.awt.Image;
 import java.util.HashMap;
+
+import carcassonne.model.TerrainType;
+import carcassonne.model.grid.GridDirection;
 
 /**
  * The tile of a grid.

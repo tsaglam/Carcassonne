@@ -1,4 +1,4 @@
-package carcassonne.model;
+package carcassonne.model.grid;
 
 /**
  * @author Timur enum for the grid directions.

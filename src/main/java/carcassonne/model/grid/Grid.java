@@ -1,7 +1,9 @@
-package carcassonne.model;
+package carcassonne.model.grid;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import carcassonne.model.tile.Tile;
 
 /**
  * The playing grid class.

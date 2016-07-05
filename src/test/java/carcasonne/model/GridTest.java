@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import carcassonne.model.Grid;
+import carcassonne.model.grid.Grid;
 
 /**
  * Test case for the grid class.
