@@ -175,11 +175,12 @@ public class Grid {
     }
 
     /**
-     * TODO comment me.
-     * @param x
-     * @param y
+     * Error checker method for other methods in this class. It just checks whether specific
+     * coordinates are on the grid and throws an error if not.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
      */
-    public void checkCoordinates(int x, int y) {
+    private void checkCoordinates(int x, int y) {
         if (!isOnGrid(x, y)) {
             throw new IllegalArgumentException("tile coordinates are out of grid");
         }
