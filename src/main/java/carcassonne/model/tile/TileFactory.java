@@ -20,48 +20,49 @@ public class TileFactory {
         TerrainType road = TerrainType.ROAD;
         TerrainType monastry = TerrainType.MONASTRY;
         TerrainType fields = TerrainType.FIELDS;
-        switch (type) { // TODO implement real tile creation.
+        String path = "src/main/ressources/tiles/" + type.name() + ".jpg";
+        switch (type) {
         case CastleCenter:
-            return new Tile(castle, castle, castle, castle, castle);
+            return new Tile(castle, castle, castle, castle, castle, path, type);
         case CastleCenterEntry:
-            return new Tile(castle, castle, road, castle, castle);
+            return new Tile(castle, castle, road, castle, castle, path, type);
         case CastleCenterSide:
-            return new Tile(castle, castle, fields, castle, castle);
+            return new Tile(castle, castle, fields, castle, castle, path, type);
         case CastleEdge:
-            return new Tile(castle, castle, fields, fields, castle);
+            return new Tile(castle, castle, fields, fields, castle, path, type);
         case CastleEdgeRoad:
-            return new Tile(castle, castle, road, road, standard);
+            return new Tile(castle, castle, road, road, standard, path, type);
         case CastleSides:
-            return new Tile(castle, fields, castle, fields, fields);
+            return new Tile(castle, fields, castle, fields, fields, path, type);
         case CastleSidesEdge:
-            return new Tile(castle, fields, fields, castle, fields);
+            return new Tile(castle, fields, fields, castle, fields, path, type);
         case CastleTube:
-            return new Tile(fields, castle, fields, castle, fields);
+            return new Tile(fields, castle, fields, castle, fields, path, type);
         case CastleWall:
-            return new Tile(castle, fields, fields, fields, fields);
+            return new Tile(castle, fields, fields, fields, fields, path, type);
         case CastleWallCurveLeft:
-            return new Tile(castle, fields, road, road, road);
+            return new Tile(castle, fields, road, road, road, path, type);
         case CastleWallCurveRight:
-            return new Tile(castle, road, road, fields, road);
+            return new Tile(castle, road, road, fields, road, path, type);
         case CastleWallJunction:
-            return new Tile(castle, road, road, road, fields);
+            return new Tile(castle, road, road, road, fields, path, type);
         case CastleWallRoad:
-            return new Tile(castle, road, fields, road, road);
+            return new Tile(castle, road, fields, road, road, path, type);
         case Monastry:
-            return new Tile(fields, fields, fields, fields, monastry);
+            return new Tile(fields, fields, fields, fields, monastry, path, type);
         case MonastryRoad:
-            return new Tile(fields, fields, road, fields, monastry);
+            return new Tile(fields, fields, road, fields, monastry, path, type);
         case Road:
-            return new Tile(road, fields, road, fields, road);
+            return new Tile(road, fields, road, fields, road, path, type);
         case RoadCurve:
-            return new Tile(fields, fields, road, road, road);
+            return new Tile(fields, fields, road, road, road, path, type);
         case RoadJunctionLarge:
-            return new Tile(road, road, road, road, fields);
+            return new Tile(road, road, road, road, fields, path, type);
         case RoadJunctionSmall:
-            return new Tile(fields, road, road, road, road);
+            return new Tile(fields, road, road, road, road, path, type);
         case Null:
         default:
-            return new Tile(standard, standard, standard, standard, standard);
+            return new Tile(standard, standard, standard, standard, standard, path, type);
         }
 
     }

@@ -3,6 +3,8 @@ package carcassonne.model.tile;
 import java.awt.Image;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
+
 import carcassonne.model.TerrainType;
 import carcassonne.model.grid.GridDirection;
 
@@ -14,6 +16,7 @@ public class Tile {
     private HashMap<GridDirection, TerrainType> terrainMap;
     private Image image;
     private Boolean tag;
+    private TileType type;
 
     /**
      * Simple constructor.
@@ -23,14 +26,17 @@ public class Tile {
      * @param left is the left terrain type.
      * @param middle is the middle terrain type.
      */
-    public Tile(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle) {
+    public Tile(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle, String tilePath, TileType type) {
         terrainMap = new HashMap<GridDirection, TerrainType>(5);
         terrainMap.put(GridDirection.TOP, top);
         terrainMap.put(GridDirection.RIGHT, right);
         terrainMap.put(GridDirection.BOTTOM, bottom);
         terrainMap.put(GridDirection.LEFT, left);
         terrainMap.put(GridDirection.MIDDLE, middle);
+        this.type = type;
+        this.image = new ImageIcon(tilePath).getImage();
         tag = false;
+        
     }
 
     /**
@@ -48,9 +54,11 @@ public class Tile {
      * @param to is the terrain to check to.
      * @return true if connected, false if not.
      */
-    public boolean isConnected(GridDirection from, GridDirection to) { //TODO update for terrain other in the middle
+    public boolean isConnected(GridDirection fromDirection, GridDirection toDirection) {
         TerrainType middle = getTerrainAt(GridDirection.MIDDLE);
-        return getTerrainAt(from).equals(middle) && getTerrainAt(to).equals(middle);
+        TerrainType from = getTerrainAt(fromDirection);
+        TerrainType to = getTerrainAt(toDirection);
+        return from.equals(to) && (middle.equals(to) || middle.equals(TerrainType.OTHER));
     }
 
     /**
@@ -70,9 +78,18 @@ public class Tile {
     }
 
     /**
+     * Getter for the tile image.
      * @return the image of the tile.
      */
     public Image getImage() {
         return image;
+    }
+
+    /**
+     * Getter for the tile type.
+     * @return the type
+     */
+    public TileType getType() {
+        return type;
     }
 }
