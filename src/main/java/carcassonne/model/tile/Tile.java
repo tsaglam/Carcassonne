@@ -48,7 +48,7 @@ public class Tile {
      * @param to is the terrain to check to.
      * @return true if connected, false if not.
      */
-    public boolean isConnected(GridDirection from, GridDirection to) {
+    public boolean isConnected(GridDirection from, GridDirection to) { //TODO update for terrain other in the middle
         TerrainType middle = getTerrainAt(GridDirection.MIDDLE);
         return getTerrainAt(from).equals(middle) && getTerrainAt(to).equals(middle);
     }
