@@ -5,5 +5,5 @@ package carcassonne.model;
  * @author Timur Saglam
  */
 public enum TerrainType {
-    CASTLE, STREET, MONASTRY, FIELDS, OTHER
+    CASTLE, ROAD, MONASTRY, FIELDS, OTHER
 }
