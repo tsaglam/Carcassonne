@@ -1,6 +1,3 @@
-/**
- * 
- */
 package carcassonne.model.tile;
 
 /**

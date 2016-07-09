@@ -15,9 +15,6 @@ public class GridTest {
 
     private Grid testGrid;
 
-    /**
-     * @throws java.lang.Exception
-     */
     @Before
     public void setUp() throws Exception {
         testGrid = new Grid(4, 4);
