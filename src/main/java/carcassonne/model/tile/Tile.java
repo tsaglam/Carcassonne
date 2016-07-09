@@ -1,6 +1,7 @@
 package carcassonne.model.tile;
 
 import java.awt.Image;
+import java.io.File;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
@@ -27,6 +28,11 @@ public class Tile {
      * @param middle is the middle terrain type.
      */
     public Tile(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle, String tilePath, TileType type) {
+        if (!new File(tilePath).exists()) {
+            throw new IllegalArgumentException("Image path is not valid : " + tilePath);
+        } else if (type == null) {
+            throw new IllegalArgumentException("Tile can't be null");
+        }
         terrainMap = new HashMap<GridDirection, TerrainType>(5);
         terrainMap.put(GridDirection.TOP, top);
         terrainMap.put(GridDirection.RIGHT, right);
@@ -36,7 +42,7 @@ public class Tile {
         this.type = type;
         this.image = new ImageIcon(tilePath).getImage();
         tag = false;
-        
+
     }
 
     /**
@@ -58,7 +64,10 @@ public class Tile {
         TerrainType middle = getTerrainAt(GridDirection.MIDDLE);
         TerrainType from = getTerrainAt(fromDirection);
         TerrainType to = getTerrainAt(toDirection);
-        return from.equals(to) && (middle.equals(to) || middle.equals(TerrainType.OTHER));
+        if (middle == TerrainType.CASTLE_AND_ROAD) {
+            return from.equals(to) && (from.equals(TerrainType.CASTLE) || from.equals(TerrainType.ROAD));
+        }
+        return from.equals(middle) && (middle.equals(to));
     }
 
     /**
