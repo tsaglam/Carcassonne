@@ -1,8 +1,6 @@
-package carcassonne.model;
+package carcassonne.model.tile;
 
 import java.util.ArrayList;
-
-import carcassonne.model.tile.Tile;
 
 /**
  * The stack of tiles for a game.
@@ -13,7 +11,16 @@ public class TileStack {
 
     public TileStack() {
         tileList = new ArrayList<Tile>();
-        //TODO implement filling of the stack.
+        fillStack();
+    }
+
+    private void fillStack() {
+        int[] tileAmount = { 1, 3, 4, 5, 5, 3, 2, 3, 5, 3, 3, 3, 4, 4, 2, 0, 8, 9, 1, 4 };
+        for (TileType tileType : TileType.values()) {
+            for (int i = 0; i < tileAmount[tileType.ordinal()]; i++) {
+                tileList.add(TileFactory.createTile(tileType));
+            }
+        }
     }
 
     /**
@@ -24,7 +31,7 @@ public class TileStack {
         if (tileList.isEmpty()) {
             return null;
         }
-        return tileList.remove((int) Math.round(Math.random() * tileList.size()));
+        return tileList.remove((int) Math.round(Math.random() * (tileList.size() - 1)));
     }
 
     /**
