@@ -31,7 +31,7 @@ public class TileFactory {
         case CastleEdge:
             return new Tile(castle, castle, fields, fields, castle, path, type);
         case CastleEdgeRoad:
-            return new Tile(castle, castle, road, road, standard, path, type);
+            return new Tile(castle, castle, road, road, TerrainType.CASTLE_AND_ROAD, path, type);
         case CastleSides:
             return new Tile(castle, fields, castle, fields, fields, path, type);
         case CastleSidesEdge:
