@@ -25,9 +25,14 @@ public class SystemProperties {
         resolutionHeight = displayMode.getHeight();
         operatingSystemName = System.getProperty("os.name");
         switch (operatingSystemName) {
-            case "Windows 7": taskBarHeight = 40; break;
-            case "Mac OS X": taskBarHeight = 22; break;
-            default: taskBarHeight = 40;
+        case "Windows 7":
+            taskBarHeight = 40;
+            break;
+        case "Mac OS X":
+            taskBarHeight = 22;
+            break;
+        default:
+            taskBarHeight = 40;
         }
     }
 
