@@ -7,7 +7,7 @@ import carcassonne.model.TerrainType;
  * little differences.
  * @author Timur
  */
-public class TileFactory {
+public final class TileFactory {
 
     /**
      * Factory method of the class. Produces a specific tile for a specific tile type.
