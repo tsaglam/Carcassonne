@@ -33,4 +33,13 @@ public enum GridDirection {
         GridDirection[] directions = { TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
         return directions;
     }
+
+    /**
+     * Generates an array of the GridDirections for all positions on a tile.
+     * @return an array of an array of TOP, RIGHT, BOTTOM, LEFT and MIDDLE.
+     */
+    public static GridDirection[] tilePositions() {
+        GridDirection[] directions = { TOP, RIGHT, BOTTOM, LEFT, MIDDLE };
+        return directions;
+    }
 }
