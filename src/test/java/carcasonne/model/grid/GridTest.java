@@ -1,4 +1,4 @@
-package carcasonne.model;
+package carcasonne.model.grid;
 
 import static org.junit.Assert.*;
 
