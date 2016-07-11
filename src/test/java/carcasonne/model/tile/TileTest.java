@@ -1,6 +1,9 @@
 package carcasonne.model.tile;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Image;
 
@@ -56,6 +59,18 @@ public class TileTest {
             assertNotNull(tile.getTerrainAt(position)); // has a terrain type
         }
     }
+    
+    @Test
+    public void rotateTest() {
+        tile = new Tile(TerrainType.CASTLE, TerrainType.FIELDS, TerrainType.ROAD, TerrainType.MONASTRY, stdTerrain, stdPath, stdTileType);
+        tile.rotate();
+        TerrainType[] expected = { TerrainType.MONASTRY, TerrainType.CASTLE, TerrainType.FIELDS, TerrainType.ROAD, stdTerrain };
+        int i = 0;
+        for (GridDirection direction : GridDirection.tilePositions()) { // for every position
+            assertEquals(expected[i++], tile.getTerrainAt(direction)); // check i rotated successfully.
+        }
+        // TODO maybe test if image is really rotated
+    }
 
     @Test
     public void isConnectedTest() {
@@ -64,18 +79,10 @@ public class TileTest {
             for (TerrainType right : TerrainType.basicTerrain()) { // for every right terrain
                 for (TerrainType bottom : TerrainType.basicTerrain()) { // for bottom top terrain
                     for (TerrainType left : TerrainType.basicTerrain()) { // for every left terrain
-                        for (TerrainType middle : TerrainType.basicTerrain()) { // for every middle
-                                                                                // terrain
-                            for (GridDirection direction : GridDirection.directNeighbors()) { // from
-                                                                                              // every
-                                                                                              // direction
-                                tile = new Tile(top, right, bottom, left, middle, stdPath, stdTileType); // create
-                                                                                                         // that
-                                                                                                         // tile
-                                TerrainType atDirection = tile.getTerrainAt(direction); // get
-                                                                                        // terrain
-                                                                                        // from
-                                                                                        // direction
+                        for (TerrainType middle : TerrainType.basicTerrain()) { // for every middle terrain
+                            for (GridDirection direction : GridDirection.directNeighbors()) { // from every direction
+                                tile = new Tile(top, right, bottom, left, middle, stdPath, stdTileType); // create that tile
+                                TerrainType atDirection = tile.getTerrainAt(direction); // get terrain from direction
                                 expected = 0; // generate expected connections:
                                 if (atDirection == middle) {
                                     expected = (middle == top) ? ++expected : expected;
@@ -83,8 +90,7 @@ public class TileTest {
                                     expected = (middle == bottom) ? ++expected : expected;
                                     expected = (middle == left) ? ++expected : expected;
                                 }
-                                checkConnections(tile, direction, expected); // count real
-                                                                             // connections
+                                checkConnections(tile, direction, expected); // count real connections
                             }
                         }
                     }

@@ -64,12 +64,24 @@ public class Tile {
         TerrainType middle = getTerrainAt(GridDirection.MIDDLE);
         TerrainType from = getTerrainAt(fromDirection);
         TerrainType to = getTerrainAt(toDirection);
-        if (middle == TerrainType.CASTLE_AND_ROAD) {
+        if (middle == TerrainType.CASTLE_AND_ROAD) { // special case, castle and road can be connected.
             return from.equals(to) && (from.equals(TerrainType.CASTLE) || from.equals(TerrainType.ROAD));
         }
-        return from.equals(middle) && (middle.equals(to));
+        return from.equals(middle) && (middle.equals(to)); // normal case. basic connection.
     }
-
+    
+    /**
+     * Turns a tile 90 degree to the right.
+     */
+    public void rotate(){
+        TerrainType temporary = terrainMap.get(GridDirection.LEFT);
+        for (GridDirection direction : GridDirection.directNeighbors()) {
+            temporary = terrainMap.put(direction, temporary);
+        }
+        //TODO rotate picture itself.
+    }
+    
+  
     /**
      * Checks whether this tile was already tagged. This is used for the structure checks.
      * @return true if tagged.
