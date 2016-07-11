@@ -1,4 +1,4 @@
-package tile;
+package carcasonne.model.tile;
 
 import static org.junit.Assert.*;
 
