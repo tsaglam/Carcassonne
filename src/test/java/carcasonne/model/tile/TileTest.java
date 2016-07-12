@@ -28,7 +28,6 @@ import carcassonne.model.tile.TileType;
 public class TileTest {
     private Tile tile;
     private Image image;
-    private TerrainType stdTerrain;
     private String stdPath;
     private TileType stdTileType;
 
@@ -37,23 +36,22 @@ public class TileTest {
         tile = null;
         image = null;
         stdPath = "src/main/ressources/tiles/Null.jpg";
-        stdTerrain = OTHER;
         stdTileType = TileType.Null;
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidImageTest() {
-        tile = new Tile(stdTerrain, stdTerrain, stdTerrain, stdTerrain, stdTerrain, "not a file!", stdTileType);
+        tile = new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, "not a file!", stdTileType);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidTypeTest() {
-        tile = new Tile(stdTerrain, stdTerrain, stdTerrain, stdTerrain, stdTerrain, stdPath, null);
+        tile = new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, stdPath, null);
     }
 
     @Test
     public void basicTest() {
-        tile = new Tile(stdTerrain, stdTerrain, stdTerrain, stdTerrain, stdTerrain, stdPath, stdTileType);
+        tile = new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, stdPath, stdTileType);
         // TEST TAG:
         assertEquals(stdTileType, tile.getType());
         assertFalse(tile.isTagged()); // Initially not tagged.
@@ -67,9 +65,9 @@ public class TileTest {
     
     @Test
     public void rotateTest() {
-        tile = new Tile(CASTLE, FIELDS, ROAD, MONASTRY, stdTerrain, stdPath, stdTileType);
+        tile = new Tile(CASTLE, FIELDS, ROAD, MONASTRY, OTHER, stdPath, stdTileType);
         tile.rotate();
-        TerrainType[] expected = { MONASTRY, CASTLE, FIELDS, ROAD, stdTerrain };
+        TerrainType[] expected = { MONASTRY, CASTLE, FIELDS, ROAD, OTHER };
         int i = 0;
         for (GridDirection direction : GridDirection.tilePositions()) { // for every position
             assertEquals(expected[i++], tile.getTerrainAt(direction)); // check i rotated successfully.
