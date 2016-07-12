@@ -1,4 +1,4 @@
-package carcassonne.model;
+package carcassonne.model.tile;
 
 /**
  * enum for the terrain type.

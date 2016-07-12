@@ -1,11 +1,11 @@
 package carcassonne.model.tile;
 
-import static carcassonne.model.TerrainType.CASTLE;
-import static carcassonne.model.TerrainType.CASTLE_AND_ROAD;
-import static carcassonne.model.TerrainType.FIELDS;
-import static carcassonne.model.TerrainType.MONASTRY;
-import static carcassonne.model.TerrainType.OTHER;
-import static carcassonne.model.TerrainType.ROAD;
+import static carcassonne.model.tile.TerrainType.CASTLE;
+import static carcassonne.model.tile.TerrainType.CASTLE_AND_ROAD;
+import static carcassonne.model.tile.TerrainType.FIELDS;
+import static carcassonne.model.tile.TerrainType.MONASTRY;
+import static carcassonne.model.tile.TerrainType.OTHER;
+import static carcassonne.model.tile.TerrainType.ROAD;
 
 /**
  * Factory class for building tile objects. Used this because there are so many types of tile with

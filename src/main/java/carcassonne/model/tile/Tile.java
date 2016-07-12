@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
-import carcassonne.model.TerrainType;
 import carcassonne.model.grid.GridDirection;
 
 /**
