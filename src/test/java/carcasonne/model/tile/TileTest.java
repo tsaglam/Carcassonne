@@ -1,5 +1,10 @@
 package carcasonne.model.tile;
 
+import static carcassonne.model.TerrainType.CASTLE;
+import static carcassonne.model.TerrainType.FIELDS;
+import static carcassonne.model.TerrainType.MONASTRY;
+import static carcassonne.model.TerrainType.OTHER;
+import static carcassonne.model.TerrainType.ROAD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -15,7 +20,6 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
-import static carcassonne.model.TerrainType.*;
 
 /**
  * Test class for the tile class.
