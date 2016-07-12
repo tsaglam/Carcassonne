@@ -1,5 +1,16 @@
 package carcassonne.model.grid;
 
+import static carcassonne.model.grid.GridDirection.BOTTOM;
+import static carcassonne.model.grid.GridDirection.BOTTOM_LEFT;
+import static carcassonne.model.grid.GridDirection.BOTTOM_RIGHT;
+import static carcassonne.model.grid.GridDirection.LEFT;
+import static carcassonne.model.grid.GridDirection.RIGHT;
+import static carcassonne.model.grid.GridDirection.TOP;
+import static carcassonne.model.grid.GridDirection.TOP_LEFT;
+import static carcassonne.model.grid.GridDirection.TOP_RIGHT;
+import static carcassonne.model.grid.GridDirection.directNeighbors;
+import static carcassonne.model.grid.GridDirection.neighbors;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -88,7 +99,7 @@ public class Grid {
     public List<Tile> getDirectNeighbors(int x, int y) {
         checkCoordinates(x, y);
         List<Tile> list = new LinkedList<Tile>();
-        for (GridDirection direction : GridDirection.directNeighbors()) {
+        for (GridDirection direction : directNeighbors()) {
             if (getNeighbour(x, y, direction) != null) {
                 list.add(getNeighbour(x, y, direction));
             }
@@ -105,7 +116,7 @@ public class Grid {
     public List<Tile> getNeighbors(int x, int y) {
         checkCoordinates(x, y);
         List<Tile> list = new LinkedList<Tile>();
-        for (GridDirection direction : GridDirection.neighbors()) {
+        for (GridDirection direction : neighbors()) {
             if (getNeighbour(x, y, direction) != null) {
                 list.add(getNeighbour(x, y, direction));
             }
@@ -122,15 +133,15 @@ public class Grid {
      */
     public Tile getNeighbour(int x, int y, GridDirection dir) {
         // changes the x coordinate according to direction:
-        if (dir == GridDirection.TOP_RIGHT || dir == GridDirection.RIGHT || dir == GridDirection.BOTTOM_RIGHT) {
+        if (dir == TOP_RIGHT || dir == RIGHT || dir == BOTTOM_RIGHT) {
             x++;
-        } else if (dir == GridDirection.TOP_LEFT || dir == GridDirection.LEFT || dir == GridDirection.BOTTOM_LEFT) {
+        } else if (dir == TOP_LEFT || dir == LEFT || dir == BOTTOM_LEFT) {
             x--;
         }
         // changes the y coordinate according to direction:
-        if (dir == GridDirection.BOTTOM_LEFT || dir == GridDirection.BOTTOM || dir == GridDirection.BOTTOM_RIGHT) {
+        if (dir == BOTTOM_LEFT || dir == BOTTOM || dir == BOTTOM_RIGHT) {
             y++;
-        } else if (dir == GridDirection.TOP_LEFT || dir == GridDirection.TOP || dir == GridDirection.TOP_RIGHT) {
+        } else if (dir == TOP_LEFT || dir == TOP || dir == TOP_RIGHT) {
             y--;
         }
         // return calculated neighbor if valid:
@@ -151,7 +162,7 @@ public class Grid {
     public List<Tile> getConnectedTiles(int x, int y, GridDirection from) {
         checkCoordinates(x, y);
         List<Tile> list = new LinkedList<Tile>();
-        for (GridDirection to : GridDirection.directNeighbors()) {
+        for (GridDirection to : directNeighbors()) {
             if (tile[x][y].isConnected(from, to) && from != to) { // if connected
                 if (getNeighbour(x, y, to) != null) { // if is on grid
                     list.add(getNeighbour(x, y, to));

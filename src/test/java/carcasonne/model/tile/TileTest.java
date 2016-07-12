@@ -15,6 +15,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
+import static carcassonne.model.TerrainType.*;
 
 /**
  * Test class for the tile class.
@@ -32,7 +33,7 @@ public class TileTest {
         tile = null;
         image = null;
         stdPath = "src/main/ressources/tiles/Null.jpg";
-        stdTerrain = TerrainType.OTHER;
+        stdTerrain = OTHER;
         stdTileType = TileType.Null;
     }
 
@@ -62,9 +63,9 @@ public class TileTest {
     
     @Test
     public void rotateTest() {
-        tile = new Tile(TerrainType.CASTLE, TerrainType.FIELDS, TerrainType.ROAD, TerrainType.MONASTRY, stdTerrain, stdPath, stdTileType);
+        tile = new Tile(CASTLE, FIELDS, ROAD, MONASTRY, stdTerrain, stdPath, stdTileType);
         tile.rotate();
-        TerrainType[] expected = { TerrainType.MONASTRY, TerrainType.CASTLE, TerrainType.FIELDS, TerrainType.ROAD, stdTerrain };
+        TerrainType[] expected = { MONASTRY, CASTLE, FIELDS, ROAD, stdTerrain };
         int i = 0;
         for (GridDirection direction : GridDirection.tilePositions()) { // for every position
             assertEquals(expected[i++], tile.getTerrainAt(direction)); // check i rotated successfully.
