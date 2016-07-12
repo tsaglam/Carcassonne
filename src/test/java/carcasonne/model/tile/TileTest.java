@@ -62,7 +62,7 @@ public class TileTest {
             assertNotNull(tile.getTerrainAt(position)); // has a terrain type
         }
     }
-    
+
     @Test
     public void rotateTest() {
         tile = new Tile(CASTLE, FIELDS, ROAD, MONASTRY, OTHER, stdPath, stdTileType);
@@ -142,8 +142,11 @@ public class TileTest {
 
     @Test
     public void nullTileTest() {
-        tile = TileFactory.createTile(TileType.Null);
-        // TODO implement test for the null tile to accept special behavior
+        tile = TileFactory.createTile(TileType.Null); 
+        tile.rotate(); // just testing the useless tile for exceptions & co
+        assertEquals(TerrainType.OTHER, tile.getTerrainAt(GridDirection.TOP));
+        assertEquals(TileType.Null, tile.getType());
+        assertEquals(true, tile.isConnected(GridDirection.TOP, GridDirection.LEFT));
     }
 
 }
