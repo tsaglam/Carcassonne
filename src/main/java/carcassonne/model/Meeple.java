@@ -10,7 +10,6 @@ public class Meeple {
 
     private int owner;
     private Tile placementLocation;
-    private boolean isPlaced;
 
     /**
      * Basic constructor.
@@ -19,7 +18,6 @@ public class Meeple {
     public Meeple(int owner) {
         this.owner = owner;
         placementLocation = null;
-        isPlaced = false;
     }
 
     /**
@@ -29,11 +27,10 @@ public class Meeple {
     public void placeOn(Tile tile) {
         if (tile == null) {
             throw new IllegalArgumentException("Job location cannot be null.");
-        } else if (isPlaced) {
+        } else if (isPlaced()) {
             throw new IllegalStateException("Meeple (player " + owner + ") is already in use.");
         }
         placementLocation = tile;
-        isPlaced = true;
     }
 
     /**
@@ -41,7 +38,6 @@ public class Meeple {
      */
     public void collect() {
         placementLocation = null;
-        isPlaced = false;
     }
 
     /**
@@ -49,7 +45,7 @@ public class Meeple {
      * @return true if placed.
      */
     public boolean isPlaced() {
-        return isPlaced;
+        return placementLocation != null;
     }
 
     /**
