@@ -88,7 +88,7 @@ public class Tile {
      * @param meeple the meeple to place on the tile.
      */
     public void setMeeple(Meeple meeple) {
-        if (meeple != null) {
+        if (this.meeple != null) {
             throw new IllegalArgumentException("Tile can not have already a meeple placed on it.");
         }
         this.meeple = meeple;
