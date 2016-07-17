@@ -19,7 +19,7 @@ public class Player {
      * Simple constructor.
      * @param playerNumber is the number of the player.
      */
-    public Player(int playerNumber) {
+    public Player() {
         points = 0;
         unusedMeeples = new LinkedList<Meeple>();
         usedMeeples = new LinkedList<Meeple>();

@@ -30,7 +30,7 @@ public class Round {
     private void createPlayers(int playerCount) {
         player = new Player[playerCount]; // initialize the player array.
         for (int i = 0; i < player.length; i++) {
-            player[i] = new Player(i); // create the players.
+            player[i] = new Player(); // create the players.
         }
         activePlayer = 0; // set first player as active.
 
