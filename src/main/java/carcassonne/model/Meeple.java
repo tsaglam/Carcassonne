@@ -8,20 +8,20 @@ import carcassonne.model.tile.Tile;
  */
 public class Meeple {
 
-    private int owner;
+    private Player owner;
     private Tile placementLocation;
 
     /**
      * Basic constructor.
      * @param owner is the owner of the meeple.
      */
-    public Meeple(int owner) {
+    public Meeple(Player owner) {
         this.owner = owner;
         placementLocation = null;
     }
 
     /**
-     * Places meeple on a specific tile.
+     * Places meeple on a specific tile. This method calls Tile.setMeeple().
      * @param tile is the specific tile.
      */
     public void placeOn(Tile tile) {
@@ -31,13 +31,15 @@ public class Meeple {
             throw new IllegalStateException("Meeple (player " + owner + ") is already in use.");
         }
         placementLocation = tile;
+        tile.setMeeple(this);
     }
 
     /**
      * Collects meeple from tile.
      */
-    public void collect() {
-        placementLocation = null;
+    public void removePlacement() {
+        placementLocation = null; // mark as unplaced.
+        owner.returnMeeple(this); // return me.
     }
 
     /**
@@ -57,10 +59,10 @@ public class Meeple {
     }
 
     /**
-     * Getter for the owner number of the meeple.
-     * @return the owner number.
+     * Getter for the player that owns the meeple.
+     * @return the owner.
      */
-    public int getOwner() {
+    public Player getOwner() {
         return owner;
     }
 

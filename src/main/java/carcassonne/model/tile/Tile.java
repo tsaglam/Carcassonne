@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
+import carcassonne.model.Meeple;
 import carcassonne.model.grid.GridDirection;
 
 /**
@@ -17,6 +18,7 @@ public class Tile {
     private Image image;
     private Boolean tag;
     private TileType type;
+    private Meeple meeple;
 
     /**
      * Simple constructor.
@@ -41,6 +43,7 @@ public class Tile {
         this.type = type;
         this.image = new ImageIcon(tilePath).getImage();
         tag = false;
+        meeple = null;
 
     }
 
@@ -63,24 +66,58 @@ public class Tile {
         TerrainType middle = getTerrainAt(GridDirection.MIDDLE);
         TerrainType from = getTerrainAt(fromDirection);
         TerrainType to = getTerrainAt(toDirection);
-        if (middle == TerrainType.CASTLE_AND_ROAD) { // special case, castle and road can be connected.
+        if (middle == TerrainType.CASTLE_AND_ROAD) { // special case.
             return from.equals(to) && (from.equals(TerrainType.CASTLE) || from.equals(TerrainType.ROAD));
         }
         return from.equals(middle) && (middle.equals(to)); // normal case. basic connection.
     }
-    
+
     /**
      * Turns a tile 90 degree to the right.
      */
-    public void rotate(){
+    public void rotate() {
         TerrainType temporary = terrainMap.get(GridDirection.LEFT);
         for (GridDirection direction : GridDirection.directNeighbors()) {
             temporary = terrainMap.put(direction, temporary);
         }
-        //TODO rotate picture itself.
+        // TODO rotate picture itself.
     }
-    
-  
+
+    /**
+     * Places a meeple on the tile, if the tile has not already one placed.
+     * @param meeple the meeple to place on the tile.
+     */
+    public void setMeeple(Meeple meeple) {
+        if (meeple != null) {
+            throw new IllegalArgumentException("Tile can not have already a meeple placed on it.");
+        }
+        this.meeple = meeple;
+    }
+
+    /**
+     * Removes and returns the meeple from the tile. Calls Meeple.removePlacement.
+     */
+    public void removeMeeple() {
+        meeple.removePlacement();
+        meeple = null;
+    }
+
+    /**
+     * Checks whether the tile has a meeple.
+     * @return true if it has a meeple
+     */
+    public boolean hasMeeple() {
+        return meeple != null;
+    }
+
+    /**
+     * Getter for the meeple of the tile.
+     * @return
+     */
+    public Meeple getMeeple() {
+        return meeple;
+    }
+
     /**
      * Checks whether this tile was already tagged. This is used for the structure checks.
      * @return true if tagged.
