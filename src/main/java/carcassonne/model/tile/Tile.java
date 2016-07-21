@@ -15,7 +15,7 @@ import carcassonne.model.grid.GridDirection;
  */
 public class Tile {
     private HashMap<GridDirection, TerrainType> terrainMap;
-    private Image image;
+    private ImageIcon image;
     private Boolean tag;
     private TileType type;
     private Meeple meeple;
@@ -41,7 +41,7 @@ public class Tile {
         terrainMap.put(GridDirection.LEFT, left);
         terrainMap.put(GridDirection.MIDDLE, middle);
         this.type = type;
-        this.image = new ImageIcon(tilePath).getImage();
+        this.image = new ImageIcon(tilePath);
         tag = false;
         meeple = null;
 
@@ -138,7 +138,7 @@ public class Tile {
      * Getter for the tile image.
      * @return the image of the tile.
      */
-    public Image getImage() {
+    public ImageIcon getImage() {
         return image;
     }
 

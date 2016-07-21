@@ -10,7 +10,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.Image;
+import javax.swing.ImageIcon;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ import carcassonne.model.tile.TileType;
  */
 public class TileTest {
     private Tile tile;
-    private Image image;
+    private ImageIcon image;
     private String stdPath;
     private TileType stdTileType;
 
@@ -135,8 +135,8 @@ public class TileTest {
         for (TileType type : TileType.values()) { // for every tile type
             tile = TileFactory.createTile(type); // create tile
             image = tile.getImage(); // get image
-            assertEquals(image.getHeight(null), 100); // check height
-            assertEquals(image.getWidth(null), 100); // check width
+            assertEquals(image.getIconHeight(), 100); // check height
+            assertEquals(image.getIconWidth(), 100); // check width
         }
     }
 
