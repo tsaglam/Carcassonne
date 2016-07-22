@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import carcassonne.model.Meeple;
+import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
@@ -50,6 +52,13 @@ public class MainGUI extends JPanel {
         } else {
             throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
         }
+    }
+
+    /**
+     * TODO comment paint meeple method.
+     */
+    public void paint(Meeple meeple, int x, int y, GridDirection orientation) {
+        // TODO implement paint meeple method.
     }
 
     /*
