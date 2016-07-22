@@ -132,21 +132,23 @@ public class Grid {
      * @return the neighbor, or null if it does not exist.
      */
     public Tile getNeighbour(int x, int y, GridDirection dir) {
+        int newX = x;
+        int newY = y;
         // changes the x coordinate according to direction:
         if (dir == TOP_RIGHT || dir == RIGHT || dir == BOTTOM_RIGHT) {
-            x++;
+            newX++;
         } else if (dir == TOP_LEFT || dir == LEFT || dir == BOTTOM_LEFT) {
-            x--;
+            newX--;
         }
         // changes the y coordinate according to direction:
         if (dir == BOTTOM_LEFT || dir == BOTTOM || dir == BOTTOM_RIGHT) {
-            y++;
+            newY++;
         } else if (dir == TOP_LEFT || dir == TOP || dir == TOP_RIGHT) {
-            y--;
+            newY--;
         }
         // return calculated neighbor if valid:
-        if (isOnGrid(x, y)) {
-            return tile[x][y];
+        if (isOnGrid(newX, newY)) {
+            return tile[newX][newY];
         }
         return null;  // return null if tile not placed or not on grid.
     }
