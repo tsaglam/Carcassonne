@@ -35,6 +35,21 @@ public class Round {
         activePlayer = 0; // set first player as active.
 
     }
+    
+    /*
+     * TODO game logic
+     * draw tile from stack
+     * show placement gui
+     * place tile on grid
+     * paint tile.
+     * show meeple gui
+     * place meeple on grid
+     * paint meeple
+     * evaluate points
+     * add points
+     * check if player won or grid is full
+     * next player
+     */
 
     /**
      * Method the starts the turn of the next player.
