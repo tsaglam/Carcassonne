@@ -1,7 +1,9 @@
 package carcassonne.model;
 
 import carcassonne.model.grid.Grid;
+import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileStack;
+import carcassonne.model.tile.TileType;
 
 /**
  * An object of the round class simulates a game round.
@@ -22,7 +24,10 @@ public class Round {
      */
     public Round(int playerCount, int width, int height) {
         grid = new Grid(width, height);
-        // TODO build starting tile on grid.
+        // TODO get the control or gui to draw the tile.
+        // TODO change 1 1 to middle.
+        // TODO use method with enum for initial setup
+        grid.place(1, 1, TileFactory.createTile(TileType.CastleWallRoad));
         tileStack = new TileStack();
         createPlayers(playerCount);
     }
@@ -35,20 +40,11 @@ public class Round {
         activePlayer = 0; // set first player as active.
 
     }
-    
+
     /*
-     * TODO game logic
-     * draw tile from stack
-     * show placement gui
-     * place tile on grid
-     * paint tile.
-     * show meeple gui
-     * place meeple on grid
-     * paint meeple
-     * evaluate points
-     * add points
-     * check if player won or grid is full
-     * next player
+     * TODO game logic draw tile from stack show placement gui place tile on grid paint tile. show
+     * meeple gui place meeple on grid paint meeple evaluate points add points check if player won
+     * or grid is full next player
      */
 
     /**
