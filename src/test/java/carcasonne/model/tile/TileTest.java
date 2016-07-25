@@ -29,29 +29,31 @@ public class TileTest {
     private Tile tile;
     private ImageIcon image;
     private String stdPath;
+    private String stdFileType;
     private TileType stdTileType;
 
     @Before
     public void setUp() throws Exception {
         tile = null;
         image = null;
-        stdPath = "src/main/ressources/tiles/Null.jpg";
+        stdPath = "src/main/ressources/tiles/Null";
+        stdFileType = ".jpg";
         stdTileType = TileType.Null;
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidImageTest() {
-        tile = new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, "not a file!", stdTileType);
+        tile = new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, "not a file!", stdFileType, stdTileType);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidTypeTest() {
-        tile = new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, stdPath, null);
+        tile = new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, stdPath, stdFileType, null);
     }
 
     @Test
     public void basicTest() {
-        tile = new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, stdPath, stdTileType);
+        tile = new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, stdPath, stdFileType, stdTileType);
         // TEST TAG:
         assertEquals(stdTileType, tile.getType());
         assertFalse(tile.isTagged()); // Initially not tagged.
@@ -65,14 +67,16 @@ public class TileTest {
 
     @Test
     public void rotateTest() {
-        tile = new Tile(CASTLE, FIELDS, ROAD, MONASTRY, OTHER, stdPath, stdTileType);
+        tile = new Tile(CASTLE, FIELDS, ROAD, MONASTRY, OTHER, stdPath, stdFileType, stdTileType);
         tile.rotate();
         TerrainType[] expected = { MONASTRY, CASTLE, FIELDS, ROAD, OTHER };
         int i = 0;
         for (GridDirection direction : GridDirection.tilePositions()) { // for every position
-            assertEquals(expected[i++], tile.getTerrainAt(direction)); // check i rotated successfully.
+            assertEquals(expected[i++], tile.getTerrainAt(direction)); // check if rotated
         }
-        // TODO maybe test if image is really rotated
+        for (int j = 0; j < 10; j++) {
+            tile.rotate(); // should not crash.
+        }
     }
 
     @Test
@@ -82,10 +86,18 @@ public class TileTest {
             for (TerrainType right : TerrainType.basicTerrain()) { // for every right terrain
                 for (TerrainType bottom : TerrainType.basicTerrain()) { // for bottom top terrain
                     for (TerrainType left : TerrainType.basicTerrain()) { // for every left terrain
-                        for (TerrainType middle : TerrainType.basicTerrain()) { // for every middle terrain
-                            for (GridDirection direction : GridDirection.directNeighbors()) { // from every direction
-                                tile = new Tile(top, right, bottom, left, middle, stdPath, stdTileType); // create that tile
-                                TerrainType atDirection = tile.getTerrainAt(direction); // get terrain from direction
+                        for (TerrainType middle : TerrainType.basicTerrain()) { // for every middle
+                                                                                // terrain
+                            for (GridDirection direction : GridDirection.directNeighbors()) { // from
+                                                                                              // every
+                                                                                              // direction
+                                tile = new Tile(top, right, bottom, left, middle, stdPath, stdFileType, stdTileType); // create
+                                                                                                                      // that
+                                                                                                                      // tile
+                                TerrainType atDirection = tile.getTerrainAt(direction); // get
+                                                                                        // terrain
+                                                                                        // from
+                                                                                        // direction
                                 expected = 0; // generate expected connections:
                                 if (atDirection == middle) {
                                     expected = (middle == top) ? ++expected : expected;
@@ -93,7 +105,8 @@ public class TileTest {
                                     expected = (middle == bottom) ? ++expected : expected;
                                     expected = (middle == left) ? ++expected : expected;
                                 }
-                                checkConnections(tile, direction, expected); // count real connections
+                                checkConnections(tile, direction, expected); // count real
+                                                                             // connections
                             }
                         }
                     }
@@ -142,7 +155,7 @@ public class TileTest {
 
     @Test
     public void nullTileTest() {
-        tile = TileFactory.createTile(TileType.Null); 
+        tile = TileFactory.createTile(TileType.Null);
         tile.rotate(); // just testing the useless tile for exceptions & co
         assertEquals(TerrainType.OTHER, tile.getTerrainAt(GridDirection.TOP));
         assertEquals(TileType.Null, tile.getType());

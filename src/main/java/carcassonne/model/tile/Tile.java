@@ -14,7 +14,8 @@ import carcassonne.model.grid.GridDirection;
  */
 public class Tile {
     private HashMap<GridDirection, TerrainType> terrainMap;
-    private ImageIcon image;
+    private ImageIcon[] image; // tile image
+    private int rotation;
     private Boolean tag;
     private TileType type;
     private Meeple meeple;
@@ -27,8 +28,8 @@ public class Tile {
      * @param left is the left terrain type.
      * @param middle is the middle terrain type.
      */
-    public Tile(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle, String tilePath, TileType type) {
-        if (!new File(tilePath).exists()) {
+    public Tile(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle, String tilePath, String fileType, TileType type) {
+        if (!new File(tilePath + rotation + fileType).exists()) {
             throw new IllegalArgumentException("Image path is not valid : " + tilePath);
         } else if (type == null) {
             throw new IllegalArgumentException("Tile can't be null");
@@ -40,10 +41,12 @@ public class Tile {
         terrainMap.put(GridDirection.LEFT, left);
         terrainMap.put(GridDirection.MIDDLE, middle);
         this.type = type;
-        this.image = new ImageIcon(tilePath);
+        image = new ImageIcon[4]; // TODO use own methods.
+        for (int i = 0; i <= 3; i++) {
+            image[i] = new ImageIcon(tilePath + rotation + fileType);
+        }
         tag = false;
         meeple = null;
-
     }
 
     /**
@@ -79,7 +82,7 @@ public class Tile {
         for (GridDirection direction : GridDirection.directNeighbors()) {
             temporary = terrainMap.put(direction, temporary);
         }
-        // TODO rotate picture itself.
+        rotation = (rotation >= 3) ? 0 : rotation++; // cycle through rotation from 0 to 3
     }
 
     /**
@@ -138,7 +141,7 @@ public class Tile {
      * @return the image of the tile.
      */
     public ImageIcon getImage() {
-        return image;
+        return image[rotation];
     }
 
     /**
