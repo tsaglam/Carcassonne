@@ -57,8 +57,12 @@ public class MainGUI extends JPanel {
 
     /**
      * TODO comment paint meeple method.
+     * @param meeple
+     * @param x
+     * @param y
+     * @param rotation
      */
-    public void paint(Meeple meeple, int x, int y, GridDirection orientation) {
+    public void paint(Meeple meeple, int x, int y, GridDirection rotation) {
         // TODO implement paint meeple method.
     }
 
