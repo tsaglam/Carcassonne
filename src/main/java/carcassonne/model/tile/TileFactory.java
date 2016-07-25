@@ -13,6 +13,9 @@ import static carcassonne.model.tile.TerrainType.ROAD;
  * @author Timur
  */
 public final class TileFactory {
+    private static final String FOLDER = "src/main/ressources/tiles/";
+    private static final String FILE_TYPE = ".jpg";
+    private static final String ROTATION = ""; // TODO enable roation
 
     /**
      * Factory method of the class. Produces a specific tile for a specific tile type.
@@ -20,7 +23,10 @@ public final class TileFactory {
      * @return the tile object.
      */
     public static Tile createTile(TileType type) {
-        String path = "src/main/ressources/tiles/" + type.name() + ".jpg";
+        if (type == null) { // null is invalid argument.
+            throw new IllegalArgumentException("TileFactory can't create tile from TileType value null.");
+        }
+        String path = FOLDER + type.name() + ROTATION + FILE_TYPE; // generate path.
         switch (type) {
         case CastleCenter:
             return new Tile(CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, path, type);
@@ -60,7 +66,6 @@ public final class TileFactory {
             return new Tile(ROAD, ROAD, ROAD, ROAD, FIELDS, path, type);
         case RoadJunctionSmall:
             return new Tile(FIELDS, ROAD, ROAD, ROAD, ROAD, path, type);
-        case Null:
         default:
             return new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, path, type);
         }
