@@ -3,9 +3,10 @@ package carcassonne.view;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import carcassonne.model.Meeple;
@@ -15,7 +16,7 @@ import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 
 /**
- * The main gui class, extending a JPanel.
+ * The main GUI class, extending a JPanel.
  * @author Timur
  */
 public class MainGUI extends JPanel {
@@ -23,7 +24,7 @@ public class MainGUI extends JPanel {
     private static final long serialVersionUID = -8750891542665009043L;
     private JFrame frame;
     private MainMenuBar menuBar;
-    private JLabel[][] labelGrid;
+    private TileLabel[][] labelGrid;
     private GridBagConstraints constraints;
     private int gridWidth;
     private int gridHeight;
@@ -36,8 +37,8 @@ public class MainGUI extends JPanel {
     public MainGUI(int frameWidth, int frameHeight) {
         super(new GridBagLayout());
         constraints = new GridBagConstraints();
-        buildFrame(frameWidth, frameHeight);
         buildLabelGrid(frameWidth, frameHeight);
+        buildFrame(frameWidth, frameHeight);
     }
 
     /**
@@ -46,7 +47,7 @@ public class MainGUI extends JPanel {
      * @param x is the x coordinate.
      * @param y is the y coordinate.
      */
-    public void paint(Tile tile, int x, int y) {
+    public void setTile(Tile tile, int x, int y) {
         if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
             labelGrid[x][y].setIcon(tile.getImage());
         } else {
@@ -66,7 +67,7 @@ public class MainGUI extends JPanel {
      */
     private void buildFrame(int frameWidth, int frameHeight) {
         menuBar = new MainMenuBar();
-        frame = new JFrame("Carcasonne by Timur S.");
+        frame = new JFrame("Carcasonne");
         frame.getContentPane().add(this);
         frame.setJMenuBar(menuBar);
         frame.setResizable(false);
@@ -74,7 +75,8 @@ public class MainGUI extends JPanel {
         frame.setSize(frameWidth, frameHeight);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBackground(new Color(165, 200, 245)); // background color
+        // setBackground(new Color(165, 200, 245)); // light blue
+        setBackground(new Color(190, 190, 190)); // grey
     }
 
     /*
@@ -83,13 +85,20 @@ public class MainGUI extends JPanel {
     private void buildLabelGrid(int frameWidth, int frameHeight) {
         gridWidth = frameWidth / 100;
         gridHeight = frameHeight / 100;
-        System.out.println(gridWidth + " " + gridHeight);
-        labelGrid = new JLabel[gridWidth][gridHeight]; // build array of labels.
+        labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
+        Tile defaultTile = TileFactory.createTile(TileType.Null);
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                labelGrid[x][y] = new JLabel(); // create empty label
-                constraints.gridx = x; // set x coordinate.
-                constraints.gridy = y; // set y coordinate.
+                labelGrid[x][y] = new TileLabel(defaultTile.getImage(), x, y);
+                labelGrid[x][y].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) { // TODO maybe move to TileLabel
+                        TileLabel label = (TileLabel) e.getSource(); // TODO whatever a click does
+                        System.out.println("Clicked label at (" + label.getPosX() + "|" + label.getPosY() + ")");
+                    }
+                });
+                constraints.gridx = x;
+                constraints.gridy = y;
                 add(labelGrid[x][y], constraints); // add label with constraints
             }
         }
@@ -100,26 +109,7 @@ public class MainGUI extends JPanel {
      * @param args are the arguments.
      */
     public static void main(String[] args) { // TODO remove sometime
-        int x = 1280;
-        int y = 768;
-        MainGUI gui = new MainGUI(x, y);
-        Tile tile;
-        int rndX;
-        int rndY;
-        for (int i = 0; i < 50000; i++) {
-            for (TileType tileType : TileType.values()) {
-                tile = TileFactory.createTile(tileType);
-                rndX = (int) Math.round(Math.random() * ((x / 100) - 1));
-                rndY = (int) Math.round(Math.random() * ((y / 100) - 1));
-                gui.paint(tile, rndX, rndY);
-            }
-        }
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.exit(0);
+        MainGUI gui = new MainGUI(1280, 768);
     }
 
 }

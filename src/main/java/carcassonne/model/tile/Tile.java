@@ -1,6 +1,5 @@
 package carcassonne.model.tile;
 
-import java.awt.Image;
 import java.io.File;
 import java.util.HashMap;
 
