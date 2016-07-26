@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import carcassonne.control.SystemProperties;
 import carcassonne.model.Meeple;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
@@ -31,14 +32,12 @@ public class MainGUI extends JPanel {
 
     /**
      * Basic constructor.
-     * @param frameWidth is the width of the frame
-     * @param frameHeight is the height of the frame
      */
-    public MainGUI(int frameWidth, int frameHeight) {
+    public MainGUI() {
         super(new GridBagLayout());
         constraints = new GridBagConstraints();
-        buildLabelGrid(frameWidth, frameHeight);
-        buildFrame(frameWidth, frameHeight);
+        buildLabelGrid();
+        buildFrame();
     }
 
     /**
@@ -69,26 +68,27 @@ public class MainGUI extends JPanel {
     /*
      * Builds the frame.
      */
-    private void buildFrame(int frameWidth, int frameHeight) {
+    private void buildFrame() {
         menuBar = new MainMenuBar();
         frame = new JFrame("Carcasonne");
         frame.getContentPane().add(this);
         frame.setJMenuBar(menuBar);
-        frame.setResizable(false);
-        frame.setVisible(true);
-        frame.setSize(frameWidth, frameHeight);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // setBackground(new Color(165, 200, 245)); // light blue
         setBackground(new Color(190, 190, 190)); // grey
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setResizable(false);
+        // frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     /*
      * Creates the grid of labels.
      */
-    private void buildLabelGrid(int frameWidth, int frameHeight) {
-        gridWidth = frameWidth / 100;
-        gridHeight = frameHeight / 100;
+    private void buildLabelGrid() {
+        SystemProperties p = new SystemProperties(); // TODO make this pretty
+        gridWidth = p.getResolutionWidth() / 100;
+        gridHeight = (p.getResolutionHeight() - p.getTaskBarHeight()) / 100;
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
         Tile defaultTile = TileFactory.createTile(TileType.Null);
         for (int x = 0; x < gridWidth; x++) {
@@ -113,7 +113,12 @@ public class MainGUI extends JPanel {
      * @param args are the arguments.
      */
     public static void main(String[] args) { // TODO remove sometime
-        MainGUI gui = new MainGUI(1280, 768);
+        MainGUI gui = new MainGUI();
+        Tile tile = TileFactory.createTile(TileType.CastleWallCurveRight);
+        for (int i = 0; i < 12; i++) {
+            gui.setTile(tile, i, 0); // TODO fix rotation
+            tile.rotate();
+        }
     }
 
 }
