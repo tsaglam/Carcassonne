@@ -15,6 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileFactory;
+import carcassonne.model.tile.TileType;
 
 /**
  * The playing grid class.
@@ -29,11 +31,23 @@ public class Grid {
      * Basic constructor
      * @param width is the grid width.
      * @param height is the grid height.
+     * @param foundationType is the tile type of the first tile in the middle of the grid.
      */
-    public Grid(int width, int height) {
+    public Grid(int width, int height, TileType foundationType) {
         this.width = width;
         this.height = height;
         tile = new Tile[width][height];
+        placeFoundation(foundationType);
+    }
+
+    /**
+     * Places a specific tile in the middle of the grid.
+     * @param tileType is the type of that specific tile.
+     */
+    public void placeFoundation(TileType tileType) {
+        int centerX = Math.round((width - 1) / 2);
+        int centerY = Math.round((height - 1) / 2);
+        place(centerX, centerY, TileFactory.createTile(tileType));
     }
 
     /**

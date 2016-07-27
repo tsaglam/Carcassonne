@@ -1,7 +1,6 @@
 package carcassonne.model;
 
 import carcassonne.model.grid.Grid;
-import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileStack;
 import carcassonne.model.tile.TileType;
 
@@ -23,15 +22,24 @@ public class Round {
      * @param width is the maximal grid width
      */
     public Round(int playerCount, int width, int height) {
-        grid = new Grid(width, height);
+        grid = new Grid(width, height, TileType.CastleWallRoad);
         // TODO get the control or gui to draw the tile.
-        // TODO change 1 1 to middle.
-        // TODO use method with enum for initial setup
-        grid.place(1, 1, TileFactory.createTile(TileType.CastleWallRoad));
         tileStack = new TileStack();
         createPlayers(playerCount);
     }
 
+    /*
+     * TODO
+     * @return
+     */
+    private boolean isOver() {
+        return grid.isFull() || tileStack.isEmpty();
+    }
+
+    /*
+     * TODO
+     * @param playerCount
+     */
     private void createPlayers(int playerCount) {
         player = new Player[playerCount]; // initialize the player array.
         for (int i = 0; i < player.length; i++) {
