@@ -23,7 +23,7 @@ public class PlayerTest {
     @Before
     public void setUp() throws Exception {
         player = new Player();
-        grid = new Grid(3, 3);
+        grid = new Grid(3, 3, TileType.Null);
         tile = TileFactory.createTile(TileType.CastleWallRoad);
         grid.place(0, 0, tile);
     }

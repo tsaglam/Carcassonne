@@ -1,11 +1,12 @@
 package carcasonne.model.grid;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import carcassonne.model.grid.Grid;
+import carcassonne.model.tile.TileType;
 
 /**
  * Test case for the grid class.
@@ -17,14 +18,15 @@ public class GridTest {
 
     @Before
     public void setUp() throws Exception {
-        testGrid = new Grid(4, 4);
+        TileType t = TileType.CastleCenterSide;
+        testGrid = new Grid(4, 4, t);
     }
 
     @Test
-    public void getDirectNeighborsTest() {
+    public void getDirectNeighborsTest() { // TODO more tests for the grid class.
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
-                assertEquals(testGrid.getDirectNeighbors(x, y).size(), 0);
+                assertEquals(1, testGrid.getDirectNeighbors(x, y).size());
             }
         }
     }
@@ -33,7 +35,7 @@ public class GridTest {
     public void getNeighborsTest() {
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
-                assertEquals(testGrid.getNeighbors(x, y).size(), 0);
+                assertEquals(1, testGrid.getNeighbors(x, y).size());
             }
         }
     }
