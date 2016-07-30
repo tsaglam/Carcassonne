@@ -28,17 +28,18 @@ public class Round {
         createPlayers(playerCount);
     }
 
-    /*
-     * TODO
-     * @return
+    /**
+     * Checks whether the game round is over. A game round is over if the grid is full or the stack
+     * of tiles is empty (no tiles left).
+     * @return true if the game is over.
      */
     private boolean isOver() {
         return grid.isFull() || tileStack.isEmpty();
     }
 
-    /*
-     * TODO
-     * @param playerCount
+    /**
+     * creates the player objects and sets the first player as active player.
+     * @param playerCount is the number of players.
      */
     private void createPlayers(int playerCount) {
         player = new Player[playerCount]; // initialize the player array.
@@ -49,11 +50,15 @@ public class Round {
 
     }
 
-    /*
-     * TODO game logic draw tile from stack show placement gui place tile on grid paint tile. show
+    /**
+     * TODO game logic: 
+     * draw tile from stack show placement gui place tile on grid paint tile. show
      * meeple gui place meeple on grid paint meeple evaluate points add points check if player won
      * or grid is full next player
      */
+    public void startGame() {
+        // TODO implement game logic as stated in the jdoc comment.
+    }
 
     /**
      * Method the starts the turn of the next player.
