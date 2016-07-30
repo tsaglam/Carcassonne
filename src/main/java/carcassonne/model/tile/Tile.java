@@ -42,12 +42,10 @@ public class Tile {
     }
 
     /**
-     * Getter for the tile image.
-     * @return the image of the tile.
+     * Getter for the tile image. the image depends on the rotation.
+     * @return the image of the tile with the tile specific rotation.
      */
     public ImageIcon getImage() {
-        // TODO (IMPORTANT) remove debug println
-        System.out.println("Rotation is " + rotation);
         return image[rotation];
     }
 
