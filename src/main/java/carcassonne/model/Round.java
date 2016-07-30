@@ -29,12 +29,31 @@ public class Round {
     }
 
     /**
-     * Checks whether the game round is over. A game round is over if the grid is full or the stack
-     * of tiles is empty (no tiles left).
-     * @return true if the game is over.
+     * Getter for the number of the active player.
+     * @return the player number.
      */
-    private boolean isOver() {
-        return grid.isFull() || tileStack.isEmpty();
+    public int getActivePlayerNumber() {
+        return activePlayer;
+    }
+
+    /**
+     * Method the starts the turn of the next player.
+     */
+    public void nextTurn() {
+        activePlayer++;
+        if (activePlayer == player.length) {
+            activePlayer = 0;
+        }
+    }
+
+    /**
+     * TODO comment game logic method.  
+     * draw tile from stack show placement gui place tile on grid paint tile. show
+     * meeple gui place meeple on grid paint meeple evaluate points add points check if player won
+     * or grid is full next player
+     */
+    public void startGame() {
+        // TODO implement game logic as stated in the jdoc comment.
     }
 
     /**
@@ -51,31 +70,12 @@ public class Round {
     }
 
     /**
-     * TODO game logic: 
-     * draw tile from stack show placement gui place tile on grid paint tile. show
-     * meeple gui place meeple on grid paint meeple evaluate points add points check if player won
-     * or grid is full next player
+     * Checks whether the game round is over. A game round is over if the grid is full or the stack
+     * of tiles is empty (no tiles left).
+     * @return true if the game is over.
      */
-    public void startGame() {
-        // TODO implement game logic as stated in the jdoc comment.
-    }
-
-    /**
-     * Method the starts the turn of the next player.
-     */
-    public void nextTurn() {
-        activePlayer++;
-        if (activePlayer == player.length) {
-            activePlayer = 0;
-        }
-    }
-
-    /**
-     * Getter for the number of the active player.
-     * @return the player number.
-     */
-    public int getActivePlayerNumber() {
-        return activePlayer;
+    private boolean isOver() {
+        return grid.isFull() || tileStack.isEmpty();
     }
 
 }

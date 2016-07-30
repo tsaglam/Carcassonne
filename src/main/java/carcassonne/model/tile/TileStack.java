@@ -14,15 +14,6 @@ public class TileStack {
         fillStack();
     }
 
-    private void fillStack() {
-        int[] tileAmount = { 1, 3, 4, 5, 5, 3, 2, 3, 5, 3, 3, 3, 4, 4, 2, 0, 8, 9, 1, 4 };
-        for (TileType tileType : TileType.values()) {
-            for (int i = 0; i < tileAmount[tileType.ordinal()]; i++) {
-                tileList.add(TileFactory.createTile(tileType));
-            }
-        }
-    }
-
     /**
      * Draws random tile from the stack and returns it
      * @return the tile or null if the stack is empty.
@@ -40,5 +31,14 @@ public class TileStack {
      */
     public boolean isEmpty() {
         return tileList.isEmpty();
+    }
+
+    private void fillStack() {
+        int[] tileAmount = { 1, 3, 4, 5, 5, 3, 2, 3, 5, 3, 3, 3, 4, 4, 2, 0, 8, 9, 1, 4 };
+        for (TileType tileType : TileType.values()) {
+            for (int i = 0; i < tileAmount[tileType.ordinal()]; i++) {
+                tileList.add(TileFactory.createTile(tileType));
+            }
+        }
     }
 }

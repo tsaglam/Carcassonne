@@ -41,67 +41,24 @@ public class Grid {
     }
 
     /**
-     * Places a specific tile in the middle of the grid.
-     * @param tileType is the type of that specific tile.
-     */
-    public void placeFoundation(TileType tileType) {
-        int centerX = Math.round((width - 1) / 2);
-        int centerY = Math.round((height - 1) / 2);
-        place(centerX, centerY, TileFactory.createTile(tileType));
-    }
-
-    /**
-     * Tries to place a tile on a spot on the grid.
+     * Creates a list of tiles that are connected to a specific tile with the terrain in a specific
+     * direction on the tile.
      * @param x is the x coordinate
      * @param y is the y coordinate
-     * @param tile is the tile to place
-     * @return true if it was successful, false if spot is occupied.
+     * @param from is the direction the tile is connected from
+     * @return the list of connected tiles.
      */
-    public boolean place(int x, int y, Tile tile) {
+    public List<Tile> getConnectedTiles(int x, int y, GridDirection from) {
         checkCoordinates(x, y);
-        if (isOccupied(x, y)) {
-            return false; // tile cant be placed, spot is occupied.
-        } else {
-            this.tile[x][y] = tile;
-            return true; // tile was successfully placed.
-        }
-    }
-
-    /**
-     * Checks whether a specific tile of the grid is occupied.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
-     * @return true if occupied
-     */
-    public boolean isOccupied(int x, int y) {
-        checkCoordinates(x, y);
-        return tile[x][y] != null;
-    }
-
-    /**
-     * Checks whether a specific tile of the grid is free.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
-     * @return true if free
-     */
-    public boolean isFree(int x, int y) {
-        checkCoordinates(x, y);
-        return tile[x][y] == null;
-    }
-
-    /**
-     * Checks whether the grid is full.
-     * @return true if full.
-     */
-    public boolean isFull() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (isFree(x, y)) {
-                    return false; // grid is not full if one position is free
+        List<Tile> list = new LinkedList<Tile>();
+        for (GridDirection to : directNeighbors()) {
+            if (tile[x][y].isConnected(from, to) && from != to) { // if connected
+                if (getNeighbour(x, y, to) != null) { // if is on grid
+                    list.add(getNeighbour(x, y, to));
                 }
             }
         }
-        return true;
+        return list;
     }
 
     /**
@@ -119,6 +76,14 @@ public class Grid {
             }
         }
         return list;
+    }
+
+    /**
+     * Getter for the grid height.
+     * @return the height
+     */
+    public int getHeight() {
+        return height;
     }
 
     /**
@@ -168,24 +133,60 @@ public class Grid {
     }
 
     /**
-     * Creates a list of tiles that are connected to a specific tile with the terrain in a specific
-     * direction on the tile.
+     * Safe getter for tiles.
      * @param x is the x coordinate
      * @param y is the y coordinate
-     * @param from is the direction the tile is connected from
-     * @return the list of connected tiles.
+     * @return the tile
+     * @throws IllegalArgumentException if the requested tile is out of grid.
      */
-    public List<Tile> getConnectedTiles(int x, int y, GridDirection from) {
+    public Tile getTile(int x, int y) {
         checkCoordinates(x, y);
-        List<Tile> list = new LinkedList<Tile>();
-        for (GridDirection to : directNeighbors()) {
-            if (tile[x][y].isConnected(from, to) && from != to) { // if connected
-                if (getNeighbour(x, y, to) != null) { // if is on grid
-                    list.add(getNeighbour(x, y, to));
+        return tile[x][y];
+    }
+
+    /**
+     * Getter for the grid width.
+     * @return the width
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * Checks whether a specific tile of the grid is free.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @return true if free
+     */
+    public boolean isFree(int x, int y) {
+        checkCoordinates(x, y);
+        return tile[x][y] == null;
+    }
+
+    /**
+     * Checks whether the grid is full.
+     * @return true if full.
+     */
+    public boolean isFull() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (isFree(x, y)) {
+                    return false; // grid is not full if one position is free
                 }
             }
         }
-        return list;
+        return true;
+    }
+
+    /**
+     * Checks whether a specific tile of the grid is occupied.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @return true if occupied
+     */
+    public boolean isOccupied(int x, int y) {
+        checkCoordinates(x, y);
+        return tile[x][y] != null;
     }
 
     /**
@@ -202,6 +203,33 @@ public class Grid {
     }
 
     /**
+     * Tries to place a tile on a spot on the grid.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @param tile is the tile to place
+     * @return true if it was successful, false if spot is occupied.
+     */
+    public boolean place(int x, int y, Tile tile) {
+        checkCoordinates(x, y);
+        if (isOccupied(x, y)) {
+            return false; // tile cant be placed, spot is occupied.
+        } else {
+            this.tile[x][y] = tile;
+            return true; // tile was successfully placed.
+        }
+    }
+
+    /**
+     * Places a specific tile in the middle of the grid.
+     * @param tileType is the type of that specific tile.
+     */
+    public void placeFoundation(TileType tileType) {
+        int centerX = Math.round((width - 1) / 2);
+        int centerY = Math.round((height - 1) / 2);
+        place(centerX, centerY, TileFactory.createTile(tileType));
+    }
+
+    /**
      * Error checker method for other methods in this class. It just checks whether specific
      * coordinates are on the grid and throws an error if not.
      * @param x is the x coordinate
@@ -211,34 +239,6 @@ public class Grid {
         if (!isOnGrid(x, y)) {
             throw new IllegalArgumentException("tile coordinates are out of grid");
         }
-    }
-
-    /**
-     * Getter for the grid width.
-     * @return the width
-     */
-    public int getWidth() {
-        return width;
-    }
-
-    /**
-     * Getter for the grid height.
-     * @return the height
-     */
-    public int getHeight() {
-        return height;
-    }
-
-    /**
-     * Safe getter for tiles.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
-     * @return the tile
-     * @throws IllegalArgumentException if the requested tile is out of grid.
-     */
-    public Tile getTile(int x, int y) {
-        checkCoordinates(x, y);
-        return tile[x][y];
     }
 
 }

@@ -12,8 +12,8 @@ public class Player {
 
     private static final int MEEPLE_COUNT = 5;
     private int points;
-    LinkedList<Meeple> usedMeeples;
-    LinkedList<Meeple> unusedMeeples;
+    private LinkedList<Meeple> usedMeeples;
+    private LinkedList<Meeple> unusedMeeples;
 
     /**
      * Simple constructor.
@@ -26,6 +26,22 @@ public class Player {
         for (int i = 0; i < MEEPLE_COUNT; i++) {
             unusedMeeples.add(new Meeple(this));
         }
+    }
+
+    /**
+     * Adds points to the players point value.
+     * @param points are the points to add.
+     */
+    public void addPoints(int points) {
+        this.points += points;
+    }
+
+    /**
+     * Getter for the points of the player.
+     * @return the points
+     */
+    public int getPoints() {
+        return points;
     }
 
     /**
@@ -51,22 +67,6 @@ public class Player {
             throw new IllegalArgumentException("This meeple is not in the used list.");
         }
         usedMeeples.add(meeple); // put in unused list if it was previously used.
-    }
-
-    /**
-     * Getter for the points of the player.
-     * @return the points
-     */
-    public int getPoints() {
-        return points;
-    }
-
-    /**
-     * Adds points to the players point value.
-     * @param points are the points to add.
-     */
-    public void addPoints(int points) {
-        this.points += points;
     }
 
 }
