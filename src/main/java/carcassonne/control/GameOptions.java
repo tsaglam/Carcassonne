@@ -32,16 +32,21 @@ public final class GameOptions {
      * is the height value of the resolution.
      */
     public final int resolutionHeight;
-    
+
     /**
      * is the name of the operating system.
      */
     public final String operatingSystemName;
-    
+
     /**
      * maximal amount of players.
      */
     public final int maximalPlayers = 4;
+
+    /**
+     * width and height of a tile in pixels.
+     */
+    public final int tileSize = 100;
 
     private int taskBarHeight;
 
@@ -70,16 +75,16 @@ public final class GameOptions {
      * Getter for the frame height, which depends on the resolution height.
      * @return the frame height.
      */
-    public int getFrameHeight() {
-        return resolutionHeight - taskBarHeight;
+    public int getGridHeight() {
+        return (resolutionHeight - taskBarHeight) / 100;
     }
 
     /**
      * Getter for the frame width, which depends on the resolution width.
      * @return the frame width.
      */
-    public int getFrameWidth() {
-        return resolutionWidth;
+    public int getGridWidth() {
+        return resolutionWidth / 100;
     }
 
 }

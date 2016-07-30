@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import carcassonne.control.GameOptions;
+import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
@@ -29,7 +30,7 @@ public class MainGUI extends JPanel {
      * @param args are the arguments.
      */
     public static void main(String[] args) { // TODO (later) remove sometime
-        MainGUI gui = new MainGUI();
+        MainGUI gui = new MainGUI(null);
         Tile tile = TileFactory.createTile(TileType.CastleWallCurveRight);
         for (int i = 0; i < 12; i++) {
             gui.set(tile, i, 0);
@@ -37,25 +38,40 @@ public class MainGUI extends JPanel {
         }
     }
 
-    GameOptions options;
+    private MainController controller;
+    private GameOptions options;
     private JFrame frame;
     private MainMenuBar menuBar;
     private TileLabel[][] labelGrid;
     private GridBagConstraints constraints;
     private int gridWidth;
-
     private int gridHeight;
 
     /**
      * Basic constructor.
      */
-    public MainGUI() {
+    public MainGUI(MainController controller) {
         super(new GridBagLayout());
+        this.controller = controller;
         options = GameOptions.getInstance();
         constraints = new GridBagConstraints();
         buildLabelGrid();
         buildFrame();
 
+    }
+
+    /**
+     * TODO comment rebuildLabelGrid()
+     */
+    public void rebuildLabelGrid() { // TODO test gui rebuild
+        frame.setVisible(false);
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
+                remove(labelGrid[x][y]);
+            }
+        }
+        buildLabelGrid();
+        frame.pack();
     }
 
     /**
@@ -104,20 +120,13 @@ public class MainGUI extends JPanel {
      * Creates the grid of labels.
      */
     private void buildLabelGrid() {
-        gridWidth = options.getFrameWidth() / 100;
-        gridHeight = options.getFrameHeight() / 100;
+        gridWidth = options.getGridWidth();
+        gridHeight = options.getGridHeight();
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
         Tile defaultTile = TileFactory.createTile(TileType.Null);
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                labelGrid[x][y] = new TileLabel(defaultTile.getImage(), x, y);
-                labelGrid[x][y].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) { // TODO maybe move to TileLabel
-                        TileLabel label = (TileLabel) e.getSource(); // TODO whatever a click does
-                        System.out.println("Clicked label at (" + label.getPosX() + "|" + label.getPosY() + ")");
-                    }
-                });
+                labelGrid[x][y] = new TileLabel(defaultTile.getImage(), controller, x, y);
                 constraints.gridx = x;
                 constraints.gridy = y;
                 add(labelGrid[x][y], constraints); // add label with constraints

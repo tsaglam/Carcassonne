@@ -3,6 +3,8 @@ package carcassonne.view;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import carcassonne.control.MainController;
+
 /**
  * Is a simple class derived form JLabel, which stores (additionally to the JLabel functions) the
  * coordinates of the label on the label grid.
@@ -16,24 +18,24 @@ public class TileLabel extends JLabel {
     /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
      * @param image sets the ImageIcon of the label.
+     * @param controller is the controller of the GUI.
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
-    public TileLabel(ImageIcon image, int x, int y) {
+    public TileLabel(ImageIcon image, MainController controller, int x, int y) {
         super(image);
-        this.posX = x;
-        this.posY = y;
+        setup(controller, x, y);
     }
 
     /**
      * Simple constructor calling the <code>JLabel()</code> constructor.
+     * @param controller is the controller of the GUI.
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
-    public TileLabel(int x, int y) {
+    public TileLabel(MainController controller, int x, int y) {
         super();
-        this.posX = x;
-        this.posY = y;
+        setup(controller, x, y);
     }
 
     /**
@@ -50,5 +52,11 @@ public class TileLabel extends JLabel {
      */
     public int getPosY() {
         return posY;
+    }
+
+    private void setup(MainController controller, int x, int y) {
+        addMouseListener(new TileLabelMouseAdapter(this, controller));
+        this.posX = x;
+        this.posY = y;
     }
 }
