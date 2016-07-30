@@ -9,6 +9,20 @@ import java.awt.GraphicsEnvironment;
  * @author Timur
  */
 public final class GameOptions {
+    private static GameOptions instance;
+
+    /**
+     * Access method for the GameProperties instance. Secures that only one property object can
+     * exist at a time.
+     * @return the instance.
+     */
+    public static GameOptions getInstance() {
+        if (instance == null) {
+            instance = new GameOptions();
+        }
+        return instance;
+    }
+
     /**
      * is the width value of the resolution.
      */
@@ -18,13 +32,11 @@ public final class GameOptions {
      * is the height value of the resolution.
      */
     public final int resolutionHeight;
-
     /**
      * is the name of the operating system.
      */
     public final String operatingSystemName;
 
-    private static GameOptions instance;
     private int taskBarHeight;
 
     /**
@@ -49,14 +61,6 @@ public final class GameOptions {
     }
 
     /**
-     * Getter for the frame width, which depends on the resolution width.
-     * @return the frame width.
-     */
-    public int getFrameWidth() {
-        return resolutionWidth;
-    }
-
-    /**
      * Getter for the frame height, which depends on the resolution height.
      * @return the frame height.
      */
@@ -65,15 +69,11 @@ public final class GameOptions {
     }
 
     /**
-     * Access method for the GameProperties instance. Secures that only one property object can
-     * exist at a time.
-     * @return the instance.
+     * Getter for the frame width, which depends on the resolution width.
+     * @return the frame width.
      */
-    public static GameOptions getInstance() {
-        if (instance == null) {
-            instance = new GameOptions();
-        }
-        return instance;
+    public int getFrameWidth() {
+        return resolutionWidth;
     }
 
 }

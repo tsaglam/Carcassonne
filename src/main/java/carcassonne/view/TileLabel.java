@@ -14,17 +14,6 @@ public class TileLabel extends JLabel {
     private int posY;
 
     /**
-     * Simple constructor calling the <code>JLabel()</code> constructor.
-     * @param x sets the x coordinate.
-     * @param y sets the y coordinate.
-     */
-    public TileLabel(int x, int y) {
-        super();
-        this.posX = x;
-        this.posY = y;
-    }
-
-    /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
      * @param image sets the ImageIcon of the label.
      * @param x sets the x coordinate.
@@ -32,6 +21,17 @@ public class TileLabel extends JLabel {
      */
     public TileLabel(ImageIcon image, int x, int y) {
         super(image);
+        this.posX = x;
+        this.posY = y;
+    }
+
+    /**
+     * Simple constructor calling the <code>JLabel()</code> constructor.
+     * @param x sets the x coordinate.
+     * @param y sets the y coordinate.
+     */
+    public TileLabel(int x, int y) {
+        super();
         this.posX = x;
         this.posY = y;
     }

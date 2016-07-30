@@ -23,12 +23,25 @@ import carcassonne.model.tile.TileType;
 public class MainGUI extends JPanel {
 
     private static final long serialVersionUID = -8750891542665009043L;
+    /**
+     * Main method for testing.
+     * @param args are the arguments.
+     */
+    public static void main(String[] args) { // TODO remove sometime
+        MainGUI gui = new MainGUI();
+        Tile tile = TileFactory.createTile(TileType.CastleWallCurveRight);
+        for (int i = 0; i < 12; i++) {
+            gui.set(tile, i, 0); // TODO fix rotation
+            tile.rotate();
+        }
+    }
     GameOptions options;
     private JFrame frame;
     private MainMenuBar menuBar;
     private TileLabel[][] labelGrid;
     private GridBagConstraints constraints;
     private int gridWidth;
+
     private int gridHeight;
 
     /**
@@ -44,6 +57,17 @@ public class MainGUI extends JPanel {
     }
 
     /**
+     * Draws meeple on a tile on the grid.
+     * @param meeple is the meeple to draw.
+     * @param x is the x position of the tile.
+     * @param y is the y position of the tile.
+     * @param position is the position of the meeple on the specific tile.
+     */
+    public void set(Meeple meeple, int x, int y, GridDirection position) {
+        // TODO implement paint meeple method.
+    }
+
+    /**
      * Draws the tile on a specific position on the GUI.
      * @param tile is the tile.
      * @param x is the x coordinate.
@@ -55,17 +79,6 @@ public class MainGUI extends JPanel {
         } else {
             throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
         }
-    }
-
-    /**
-     * Draws meeple on a tile on the grid.
-     * @param meeple is the meeple to draw.
-     * @param x is the x position of the tile.
-     * @param y is the y position of the tile.
-     * @param position is the position of the meeple on the specific tile.
-     */
-    public void set(Meeple meeple, int x, int y, GridDirection position) {
-        // TODO implement paint meeple method.
     }
 
     /*
@@ -107,19 +120,6 @@ public class MainGUI extends JPanel {
                 constraints.gridy = y;
                 add(labelGrid[x][y], constraints); // add label with constraints
             }
-        }
-    }
-
-    /**
-     * Main method for testing.
-     * @param args are the arguments.
-     */
-    public static void main(String[] args) { // TODO remove sometime
-        MainGUI gui = new MainGUI();
-        Tile tile = TileFactory.createTile(TileType.CastleWallCurveRight);
-        for (int i = 0; i < 12; i++) {
-            gui.set(tile, i, 0); // TODO fix rotation
-            tile.rotate();
         }
     }
 
