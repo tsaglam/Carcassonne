@@ -1,5 +1,7 @@
 package carcassonne;
 
+import carcassonne.control.MainController;
+
 /**
  * Carcassonne main class for starting the game itself.
  * @author Timur
@@ -10,10 +12,10 @@ public final class CarcasonneMain {
      * @param args are not used.
      */
     public static void main(String[] args) {
-        // TODO implement main method of game.
+        new MainController();
     }
-    
+
     private CarcasonneMain() {
-      
+        throw new IllegalAccessError("This class mustn't be instantiated.");
     }
 }
