@@ -23,18 +23,20 @@ import carcassonne.model.tile.TileType;
 public class MainGUI extends JPanel {
 
     private static final long serialVersionUID = -8750891542665009043L;
+
     /**
      * Main method for testing.
      * @param args are the arguments.
      */
-    public static void main(String[] args) { // TODO remove sometime
+    public static void main(String[] args) { // TODO (later) remove sometime
         MainGUI gui = new MainGUI();
         Tile tile = TileFactory.createTile(TileType.CastleWallCurveRight);
         for (int i = 0; i < 12; i++) {
-            gui.set(tile, i, 0); // TODO fix rotation
+            gui.set(tile, i, 0);
             tile.rotate();
         }
     }
+
     GameOptions options;
     private JFrame frame;
     private MainMenuBar menuBar;

@@ -46,6 +46,8 @@ public class Tile {
      * @return the image of the tile.
      */
     public ImageIcon getImage() {
+        // TODO (IMPORTANT) remove debug println
+        System.out.println("Rotation is " + rotation);
         return image[rotation];
     }
 
@@ -122,7 +124,8 @@ public class Tile {
         for (GridDirection direction : GridDirection.directNeighbors()) {
             temporary = terrainMap.put(direction, temporary);
         }
-        rotation = (rotation >= 3) ? 0 : rotation++; // cycle through rotation from 0 to 3
+        // if rotation >= 3 reset rotation to zero, else increase by one:
+        rotation = (rotation >= 3) ? 0 : rotation + 1;
     }
 
     /**
