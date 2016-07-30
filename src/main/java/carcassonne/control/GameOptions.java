@@ -1,26 +1,38 @@
 package carcassonne.control;
 
 import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 /**
- * Class which to access system information.
+ * Singleton that stores the game options and other information. There is only one option instance
+ * at a time. The use of singletons is heavily discussed.
  * @author Timur
  */
-public class SystemProperties {
-    int resolutionWidth;
-    int resolutionHeight;
-    private String operatingSystemName;
-    int taskBarHeight;
+public final class GameOptions {
+    /**
+     * is the width value of the resolution.
+     */
+    public final int resolutionWidth;
+
+    /**
+     * is the height value of the resolution.
+     */
+    public final int resolutionHeight;
+
+    /**
+     * is the name of the operating system.
+     */
+    public final String operatingSystemName;
+
+    private static GameOptions instance;
+    private int taskBarHeight;
 
     /**
      * Simple constructor that loads the information.
      */
-    public SystemProperties() {
+    private GameOptions() {
         GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice graphicsDevice = environment.getDefaultScreenDevice();
-        DisplayMode displayMode = graphicsDevice.getDisplayMode();
+        DisplayMode displayMode = environment.getDefaultScreenDevice().getDisplayMode();
         resolutionWidth = displayMode.getWidth();
         resolutionHeight = displayMode.getHeight();
         operatingSystemName = System.getProperty("os.name");
@@ -37,31 +49,31 @@ public class SystemProperties {
     }
 
     /**
-     * @return the resolutionWidth
+     * Getter for the frame width, which depends on the resolution width.
+     * @return the frame width.
      */
-    public int getResolutionWidth() {
+    public int getFrameWidth() {
         return resolutionWidth;
     }
 
     /**
-     * @return the resolutionHeight
+     * Getter for the frame height, which depends on the resolution height.
+     * @return the frame height.
      */
-    public int getResolutionHeight() {
-        return resolutionHeight;
+    public int getFrameHeight() {
+        return resolutionHeight - taskBarHeight;
     }
 
     /**
-     * @return the operatingSystemName
+     * Access method for the GameProperties instance. Secures that only one property object can
+     * exist at a time.
+     * @return the instance.
      */
-    public String getOperatingSystemName() {
-        return operatingSystemName;
-    }
-
-    /**
-     * @return the taskBarHeight
-     */
-    public int getTaskBarHeight() {
-        return taskBarHeight;
+    public static GameOptions getInstance() {
+        if (instance == null) {
+            instance = new GameOptions();
+        }
+        return instance;
     }
 
 }
