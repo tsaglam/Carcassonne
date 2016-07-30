@@ -3,8 +3,6 @@ package carcassonne.view;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,15 +24,29 @@ public class MainGUI extends JPanel {
     private static final long serialVersionUID = -8750891542665009043L;
 
     /**
-     * Main method for testing.
+     * Main method for testing. //TODO maybe remove sometime.
      * @param args are the arguments.
+     * @throws InterruptedException exception
      */
-    public static void main(String[] args) { // TODO (later) remove sometime
+    public static void main(String[] args) throws InterruptedException {
+        int pause = 15;
         MainGUI gui = new MainGUI(null);
         Tile tile = TileFactory.createTile(TileType.CastleWallCurveRight);
-        for (int i = 0; i < 12; i++) {
-            gui.set(tile, i, 0);
-            tile.rotate();
+        for (int y = 0; y < 7; y++) {
+            for (int x = 0; x < 12; x++) {
+                gui.set(tile, x, y);
+                tile.rotate();
+                Thread.sleep(pause);
+            }
+        }
+        gui.rebuildLabelGrid();
+        Thread.sleep(100*pause);
+        for (int y = 0; y < 7; y++) {
+            for (int x = 0; x < 12; x++) {
+                gui.set(tile, x, y);
+                tile.rotate();
+                Thread.sleep(pause);
+            }
         }
     }
 
@@ -61,10 +73,9 @@ public class MainGUI extends JPanel {
     }
 
     /**
-     * TODO comment rebuildLabelGrid()
+     * Rebuilds the label grid if the game should be restarted.
      */
     public void rebuildLabelGrid() { // TODO test gui rebuild
-        frame.setVisible(false);
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 remove(labelGrid[x][y]);

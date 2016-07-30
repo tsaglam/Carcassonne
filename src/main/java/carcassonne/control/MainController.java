@@ -10,7 +10,7 @@ public class MainController {
 
     public MainController() {
         gui = new MainGUI(this);
-        newGame(2);
+        currentRound = new Round(2, options.getGridWidth(), options.getGridHeight());
     }
 
     public void newGame(int playerCount) {
