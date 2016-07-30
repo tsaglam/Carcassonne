@@ -1,5 +1,6 @@
 package carcassonne.model;
 
+import carcassonne.control.GameOptions;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.tile.TileStack;
 import carcassonne.model.tile.TileType;
@@ -47,10 +48,9 @@ public class Round {
     }
 
     /**
-     * TODO comment game logic method.  
-     * draw tile from stack show placement gui place tile on grid paint tile. show
-     * meeple gui place meeple on grid paint meeple evaluate points add points check if player won
-     * or grid is full next player
+     * TODO comment game logic method. draw tile from stack show placement gui place tile on grid
+     * paint tile. show meeple gui place meeple on grid paint meeple evaluate points add points
+     * check if player won or grid is full next player
      */
     public void startGame() {
         // TODO implement game logic as stated in the jdoc comment.
@@ -58,9 +58,13 @@ public class Round {
 
     /**
      * creates the player objects and sets the first player as active player.
-     * @param playerCount is the number of players.
+     * @param playerCount is the number of players in the range of [1,
+     * <code>GameOptions.maximalPlayers]</code>.
      */
     private void createPlayers(int playerCount) {
+        if (playerCount <= 1 || playerCount >= GameOptions.getInstance().maximalPlayers) {
+            throw new IllegalArgumentException(playerCount + " is not a valid player count");
+        }
         player = new Player[playerCount]; // initialize the player array.
         for (int i = 0; i < player.length; i++) {
             player[i] = new Player(); // create the players.

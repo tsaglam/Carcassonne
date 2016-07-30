@@ -32,10 +32,16 @@ public final class GameOptions {
      * is the height value of the resolution.
      */
     public final int resolutionHeight;
+    
     /**
      * is the name of the operating system.
      */
     public final String operatingSystemName;
+    
+    /**
+     * maximal amount of players.
+     */
+    public final int maximalPlayers = 4;
 
     private int taskBarHeight;
 
