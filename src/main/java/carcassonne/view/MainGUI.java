@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import carcassonne.control.SystemProperties;
+import carcassonne.control.GameOptions;
 import carcassonne.model.Meeple;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
@@ -23,6 +23,7 @@ import carcassonne.model.tile.TileType;
 public class MainGUI extends JPanel {
 
     private static final long serialVersionUID = -8750891542665009043L;
+    GameOptions options;
     private JFrame frame;
     private MainMenuBar menuBar;
     private TileLabel[][] labelGrid;
@@ -35,9 +36,11 @@ public class MainGUI extends JPanel {
      */
     public MainGUI() {
         super(new GridBagLayout());
+        options = GameOptions.getInstance();
         constraints = new GridBagConstraints();
         buildLabelGrid();
         buildFrame();
+
     }
 
     /**
@@ -46,7 +49,7 @@ public class MainGUI extends JPanel {
      * @param x is the x coordinate.
      * @param y is the y coordinate.
      */
-    public void setTile(Tile tile, int x, int y) {
+    public void set(Tile tile, int x, int y) {
         if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
             labelGrid[x][y].setIcon(tile.getImage());
         } else {
@@ -55,13 +58,13 @@ public class MainGUI extends JPanel {
     }
 
     /**
-     * TODO comment paint meeple method.
-     * @param meeple
-     * @param x
-     * @param y
-     * @param rotation
+     * Draws meeple on a tile on the grid.
+     * @param meeple is the meeple to draw.
+     * @param x is the x position of the tile.
+     * @param y is the y position of the tile.
+     * @param position is the position of the meeple on the specific tile.
      */
-    public void paint(Meeple meeple, int x, int y, GridDirection rotation) {
+    public void set(Meeple meeple, int x, int y, GridDirection position) {
         // TODO implement paint meeple method.
     }
 
@@ -86,9 +89,8 @@ public class MainGUI extends JPanel {
      * Creates the grid of labels.
      */
     private void buildLabelGrid() {
-        SystemProperties p = new SystemProperties(); // TODO make this pretty
-        gridWidth = p.getResolutionWidth() / 100;
-        gridHeight = (p.getResolutionHeight() - p.getTaskBarHeight()) / 100;
+        gridWidth = options.getFrameWidth() / 100;
+        gridHeight = options.getFrameHeight() / 100;
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
         Tile defaultTile = TileFactory.createTile(TileType.Null);
         for (int x = 0; x < gridWidth; x++) {
@@ -116,7 +118,7 @@ public class MainGUI extends JPanel {
         MainGUI gui = new MainGUI();
         Tile tile = TileFactory.createTile(TileType.CastleWallCurveRight);
         for (int i = 0; i < 12; i++) {
-            gui.setTile(tile, i, 0); // TODO fix rotation
+            gui.set(tile, i, 0); // TODO fix rotation
             tile.rotate();
         }
     }
