@@ -34,19 +34,27 @@ public class Tile {
         } else if (type == null) {
             throw new IllegalArgumentException("Tile can't be null");
         }
-        terrainMap = new HashMap<GridDirection, TerrainType>(5);
-        terrainMap.put(GridDirection.TOP, top);
-        terrainMap.put(GridDirection.RIGHT, right);
-        terrainMap.put(GridDirection.BOTTOM, bottom);
-        terrainMap.put(GridDirection.LEFT, left);
-        terrainMap.put(GridDirection.MIDDLE, middle);
         this.type = type;
-        image = new ImageIcon[4]; // TODO use own methods.
-        for (int i = 0; i <= 3; i++) {
-            image[i] = new ImageIcon(tilePath + rotation + fileType);
-        }
         tag = false;
         meeple = null;
+        buildTerrainMap(top, right, bottom, left, middle);
+        loadImages(tilePath, fileType);
+    }
+
+    /**
+     * Getter for the tile image.
+     * @return the image of the tile.
+     */
+    public ImageIcon getImage() {
+        return image[rotation];
+    }
+
+    /**
+     * Getter for the meeple of the tile.
+     * @return
+     */
+    public Meeple getMeeple() {
+        return meeple;
     }
 
     /**
@@ -56,6 +64,22 @@ public class Tile {
      */
     public TerrainType getTerrainAt(GridDirection direction) {
         return terrainMap.get(direction);
+    }
+
+    /**
+     * Getter for the tile type.
+     * @return the type
+     */
+    public TileType getType() {
+        return type;
+    }
+
+    /**
+     * Checks whether the tile has a meeple.
+     * @return true if it has a meeple
+     */
+    public boolean hasMeeple() {
+        return meeple != null;
     }
 
     /**
@@ -72,6 +96,22 @@ public class Tile {
             return from.equals(to) && (from.equals(TerrainType.CASTLE) || from.equals(TerrainType.ROAD));
         }
         return from.equals(middle) && (middle.equals(to)); // normal case. basic connection.
+    }
+
+    /**
+     * Checks whether this tile was already tagged. This is used for the structure checks.
+     * @return true if tagged.
+     */
+    public Boolean isTagged() {
+        return tag;
+    }
+
+    /**
+     * Removes and returns the meeple from the tile. Calls Meeple.removePlacement.
+     */
+    public void removeMeeple() {
+        meeple.removePlacement();
+        meeple = null;
     }
 
     /**
@@ -97,38 +137,6 @@ public class Tile {
     }
 
     /**
-     * Removes and returns the meeple from the tile. Calls Meeple.removePlacement.
-     */
-    public void removeMeeple() {
-        meeple.removePlacement();
-        meeple = null;
-    }
-
-    /**
-     * Checks whether the tile has a meeple.
-     * @return true if it has a meeple
-     */
-    public boolean hasMeeple() {
-        return meeple != null;
-    }
-
-    /**
-     * Getter for the meeple of the tile.
-     * @return
-     */
-    public Meeple getMeeple() {
-        return meeple;
-    }
-
-    /**
-     * Checks whether this tile was already tagged. This is used for the structure checks.
-     * @return true if tagged.
-     */
-    public Boolean isTagged() {
-        return tag;
-    }
-
-    /**
      * Sets the tag of the tile.
      * @param value is the value the tag gets set to.
      */
@@ -136,19 +144,19 @@ public class Tile {
         tag = value;
     }
 
-    /**
-     * Getter for the tile image.
-     * @return the image of the tile.
-     */
-    public ImageIcon getImage() {
-        return image[rotation];
+    private void buildTerrainMap(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle) {
+        terrainMap = new HashMap<GridDirection, TerrainType>(5); // create terrain map.
+        terrainMap.put(GridDirection.TOP, top); // map the terrain types to the tile position.
+        terrainMap.put(GridDirection.RIGHT, right);
+        terrainMap.put(GridDirection.BOTTOM, bottom);
+        terrainMap.put(GridDirection.LEFT, left);
+        terrainMap.put(GridDirection.MIDDLE, middle);
     }
 
-    /**
-     * Getter for the tile type.
-     * @return the type
-     */
-    public TileType getType() {
-        return type;
+    private void loadImages(String tilePath, String fileType) {
+        image = new ImageIcon[4]; // create image array.
+        for (int i = 0; i <= 3; i++) { // for every image:
+            image[i] = new ImageIcon(tilePath + i + fileType); // load it from path.
+        }
     }
 }
