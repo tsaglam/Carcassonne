@@ -4,7 +4,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 /**
- * TODO comment the TileLabel
+ * Is a simple class derived form JLabel, which stores (additionally to the JLabel functions) the
+ * coordinates of the label on the label grid.
  * @author Timur
  */
 public class TileLabel extends JLabel {
@@ -13,7 +14,9 @@ public class TileLabel extends JLabel {
     private int posY;
 
     /**
-     * TODO comment the TileLabel
+     * Simple constructor calling the <code>JLabel()</code> constructor.
+     * @param x sets the x coordinate.
+     * @param y sets the y coordinate.
      */
     public TileLabel(int x, int y) {
         super();
@@ -22,10 +25,10 @@ public class TileLabel extends JLabel {
     }
 
     /**
-     * TODO comment the TileLabel
-     * @param image
-     * @param x
-     * @param y
+     * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
+     * @param image sets the ImageIcon of the label.
+     * @param x sets the x coordinate.
+     * @param y sets the y coordinate.
      */
     public TileLabel(ImageIcon image, int x, int y) {
         super(image);
