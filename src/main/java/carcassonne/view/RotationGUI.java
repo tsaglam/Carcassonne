@@ -11,15 +11,15 @@ import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 
 /**
- * GUI class for the small tile placement GUI. It lets the user look at the tile to place and rotate
- * it.
+ * GUI class for the tile rotation. It lets the user look at the tile to place and rotate it both
+ * right and left.
  * @author Timur
  */
-public class PlacementGUI extends SmallGUI {
+public class RotationGUI extends SmallGUI {
     private static final long serialVersionUID = -5179683977081970564L;
 
     public static void main(String[] args) {
-        new PlacementGUI(null);
+        new RotationGUI(null);
     }
 
     private JButton buttonSkip;
@@ -32,8 +32,8 @@ public class PlacementGUI extends SmallGUI {
      * @param controller
      * @param title
      */
-    public PlacementGUI(MainController controller) {
-        super(controller, ""); // TODO take tile.
+    public RotationGUI(MainController controller) {
+        super(controller, ""); // TODO take tile. Rotate tile. Mouse adapters.
         buildContent();
         finishFrame();
     }
