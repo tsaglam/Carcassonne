@@ -15,6 +15,7 @@ public final class CarcasonneMain {
         new MainController();
     }
 
+    // private constructor, should never be called.
     private CarcasonneMain() {
         throw new IllegalAccessError("This class mustn't be instantiated.");
     }
