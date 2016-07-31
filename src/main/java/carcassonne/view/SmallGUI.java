@@ -32,6 +32,7 @@ public abstract class SmallGUI extends JPanel {
         options = GameOptions.getInstance();
         constraints = new GridBagConstraints();
         buildFrame(title);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // TODO (later) remove exit operation
 
     }
 
