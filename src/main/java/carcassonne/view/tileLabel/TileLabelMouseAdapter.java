@@ -1,4 +1,4 @@
-package carcassonne.view;
+package carcassonne.view.tileLabel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

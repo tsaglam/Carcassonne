@@ -14,6 +14,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
+import carcassonne.view.tileLabel.TileLabel;
 
 /**
  * The main GUI class, extending a JPanel.
