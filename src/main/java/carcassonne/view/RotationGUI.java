@@ -28,9 +28,8 @@ public class RotationGUI extends SmallGUI {
     private JButton buttonRotateRight;
 
     /**
-     * TODO comment the placement GUI.
-     * @param controller
-     * @param title
+     * Simple constructor which uses the constructor of the <code>SmallGUI</code>.
+     * @param controller is the game controller.
      */
     public RotationGUI(MainController controller) {
         super(controller, ""); // TODO take tile. Rotate tile. Mouse adapters.
