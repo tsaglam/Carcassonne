@@ -1,12 +1,14 @@
-package carcassonne.model;
+package carcassonne.model; // maybe move to controller? or not?
 
 import carcassonne.control.GameOptions;
 import carcassonne.model.grid.Grid;
+import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
 import carcassonne.model.tile.TileType;
 
 /**
- * An object of the round class simulates a game round.
+ * An object of the round class simulates a game round. It does not actively control the game. It
+ * represents the round and its information in an object.
  * @author Timur
  */
 public class Round {
@@ -15,6 +17,7 @@ public class Round {
     private Player[] player;
     private int activePlayer;
     private TileStack tileStack;
+    private Tile currentTile;
 
     /**
      * Simple constructor that creates the grid, the tile stack and the players.
@@ -26,6 +29,7 @@ public class Round {
         grid = new Grid(width, height, TileType.CastleWallRoad);
         // TODO get the control or gui to draw the tile.
         tileStack = new TileStack();
+        currentTile = tileStack.drawTile();
         createPlayers(playerCount);
     }
 
@@ -38,6 +42,32 @@ public class Round {
     }
 
     /**
+     * Getter for the current tile.
+     * @return the currentTile.
+     */
+    public Tile getCurrentTile() {
+        return currentTile;
+    }
+
+    /**
+     * Checks whether the game round is over. A game round is over if the grid is full or the stack
+     * of tiles is empty (no tiles left).
+     * @return true if the game is over.
+     */
+    public boolean isOver() {
+        return grid.isFull() || tileStack.isEmpty();
+    }
+
+    /**
+     * Checks whether the game round is NOT over. A game round is over if the grid is full or the
+     * stack of tiles is empty (no tiles left).
+     * @return true if the game is NOT over.
+     */
+    public boolean isNotOver() {
+        return !isOver();
+    }
+
+    /**
      * Method the starts the turn of the next player.
      */
     public void nextTurn() {
@@ -45,12 +75,13 @@ public class Round {
         if (activePlayer == player.length) {
             activePlayer = 0;
         }
+        currentTile = tileStack.drawTile();
     }
 
     /**
-     * TODO comment game logic method. draw tile from stack show placement gui place tile on grid
-     * paint tile. show meeple gui place meeple on grid paint meeple evaluate points add points
-     * check if player won or grid is full next player
+     * comment game logic method. draw tile from stack show placement gui place tile on grid paint
+     * tile. show meeple gui place meeple on grid paint meeple evaluate points add points check if
+     * player won or grid is full next player
      */
     public void startGame() {
         // TODO implement game logic as stated in the jdoc comment.
@@ -71,15 +102,6 @@ public class Round {
         }
         activePlayer = 0; // set first player as active.
 
-    }
-
-    /**
-     * Checks whether the game round is over. A game round is over if the grid is full or the stack
-     * of tiles is empty (no tiles left).
-     * @return true if the game is over.
-     */
-    private boolean isOver() {
-        return grid.isFull() || tileStack.isEmpty();
     }
 
 }
