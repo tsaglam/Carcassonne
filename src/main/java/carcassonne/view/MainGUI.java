@@ -70,7 +70,6 @@ public class MainGUI extends JPanel {
         constraints = new GridBagConstraints();
         buildLabelGrid();
         buildFrame();
-
     }
 
     /**
