@@ -42,4 +42,14 @@ public enum GridDirection {
         GridDirection[] directions = { TOP, RIGHT, BOTTOM, LEFT, MIDDLE };
         return directions;
     }
+
+    /**
+     * Generates a two dimensional array of the GridDirections for their orientation on a tile.
+     * @return a 2D array of an array of TOP_LEFT, LEFT, BOTTOM_LEFT, TOP, MIDDLE, BOTTOM,
+     * TOP_RIGHT, RIGHT and BOTTOM_RIGHT.
+     */
+    public static GridDirection[][] values2D() {
+        GridDirection[][] directions = { { TOP_LEFT, LEFT, BOTTOM_LEFT }, { TOP, MIDDLE, BOTTOM }, { TOP_RIGHT, RIGHT, BOTTOM_RIGHT } };
+        return directions;
+    }
 }
