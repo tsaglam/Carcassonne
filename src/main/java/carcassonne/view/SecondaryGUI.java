@@ -14,7 +14,7 @@ import carcassonne.model.tile.Tile;
  * Super class for all other smaller GUI beneath the main GUI.
  * @author Timur
  */
-public abstract class SmallGUI extends JPanel {
+public abstract class SecondaryGUI extends JPanel {
     private static final long serialVersionUID = 4056347951568551115L;
     protected MainController controller;
     protected GameOptions options;
@@ -27,7 +27,7 @@ public abstract class SmallGUI extends JPanel {
      * @param controller sets the controller.
      * @param title sets the window title.
      */
-    public SmallGUI(MainController controller, String title) {
+    public SecondaryGUI(MainController controller, String title) {
         super(new GridBagLayout());
         this.controller = controller;
         options = GameOptions.getInstance();

@@ -2,6 +2,7 @@ package carcassonne.control;
 
 import carcassonne.model.Round;
 import carcassonne.view.MainGUI;
+import carcassonne.view.SecondaryGUI;
 
 /**
  * Main controller for the game. This class is not a classic controller class from the

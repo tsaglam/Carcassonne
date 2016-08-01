@@ -18,7 +18,7 @@ import carcassonne.model.tile.TileType;
  * right and left.
  * @author Timur
  */
-public class RotationGUI extends SmallGUI {
+public class RotationGUI extends SecondaryGUI {
     private static final long serialVersionUID = -5179683977081970564L;
 
     public static void main(String[] args) {
