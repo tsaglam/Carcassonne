@@ -19,7 +19,8 @@ public class RotationGUI extends SmallGUI {
     private static final long serialVersionUID = -5179683977081970564L;
 
     public static void main(String[] args) {
-        new RotationGUI(null);
+        RotationGUI g = new RotationGUI(null);
+        g.setTile(TileFactory.createTile(TileType.CastleEdgeRoad));
     }
 
     private JButton buttonSkip;
@@ -59,5 +60,15 @@ public class RotationGUI extends SmallGUI {
         constraints.gridx = 0;
         constraints.gridwidth = 3;
         add(tileLabel, constraints);
+    }
+
+    /**
+     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update
+     * the GUI content according to the tiles properties.
+     */
+    @Override
+    protected void update() {
+        // TODO Auto-generated method stub
+
     }
 }
