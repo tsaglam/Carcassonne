@@ -117,13 +117,18 @@ public class Tile {
     /**
      * Turns a tile 90 degree to the right.
      */
-    public void rotate() {
-        TerrainType temporary = terrainMap.get(GridDirection.LEFT);
-        for (GridDirection direction : GridDirection.directNeighbors()) {
-            temporary = terrainMap.put(direction, temporary);
+    public void rotate(int rotations) {
+        if (rotations < 0) {
+            throw new IllegalArgumentException("Negative amount of rotations: " + rotations);
         }
-        // if rotation >= 3 reset rotation to zero, else increase by one:
-        rotation = (rotation >= 3) ? 0 : rotation + 1;
+        TerrainType temporary;
+        for (int i = 0; i < (rotations % 4); i++) {
+            temporary = terrainMap.get(GridDirection.LEFT); // rotate terrain:
+            for (GridDirection direction : GridDirection.directNeighbors()) {
+                temporary = terrainMap.put(direction, temporary);
+            }
+            rotation = (rotation >= 3) ? 0 : rotation + 1; // rotation indicator
+        }
     }
 
     /**
