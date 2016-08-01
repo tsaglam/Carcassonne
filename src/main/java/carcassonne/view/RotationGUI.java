@@ -1,12 +1,15 @@
 package carcassonne.view;
 
 import java.awt.GridBagConstraints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import carcassonne.control.MainController;
+import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 
@@ -38,6 +41,11 @@ public class RotationGUI extends SmallGUI {
         finishFrame();
     }
 
+    public Tile useTile() {
+        frame.setVisible(false);
+        return tile;
+    }
+
     // build the GUI content
     private void buildContent() {
         tileLabel = new JLabel(TileFactory.createTile(TileType.Null).getImage());
@@ -49,6 +57,8 @@ public class RotationGUI extends SmallGUI {
         buttonSkip.setToolTipText("Don't place tile and skip turn");
         buttonRotateLeft.setToolTipText("Rotate left");
         buttonRotateRight.setToolTipText("Rotate right");
+        // set listeners:
+        addMouseAdapters();
         // set constraints:
         constraints.fill = GridBagConstraints.BOTH;
         // add buttons:
@@ -62,13 +72,37 @@ public class RotationGUI extends SmallGUI {
         add(tileLabel, constraints);
     }
 
+    // simple mouser adapters TODO (later) make own classes
+    private void addMouseAdapters() {
+        buttonSkip.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controller.requestSkip();
+            }
+        });
+        buttonRotateLeft.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                tile.rotate(3);
+                update();
+            }
+        });
+        buttonRotateRight.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                tile.rotate(1);
+                update();
+            }
+        });
+    }
+
     /**
      * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update
      * the GUI content according to the tiles properties.
      */
     @Override
     protected void update() {
-        // TODO Auto-generated method stub
-
+        tileLabel.setIcon(tile.getImage());
     }
+
 }

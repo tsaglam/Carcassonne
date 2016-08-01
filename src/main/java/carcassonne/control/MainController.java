@@ -33,12 +33,23 @@ public class MainController {
     }
 
     /**
-     * Methods for the view to call if a user places a tile.
+     * Method for the view to call if a user places a tile.
      * @param x is the x coordinate.
      * @param y is the y coordinate.
+     * @return true if request was granted.
      */
-    public void requestTilePlacement(int x, int y) {
-
+    public boolean requestTilePlacement(int x, int y) {
+        //TODO implement tile placement.
+        return true;
+    }
+    
+    /**
+     * Method for the view to call if the user wants to skip a round.
+     * @return true if request was granted.
+     */
+    public boolean requestSkip() {
+        currentRound.nextTurn();
+        return true;
     }
 
     /**
