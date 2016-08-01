@@ -24,7 +24,7 @@ public class PlayerTest {
     public void setUp() throws Exception {
         player = new Player();
         grid = new Grid(3, 3, TileType.Null);
-        tile = TileFactory.createTile(TileType.CastleWallRoad);
+        tile = TileFactory.create(TileType.CastleWallRoad);
         grid.place(0, 0, tile);
     }
 

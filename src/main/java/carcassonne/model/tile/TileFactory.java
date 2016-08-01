@@ -21,7 +21,7 @@ public final class TileFactory {
      * @param type is the tile type.
      * @return the tile object.
      */
-    public static Tile createTile(TileType type) {
+    public static Tile create(TileType type) {
         if (type == null) { // null is invalid argument.
             throw new IllegalArgumentException("TileFactory can't create tile from TileType value null.");
         }

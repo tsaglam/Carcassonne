@@ -31,7 +31,7 @@ public class MainGUI extends JPanel {
     public static void main(String[] args) throws InterruptedException {
         int pause = 15;
         MainGUI gui = new MainGUI(null);
-        Tile tile = TileFactory.createTile(TileType.CastleWallCurveRight);
+        Tile tile = TileFactory.create(TileType.CastleWallCurveRight);
         for (int y = 0; y < 7; y++) {
             for (int x = 0; x < 12; x++) {
                 gui.set(tile, x, y);
@@ -133,7 +133,7 @@ public class MainGUI extends JPanel {
         gridWidth = options.getGridWidth();
         gridHeight = options.getGridHeight();
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
-        Tile defaultTile = TileFactory.createTile(TileType.Null);
+        Tile defaultTile = TileFactory.create(TileType.Null);
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 labelGrid[x][y] = new TileLabel(defaultTile.getImage(), controller, x, y);

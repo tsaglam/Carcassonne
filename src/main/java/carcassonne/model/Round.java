@@ -83,7 +83,7 @@ public class Round {
      * player won or grid is full next player
      */
     public void startGame() {
-        // TODO (HIGH) implement game logic as stated in the jdoc comment.
+        // TODO (MEDIUM) implement game logic as stated in the jdoc comment.
     }
 
     /**

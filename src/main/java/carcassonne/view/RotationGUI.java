@@ -23,7 +23,7 @@ public class RotationGUI extends SecondaryGUI {
 
     public static void main(String[] args) {
         RotationGUI g = new RotationGUI(null); //TODO (LOWEST) remove main method sometime.
-        g.setTile(TileFactory.createTile(TileType.CastleEdgeRoad));
+        g.setTile(TileFactory.create(TileType.CastleEdgeRoad));
     }
 
     private JButton buttonSkip;
@@ -48,7 +48,7 @@ public class RotationGUI extends SecondaryGUI {
 
     // build the GUI content
     private void buildContent() {
-        tileLabel = new JLabel(TileFactory.createTile(TileType.Null).getImage());
+        tileLabel = new JLabel(TileFactory.create(TileType.Null).getImage());
         // create buttons:
         buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
         buttonRotateLeft = new JButton(new ImageIcon("src/main/ressources/icons/left.png"));

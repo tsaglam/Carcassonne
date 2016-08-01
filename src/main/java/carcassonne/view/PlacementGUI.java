@@ -19,7 +19,7 @@ public class PlacementGUI extends SecondaryGUI {
 
     public static void main(String[] args) { // TODO (LOWEST) remove main method sometime.
         PlacementGUI g = new PlacementGUI(null);
-        g.setTile(TileFactory.createTile(TileType.CastleEdgeRoad));
+        g.setTile(TileFactory.create(TileType.CastleEdgeRoad));
     }
 
     private JButton[][] button;
@@ -64,8 +64,8 @@ public class PlacementGUI extends SecondaryGUI {
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 terrain = tile.getTerrainAt(directions[x][y]);
-                System.out.println(directions[x][y]+" --> "+terrain);
-                if (terrain == null) {
+                System.out.println(directions[x][y] + " --> " + terrain);
+                if (terrain == null || terrain == TerrainType.CASTLE_AND_ROAD) {
                     button[x][y].setEnabled(false);
                 } else {
                     button[x][y].setEnabled(true);

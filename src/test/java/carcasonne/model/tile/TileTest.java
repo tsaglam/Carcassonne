@@ -132,7 +132,7 @@ public class TileTest {
     }
 
     private void checkConnections(TileType tileType, GridDirection fromDirection, int expectedConnections) {
-        tile = TileFactory.createTile(tileType); // create tile from type
+        tile = TileFactory.create(tileType); // create tile from type
         int connectionCounter = 0;
         for (GridDirection position : GridDirection.directNeighbors()) { // for every tile side
             if (tile.isConnected(fromDirection, position)) { // if side connected to fromDirection
@@ -146,7 +146,7 @@ public class TileTest {
     @Test
     public void imageTest() {
         for (TileType type : TileType.values()) { // for every tile type
-            tile = TileFactory.createTile(type); // create tile
+            tile = TileFactory.create(type); // create tile
             image = tile.getImage(); // get image
             assertEquals(image.getIconHeight(), 100); // check height
             assertEquals(image.getIconWidth(), 100); // check width
@@ -155,7 +155,7 @@ public class TileTest {
 
     @Test
     public void nullTileTest() {
-        tile = TileFactory.createTile(TileType.Null);
+        tile = TileFactory.create(TileType.Null);
         tile.rotate(1); // just testing the useless tile for exceptions & co
         assertEquals(TerrainType.OTHER, tile.getTerrainAt(GridDirection.TOP));
         assertEquals(TileType.Null, tile.getType());
