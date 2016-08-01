@@ -1,6 +1,7 @@
 package carcassonne.control;
 
 import java.awt.DisplayMode;
+import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
 /**
@@ -41,12 +42,17 @@ public final class GameOptions {
     /**
      * maximal amount of players.
      */
-    public final int maximalPlayers = 4;
+    public final int maximalPlayers;
 
     /**
      * width and height of a tile in pixels.
      */
-    public final int tileSize = 100;
+    public final int tileSize;
+    
+    /**
+     * Font type of the button.
+     */
+    public final Font buttonFont;
 
     private int taskBarHeight;
 
@@ -69,6 +75,9 @@ public final class GameOptions {
         default:
             taskBarHeight = 40;
         }
+        buttonFont = new Font("Helvetica", Font.BOLD, 12);
+        maximalPlayers = 4;
+        tileSize =  100;
     }
 
     /**
