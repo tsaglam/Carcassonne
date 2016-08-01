@@ -5,6 +5,8 @@ import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
+import carcassonne.model.tile.TerrainType;
+
 /**
  * Singleton that stores the game options and other information. There is only one option instance
  * at a time. The use of singletons is heavily discussed.
@@ -49,17 +51,17 @@ public final class GameOptions {
      * width and height of a tile in pixels.
      */
     public final int tileSize;
-    
+
     /**
      * Font type of the button.
      */
     public final Font buttonFont;
-    
+
     /**
      * Background color of the main GUI.
      */
     public final Color colorGUImain;
-    
+
     /**
      * Background color of the small GUIs.
      */
@@ -90,7 +92,26 @@ public final class GameOptions {
         colorGUImain = new Color(190, 190, 190); // grey
         colorGUIsmall = new Color(217, 217, 217); // light grey
         maximalPlayers = 4;
-        tileSize =  100; 
+        tileSize = 100;
+    }
+
+    /**
+     * Builds the path to the image of a specific meeple of a player.
+     * @param type the type of terrain the meeple occupies.
+     * @param playerNumber the number of the meeple owner.
+     * @return the path as a String.
+     */
+    public String buildImagePath(TerrainType type, int playerNumber) {
+        return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + "_" + playerNumber + ".png";
+    }
+    
+    /**
+     * Builds the path to the image of a specific meeple
+     * @param type the type of terrain the meeple occupies.
+     * @return the path as a String.
+     */
+    public String buildImagePath(TerrainType type) {
+        return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + ".png";
     }
 
     /**

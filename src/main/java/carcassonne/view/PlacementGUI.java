@@ -2,6 +2,7 @@ package carcassonne.view;
 
 import java.awt.GridBagConstraints;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import carcassonne.control.MainController;
@@ -39,13 +40,13 @@ public class PlacementGUI extends SecondaryGUI {
         String[][] toolTipText = { { "top left", "top", "top right" }, { "left", "middle", "right" }, { "bottom left", "bottom", "bottom right" } };
         constraints.fill = GridBagConstraints.BOTH;
         constraints.ipadx = 0;
-        constraints.ipady = 40;
+        constraints.ipady = 0;
         button = new JButton[3][3];
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 button[x][y] = new JButton();
                 button[x][y].setToolTipText("Place Meeple on the " + toolTipText[x][y] + " of the tile.");
-                button[x][y].setFont(options.buttonFont);
+                button[x][y].setBorder(null);
                 constraints.gridx = x;
                 constraints.gridy = y;
                 add(button[x][y], constraints);
@@ -67,10 +68,11 @@ public class PlacementGUI extends SecondaryGUI {
                 System.out.println(directions[x][y] + " --> " + terrain);
                 if (terrain == null || terrain == TerrainType.CASTLE_AND_ROAD) {
                     button[x][y].setEnabled(false);
+                    terrain = TerrainType.OTHER;
                 } else {
                     button[x][y].setEnabled(true);
-                    button[x][y].setText(terrain.toString().substring(0, 4));
                 }
+                button[x][y].setIcon(new ImageIcon(options.buildImagePath(terrain)));
             }
         }
         finishFrame();
