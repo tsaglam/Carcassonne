@@ -1,6 +1,5 @@
 package carcassonne.view;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -56,7 +55,7 @@ public abstract class SmallGUI extends JPanel {
     private void buildFrame(String title) {
         frame = new JFrame(title);
         frame.getContentPane().add(this);
-        setBackground(new Color(190, 190, 190)); // grey
+        setBackground(options.colorGUIsmall); // mac grey
         frame.setResizable(false);
     }
 

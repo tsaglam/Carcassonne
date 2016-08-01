@@ -1,5 +1,6 @@
 package carcassonne.control;
 
+import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -53,6 +54,16 @@ public final class GameOptions {
      * Font type of the button.
      */
     public final Font buttonFont;
+    
+    /**
+     * Background color of the main GUI.
+     */
+    public final Color colorGUImain;
+    
+    /**
+     * Background color of the small GUIs.
+     */
+    public final Color colorGUIsmall;
 
     private int taskBarHeight;
 
@@ -76,8 +87,10 @@ public final class GameOptions {
             taskBarHeight = 40;
         }
         buttonFont = new Font("Helvetica", Font.BOLD, 12);
+        colorGUImain = new Color(190, 190, 190); // grey
+        colorGUIsmall = new Color(217, 217, 217); // light grey
         maximalPlayers = 4;
-        tileSize =  100;
+        tileSize =  100; 
     }
 
     /**

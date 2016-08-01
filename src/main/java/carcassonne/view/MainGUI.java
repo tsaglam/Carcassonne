@@ -1,6 +1,5 @@
 package carcassonne.view;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -118,7 +117,7 @@ public class MainGUI extends JPanel {
         frame = new JFrame("Carcasonne");
         frame.getContentPane().add(this);
         frame.setJMenuBar(menuBar);
-        setBackground(new Color(190, 190, 190)); // grey
+        setBackground(options.colorGUImain); // grey
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // frame.setResizable(false);
         // frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
