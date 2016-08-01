@@ -33,8 +33,6 @@ public abstract class SecondaryGUI extends JPanel {
         options = GameOptions.getInstance();
         constraints = new GridBagConstraints();
         buildFrame(title);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // TODO (later) remove exit operation
-
     }
 
     /**
@@ -55,16 +53,18 @@ public abstract class SecondaryGUI extends JPanel {
     private void buildFrame(String title) {
         frame = new JFrame(title);
         frame.getContentPane().add(this);
-        setBackground(options.colorGUIsmall); // mac grey
+        setBackground(options.colorGUIsmall);
         frame.setResizable(false);
+        frame.setAlwaysOnTop(true);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
     /**
-     * Packs and shows the frame. should be called at the end of a constructor of a subclass.
+     * Should be called at the end of a constructor of a subclass.
      */
     protected void finishFrame() {
         frame.pack();
-        //frame.setVisible(true); disabled, use setTile to show GUI.
+        frame.setVisible(true); // disabled, use setTile to show GUI.
     }
 
     /**
