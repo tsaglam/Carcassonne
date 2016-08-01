@@ -11,8 +11,8 @@ import carcassonne.view.SecondaryGUI;
 /**
  * Main controller for the game. This class is not a classic controller class from the
  * Model/View/Controller Architecture. It gets the user input from all view classes and notifies
- * both the model and the view. It contains state information. TODO (MEDIUM) create state machine - make
- * multiple state classes - make abstract state - implement the state machine functions
+ * both the model and the view. It contains state information. TODO (MEDIUM) create state machine -
+ * make multiple state classes - make abstract state - implement the state machine functions
  * @author Timur
  */
 public class MainController {
@@ -72,6 +72,7 @@ public class MainController {
      */
     public boolean requestMeeplePlacement(GridDirection position) {
         // TODO (MEDIUM) implement meeple placement.
+        System.out.println("requestMeeplePlacement: " + position);
         return false;
     }
 
