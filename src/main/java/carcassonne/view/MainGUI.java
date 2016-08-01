@@ -24,7 +24,7 @@ public class MainGUI extends JPanel {
     private static final long serialVersionUID = -8750891542665009043L;
 
     /**
-     * Main method for testing. //TODO maybe remove sometime.
+     * Main method for testing. //TODO (LOWEST) remove main method sometime.
      * @param args are the arguments.
      * @throws InterruptedException exception
      */
@@ -74,7 +74,7 @@ public class MainGUI extends JPanel {
     /**
      * Rebuilds the label grid if the game should be restarted.
      */
-    public void rebuildLabelGrid() { // TODO test gui rebuild
+    public void rebuildLabelGrid() {
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 remove(labelGrid[x][y]);
@@ -92,7 +92,7 @@ public class MainGUI extends JPanel {
      * @param position is the position of the meeple on the specific tile.
      */
     public void set(Meeple meeple, int x, int y, GridDirection position) {
-        // TODO implement paint meeple method.
+        // TODO (MEDIUM) implement paint meeple method.
     }
 
     /**

@@ -22,7 +22,7 @@ public class RotationGUI extends SecondaryGUI {
     private static final long serialVersionUID = -5179683977081970564L;
 
     public static void main(String[] args) {
-        RotationGUI g = new RotationGUI(null);
+        RotationGUI g = new RotationGUI(null); //TODO (LOWEST) remove main method sometime.
         g.setTile(TileFactory.createTile(TileType.CastleEdgeRoad));
     }
 
@@ -36,7 +36,7 @@ public class RotationGUI extends SecondaryGUI {
      * @param controller is the game controller.
      */
     public RotationGUI(MainController controller) {
-        super(controller, ""); // TODO take tile. Rotate tile. Mouse adapters.
+        super(controller, "");
         buildContent();
         finishFrame();
     }
@@ -72,7 +72,7 @@ public class RotationGUI extends SecondaryGUI {
         add(tileLabel, constraints);
     }
 
-    // simple mouser adapters TODO (later) make own classes
+    // simple mouser adapters TODO (LOW) make own classes
     private void addMouseAdapters() {
         buttonSkip.addMouseListener(new MouseAdapter() {
             @Override

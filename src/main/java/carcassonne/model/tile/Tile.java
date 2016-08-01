@@ -117,7 +117,7 @@ public class Tile {
     /**
      * Turns a tile 90 degree to the right.
      */
-    public void rotate(int rotations) {
+    public void rotate(int rotations) { // TODO (LOW) maybe build real rotate left
         if (rotations < 0) {
             throw new IllegalArgumentException("Negative amount of rotations: " + rotations);
         }
@@ -154,7 +154,7 @@ public class Tile {
         terrainMap = new HashMap<GridDirection, TerrainType>(5); // create terrain map.
         terrainMap.put(GridDirection.TOP, top); // map the terrain types to the tile position.
         terrainMap.put(GridDirection.RIGHT, right);
-        terrainMap.put(GridDirection.BOTTOM, bottom);
+        terrainMap.put(GridDirection.BOTTOM, bottom); // TODO (LOW) Update model!
         terrainMap.put(GridDirection.LEFT, left);
         terrainMap.put(GridDirection.MIDDLE, middle);
     }

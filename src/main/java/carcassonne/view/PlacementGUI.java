@@ -16,7 +16,7 @@ import carcassonne.model.tile.TileType;
 public class PlacementGUI extends SecondaryGUI {
     private static final long serialVersionUID = 1449264387665531286L;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { //TODO (LOWEST) remove main method sometime.
         PlacementGUI g = new PlacementGUI(null);
         g.setTile(TileFactory.createTile(TileType.CastleEdgeRoad));
     }
@@ -34,7 +34,7 @@ public class PlacementGUI extends SecondaryGUI {
     }
 
     // build the GUI content
-    private void buildContent() { // TODO add real dynamic tile placement.
+    private void buildContent() {
         String[][] toolTipText = { { "top left", "top", "top right" }, { "left", "middle", "right" }, { "bottom left", "bottom", "bottom right" } };
         constraints.fill = GridBagConstraints.BOTH;
         constraints.ipadx = 0;
@@ -58,6 +58,7 @@ public class PlacementGUI extends SecondaryGUI {
      */
     @Override
     protected void update() {
+        // TODO (HIGH) add real dynamic tile placement.
         button[1][0].setText(tile.getTerrainAt(GridDirection.TOP).toString());
         button[1][2].setText(tile.getTerrainAt(GridDirection.BOTTOM).toString());
     }

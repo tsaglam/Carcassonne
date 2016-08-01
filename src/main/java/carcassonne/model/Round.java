@@ -27,7 +27,6 @@ public class Round {
      */
     public Round(int playerCount, int width, int height) {
         grid = new Grid(width, height, TileType.CastleWallRoad);
-        // TODO get the control or gui to draw the tile.
         tileStack = new TileStack();
         currentTile = tileStack.drawTile();
         createPlayers(playerCount);
@@ -84,7 +83,7 @@ public class Round {
      * player won or grid is full next player
      */
     public void startGame() {
-        // TODO implement game logic as stated in the jdoc comment.
+        // TODO (HIGH) implement game logic as stated in the jdoc comment.
     }
 
     /**

@@ -3,7 +3,7 @@ package carcassonne.model.tile;
 /**
  * Enum for the specific type of tiles. this is needed for the tile factory.
  * It allows easy construction of tile objects. 
- * Values use lower case for easy image importing. TODO (later) maybe rename enum values and tile image resources.
+ * Values use lower case for easy image importing. TODO (LOW) maybe rename enum values and tile image resources.
  * @author Timur
  */
 public enum TileType {

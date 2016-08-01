@@ -23,7 +23,7 @@ public class GridTest {
     }
 
     @Test
-    public void getDirectNeighborsTest() { // TODO more tests for the grid class.
+    public void getDirectNeighborsTest() { // TODO (LOW) more tests for the grid class.
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
                 assertEquals(1, testGrid.getDirectNeighbors(x, y).size());

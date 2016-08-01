@@ -31,7 +31,7 @@ public class PlayerTest {
     @Test
     public void test() {
         player.placeMeepleAt(grid.getTile(0, 0));
-        // TODO implement tests
+        // TODO (LOW) implement tests
         fail("Not yet implemented");
     }
 
