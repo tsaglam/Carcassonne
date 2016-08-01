@@ -38,16 +38,6 @@ public abstract class SmallGUI extends JPanel {
 
     }
 
-    /*
-     * Builds the frame and sets its properties.
-     */
-    private void buildFrame(String title) {
-        frame = new JFrame(title);
-        frame.getContentPane().add(this);
-        setBackground(new Color(190, 190, 190)); // grey
-        frame.setResizable(false);
-    }
-
     /**
      * Sets the tile of the GUI, updates the GUI and then makes it visible. Should be called to show
      * the GUI. The method implements the template method pattern using the method
@@ -60,11 +50,15 @@ public abstract class SmallGUI extends JPanel {
         frame.setVisible(true);
     }
 
-    /**
-     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update
-     * the GUI content according to the tiles properties.
+    /*
+     * Builds the frame and sets its properties.
      */
-    protected abstract void update();
+    private void buildFrame(String title) {
+        frame = new JFrame(title);
+        frame.getContentPane().add(this);
+        setBackground(new Color(190, 190, 190)); // grey
+        frame.setResizable(false);
+    }
 
     /**
      * Packs and shows the frame. should be called at the end of a constructor of a subclass.
@@ -73,5 +67,11 @@ public abstract class SmallGUI extends JPanel {
         frame.pack();
         //frame.setVisible(true); disabled, use setTile to show GUI.
     }
+
+    /**
+     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update
+     * the GUI content according to the tiles properties.
+     */
+    protected abstract void update();
 
 }

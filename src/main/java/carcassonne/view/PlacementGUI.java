@@ -14,12 +14,12 @@ import carcassonne.model.tile.TileType;
  */
 public class PlacementGUI extends SmallGUI {
     private static final long serialVersionUID = 1449264387665531286L;
-    private JButton[][] button;
-
     public static void main(String[] args) {
         PlacementGUI g = new PlacementGUI(null);
         g.setTile(TileFactory.createTile(TileType.CastleEdgeRoad));
     }
+
+    private JButton[][] button;
 
     /**
      * Simple constructor which uses the constructor of the <code>SmallGUI</code>.
