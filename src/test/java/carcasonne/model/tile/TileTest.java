@@ -68,14 +68,28 @@ public class TileTest {
     @Test
     public void rotateTest() {
         tile = new Tile(CASTLE, FIELDS, ROAD, MONASTRY, OTHER, stdPath, stdFileType, stdTileType);
-        tile.rotate(1);
+        tile.rotateRight();
         TerrainType[] expected = { MONASTRY, CASTLE, FIELDS, ROAD, OTHER };
         int i = 0;
         for (GridDirection direction : GridDirection.tilePositions()) { // for every position
             assertEquals(expected[i++], tile.getTerrainAt(direction)); // check if rotated
         }
         for (int j = 0; j < 10; j++) {
-            tile.rotate(1); // should not crash.
+            tile.rotateRight(); // should not crash.
+        }
+    }
+    
+    @Test
+    public void rotateTest2() {
+        tile = new Tile(CASTLE, FIELDS, ROAD, MONASTRY, OTHER, stdPath, stdFileType, stdTileType);
+        tile.rotateLeft();
+        TerrainType[] expected = { FIELDS, ROAD, MONASTRY, CASTLE, OTHER };
+        int i = 0;
+        for (GridDirection direction : GridDirection.tilePositions()) { // for every position
+            assertEquals(expected[i++], tile.getTerrainAt(direction)); // check if rotated
+        }
+        for (int j = 0; j < 10; j++) {
+            tile.rotateLeft(); // should not crash.
         }
     }
 
@@ -156,7 +170,7 @@ public class TileTest {
     @Test
     public void nullTileTest() {
         tile = TileFactory.create(TileType.Null);
-        tile.rotate(1); // just testing the useless tile for exceptions & co
+        tile.rotateRight(); // just testing the useless tile for exceptions & co
         assertEquals(TerrainType.OTHER, tile.getTerrainAt(GridDirection.TOP));
         assertEquals(TileType.Null, tile.getType());
         assertEquals(true, tile.isConnected(GridDirection.TOP, GridDirection.LEFT));

@@ -35,7 +35,7 @@ public class MainGUI extends JPanel {
         for (int y = 0; y < 7; y++) {
             for (int x = 0; x < 12; x++) {
                 gui.set(tile, x, y);
-                tile.rotate(1);
+                tile.rotateRight();
                 Thread.sleep(pause);
             }
         }
@@ -44,7 +44,7 @@ public class MainGUI extends JPanel {
         for (int y = 0; y < 7; y++) {
             for (int x = 0; x < 12; x++) {
                 gui.set(tile, x, y);
-                tile.rotate(1);
+                tile.rotateRight();
                 Thread.sleep(pause);
             }
         }

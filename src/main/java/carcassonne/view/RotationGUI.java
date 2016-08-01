@@ -83,14 +83,14 @@ public class RotationGUI extends SecondaryGUI {
         buttonRotateLeft.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                tile.rotate(3);
+                tile.rotateLeft();
                 update();
             }
         });
         buttonRotateRight.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                tile.rotate(1);
+                tile.rotateRight();
                 update();
             }
         });
