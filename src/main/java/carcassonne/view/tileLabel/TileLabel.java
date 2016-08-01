@@ -12,8 +12,6 @@ import carcassonne.control.MainController;
  */
 public class TileLabel extends JLabel {
     private static final long serialVersionUID = -9104123100195977262L;
-    private int posX;
-    private int posY;
 
     /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
@@ -38,25 +36,7 @@ public class TileLabel extends JLabel {
         setup(controller, x, y);
     }
 
-    /**
-     * getter for the label position x.
-     * @return the labelPositionX
-     */
-    public int getPosX() {
-        return posX;
-    }
-
-    /**
-     * getter for the label position x.
-     * @return the labelPositionY
-     */
-    public int getPosY() {
-        return posY;
-    }
-
     private void setup(MainController controller, int x, int y) {
-        addMouseListener(new TileLabelMouseAdapter(this, controller));
-        this.posX = x;
-        this.posY = y;
+        addMouseListener(new TileLabelMouseAdapter(controller, x, y));
     }
 }
