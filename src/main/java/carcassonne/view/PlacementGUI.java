@@ -6,6 +6,7 @@ import javax.swing.JButton;
 
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 
@@ -16,7 +17,7 @@ import carcassonne.model.tile.TileType;
 public class PlacementGUI extends SecondaryGUI {
     private static final long serialVersionUID = 1449264387665531286L;
 
-    public static void main(String[] args) { //TODO (LOWEST) remove main method sometime.
+    public static void main(String[] args) { // TODO (LOWEST) remove main method sometime.
         PlacementGUI g = new PlacementGUI(null);
         g.setTile(TileFactory.createTile(TileType.CastleEdgeRoad));
     }
@@ -40,8 +41,8 @@ public class PlacementGUI extends SecondaryGUI {
         constraints.ipadx = 0;
         constraints.ipady = 40;
         button = new JButton[3][3];
-        for (int x = 0; x < 3; x++) {
-            for (int y = 0; y < 3; y++) {
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
                 button[x][y] = new JButton();
                 button[x][y].setToolTipText("Place Meeple on the " + toolTipText[x][y] + " of the tile.");
                 button[x][y].setFont(options.buttonFont);
@@ -58,8 +59,20 @@ public class PlacementGUI extends SecondaryGUI {
      */
     @Override
     protected void update() {
-        // TODO (HIGH) add real dynamic tile placement.
-        button[1][0].setText(tile.getTerrainAt(GridDirection.TOP).toString());
-        button[1][2].setText(tile.getTerrainAt(GridDirection.BOTTOM).toString());
+        GridDirection[][] directions = GridDirection.values2D();
+        TerrainType terrain;
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                terrain = tile.getTerrainAt(directions[x][y]);
+                System.out.println(directions[x][y]+" --> "+terrain);
+                if (terrain == null) {
+                    button[x][y].setEnabled(false);
+                } else {
+                    button[x][y].setEnabled(true);
+                    button[x][y].setText(terrain.toString().substring(0, 4));
+                }
+            }
+        }
+        finishFrame();
     }
 }
