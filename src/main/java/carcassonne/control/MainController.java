@@ -1,7 +1,11 @@
 package carcassonne.control;
 
 import carcassonne.model.Round;
+import carcassonne.model.grid.GridDirection;
+import carcassonne.model.tile.Tile;
 import carcassonne.view.MainGUI;
+import carcassonne.view.PlacementGUI;
+import carcassonne.view.RotationGUI;
 import carcassonne.view.SecondaryGUI;
 
 /**
@@ -14,6 +18,8 @@ import carcassonne.view.SecondaryGUI;
 public class MainController {
     GameOptions options = GameOptions.getInstance();
     MainGUI gui;
+    RotationGUI rotationGUI;
+    SecondaryGUI placementGUI;
     Round currentRound;
 
     /**
@@ -21,6 +27,8 @@ public class MainController {
      */
     public MainController() {
         gui = new MainGUI(this);
+        rotationGUI = new RotationGUI(this);
+        placementGUI = new PlacementGUI(this);
         currentRound = new Round(2, options.getGridWidth(), options.getGridHeight());
     }
 
@@ -40,10 +48,14 @@ public class MainController {
      * @return true if request was granted.
      */
     public boolean requestTilePlacement(int x, int y) {
-        //TODO implement tile placement.
-        return true;
+        Tile t = rotationGUI.useTile();
+        // if (t can be placed) {
+        // round.place(t);
+        // return true;
+        // } TODO implement tile placement.
+        return false;
     }
-    
+
     /**
      * Method for the view to call if the user wants to skip a round.
      * @return true if request was granted.
@@ -56,8 +68,9 @@ public class MainController {
     /**
      * Method for the view to call if a user mans a tile with a meeple.
      */
-    public void placeMeeple() {
-
+    public boolean requestMeeplePlacement(GridDirection position) {
+        // TODO implement meeple placement.
+        return false;
     }
 
 }
