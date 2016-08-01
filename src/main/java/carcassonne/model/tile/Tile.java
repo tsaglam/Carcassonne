@@ -60,7 +60,7 @@ public class Tile {
     /**
      * return the terrain type on the tile in the specific direction.
      * @param direction is the specific direction.
-     * @return the terrain type.
+     * @return the terrain type, or null if the direction is not mapped.
      */
     public TerrainType getTerrainAt(GridDirection direction) {
         return terrainMap.get(direction);
