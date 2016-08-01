@@ -49,9 +49,10 @@ public class MainController {
      * @return true if request was granted.
      */
     public boolean requestTilePlacement(int x, int y) {
-        Tile t = rotationGUI.useTile();
+        Tile tile = rotationGUI.useTile();
         // if (t can be placed) {
         // round.place(t);
+        placementGUI.setTile(tile);
         // return true;
         // } TODO (MEDIUM) implement tile placement.
         return false;
