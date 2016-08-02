@@ -30,6 +30,7 @@ public class MainController {
         rotationGUI = new RotationGUI(this);
         placementGUI = new PlacementGUI(this);
         currentRound = new Round(2, options.getGridWidth(), options.getGridHeight());
+        newGame(2); // TODO (low) don't auto-start new game
     }
 
     /**
@@ -40,6 +41,7 @@ public class MainController {
         currentRound = new Round(playerCount, options.getGridWidth(), options.getGridHeight());
         gui.rebuildLabelGrid();
         // TODO (MEDIUM) get the control or GUI to draw the tile.
+        rotationGUI.setTile(currentRound.getCurrentTile());
     }
 
     /**
@@ -50,11 +52,12 @@ public class MainController {
      */
     public boolean requestTilePlacement(int x, int y) {
         Tile tile = rotationGUI.useTile();
-        // if (t can be placed) {
-        // round.place(t);
-        placementGUI.setTile(tile);
-        // return true;
-        // } TODO (MEDIUM) implement tile placement.
+        if(currentRound.makeGridPlacement(x, y, tile)) {
+            gui.set(tile, x, y);
+            rotationGUI.setEnabled(false);
+            placementGUI.setTile(tile); // TODO (MEDIUM) only if player has meeples
+            return true;
+        }
         return false;
     }
 

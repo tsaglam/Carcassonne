@@ -230,7 +230,7 @@ public class Grid {
      * Places a specific tile in the middle of the grid.
      * @param tileType is the type of that specific tile.
      */
-    public void placeFoundation(TileType tileType) {
+    private void placeFoundation(TileType tileType) {
         int centerX = Math.round((width - 1) / 2);
         int centerY = Math.round((height - 1) / 2);
         place(centerX, centerY, TileFactory.create(tileType));

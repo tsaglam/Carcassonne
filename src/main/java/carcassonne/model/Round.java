@@ -2,6 +2,7 @@ package carcassonne.model; // maybe move to controller? or not?
 
 import carcassonne.control.GameOptions;
 import carcassonne.model.grid.Grid;
+import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
 import carcassonne.model.tile.TileType;
@@ -75,6 +76,16 @@ public class Round {
             activePlayer = 0;
         }
         currentTile = tileStack.drawTile();
+    }
+    
+    public boolean makeGridPlacement(int x, int y, Tile tile) {
+        currentTile = tile;
+        return grid.place(x, y, tile);
+    }
+    
+    public boolean makeMeeplePlacement(GridDirection direction) {
+        player[activePlayer].placeMeepleAt(currentTile);
+        return true; // TODO make check for amount of meeples
     }
 
     /**
