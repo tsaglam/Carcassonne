@@ -40,7 +40,7 @@ public class MainController {
         currentRound = new Round(playerCount, options.gridWidth, options.gridHeight);
         gui.rebuildLabelGrid();
         gui.set(currentRound.getFirstTile(), options.gridCenterX, options.gridCenterY);
-        rotationGUI.setTile(currentRound.getCurrentTile());
+        placementGUI.setTile(currentRound.getCurrentTile());
     }
 
     /**

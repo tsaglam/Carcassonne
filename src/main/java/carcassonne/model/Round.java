@@ -29,8 +29,8 @@ public class Round {
     public Round(int playerCount, int width, int height) {
         grid = new Grid(width, height, TileType.CastleWallRoad);
         tileStack = new TileStack();
-        currentTile = tileStack.drawTile();
         createPlayers(playerCount);
+        currentTile = getFirstTile();
     }
 
     /**
