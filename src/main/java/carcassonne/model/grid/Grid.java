@@ -250,7 +250,7 @@ public class Grid {
             throw new IllegalArgumentException("Tile from type TileType.Null can't be placed.");
         }
     }
-    
+
     /**
      * Forces to place a tile on a spot on the grid.
      * @param x is the x coordinate
@@ -276,7 +276,8 @@ public class Grid {
      * @param x is the x position on the grid.
      * @param y is the y position on the grid.
      * @param tile is the tile to place.
-     * @param freePlacement is the boolean that decides whether a tile has to connect to another tile.
+     * @param freePlacement is the boolean that decides whether a tile has to connect to another
+     * tile.
      * @return true if the tile can be placed on the grid position specified through the
      * coordinates.
      */

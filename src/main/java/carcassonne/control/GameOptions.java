@@ -67,6 +67,26 @@ public final class GameOptions {
      */
     public final Color colorGUIsmall;
 
+    /**
+     * The width of the grid in tiles.
+     */
+    public int gridWidth;
+
+    /**
+     * The height of the grid in tiles.
+     */
+    public int gridHeight;
+
+    /**
+     * The x coordinates of the grid center.
+     */
+    public int gridCenterX;
+
+    /**
+     * The y coordinates of the grid center.
+     */
+    public int gridCenterY;
+
     private int taskBarHeight;
 
     /**
@@ -93,6 +113,19 @@ public final class GameOptions {
         colorGUIsmall = new Color(217, 217, 217); // light grey
         maximalPlayers = 4;
         tileSize = 100;
+        gridHeight = (resolutionHeight - taskBarHeight) / 100;
+        gridWidth = resolutionWidth / 100;
+        gridCenterX = Math.round((gridWidth - 1) / 2);
+        gridCenterY = Math.round((gridHeight - 1) / 2);
+    }
+
+    /**
+     * Builds the path to the image of a specific meeple
+     * @param type the type of terrain the meeple occupies.
+     * @return the path as a String.
+     */
+    public String buildImagePath(TerrainType type) {
+        return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + ".png";
     }
 
     /**
@@ -104,30 +137,4 @@ public final class GameOptions {
     public String buildImagePath(TerrainType type, int playerNumber) {
         return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + "_" + playerNumber + ".png";
     }
-    
-    /**
-     * Builds the path to the image of a specific meeple
-     * @param type the type of terrain the meeple occupies.
-     * @return the path as a String.
-     */
-    public String buildImagePath(TerrainType type) {
-        return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + ".png";
-    }
-
-    /**
-     * Getter for the frame height, which depends on the resolution height.
-     * @return the frame height.
-     */
-    public int getGridHeight() {
-        return (resolutionHeight - taskBarHeight) / 100;
-    }
-
-    /**
-     * Getter for the frame width, which depends on the resolution width.
-     * @return the frame width.
-     */
-    public int getGridWidth() {
-        return resolutionWidth / 100;
-    }
-
 }

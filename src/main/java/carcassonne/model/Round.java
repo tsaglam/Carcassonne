@@ -42,6 +42,14 @@ public class Round {
     }
 
     /**
+     * Getter for foundation tile of a round.
+     * @return the the foundation tile.
+     */
+    public Tile getFirstTile() {
+        return grid.getTile(Math.round((grid.getWidth() - 1) / 2), Math.round((grid.getHeight() - 1) / 2));
+    }
+
+    /**
      * Getter for the current tile.
      * @return the currentTile.
      */
@@ -77,12 +85,12 @@ public class Round {
         }
         currentTile = tileStack.drawTile();
     }
-    
+
     public boolean makeGridPlacement(int x, int y, Tile tile) {
         currentTile = tile;
         return grid.place(x, y, tile);
     }
-    
+
     public boolean makeMeeplePlacement(GridDirection direction) {
         player[activePlayer].placeMeepleAt(currentTile);
         return true; // TODO (HIGH) make check for amount of meeples

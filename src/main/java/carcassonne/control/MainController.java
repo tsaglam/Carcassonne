@@ -29,7 +29,6 @@ public class MainController {
         gui = new MainGUI(this);
         rotationGUI = new RotationGUI(this);
         placementGUI = new PlacementGUI(this);
-        currentRound = new Round(2, options.getGridWidth(), options.getGridHeight());
         newGame(2); // TODO (LOW) don't auto-start new game
     }
 
@@ -38,9 +37,9 @@ public class MainController {
      * @param playerCount sets the amount of players.
      */
     public void newGame(int playerCount) {
-        currentRound = new Round(playerCount, options.getGridWidth(), options.getGridHeight());
+        currentRound = new Round(playerCount, options.gridWidth, options.gridHeight);
         gui.rebuildLabelGrid();
-        // TODO (MEDIUM) get the control or GUI to draw the starting tile.
+        gui.set(currentRound.getFirstTile(), options.gridCenterX, options.gridCenterY);
         rotationGUI.setTile(currentRound.getCurrentTile());
     }
 

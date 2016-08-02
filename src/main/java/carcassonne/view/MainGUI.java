@@ -130,8 +130,8 @@ public class MainGUI extends JPanel {
      * Creates the grid of labels.
      */
     private void buildLabelGrid() {
-        gridWidth = options.getGridWidth();
-        gridHeight = options.getGridHeight();
+        gridWidth = options.gridWidth;
+        gridHeight = options.gridHeight;
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
         Tile defaultTile = TileFactory.create(TileType.Null);
         for (int x = 0; x < gridWidth; x++) {
