@@ -53,7 +53,7 @@ public class MainController {
         Tile tile = rotationGUI.useTile();
         if(currentRound.makeGridPlacement(x, y, tile)) {
             gui.set(tile, x, y);
-            rotationGUI.setEnabled(false);
+            rotationGUI.disableFrame();
             placementGUI.setTile(tile); // TODO (MEDIUM) only if player has meeples
             return true;
         }
@@ -74,7 +74,13 @@ public class MainController {
      */
     public boolean requestMeeplePlacement(GridDirection position) {
         // TODO (MEDIUM) implement meeple placement.
-        System.out.println("requestMeeplePlacement: " + position);
+        if ( currentRound.makeMeeplePlacement(position)) {
+            gui.set(null, 0, 0, position); // TODO (HIGH) get real information
+            placementGUI.disableFrame();
+            currentRound.nextTurn();
+            rotationGUI.setTile(currentRound.getCurrentTile());
+            return true;
+        }
         return false;
     }
 

@@ -64,7 +64,14 @@ public abstract class SecondaryGUI extends JPanel {
      */
     protected void finishFrame() {
         frame.pack();
-        frame.setVisible(true); // disabled, use setTile to show GUI.
+        frame.setVisible(false); // TODO (MEDIUM) disabled, use setTile to show GUI.
+    }
+
+    /**
+     * Hides the GUI.
+     */
+    public void disableFrame() {
+        frame.setVisible(false);
     }
 
     /**

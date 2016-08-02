@@ -15,7 +15,6 @@ import javax.swing.ImageIcon;
 import org.junit.Before;
 import org.junit.Test;
 
-import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
@@ -183,7 +182,7 @@ public class TileTest {
         Player p = new Player();
         tile = TileFactory.create(TileType.Null);
         assertFalse(tile.hasMeeple());
-        p.placeMeepleAt(tile);
+        p.placeMeepleAt(tile, GridDirection.TOP);
         assertTrue(tile.hasMeeple());
         assertNotNull(tile.getMeeple());
         tile.removeMeeple();

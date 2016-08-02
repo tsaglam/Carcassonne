@@ -91,8 +91,8 @@ public class Round {
         return grid.place(x, y, tile);
     }
 
-    public boolean makeMeeplePlacement(GridDirection direction) {
-        player[activePlayer].placeMeepleAt(currentTile);
+    public boolean makeMeeplePlacement(GridDirection positionOnTile) {
+        player[activePlayer].placeMeepleAt(currentTile, positionOnTile);
         return true; // TODO (HIGH) make check for amount of meeples
     }
 

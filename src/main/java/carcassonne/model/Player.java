@@ -2,6 +2,7 @@ package carcassonne.model;
 
 import java.util.LinkedList;
 
+import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 
 /**
@@ -49,7 +50,7 @@ public class Player {
      * @param tile is the tile to place a meeple on.
      * @return
      */
-    public void placeMeepleAt(Tile tile) {
+    public void placeMeepleAt(Tile tile, GridDirection positionOnTile) {
         if (unusedMeeples.isEmpty()) {
             throw new IllegalStateException("No unused meeples are left.");
         }

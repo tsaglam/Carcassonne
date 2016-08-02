@@ -36,8 +36,6 @@ public class TileLabelMouseAdapter extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
         controller.requestTilePlacement(x, y);
-        // TODO (LOWEST) remove debug output.
-        System.out.println("Clicked label at (" + x + "|" + y + ")");
     }
 
 }

@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import carcassonne.model.Player;
 import carcassonne.model.grid.Grid;
+import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
@@ -30,7 +31,7 @@ public class PlayerTest {
 
     @Test
     public void test() {
-        player.placeMeepleAt(grid.getTile(0, 0));
+        player.placeMeepleAt(grid.getTile(0, 0), GridDirection.TOP);
         // TODO (LOW) implement tests
         fail("Not yet implemented");
     }
