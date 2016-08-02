@@ -12,6 +12,11 @@ public abstract class CarcasonneMain {
      * @param args are not used.
      */
     public static void main(String[] args) {
+        // try { // Simulate Windows Look and Feel
+        // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
         new MainController();
     }
 }
