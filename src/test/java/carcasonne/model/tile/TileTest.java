@@ -15,6 +15,8 @@ import javax.swing.ImageIcon;
 import org.junit.Before;
 import org.junit.Test;
 
+import carcassonne.model.Meeple;
+import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
@@ -78,7 +80,7 @@ public class TileTest {
             tile.rotateRight(); // should not crash.
         }
     }
-    
+
     @Test
     public void rotateTest2() {
         tile = new Tile(CASTLE, FIELDS, ROAD, MONASTRY, OTHER, stdPath, stdFileType, stdTileType);
@@ -109,9 +111,9 @@ public class TileTest {
                                                                                                                       // that
                                                                                                                       // tile
                                 TerrainType atDirection = tile.getTerrain(direction); // get
-                                                                                        // terrain
-                                                                                        // from
-                                                                                        // direction
+                                                                                      // terrain
+                                                                                      // from
+                                                                                      // direction
                                 expected = 0; // generate expected connections:
                                 if (atDirection == middle) {
                                     expected = (middle == top) ? ++expected : expected;
@@ -174,6 +176,18 @@ public class TileTest {
         assertEquals(TerrainType.OTHER, tile.getTerrain(GridDirection.TOP));
         assertEquals(TileType.Null, tile.getType());
         assertEquals(true, tile.isConnected(GridDirection.TOP, GridDirection.LEFT));
+    }
+
+    @Test
+    public void meepleTest() {
+        Player p = new Player();
+        tile = TileFactory.create(TileType.Null);
+        assertFalse(tile.hasMeeple());
+        p.placeMeepleAt(tile);
+        assertTrue(tile.hasMeeple());
+        assertNotNull(tile.getMeeple());
+        tile.removeMeeple();
+        assertFalse(tile.hasMeeple());
     }
 
 }
