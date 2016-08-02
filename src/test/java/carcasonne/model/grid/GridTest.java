@@ -29,23 +29,26 @@ public class GridTest {
     @Test
     public void tilePlacementTest() {
         System.out.println("Tile placement test:");
-        assertTrue(testGrid.place(1, 0, TileFactory.create(CastleCenter)));
-        assertTrue(testGrid.place(0, 1, TileFactory.create(Monastry)));
-        assertTrue(testGrid.place(2, 1, TileFactory.create(RoadJunctionLarge)));
-        assertTrue(testGrid.place(1, 2, TileFactory.create(RoadJunctionLarge)));
-        assertTrue(testGrid.place(1, 1, TileFactory.create(CastleWallCurveRight)));
-        Tile tmp = TileFactory.create(RoadCurve);
+        Tile tmp = TileFactory.create(Monastry);
+        tmp.rotateRight();
+        assertTrue(testGrid.place(2, 3, tmp));
+        tmp = TileFactory.create(RoadCurve);
         tmp.rotateRight();
         assertTrue(testGrid.place(2, 2, tmp));
-        tmp = TileFactory.create(CastleSides);
-        tmp.rotateRight();
-        assertTrue(testGrid.place(0, 0, tmp));
+        assertTrue(testGrid.place(2, 1, TileFactory.create(RoadJunctionLarge)));
         tmp = TileFactory.create(CastleEdgeRoad);
         tmp.rotateLeft();
         assertTrue(testGrid.place(2, 0, tmp));
+        assertTrue(testGrid.place(1, 0, TileFactory.create(CastleCenter)));
+        tmp = TileFactory.create(CastleSides);
+        tmp.rotateRight();
+        assertTrue(testGrid.place(0, 0, tmp));
+        assertTrue(testGrid.place(0, 1, TileFactory.create(Monastry)));
         tmp = TileFactory.create(Road);
         tmp.rotateRight();
         assertTrue(testGrid.place(0, 2, tmp));
+        assertTrue(testGrid.place(1, 2, TileFactory.create(RoadJunctionLarge)));
+        assertTrue(testGrid.place(1, 1, TileFactory.create(CastleWallCurveRight)));   
     }
 
     @Test

@@ -218,22 +218,12 @@ public class Grid {
     public boolean place(int x, int y, Tile tile) {
         checkParameters(x, y);
         checkParameters(tile);
-        if (isPlaceable(x, y, tile)) {
+        if (isPlaceable(x, y, tile, false)) {
             this.tile[x][y] = tile;
             return true; // tile was successfully placed.
         }
 
-        return false; // tile cant be placed, spot is occupied.
-    }
-
-    /**
-     * Places a specific tile in the middle of the grid.
-     * @param tileType is the type of that specific tile.
-     */
-    private void placeFoundation(TileType tileType) {
-        int centerX = Math.round((width - 1) / 2);
-        int centerY = Math.round((height - 1) / 2);
-        place(centerX, centerY, TileFactory.create(tileType));
+        return false; // tile can't be placed, spot is occupied.
     }
 
     /**
@@ -260,6 +250,24 @@ public class Grid {
             throw new IllegalArgumentException("Tile from type TileType.Null can't be placed.");
         }
     }
+    
+    /**
+     * Forces to place a tile on a spot on the grid.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @param tile is the tile to place
+     * @return true if it was successful, false if spot is occupied.
+     */
+    private boolean forcePlacement(int x, int y, Tile tile) {
+        checkParameters(x, y);
+        checkParameters(tile);
+        if (isPlaceable(x, y, tile, true)) {
+            this.tile[x][y] = tile;
+            return true; // tile was successfully placed.
+        }
+
+        return false; // tile can't be placed, spot is occupied.
+    }
 
     /**
      * Checks whether a tile is placeable on a specific position on the grid. First the parameters
@@ -268,28 +276,38 @@ public class Grid {
      * @param x is the x position on the grid.
      * @param y is the y position on the grid.
      * @param tile is the tile to place.
+     * @param freePlacement is the boolean that decides whether a tile has to connect to another tile.
      * @return true if the tile can be placed on the grid position specified through the
      * coordinates.
      */
-    private boolean isPlaceable(int x, int y, Tile tile) { // TODO (LOW) remove debug output
+    private boolean isPlaceable(int x, int y, Tile tile, boolean freePlacement) {
         checkParameters(x, y); // check coordinates.
         checkParameters(tile); // check tile.
         if (isOccupied(x, y)) {
             return false; // can't be placed if spot is occupied.
         }
+        int neighborCount = 0;
         Tile other;
         for (GridDirection direction : directNeighbors()) { // for every direction
             other = getNeighbour(x, y, direction);
             if (other != null) { // if there is a neighbor in the direction.
-                // System.out.println("In " + direction + " is " + tile.getTerrain(direction) +
-                // " & neighbor has" + other.getTerrain(GridDirection.opposite(direction)));
+                neighborCount++;
                 if (tile.getTerrain(direction) != other.getTerrain(GridDirection.opposite(direction))) {
                     return false; // if it does not fit to terrain, it can't be placed.
                 }
             }
         }
-        return true; // if everything is fine, it can be placed.
+        return (neighborCount > 0 || freePlacement); // can be placed beneath another tile.
+    }
 
+    /**
+     * Places a specific tile in the middle of the grid.
+     * @param tileType is the type of that specific tile.
+     */
+    private void placeFoundation(TileType tileType) {
+        int centerX = Math.round((width - 1) / 2);
+        int centerY = Math.round((height - 1) / 2);
+        forcePlacement(centerX, centerY, TileFactory.create(tileType));
     }
 
 }
