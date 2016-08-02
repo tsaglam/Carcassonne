@@ -49,12 +49,14 @@ public class Grid {
      * @return the list of connected tiles.
      */
     public List<Tile> getConnectedTiles(int x, int y, GridDirection from) {
-        checkCoordinates(x, y);
+        checkParameters(x, y);
         List<Tile> list = new LinkedList<Tile>();
+        Tile neighbor;
         for (GridDirection to : directNeighbors()) {
             if (tile[x][y].isConnected(from, to) && from != to) { // if connected
-                if (getNeighbour(x, y, to) != null) { // if is on grid
-                    list.add(getNeighbour(x, y, to));
+                neighbor = getNeighbour(x, y, to);
+                if (neighbor != null) { // if is on grid
+                    list.add(neighbor);
                 }
             }
         }
@@ -68,11 +70,13 @@ public class Grid {
      * @return the list of neighbors
      */
     public List<Tile> getDirectNeighbors(int x, int y) {
-        checkCoordinates(x, y);
+        checkParameters(x, y);
         List<Tile> list = new LinkedList<Tile>();
+        Tile neighbor;
         for (GridDirection direction : directNeighbors()) {
-            if (getNeighbour(x, y, direction) != null) {
-                list.add(getNeighbour(x, y, direction));
+            neighbor = getNeighbour(x, y, direction);
+            if (neighbor != null) {
+                list.add(neighbor);
             }
         }
         return list;
@@ -93,11 +97,13 @@ public class Grid {
      * @return the list of neighbors
      */
     public List<Tile> getNeighbors(int x, int y) {
-        checkCoordinates(x, y);
+        checkParameters(x, y);
         List<Tile> list = new LinkedList<Tile>();
+        Tile neighbor;
         for (GridDirection direction : neighbors()) {
-            if (getNeighbour(x, y, direction) != null) {
-                list.add(getNeighbour(x, y, direction));
+            neighbor = getNeighbour(x, y, direction);
+            if (neighbor != null) {
+                list.add(neighbor);
             }
         }
         return list;
@@ -140,7 +146,7 @@ public class Grid {
      * @throws IllegalArgumentException if the requested tile is out of grid.
      */
     public Tile getTile(int x, int y) {
-        checkCoordinates(x, y);
+        checkParameters(x, y);
         return tile[x][y];
     }
 
@@ -159,7 +165,7 @@ public class Grid {
      * @return true if free
      */
     public boolean isFree(int x, int y) {
-        checkCoordinates(x, y);
+        checkParameters(x, y);
         return tile[x][y] == null;
     }
 
@@ -185,7 +191,7 @@ public class Grid {
      * @return true if occupied
      */
     public boolean isOccupied(int x, int y) {
-        checkCoordinates(x, y);
+        checkParameters(x, y);
         return tile[x][y] != null;
     }
 
@@ -210,13 +216,14 @@ public class Grid {
      * @return true if it was successful, false if spot is occupied.
      */
     public boolean place(int x, int y, Tile tile) {
-        checkCoordinates(x, y);
-        if (isOccupied(x, y)) {
-            return false; // tile cant be placed, spot is occupied.
-        } else {
+        checkParameters(x, y);
+        checkParameters(tile);
+        if (isPlaceable(x, y, tile)) {
             this.tile[x][y] = tile;
             return true; // tile was successfully placed.
         }
+
+        return false; // tile cant be placed, spot is occupied.
     }
 
     /**
@@ -235,10 +242,54 @@ public class Grid {
      * @param x is the x coordinate
      * @param y is the y coordinate
      */
-    private void checkCoordinates(int x, int y) {
+    private void checkParameters(int x, int y) {
         if (!isOnGrid(x, y)) {
             throw new IllegalArgumentException("tile coordinates are out of grid");
         }
+    }
+
+    /**
+     * Error checker method for other methods in this class. It just checks whether specific tile is
+     * not null.
+     * @param tile the tile to check
+     */
+    private void checkParameters(Tile tile) {
+        if (tile == null) {
+            throw new IllegalArgumentException("Tile can't be null.");
+        } else if (tile.getType() == TileType.Null) {
+            throw new IllegalArgumentException("Tile from type TileType.Null can't be placed.");
+        }
+    }
+
+    /**
+     * Checks whether a tile is placeable on a specific position on the grid. First the parameters
+     * are checked. Then the method checks whether the terrain on every side of the tile fits to the
+     * terrain of the neighboring tile.
+     * @param x is the x position on the grid.
+     * @param y is the y position on the grid.
+     * @param tile is the tile to place.
+     * @return true if the tile can be placed on the grid position specified through the
+     * coordinates.
+     */
+    private boolean isPlaceable(int x, int y, Tile tile) { // TODO (LOW) remove debug output
+        checkParameters(x, y); // check coordinates.
+        checkParameters(tile); // check tile.
+        if (isOccupied(x, y)) {
+            return false; // can't be placed if spot is occupied.
+        }
+        Tile other;
+        for (GridDirection direction : directNeighbors()) { // for every direction
+            other = getNeighbour(x, y, direction);
+            if (other != null) { // if there is a neighbor in the direction.
+                // System.out.println("In " + direction + " is " + tile.getTerrain(direction) +
+                // " & neighbor has" + other.getTerrain(GridDirection.opposite(direction)));
+                if (tile.getTerrain(direction) != other.getTerrain(GridDirection.opposite(direction))) {
+                    return false; // if it does not fit to terrain, it can't be placed.
+                }
+            }
+        }
+        return true; // if everything is fine, it can be placed.
+
     }
 
 }

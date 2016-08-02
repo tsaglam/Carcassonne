@@ -62,7 +62,7 @@ public class Tile {
      * @param direction is the specific direction.
      * @return the terrain type, or null if the direction is not mapped.
      */
-    public TerrainType getTerrainAt(GridDirection direction) {
+    public TerrainType getTerrain(GridDirection direction) {
         return terrainMap.get(direction);
     }
 
@@ -89,9 +89,9 @@ public class Tile {
      * @return true if connected, false if not.
      */
     public boolean isConnected(GridDirection fromDirection, GridDirection toDirection) {
-        TerrainType middle = getTerrainAt(GridDirection.MIDDLE);
-        TerrainType from = getTerrainAt(fromDirection);
-        TerrainType to = getTerrainAt(toDirection);
+        TerrainType middle = getTerrain(GridDirection.MIDDLE);
+        TerrainType from = getTerrain(fromDirection);
+        TerrainType to = getTerrain(toDirection);
         if (middle == TerrainType.CASTLE_AND_ROAD) { // special case.
             return from.equals(to) && (from.equals(TerrainType.CASTLE) || from.equals(TerrainType.ROAD));
         }
@@ -118,7 +118,7 @@ public class Tile {
      * Turns a tile 90 degree to the right.
      */
     public void rotateRight() {
-        TerrainType temporary = terrainMap.get(GridDirection.LEFT); 
+        TerrainType temporary = terrainMap.get(GridDirection.LEFT);
         for (GridDirection direction : GridDirection.directNeighbors()) {
             temporary = terrainMap.put(direction, temporary); // rotate terrain:
         }
@@ -129,7 +129,7 @@ public class Tile {
      * Turns a tile 90 degree to the left.
      */
     public void rotateLeft() {
-        TerrainType temporary = terrainMap.get(GridDirection.RIGHT); 
+        TerrainType temporary = terrainMap.get(GridDirection.RIGHT);
         GridDirection[] directions = { GridDirection.TOP, GridDirection.LEFT, GridDirection.BOTTOM, GridDirection.RIGHT };
         for (GridDirection direction : directions) { // rotate terrain:
             temporary = terrainMap.put(direction, temporary);

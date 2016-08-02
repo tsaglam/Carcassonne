@@ -61,7 +61,7 @@ public class TileTest {
         assertTrue(tile.isTagged()); // is now tagged
         // TEST TERRAIN:
         for (GridDirection position : GridDirection.tilePositions()) { // for every tile position
-            assertNotNull(tile.getTerrainAt(position)); // has a terrain type
+            assertNotNull(tile.getTerrain(position)); // has a terrain type
         }
     }
 
@@ -72,7 +72,7 @@ public class TileTest {
         TerrainType[] expected = { MONASTRY, CASTLE, FIELDS, ROAD, OTHER };
         int i = 0;
         for (GridDirection direction : GridDirection.tilePositions()) { // for every position
-            assertEquals(expected[i++], tile.getTerrainAt(direction)); // check if rotated
+            assertEquals(expected[i++], tile.getTerrain(direction)); // check if rotated
         }
         for (int j = 0; j < 10; j++) {
             tile.rotateRight(); // should not crash.
@@ -86,7 +86,7 @@ public class TileTest {
         TerrainType[] expected = { FIELDS, ROAD, MONASTRY, CASTLE, OTHER };
         int i = 0;
         for (GridDirection direction : GridDirection.tilePositions()) { // for every position
-            assertEquals(expected[i++], tile.getTerrainAt(direction)); // check if rotated
+            assertEquals(expected[i++], tile.getTerrain(direction)); // check if rotated
         }
         for (int j = 0; j < 10; j++) {
             tile.rotateLeft(); // should not crash.
@@ -108,7 +108,7 @@ public class TileTest {
                                 tile = new Tile(top, right, bottom, left, middle, stdPath, stdFileType, stdTileType); // create
                                                                                                                       // that
                                                                                                                       // tile
-                                TerrainType atDirection = tile.getTerrainAt(direction); // get
+                                TerrainType atDirection = tile.getTerrain(direction); // get
                                                                                         // terrain
                                                                                         // from
                                                                                         // direction
@@ -171,7 +171,7 @@ public class TileTest {
     public void nullTileTest() {
         tile = TileFactory.create(TileType.Null);
         tile.rotateRight(); // just testing the useless tile for exceptions & co
-        assertEquals(TerrainType.OTHER, tile.getTerrainAt(GridDirection.TOP));
+        assertEquals(TerrainType.OTHER, tile.getTerrain(GridDirection.TOP));
         assertEquals(TileType.Null, tile.getType());
         assertEquals(true, tile.isConnected(GridDirection.TOP, GridDirection.LEFT));
     }
