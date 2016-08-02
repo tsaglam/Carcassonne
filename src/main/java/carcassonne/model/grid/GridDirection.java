@@ -52,4 +52,27 @@ public enum GridDirection {
         GridDirection[][] directions = { { TOP_LEFT, LEFT, BOTTOM_LEFT }, { TOP, MIDDLE, BOTTOM }, { TOP_RIGHT, RIGHT, BOTTOM_RIGHT } };
         return directions;
     }
+
+    /**
+     * Calculates the opposite <code>GridDirection</code> for a specific <code>GridDirection</code>.
+     * @param from is the <code>GridDirection</code> the opposite gets calculated from.
+     * @return the opposite <code>GridDirection</code>.
+     */
+    public static GridDirection opposite(GridDirection from) {
+        int ordinal = from.ordinal(); // get number of enum value
+        if (ordinal <= 3) { // for TOP, RIGHT, BOTTOM and LEFT:
+            return values()[smallOpposite(ordinal)];
+        } else if (ordinal <= 7) { // for TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT:
+            return values()[bigOpposite(ordinal)];
+        }
+        return MIDDLE; // middle is the opposite of itself.
+    }
+
+    private static int smallOpposite(int ordinal) {
+        return (ordinal + 2) % 4;
+    }
+
+    private static int bigOpposite(int ordinal) {
+        return 4 + smallOpposite(ordinal - 4);
+    }
 }
