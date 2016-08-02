@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import carcassonne.control.MainController;
 import carcassonne.model.tile.Tile;
@@ -21,8 +22,9 @@ import carcassonne.model.tile.TileType;
 public class RotationGUI extends SecondaryGUI {
     private static final long serialVersionUID = -5179683977081970564L;
 
-    public static void main(String[] args) {
-        RotationGUI g = new RotationGUI(null); //TODO (LOWEST) remove main method sometime.
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        //UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Simulate Windows
+        RotationGUI g = new RotationGUI(null); // TODO (LOWEST) remove main method sometime.
         g.setTile(TileFactory.create(TileType.CastleEdgeRoad));
     }
 
@@ -53,6 +55,16 @@ public class RotationGUI extends SecondaryGUI {
         buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
         buttonRotateLeft = new JButton(new ImageIcon("src/main/ressources/icons/left.png"));
         buttonRotateRight = new JButton(new ImageIcon("src/main/ressources/icons/right.png"));
+        // TODO: (HIGH) add GUI compatibility for windows
+        if (!options.operatingSystemName.startsWith("Mac")) {
+            System.out.println("NOT MAC OS");
+            buttonSkip.setBorder(null);
+            buttonRotateLeft.setBorder(null);
+            buttonRotateRight.setBorder(null);
+            constraints.ipady = 10;
+            constraints.weightx = 0.5;
+            constraints.weightx = 0.5;
+        }
         // set tool tips:
         buttonSkip.setToolTipText("Don't place tile and skip turn");
         buttonRotateLeft.setToolTipText("Rotate left");
@@ -68,6 +80,7 @@ public class RotationGUI extends SecondaryGUI {
         // change constraints and add label:
         constraints.gridy = 1;
         constraints.gridx = 0;
+        constraints.ipady = 0;
         constraints.gridwidth = 3;
         add(tileLabel, constraints);
     }
