@@ -9,7 +9,7 @@ import carcassonne.view.RotationGUI;
 
 /**
  * Is the abstract state of the state machine.
- * @author Timur
+ * @author Timur Saglam
  */
 public abstract class ControllerState {
 
@@ -42,16 +42,18 @@ public abstract class ControllerState {
 	/**
 	 * Starts new round with a specific amount of players.
 	 * @param playerCount sets the amount of players.
+	 * @return true if a new game was started.
 	 */
-	public void newGame(int playerCount) {
+	public boolean newGame(int playerCount) {
 		System.err.println("You can't start a new game right now.");
+		return false;
 	}
 
 	/**
 	 * Method for the view to call if a user places a tile.
 	 * @param x is the x coordinate.
 	 * @param y is the y coordinate.
-	 * @return true if request was granted.
+	 * @return true if tile was placed.
 	 */
 	public boolean placeTile(int x, int y) {
 		System.err.println("You can't place a tile right now.");
@@ -60,7 +62,7 @@ public abstract class ControllerState {
 
 	/**
 	 * Method for the view to call if the user wants to skip a round.
-	 * @return true if request was granted.
+	 * @return true if turn was skipped.
 	 */
 	public boolean skip() {
 		System.err.println("You can't place a tile right now.");
@@ -68,8 +70,8 @@ public abstract class ControllerState {
 	}
 
 	/**
-	 * Method for the view to call if a user mans a tile with a meeple.
-	 * @return true if request was granted.
+	 * Method for the view to call if a user mans a tile with a Meeple.
+	 * @return true if Meeple was placed.
 	 */
 	public boolean placeMeeple(GridDirection position) {
 		System.err.println("You can't place meeple tile right now.");
