@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
 import carcassonne.model.tile.TerrainType;
+import carcassonne.model.tile.TileType;
 
 /**
  * Singleton that stores the game options and other information. There is only one option instance
@@ -86,6 +87,11 @@ public final class GameOptions {
      * The y coordinates of the grid center.
      */
     public int gridCenterY;
+    
+    /**
+     * The tile type of the foundation.
+     */
+    public TileType foundationType;
 
     private int taskBarHeight;
 
@@ -117,6 +123,7 @@ public final class GameOptions {
         gridWidth = resolutionWidth / 100;
         gridCenterX = Math.round((gridWidth - 1) / 2);
         gridCenterY = Math.round((gridHeight - 1) / 2);
+        foundationType = TileType.CastleWallRoad;
     }
 
     /**
