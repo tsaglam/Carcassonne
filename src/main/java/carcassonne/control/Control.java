@@ -1,7 +1,5 @@
-package carcassonne.control.test;
+package carcassonne.control;
 
-import carcassonne.control.GameOptions;
-import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.Round2;
 import carcassonne.model.grid.Grid;
@@ -33,6 +31,7 @@ public class Control extends MainController {
 		gui = new MainGUI(this);
 		rotationGUI = new RotationGUI(this);
 		placementGUI = new PlacementGUI(this);
+		newGame(2);
 	}
 
 	public void newGame(int playerCount) {
@@ -77,7 +76,6 @@ public class Control extends MainController {
 	 * Method for the view to call if a user mans a tile with a meeple.
 	 */
 	public boolean requestMeeplePlacement(GridDirection position) {
-		// TODO (MEDIUM) implement meeple placement.
 		Player player = round.getActivePlayer();
 		if (player.hasUnusedMeeples()) {
 			player.placeMeepleAt(round.getCurrentTile(), position);
