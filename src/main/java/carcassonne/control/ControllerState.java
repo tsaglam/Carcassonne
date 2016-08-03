@@ -40,6 +40,7 @@ public abstract class ControllerState {
 		this.round = round;
 		this.grid = grid;
 		options = GameOptions.getInstance();
+		controller.register(this);
 		entry();
 	}
 	

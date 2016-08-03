@@ -13,7 +13,7 @@ import carcassonne.view.RotationGUI;
 
 /**
  * TODO (MEDIUM) comment this class.
- * @author Timur
+ * @author Timur Saglam
  */
 public class MainController {
 
@@ -35,9 +35,13 @@ public class MainController {
 		placementGUI = new PlacementGUI(this);
 		stateMap = new HashMap<Class<? extends ControllerState>, ControllerState>();
 		currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, round, grid);
-		stateMap.put(StateIdle.class, currentState);
-		// TODO (HIGH) fill state map with other states, maybe self register.
-		newGame(2);
+		new StateManning(this, mainGUI, rotationGUI, placementGUI, round, grid);
+		new StatePlacing(this, mainGUI, rotationGUI, placementGUI, round, grid);
+		new StateGameOver(this, mainGUI, rotationGUI, placementGUI, round, grid);
+//		stateMap.put(StateIdle.class, currentState);
+//		stateMap.put(StateManning.class, new StateManning(this, mainGUI, rotationGUI, placementGUI, round, grid));
+		// TODO (HIGH) does state map work?
+		requestNewGame(2); // TODO (HIGH) make GUI button for the start game function.
 	}
 
 	/**
@@ -46,18 +50,37 @@ public class MainController {
 	 */
 	public void changeState(Class<? extends ControllerState> stateType) {
 		currentState = stateMap.get(stateType);
+		if (currentState == null) {
+			throw new IllegalStateException("State is not registered: " + stateType);
+		}
+	}
+	
+	/**
+	 * Registers a specific state at the controller.
+	 * @param state is the specific state.
+	 * @param stateType is the class type of the specific state.
+	 */
+	public void register(ControllerState state) {
+		System.out.println(state + " " + state.getClass());
+		stateMap.put(state.getClass(), currentState);
 	}
 
 	/**
-	 * Starts new round with a specific amount of players.
+	 * Requests to start a new round with a specific amount of players.
 	 * @param playerCount sets the amount of players.
+	 * @return true if request was granted.
 	 */
-	public void newGame(int playerCount) {
-		grid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
-		round = new Round(playerCount, grid);
-		mainGUI.rebuildLabelGrid();
-		mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
-		placementGUI.setTile(round.getCurrentTile());
+	public boolean requestNewGame(int playerCount) {
+		return currentState.newGame(playerCount);
+	}
+
+	/**
+	 * Requests to abort the round.
+	 * @param playerCount sets the amount of players.
+	 * @return true if request was granted.
+	 */
+	public boolean requestAbortGame() {
+		return currentState.abortGame();
 	}
 
 	/**
@@ -67,15 +90,7 @@ public class MainController {
 	 * @return true if request was granted.
 	 */
 	public boolean requestTilePlacement(int x, int y) {
-		Tile tile = rotationGUI.useTile();
-		if (grid.place(x, y, tile)) {
-			round.updateCurrentTile(tile);
-			mainGUI.set(tile, x, y);
-			rotationGUI.disableFrame();
-			placementGUI.setTile(tile); // TODO (MEDIUM) only if player has meeples else show message box
-			return true;
-		}
-		return false;
+		return currentState.placeTile(x, y);
 	}
 
 	/**
@@ -83,9 +98,7 @@ public class MainController {
 	 * @return true if request was granted.
 	 */
 	public boolean requestSkip() {
-		rotationGUI.disableFrame(); // TODO (MEDIUM) test skipping
-		round.nextTurn();
-		return true;
+		return currentState.skip();
 	}
 
 	/**
@@ -93,15 +106,6 @@ public class MainController {
 	 * @return true if request was granted.
 	 */
 	public boolean requestMeeplePlacement(GridDirection position) {
-		Player player = round.getActivePlayer();
-		if (player.hasUnusedMeeples()) {
-			player.placeMeepleAt(round.getCurrentTile(), position);
-			mainGUI.set(null, 0, 0, position); // TODO (HIGH) get real information
-			placementGUI.disableFrame();
-			round.nextTurn();
-			rotationGUI.setTile(round.getCurrentTile());
-			return true;
-		}
-		return false;
+		return currentState.placeMeeple(position);
 	}
 }
