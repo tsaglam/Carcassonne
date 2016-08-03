@@ -81,6 +81,16 @@ public class Grid {
         }
         return list;
     }
+    
+    /**
+     * Returns the first tile of round, the foundation tile.
+     * @return the tile.
+     */
+	public Tile getFoundation() {
+		int centerX = Math.round((width - 1) / 2);
+		int centerY = Math.round((height - 1) / 2);
+		return tile[centerX][centerY];
+	}
 
     /**
      * Getter for the grid height.
