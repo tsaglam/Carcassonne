@@ -12,7 +12,7 @@ import carcassonne.model.tile.TileType;
  * represents the round and its information in an object.
  * @author Timur
  */
-public class Round {
+public class Round { // TODO (HIGH) make this class less a gateway and more a kind of data container.
 
     private Grid grid;
     private Player[] player;
