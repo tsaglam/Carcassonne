@@ -25,8 +25,8 @@ public class Round {
      * @param grid is the grid of the round.
      */
     public Round(int playerCount, Grid grid) {
-    	this.grid = grid;
-    	this.playerCount = playerCount;
+        this.grid = grid;
+        this.playerCount = playerCount;
         tileStack = new TileStack();
         createPlayers();
         currentTile = grid.getFoundation();

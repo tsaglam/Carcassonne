@@ -15,6 +15,7 @@ import carcassonne.view.RotationGUI;
  */
 public class MainController {
 
+    private GameOptions options;
 	private MainGUI mainGUI;
 	private RotationGUI rotationGUI;
 	private PlacementGUI placementGUI;
@@ -27,14 +28,17 @@ public class MainController {
 	 * Basic constructor. Creates the view and the model of the game.
 	 */
 	public MainController() {
+	    options = GameOptions.getInstance();
 		mainGUI = new MainGUI(this);
 		rotationGUI = new RotationGUI(this);
 		placementGUI = new PlacementGUI(this);
+		grid = new Grid(1, 1, options.foundationType);
+		round= new Round(2, grid);
 		stateMap = new HashMap<Class<? extends ControllerState>, ControllerState>();
-		currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, round, grid);
-		new StateManning(this, mainGUI, rotationGUI, placementGUI, round, grid);
-		new StatePlacing(this, mainGUI, rotationGUI, placementGUI, round, grid);
-		new StateGameOver(this, mainGUI, rotationGUI, placementGUI, round, grid);
+		currentState = new StateIdle(this);
+		new StateManning(this);
+		new StatePlacing(this);
+		new StateGameOver(this);
 		requestNewGame(2); // TODO (HIGH) make GUI button for the start game function.
 	}
 
@@ -106,4 +110,60 @@ public class MainController {
 	public boolean requestMeeplePlacement(GridDirection position) {
 		return currentState.placeMeeple(position);
 	}
+
+    /**
+     * Simple getter.
+     * @return the mainGUI
+     */
+    public MainGUI getMainGUI() {
+        return mainGUI;
+    }
+
+    /**
+     * Simple getter.
+     * @return the rotationGUI
+     */
+    public RotationGUI getRotationGUI() {
+        return rotationGUI;
+    }
+
+    /**
+     * Simple getter.
+     * @return the placementGUI
+     */
+    public PlacementGUI getPlacementGUI() {
+        return placementGUI;
+    }
+
+    /**
+     * Simple getter.
+     * @return the round
+     */
+    public Round getRound() {
+        return round;
+    }
+
+    /**
+     * Simple getter.
+     * @return the grid
+     */
+    public Grid getGrid() {
+        return grid;
+    }
+
+    /**
+     * Simple setter.
+     * @param round the round to set
+     */
+    public void setRound(Round round) {
+        this.round = round;
+    }
+
+    /**
+     * Simple setter.
+     * @param grid the grid to set
+     */
+    public void setGrid(Grid grid) {
+        this.grid = grid;
+    }
 }
