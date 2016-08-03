@@ -2,11 +2,9 @@ package carcassonne.control;
 
 import java.util.HashMap;
 
-import carcassonne.model.Player;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.model.tile.Tile;
 import carcassonne.view.MainGUI;
 import carcassonne.view.PlacementGUI;
 import carcassonne.view.RotationGUI;
@@ -17,7 +15,6 @@ import carcassonne.view.RotationGUI;
  */
 public class MainController {
 
-	private GameOptions options = GameOptions.getInstance();
 	private MainGUI mainGUI;
 	private RotationGUI rotationGUI;
 	private PlacementGUI placementGUI;
@@ -38,31 +35,32 @@ public class MainController {
 		new StateManning(this, mainGUI, rotationGUI, placementGUI, round, grid);
 		new StatePlacing(this, mainGUI, rotationGUI, placementGUI, round, grid);
 		new StateGameOver(this, mainGUI, rotationGUI, placementGUI, round, grid);
-//		stateMap.put(StateIdle.class, currentState);
-//		stateMap.put(StateManning.class, new StateManning(this, mainGUI, rotationGUI, placementGUI, round, grid));
-		// TODO (HIGH) does state map work?
 		requestNewGame(2); // TODO (HIGH) make GUI button for the start game function.
 	}
 
 	/**
 	 * Changes the state of the controller to a new state.
 	 * @param stateType specifies which state is the new state.
+	 * @return the new state.
 	 */
-	public void changeState(Class<? extends ControllerState> stateType) {
+	public ControllerState changeState(Class<? extends ControllerState> stateType) {
+		System.out.println("change to " + stateType + " from "+ currentState.getClass()); // TODO (HIGH)
 		currentState = stateMap.get(stateType);
 		if (currentState == null) {
 			throw new IllegalStateException("State is not registered: " + stateType);
 		}
+		return currentState;
 	}
-	
+
 	/**
 	 * Registers a specific state at the controller.
 	 * @param state is the specific state.
 	 * @param stateType is the class type of the specific state.
 	 */
 	public void register(ControllerState state) {
-		System.out.println(state + " " + state.getClass());
-		stateMap.put(state.getClass(), currentState);
+		if (stateMap.put(state.getClass(), state) != null) {
+			throw new IllegalArgumentException("Can't register two states of a kind.");
+		}
 	}
 
 	/**

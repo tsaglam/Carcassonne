@@ -41,13 +41,13 @@ public abstract class ControllerState {
 		this.grid = grid;
 		options = GameOptions.getInstance();
 		controller.register(this);
-		entry();
 	}
 	
 	
 	protected void changeState(Class<? extends ControllerState> stateType) {
 		exit();
-		controller.changeState(stateType);
+		ControllerState newState = controller.changeState(stateType);
+		newState.entry();
 	}
 
 	/**

@@ -33,6 +33,8 @@ public class StateManning extends ControllerState {
 	 */
 	@Override
 	protected void entry() {
+		System.out.println(round);
+		System.out.println(placementGUI);
 		placementGUI.setTile(round.getCurrentTile());
 	}
 
