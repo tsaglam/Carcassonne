@@ -13,6 +13,7 @@ import carcassonne.view.RotationGUI;
  */
 public abstract class ControllerState {
 
+	protected MainController controller;
 	protected MainGUI mainGUI;
 	protected RotationGUI rotationGUI;
 	protected PlacementGUI placementGUI;
@@ -20,9 +21,12 @@ public abstract class ControllerState {
 	protected Grid grid;
 
 	/**
-	 * Constructor of the abstract state, sets the class variables from the parameters and calls the <code>entry()</code> method.
+	 * Constructor of the abstract state, sets the class variables from the
+	 * parameters and calls the <code>entry()</code> method.
 	 */
-	public ControllerState(MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round, Grid grid) {
+	public ControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round,
+			Grid grid) {
+		this.controller = controller;
 		this.mainGUI = mainGUI;
 		this.rotationGUI = rotationGUI;
 		this.placementGUI = placementGUI;
@@ -34,11 +38,11 @@ public abstract class ControllerState {
 	protected abstract void entry();
 
 	protected abstract void exit();
-	
+
 	/**
-     * Starts new round with a specific amount of players.
-     * @param playerCount sets the amount of players.
-     */
+	 * Starts new round with a specific amount of players.
+	 * @param playerCount sets the amount of players.
+	 */
 	public void newGame(int playerCount) {
 		System.err.println("You can't start a new game right now.");
 	}
