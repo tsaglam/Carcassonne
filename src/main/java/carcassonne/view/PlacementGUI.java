@@ -42,6 +42,11 @@ public class PlacementGUI extends SecondaryGUI {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.ipadx = 0;
         constraints.ipady = 0;
+        if (!options.operatingSystemName.startsWith("Mac")) {
+            constraints.ipady = 15;
+            constraints.weightx = 0.5;
+            constraints.weightx = 0.5;
+        }
         button = new MeepleButton[3][3];
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
