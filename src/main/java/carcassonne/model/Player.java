@@ -44,6 +44,14 @@ public class Player {
     public int getPoints() {
         return points;
     }
+    
+    /**
+     * Checks whether the player can still place Meeples.
+     * @return true if he has at least one unused Meeple.
+     */
+    public boolean hasUnusedMeeples() {
+    	return unusedMeeples.size() > 0;
+    }
 
     /**
      * Places one of its meeples on a tile. Tells the meeple it was placed.
