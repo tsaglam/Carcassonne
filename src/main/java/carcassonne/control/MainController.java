@@ -25,8 +25,8 @@ public class MainController {
 	private Grid grid;
 
 	/**
-	 * 
-	 */
+     * Basic constructor. Creates the view and the model of the game.
+     */
 	public MainController() {
 		gui = new MainGUI(this);
 		rotationGUI = new RotationGUI(this);
@@ -34,6 +34,10 @@ public class MainController {
 		newGame(2);
 	}
 
+	/**
+     * Starts new round with a specific amount of players.
+     * @param playerCount sets the amount of players.
+     */
 	public void newGame(int playerCount) {
 		grid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
 		round = new Round(playerCount, grid);
@@ -63,7 +67,6 @@ public class MainController {
 
 	/**
 	 * Method for the view to call if the user wants to skip a round.
-	 * 
 	 * @return true if request was granted.
 	 */
 	public boolean requestSkip() {
@@ -74,6 +77,7 @@ public class MainController {
 
 	/**
 	 * Method for the view to call if a user mans a tile with a meeple.
+	 * @return true if request was granted.
 	 */
 	public boolean requestMeeplePlacement(GridDirection position) {
 		Player player = round.getActivePlayer();
