@@ -1,5 +1,7 @@
 package carcassonne.control;
 
+import java.util.HashMap;
+
 import carcassonne.model.Player;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
@@ -8,11 +10,9 @@ import carcassonne.model.tile.Tile;
 import carcassonne.view.MainGUI;
 import carcassonne.view.PlacementGUI;
 import carcassonne.view.RotationGUI;
-import carcassonne.view.SecondaryGUI;
 
 /**
  * TODO (MEDIUM) comment this class.
- * 
  * @author Timur
  */
 public class MainController {
@@ -20,24 +20,38 @@ public class MainController {
 	private GameOptions options = GameOptions.getInstance();
 	private MainGUI mainGUI;
 	private RotationGUI rotationGUI;
-	private SecondaryGUI placementGUI;
+	private PlacementGUI placementGUI;
 	private Round round;
 	private Grid grid;
+	private HashMap<Class<? extends ControllerState>, ControllerState> stateMap;
+	private ControllerState currentState;
 
 	/**
-     * Basic constructor. Creates the view and the model of the game.
-     */
+	 * Basic constructor. Creates the view and the model of the game.
+	 */
 	public MainController() {
 		mainGUI = new MainGUI(this);
 		rotationGUI = new RotationGUI(this);
 		placementGUI = new PlacementGUI(this);
+		stateMap = new HashMap<Class<? extends ControllerState>, ControllerState>();
+		currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, round, grid);
+		stateMap.put(StateIdle.class, currentState);
+		// TODO (HIGH) fill state map with other states, maybe self register.
 		newGame(2);
 	}
 
 	/**
-     * Starts new round with a specific amount of players.
-     * @param playerCount sets the amount of players.
-     */
+	 * Changes the state of the controller to a new state.
+	 * @param stateType specifies which state is the new state.
+	 */
+	public void changeState(Class<? extends ControllerState> stateType) {
+		currentState = stateMap.get(stateType);
+	}
+
+	/**
+	 * Starts new round with a specific amount of players.
+	 * @param playerCount sets the amount of players.
+	 */
 	public void newGame(int playerCount) {
 		grid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
 		round = new Round(playerCount, grid);
