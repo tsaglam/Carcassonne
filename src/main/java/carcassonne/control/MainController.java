@@ -1,6 +1,8 @@
 package carcassonne.control;
 
+import carcassonne.model.Player;
 import carcassonne.model.Round;
+import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.MainGUI;
@@ -9,79 +11,80 @@ import carcassonne.view.RotationGUI;
 import carcassonne.view.SecondaryGUI;
 
 /**
- * Main controller for the game. This class is not a classic controller class from the
- * Model/View/Controller Architecture. It gets the user input from all view classes and notifies
- * both the model and the view. It contains state information. TODO (MEDIUM) create state machine -
- * make multiple state classes - make abstract state - implement the state machine functions
+ * TODO (MEDIUM) comment this class.
+ * 
  * @author Timur
  */
 public class MainController {
-    GameOptions options = GameOptions.getInstance();
-    MainGUI gui;
-    RotationGUI rotationGUI;
-    SecondaryGUI placementGUI;
-    Round currentRound;
 
-    /**
-     * Basic constructor. Creates the view and the model of the game.
-     */
-    public MainController() {
-        gui = new MainGUI(this);
-        rotationGUI = new RotationGUI(this);
-        placementGUI = new PlacementGUI(this);
-        newGame(2); // TODO (LOW) don't auto-start new game
-    }
+	private GameOptions options = GameOptions.getInstance();
+	private MainGUI gui;
+	private RotationGUI rotationGUI;
+	private SecondaryGUI placementGUI;
+	private Round round;
+	private Grid grid;
 
-    /**
-     * Starts new round with a specific amount of players.
-     * @param playerCount sets the amount of players.
-     */
-    public void newGame(int playerCount) {
-        currentRound = new Round(playerCount, options.gridWidth, options.gridHeight);
-        gui.rebuildLabelGrid();
-        gui.set(currentRound.getFirstTile(), options.gridCenterX, options.gridCenterY);
-        placementGUI.setTile(currentRound.getCurrentTile());
-    }
+	/**
+	 * 
+	 */
+	public MainController() {
+		gui = new MainGUI(this);
+		rotationGUI = new RotationGUI(this);
+		placementGUI = new PlacementGUI(this);
+		newGame(2);
+	}
 
-    /**
-     * Method for the view to call if a user places a tile.
-     * @param x is the x coordinate.
-     * @param y is the y coordinate.
-     * @return true if request was granted.
-     */
-    public boolean requestTilePlacement(int x, int y) {
-        Tile tile = rotationGUI.useTile();
-        if(currentRound.makeGridPlacement(x, y, tile)) {
-            gui.set(tile, x, y);
-            rotationGUI.disableFrame();
-            placementGUI.setTile(tile); // TODO (MEDIUM) only if player has meeples
-            return true;
-        }
-        return false;
-    }
+	public void newGame(int playerCount) {
+		grid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
+		round = new Round(playerCount, grid);
+		gui.rebuildLabelGrid();
+		gui.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
+		placementGUI.setTile(round.getCurrentTile());
+	}
 
-    /**
-     * Method for the view to call if the user wants to skip a round.
-     * @return true if request was granted.
-     */
-    public boolean requestSkip() {
-        currentRound.nextTurn();
-        return true;
-    }
+	/**
+	 * Method for the view to call if a user places a tile.
+	 * 
+	 * @param x is the x coordinate.
+	 * @param y is the y coordinate.
+	 * @return true if request was granted.
+	 */
+	public boolean requestTilePlacement(int x, int y) {
+		Tile tile = rotationGUI.useTile();
+		if (grid.place(x, y, tile)) {
+			round.updateCurrentTile(tile);
+			gui.set(tile, x, y);
+			rotationGUI.disableFrame();
+			placementGUI.setTile(tile); // TODO (MEDIUM) only if player has meeples else show message box
+			return true;
+		}
+		return false;
+	}
 
-    /**
-     * Method for the view to call if a user mans a tile with a meeple.
-     */
-    public boolean requestMeeplePlacement(GridDirection position) {
-        // TODO (MEDIUM) implement meeple placement.
-        if ( currentRound.makeMeeplePlacement(position)) {
-            gui.set(null, 0, 0, position); // TODO (HIGH) get real information
-            placementGUI.disableFrame();
-            currentRound.nextTurn();
-            rotationGUI.setTile(currentRound.getCurrentTile());
-            return true;
-        }
-        return false;
-    }
+	/**
+	 * Method for the view to call if the user wants to skip a round.
+	 * 
+	 * @return true if request was granted.
+	 */
+	public boolean requestSkip() {
+		rotationGUI.disableFrame(); // TODO (MEDIUM) test skipping
+		round.nextTurn();
+		return true;
+	}
 
+	/**
+	 * Method for the view to call if a user mans a tile with a meeple.
+	 */
+	public boolean requestMeeplePlacement(GridDirection position) {
+		Player player = round.getActivePlayer();
+		if (player.hasUnusedMeeples()) {
+			player.placeMeepleAt(round.getCurrentTile(), position);
+			gui.set(null, 0, 0, position); // TODO (HIGH) get real information
+			placementGUI.disableFrame();
+			round.nextTurn();
+			rotationGUI.setTile(round.getCurrentTile());
+			return true;
+		}
+		return false;
+	}
 }

@@ -3,7 +3,6 @@ package carcassonne.view;
 import java.awt.GridBagConstraints;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
