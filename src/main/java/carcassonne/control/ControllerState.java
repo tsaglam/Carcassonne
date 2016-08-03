@@ -9,22 +9,21 @@ import carcassonne.view.RotationGUI;
 
 /**
  * Is the abstract state of the state machine.
- * 
  * @author Timur
  */
 public abstract class ControllerState {
 
-	protected MainGUI gui;
+	protected MainGUI mainGUI;
 	protected RotationGUI rotationGUI;
 	protected PlacementGUI placementGUI;
 	protected Round round;
 	protected Grid grid;
 
 	/**
-	 * 
+	 * Constructor of the abstract state, sets the class variables from the parameters and calls the <code>entry()</code> method.
 	 */
-	public ControllerState(MainGUI gui, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round, Grid grid) {
-		this.gui = gui;
+	public ControllerState(MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round, Grid grid) {
+		this.mainGUI = mainGUI;
 		this.rotationGUI = rotationGUI;
 		this.placementGUI = placementGUI;
 		this.round = round;

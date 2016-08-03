@@ -18,7 +18,7 @@ import carcassonne.view.SecondaryGUI;
 public class MainController {
 
 	private GameOptions options = GameOptions.getInstance();
-	private MainGUI gui;
+	private MainGUI mainGUI;
 	private RotationGUI rotationGUI;
 	private SecondaryGUI placementGUI;
 	private Round round;
@@ -28,7 +28,7 @@ public class MainController {
      * Basic constructor. Creates the view and the model of the game.
      */
 	public MainController() {
-		gui = new MainGUI(this);
+		mainGUI = new MainGUI(this);
 		rotationGUI = new RotationGUI(this);
 		placementGUI = new PlacementGUI(this);
 		newGame(2);
@@ -41,14 +41,13 @@ public class MainController {
 	public void newGame(int playerCount) {
 		grid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
 		round = new Round(playerCount, grid);
-		gui.rebuildLabelGrid();
-		gui.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
+		mainGUI.rebuildLabelGrid();
+		mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
 		placementGUI.setTile(round.getCurrentTile());
 	}
 
 	/**
 	 * Method for the view to call if a user places a tile.
-	 * 
 	 * @param x is the x coordinate.
 	 * @param y is the y coordinate.
 	 * @return true if request was granted.
@@ -57,7 +56,7 @@ public class MainController {
 		Tile tile = rotationGUI.useTile();
 		if (grid.place(x, y, tile)) {
 			round.updateCurrentTile(tile);
-			gui.set(tile, x, y);
+			mainGUI.set(tile, x, y);
 			rotationGUI.disableFrame();
 			placementGUI.setTile(tile); // TODO (MEDIUM) only if player has meeples else show message box
 			return true;
@@ -83,7 +82,7 @@ public class MainController {
 		Player player = round.getActivePlayer();
 		if (player.hasUnusedMeeples()) {
 			player.placeMeepleAt(round.getCurrentTile(), position);
-			gui.set(null, 0, 0, position); // TODO (HIGH) get real information
+			mainGUI.set(null, 0, 0, position); // TODO (HIGH) get real information
 			placementGUI.disableFrame();
 			round.nextTurn();
 			rotationGUI.setTile(round.getCurrentTile());
