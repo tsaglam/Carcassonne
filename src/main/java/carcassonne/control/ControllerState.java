@@ -19,6 +19,7 @@ public abstract class ControllerState {
 	protected PlacementGUI placementGUI;
 	protected Round round;
 	protected Grid grid;
+	protected GameOptions options;
 
 	/**
 	 * Constructor of the abstract state, sets the class variables from the
@@ -32,6 +33,7 @@ public abstract class ControllerState {
 		this.placementGUI = placementGUI;
 		this.round = round;
 		this.grid = grid;
+		options = GameOptions.getInstance();
 		entry();
 	}
 
