@@ -1,4 +1,4 @@
-package carcassonne.model; // maybe move to controller? or not?
+package carcassonne.model;
 
 import carcassonne.control.GameOptions;
 import carcassonne.model.grid.Grid;
@@ -10,7 +10,7 @@ import carcassonne.model.tile.TileStack;
  * represents the round and its information in an object.
  * @author Timur
  */
-public class Round { // TODO (HIGH) make this class less a gateway and more a kind of data container.
+public class Round {
 
 	private Grid grid;
 	private Player[] player;

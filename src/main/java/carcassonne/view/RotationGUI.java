@@ -55,7 +55,7 @@ public class RotationGUI extends SecondaryGUI {
         buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
         buttonRotateLeft = new JButton(new ImageIcon("src/main/ressources/icons/left.png"));
         buttonRotateRight = new JButton(new ImageIcon("src/main/ressources/icons/right.png"));
-        // TODO: (HIGH) add GUI compatibility for windows
+        // TODO (HIGH) add GUI compatibility for windows
         if (!options.operatingSystemName.startsWith("Mac")) {
             System.out.println("NOT MAC OS");
             buttonSkip.setBorder(null);
