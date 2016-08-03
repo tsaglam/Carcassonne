@@ -20,7 +20,7 @@ public class MainController {
 	private PlacementGUI placementGUI;
 	private Round round;
 	private Grid grid;
-	private HashMap<Class<? extends ControllerState>, ControllerState> stateMap;
+    private HashMap<Class<? extends ControllerState>, ControllerState> stateMap;
 	private ControllerState currentState;
 
 	/**
