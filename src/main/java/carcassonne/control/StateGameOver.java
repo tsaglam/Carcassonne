@@ -7,10 +7,10 @@ import carcassonne.view.PlacementGUI;
 import carcassonne.view.RotationGUI;
 
 /**
- * The specific state if no game is running.
+ * The specific state where the stats are shown can be placed.
  * @author Timur Saglam
  */
-public class StateIdle extends ControllerState {
+public class StateGameOver extends ControllerState {
 
 	/**
 	 * Constructor of the state.
@@ -21,7 +21,8 @@ public class StateIdle extends ControllerState {
 	 * @param round sets the round.
 	 * @param grid sets the grid.
 	 */
-	public StateIdle(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round, Grid grid) {
+	public StateGameOver(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round,
+			Grid grid) {
 		super(controller, mainGUI, rotationGUI, placementGUI, round, grid);
 	}
 
@@ -30,7 +31,9 @@ public class StateIdle extends ControllerState {
 	 */
 	@Override
 	protected void entry() {
-		mainGUI.rebuildLabelGrid();
+		// TODO (MEDIUM) show stats in StateGameOver instead of jump to next state
+		changeState(StateIdle.class);
+
 	}
 
 	/**
@@ -38,19 +41,8 @@ public class StateIdle extends ControllerState {
 	 */
 	@Override
 	protected void exit() {
-		// No exit functions.
-	}
-	
-	/**
-	 * @see carcassonne.control.ControllerState#newGame()
-	 */
-	@Override
-	public boolean newGame(int playerCount) {
-		grid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
-		round = new Round(playerCount, grid);
-		mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
-		changeState(StateIdle.class);
-		return true;
+		// TODO (MEDIUM) hide stats in StateGameOver
+
 	}
 
 }

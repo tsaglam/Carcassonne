@@ -24,6 +24,12 @@ public abstract class ControllerState {
 	/**
 	 * Constructor of the abstract state, sets the class variables from the
 	 * parameters and calls the <code>entry()</code> method.
+	 * @param controller sets the controller.
+	 * @param mainGUI sets the main GUI.
+	 * @param rotationGUI sets the rotation GUI.
+	 * @param placementGUI sets the placement GUI.
+	 * @param round sets the round.
+	 * @param grid sets the grid.
 	 */
 	public ControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round,
 			Grid grid) {
@@ -36,9 +42,21 @@ public abstract class ControllerState {
 		options = GameOptions.getInstance();
 		entry();
 	}
+	
+	
+	protected void changeState(Class<? extends ControllerState> stateType) {
+		exit();
+		controller.changeState(stateType);
+	}
 
+	/**
+	 * Entry method of the state.
+	 */
 	protected abstract void entry();
 
+	/**
+	 * Exit method of the state.
+	 */
 	protected abstract void exit();
 
 	/**
@@ -48,6 +66,15 @@ public abstract class ControllerState {
 	 */
 	public boolean newGame(int playerCount) {
 		System.err.println("You can't start a new game right now.");
+		return false;
+	}
+	
+	/**
+	 * Starts new round with a specific amount of players.
+	 * @return true if the game was aborted.
+	 */
+	public boolean abortGame() {
+		System.err.println("You can't abort a game right now.");
 		return false;
 	}
 
