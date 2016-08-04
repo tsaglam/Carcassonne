@@ -62,7 +62,7 @@ public class MainController {
      * @param state is the specific state.
      * @param stateType is the class type of the specific state.
      */
-    public void registersState(ControllerState state) {
+    public void registerState(ControllerState state) {
         if (stateMap.put(state.getClass(), state) != null) {
             throw new IllegalArgumentException("Can't register two states of a kind.");
         }

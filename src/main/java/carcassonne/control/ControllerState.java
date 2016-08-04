@@ -32,7 +32,7 @@ public abstract class ControllerState {
         this.rotationGUI = rotationGUI;
         this.placementGUI = placementGUI;
         options = GameOptions.getInstance();
-        controller.registersState(this);
+        controller.registerState(this);
     }
 
     protected void changeState(Class<? extends ControllerState> stateType) {
