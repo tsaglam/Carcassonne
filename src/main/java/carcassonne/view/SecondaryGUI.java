@@ -42,6 +42,9 @@ public abstract class SecondaryGUI extends JPanel {
      * @param tile
      */
     public void setTile(Tile tile) {
+        if (tile == null) {
+            throw new IllegalArgumentException("Tried to set the tile of the " + getClass().getSimpleName() + " to null.");
+        }
         this.tile = tile;
         update();
         frame.setVisible(true);
