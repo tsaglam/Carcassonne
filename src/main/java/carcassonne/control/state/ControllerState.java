@@ -1,5 +1,7 @@
-package carcassonne.control;
+package carcassonne.control.state;
 
+import carcassonne.control.GameOptions;
+import carcassonne.control.MainController;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;

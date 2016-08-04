@@ -1,5 +1,6 @@
-package carcassonne.control;
+package carcassonne.control.state;
 
+import carcassonne.control.MainController;
 import carcassonne.view.MainGUI;
 import carcassonne.view.PlacementGUI;
 import carcassonne.view.RotationGUI;
@@ -22,7 +23,7 @@ public class StateGameOver extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#entry()
+     * @see carcassonne.control.state.ControllerState#entry()
      */
     @Override
     protected void entry() {
@@ -31,7 +32,7 @@ public class StateGameOver extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#exit()
+     * @see carcassonne.control.state.ControllerState#exit()
      */
     @Override
     protected void exit() {

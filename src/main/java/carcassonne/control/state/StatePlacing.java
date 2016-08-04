@@ -1,5 +1,6 @@
-package carcassonne.control;
+package carcassonne.control.state;
 
+import carcassonne.control.MainController;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.MainGUI;
 import carcassonne.view.PlacementGUI;
@@ -23,7 +24,7 @@ public class StatePlacing extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#entry()
+     * @see carcassonne.control.state.ControllerState#entry()
      */
     @Override
     protected void entry() {
@@ -31,7 +32,7 @@ public class StatePlacing extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#exit()
+     * @see carcassonne.control.state.ControllerState#exit()
      */
     @Override
     protected void exit() {
@@ -59,7 +60,7 @@ public class StatePlacing extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#abortGame()
+     * @see carcassonne.control.state.ControllerState#abortGame()
      */
     @Override
     public boolean abortGame() {

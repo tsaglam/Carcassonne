@@ -1,5 +1,6 @@
-package carcassonne.control;
+package carcassonne.control.state;
 
+import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.MainGUI;
@@ -24,7 +25,7 @@ public class StateManning extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#entry()
+     * @see carcassonne.control.state.ControllerState#entry()
      */
     @Override
     protected void entry() {
@@ -34,7 +35,7 @@ public class StateManning extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#exit()
+     * @see carcassonne.control.state.ControllerState#exit()
      */
     @Override
     protected void exit() {
@@ -56,7 +57,7 @@ public class StateManning extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#abortGame()
+     * @see carcassonne.control.state.ControllerState#abortGame()
      */
     @Override
     public boolean abortGame() {

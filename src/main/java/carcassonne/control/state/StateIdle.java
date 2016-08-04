@@ -1,5 +1,6 @@
-package carcassonne.control;
+package carcassonne.control.state;
 
+import carcassonne.control.MainController;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.view.MainGUI;
@@ -24,7 +25,7 @@ public class StateIdle extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#entry()
+     * @see carcassonne.control.state.ControllerState#entry()
      */
     @Override
     protected void entry() {
@@ -32,7 +33,7 @@ public class StateIdle extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#exit()
+     * @see carcassonne.control.state.ControllerState#exit()
      */
     @Override
     protected void exit() {
@@ -40,7 +41,7 @@ public class StateIdle extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.ControllerState#newGame()
+     * @see carcassonne.control.state.ControllerState#newGame()
      */
     @Override
     public boolean newGame(int playerCount) {
