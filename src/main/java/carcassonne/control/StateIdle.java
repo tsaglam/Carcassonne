@@ -46,12 +46,9 @@ public class StateIdle extends ControllerState {
      */
     @Override
     public boolean newGame(int playerCount) {
-        grid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
-        round = new Round(playerCount, grid);
+        controller.updateStates(new Round(playerCount, grid), new Grid(options.gridWidth, options.gridHeight, options.foundationType));
         mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
-        System.out.println(round);
-        System.out.println(placementGUI);
-        changeState(StateManning.class); // TODO (HIGHEST) inconsistent object (round objects)
+        changeState(StateManning.class);
         return true;
     }
 

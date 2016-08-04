@@ -34,7 +34,7 @@ public abstract class ControllerState {
         this.round = round;
         this.grid = grid;
         options = GameOptions.getInstance();
-        controller.register(this);
+        controller.registersState(this);
     }
 
     protected void changeState(Class<? extends ControllerState> stateType) {
@@ -52,6 +52,16 @@ public abstract class ControllerState {
      * Exit method of the state.
      */
     protected abstract void exit();
+    
+    /**
+     * Updates the round and the grid object after a new round was started.
+     * @param round sets the new round.
+     * @param grid sets the new grid.
+     */
+    public void updateState(Round round, Grid grid) {
+        this.round = round;
+        this.grid = grid;
+    }
 
     /**
      * Starts new round with a specific amount of players.
