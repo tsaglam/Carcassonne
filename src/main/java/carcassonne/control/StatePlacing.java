@@ -54,6 +54,7 @@ public class StatePlacing extends ControllerState {
     @Override
     public boolean skip() {
         round.nextTurn();
+        entry();
         return true;
     }
 
