@@ -28,7 +28,6 @@ public class StateGameOver extends ControllerState {
     protected void entry() {
         // TODO (MEDIUM) show stats in StateGameOver instead of jump to next state
         changeState(StateIdle.class);
-
     }
 
     /**
@@ -37,7 +36,6 @@ public class StateGameOver extends ControllerState {
     @Override
     protected void exit() {
         // TODO (MEDIUM) hide stats in StateGameOver
-
     }
 
 }

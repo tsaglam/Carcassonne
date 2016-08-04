@@ -48,7 +48,7 @@ public class MainController {
      * @return the new state.
      */
     public ControllerState changeState(Class<? extends ControllerState> stateType) {
-        // TODO (MEDIUM) Remove debug output for state changes.
+        // TODO (LOW) Remove debug output for state changes.
         System.out.println("change to " + stateType + " from " + currentState.getClass());                                          // (HIGH)
         currentState = stateMap.get(stateType);
         if (currentState == null) {
