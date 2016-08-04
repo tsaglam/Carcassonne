@@ -22,8 +22,7 @@ public class StatePlacing extends ControllerState {
 	 * @param round sets the round.
 	 * @param grid sets the grid.
 	 */
-	public StatePlacing(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round,
-			Grid grid) {
+    public StatePlacing(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round, Grid grid) {
 		super(controller, mainGUI, rotationGUI, placementGUI, round, grid);
 	}
 

@@ -1,6 +1,11 @@
 package carcassonne.control;
 
+import carcassonne.model.Round;
+import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.view.MainGUI;
+import carcassonne.view.PlacementGUI;
+import carcassonne.view.RotationGUI;
 
 /**
  * Is the abstract state of the state machine.
@@ -9,6 +14,11 @@ import carcassonne.model.grid.GridDirection;
 public abstract class ControllerState {
 
     protected MainController controller;
+    protected MainGUI mainGUI;
+    protected RotationGUI rotationGUI;
+    protected PlacementGUI placementGUI;
+    protected Round round;
+    protected Grid grid;
     protected GameOptions options;
 
     /**
@@ -16,8 +26,13 @@ public abstract class ControllerState {
      * state at the controller and calls the <code>entry()</code> method.
      * @param controller sets the controller.
      */
-    public ControllerState(MainController controller) {
+    public ControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round, Grid grid) {
         this.controller = controller;
+        this.mainGUI = mainGUI;
+        this.rotationGUI = rotationGUI;
+        this.placementGUI = placementGUI;
+        this.round = round;
+        this.grid = grid;
         options = GameOptions.getInstance();
         controller.register(this);
     }

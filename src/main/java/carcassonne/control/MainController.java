@@ -32,13 +32,13 @@ public class MainController {
 		mainGUI = new MainGUI(this);
 		rotationGUI = new RotationGUI(this);
 		placementGUI = new PlacementGUI(this);
-		grid = new Grid(1, 1, options.foundationType);
+		grid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
 		round= new Round(2, grid);
 		stateMap = new HashMap<Class<? extends ControllerState>, ControllerState>();
-		currentState = new StateIdle(this);
-		new StateManning(this);
-		new StatePlacing(this);
-		new StateGameOver(this);
+		currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, round, grid);
+		new StateManning(this, mainGUI, rotationGUI, placementGUI, round, grid);
+		new StatePlacing(this, mainGUI, rotationGUI, placementGUI, round, grid);
+		new StateGameOver(this, mainGUI, rotationGUI, placementGUI, round, grid);
 		requestNewGame(2); // TODO (HIGH) make GUI button for the start game function.
 	}
 
