@@ -1,6 +1,11 @@
 package carcassonne.control;
 
+import carcassonne.model.Round;
+import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.view.MainGUI;
+import carcassonne.view.PlacementGUI;
+import carcassonne.view.RotationGUI;
 
 /**
  * Is the abstract state of the state machine.
@@ -9,6 +14,11 @@ import carcassonne.model.grid.GridDirection;
 public abstract class ControllerState {
 
     protected MainController controller;
+    protected MainGUI mainGUI;
+    protected RotationGUI rotationGUI;
+    protected PlacementGUI placementGUI;
+    protected Round round;
+    protected Grid grid;
     protected GameOptions options;
 
     /**
@@ -16,10 +26,13 @@ public abstract class ControllerState {
      * state at the controller and calls the <code>entry()</code> method.
      * @param controller sets the controller.
      */
-    public ControllerState(MainController controller) {
+    public ControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
         this.controller = controller;
+        this.mainGUI = mainGUI;
+        this.rotationGUI = rotationGUI;
+        this.placementGUI = placementGUI;
         options = GameOptions.getInstance();
-        controller.register(this);
+        controller.registersState(this);
     }
 
     protected void changeState(Class<? extends ControllerState> stateType) {
@@ -37,6 +50,16 @@ public abstract class ControllerState {
      * Exit method of the state.
      */
     protected abstract void exit();
+
+    /**
+     * Updates the round and the grid object after a new round was started.
+     * @param round sets the new round.
+     * @param grid sets the new grid.
+     */
+    public void updateState(Round round, Grid grid) {
+        this.round = round;
+        this.grid = grid;
+    }
 
     /**
      * Starts new round with a specific amount of players.

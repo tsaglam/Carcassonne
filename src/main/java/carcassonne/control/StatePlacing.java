@@ -1,6 +1,9 @@
 package carcassonne.control;
 
 import carcassonne.model.tile.Tile;
+import carcassonne.view.MainGUI;
+import carcassonne.view.PlacementGUI;
+import carcassonne.view.RotationGUI;
 
 /**
  * The specific state when a Tile can be placed.
@@ -11,9 +14,12 @@ public class StatePlacing extends ControllerState {
     /**
      * Constructor of the state.
      * @param controller sets the controller.
+     * @param mainGUI sets the main GUI.
+     * @param rotationGUI sets the rotation GUI.
+     * @param placementGUI sets the placement GUI.
      */
-    public StatePlacing(MainController controller) {
-        super(controller);
+    public StatePlacing(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, rotationGUI, placementGUI);
     }
 
     /**
@@ -21,7 +27,7 @@ public class StatePlacing extends ControllerState {
      */
     @Override
     protected void entry() {
-        controller.getRotationGUI().setTile(controller.getRound().getCurrentTile());
+        rotationGUI.setTile(round.getCurrentTile());
     }
 
     /**
@@ -29,16 +35,16 @@ public class StatePlacing extends ControllerState {
      */
     @Override
     protected void exit() {
-        controller.getRotationGUI().disableFrame();
+        rotationGUI.disableFrame();
     }
 
     @Override
     public boolean placeTile(int x, int y) {
-        Tile tile = controller.getRotationGUI().useTile();
-        if (controller.getGrid().place(x, y, tile)) {
-            controller.getRound().updateCurrentTile(tile);
-            controller.getMainGUI().set(tile, x, y);
-            controller.getRotationGUI().disableFrame();
+        Tile tile = rotationGUI.useTile();
+        if (grid.place(x, y, tile)) {
+            round.updateCurrentTile(tile);
+            mainGUI.set(tile, x, y);
+            rotationGUI.disableFrame();
             changeState(StateManning.class);
             return true;
         }
@@ -47,7 +53,7 @@ public class StatePlacing extends ControllerState {
 
     @Override
     public boolean skip() {
-        controller.getRound().nextTurn();
+        round.nextTurn();
         return true;
     }
 

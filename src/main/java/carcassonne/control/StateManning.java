@@ -2,6 +2,9 @@ package carcassonne.control;
 
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.view.MainGUI;
+import carcassonne.view.PlacementGUI;
+import carcassonne.view.RotationGUI;
 
 /**
  * The specific state when a Meeple can be placed.
@@ -12,9 +15,12 @@ public class StateManning extends ControllerState {
     /**
      * Constructor of the state.
      * @param controller sets the controller.
+     * @param mainGUI sets the main GUI.
+     * @param rotationGUI sets the rotation GUI.
+     * @param placementGUI sets the placement GUI.
      */
-    public StateManning(MainController controller) {
-        super(controller);
+    public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, rotationGUI, placementGUI);
     }
 
     /**
@@ -22,7 +28,9 @@ public class StateManning extends ControllerState {
      */
     @Override
     protected void entry() {
-        controller.getPlacementGUI().setTile(controller.getRound().getCurrentTile());
+        System.out.println(round);
+        System.out.println(placementGUI);
+        placementGUI.setTile(round.getCurrentTile());
     }
 
     /**
@@ -30,17 +38,17 @@ public class StateManning extends ControllerState {
      */
     @Override
     protected void exit() {
-        controller.getPlacementGUI().disableFrame();
+        placementGUI.disableFrame();
     }
 
     @Override
     public boolean placeMeeple(GridDirection position) {
-        Player player = controller.getRound().getActivePlayer();
+        Player player = round.getActivePlayer();
         if (player.hasUnusedMeeples()) {
-            player.placeMeepleAt(controller.getRound().getCurrentTile(), position);
-            controller.getMainGUI().set(null, 0, 0, position); // TODO (HIGH) get real information from method above
-            controller.getPlacementGUI().disableFrame();
-            controller.getRound().nextTurn();
+            player.placeMeepleAt(round.getCurrentTile(), position);
+            mainGUI.set(null, 0, 0, position); // TODO (HIGH) get real information from method above
+            placementGUI.disableFrame();
+            round.nextTurn();
             changeState(StatePlacing.class);
             return true;
         }

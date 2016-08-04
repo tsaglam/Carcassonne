@@ -2,6 +2,9 @@ package carcassonne.control;
 
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
+import carcassonne.view.MainGUI;
+import carcassonne.view.PlacementGUI;
+import carcassonne.view.RotationGUI;
 
 /**
  * The specific state if no game is running.
@@ -12,9 +15,12 @@ public class StateIdle extends ControllerState {
     /**
      * Constructor of the state.
      * @param controller sets the controller.
+     * @param mainGUI sets the main GUI.
+     * @param rotationGUI sets the rotation GUI.
+     * @param placementGUI sets the placement GUI.
      */
-    public StateIdle(MainController controller) {
-        super(controller);
+    public StateIdle(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, rotationGUI, placementGUI);
     }
 
     /**
@@ -22,7 +28,7 @@ public class StateIdle extends ControllerState {
      */
     @Override
     protected void entry() {
-        controller.getMainGUI().rebuildLabelGrid();
+        mainGUI.rebuildLabelGrid();
     }
 
     /**
@@ -38,10 +44,11 @@ public class StateIdle extends ControllerState {
      */
     @Override
     public boolean newGame(int playerCount) {
-        controller.setGrid(new Grid(options.gridWidth, options.gridHeight, options.foundationType));
-        controller.setRound(new Round(playerCount, controller.getGrid()));
-        controller.getMainGUI().set(controller.getRound().getCurrentTile(), options.gridCenterX, options.gridCenterY);
-        changeState(StateManning.class); // TODO (HIGHEST) inconsistent object (round objects)
+        Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
+        Round newRound = new Round(playerCount, newGrid);
+        controller.updateStates(newRound, newGrid);
+        mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
+        changeState(StateManning.class);
         return true;
     }
 
