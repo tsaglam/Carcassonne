@@ -57,6 +57,7 @@ public abstract class SecondaryGUI extends JPanel {
         frame.setResizable(false);
         frame.setAlwaysOnTop(true);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setLocation(options.resolutionWidth / 20, options.resolutionHeight / 5);
     }
 
     /**
