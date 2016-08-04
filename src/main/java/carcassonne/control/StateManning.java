@@ -1,8 +1,6 @@
 package carcassonne.control;
 
 import carcassonne.model.Player;
-import carcassonne.model.Round;
-import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.MainGUI;
 import carcassonne.view.PlacementGUI;
@@ -20,11 +18,9 @@ public class StateManning extends ControllerState {
      * @param mainGUI sets the main GUI.
      * @param rotationGUI sets the rotation GUI.
      * @param placementGUI sets the placement GUI.
-     * @param round sets the round.
-     * @param grid sets the grid.
      */
-    public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round, Grid grid) {
-        super(controller, mainGUI, rotationGUI, placementGUI, round, grid);
+    public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, rotationGUI, placementGUI);
     }
 
     /**

@@ -26,13 +26,11 @@ public abstract class ControllerState {
      * state at the controller and calls the <code>entry()</code> method.
      * @param controller sets the controller.
      */
-    public ControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round, Grid grid) {
+    public ControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
         this.controller = controller;
         this.mainGUI = mainGUI;
         this.rotationGUI = rotationGUI;
         this.placementGUI = placementGUI;
-        this.round = round;
-        this.grid = grid;
         options = GameOptions.getInstance();
         controller.registersState(this);
     }
@@ -52,7 +50,7 @@ public abstract class ControllerState {
      * Exit method of the state.
      */
     protected abstract void exit();
-    
+
     /**
      * Updates the round and the grid object after a new round was started.
      * @param round sets the new round.

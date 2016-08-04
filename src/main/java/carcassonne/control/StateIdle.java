@@ -18,11 +18,9 @@ public class StateIdle extends ControllerState {
      * @param mainGUI sets the main GUI.
      * @param rotationGUI sets the rotation GUI.
      * @param placementGUI sets the placement GUI.
-     * @param round sets the round.
-     * @param grid sets the grid.
      */
-    public StateIdle(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Round round, Grid grid) {
-        super(controller, mainGUI, rotationGUI, placementGUI, round, grid);
+    public StateIdle(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, rotationGUI, placementGUI);
     }
 
     /**
@@ -46,7 +44,9 @@ public class StateIdle extends ControllerState {
      */
     @Override
     public boolean newGame(int playerCount) {
-        controller.updateStates(new Round(playerCount, grid), new Grid(options.gridWidth, options.gridHeight, options.foundationType));
+        Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
+        Round newRound = new Round(playerCount, newGrid);
+        controller.updateStates(newRound, newGrid);
         mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
         changeState(StateManning.class);
         return true;

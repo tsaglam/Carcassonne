@@ -21,13 +21,9 @@ import carcassonne.view.RotationGUI;
  * @author Timur Saglam
  */
 public class MainController {
-
-    private GameOptions options;
     private MainGUI mainGUI;
     private RotationGUI rotationGUI;
     private PlacementGUI placementGUI;
-    private Round round;
-    private Grid grid;
     private HashMap<Class<? extends ControllerState>, ControllerState> stateMap;
     private ControllerState currentState;
 
@@ -35,18 +31,14 @@ public class MainController {
      * Basic constructor. Creates the view and the model of the game.
      */
     public MainController() {
-        options = GameOptions.getInstance();
         mainGUI = new MainGUI(this);
         rotationGUI = new RotationGUI(this);
         placementGUI = new PlacementGUI(this);
-        // grid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
-        grid = new Grid(1, 1, options.foundationType);
-        round = new Round(2, grid);
         stateMap = new HashMap<Class<? extends ControllerState>, ControllerState>();
-        currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, round, grid);
-        new StateManning(this, mainGUI, rotationGUI, placementGUI, round, grid);
-        new StatePlacing(this, mainGUI, rotationGUI, placementGUI, round, grid);
-        new StateGameOver(this, mainGUI, rotationGUI, placementGUI, round, grid);
+        currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI);
+        new StateManning(this, mainGUI, rotationGUI, placementGUI);
+        new StatePlacing(this, mainGUI, rotationGUI, placementGUI);
+        new StateGameOver(this, mainGUI, rotationGUI, placementGUI);
         requestNewGame(2); // TODO (HIGH) make GUI button for the start game function.
     }
 
@@ -82,8 +74,6 @@ public class MainController {
      * @param newGrid sets the new grid.
      */
     public void updateStates(Round newRound, Grid newGrid) {
-        this.round = newRound;
-        this.grid = newGrid;
         for (ControllerState state : stateMap.values()) {
             state.updateState(newRound, newGrid);
         }
@@ -131,21 +121,5 @@ public class MainController {
      */
     public boolean requestMeeplePlacement(GridDirection position) {
         return currentState.placeMeeple(position);
-    }
-
-    /**
-     * Simple setter.
-     * @param round the round to set
-     */
-    public void setRound(Round round) {
-        this.round = round;
-    }
-
-    /**
-     * Simple setter.
-     * @param grid the grid to set
-     */
-    public void setGrid(Grid grid) {
-        this.grid = grid;
     }
 }
