@@ -114,7 +114,7 @@ public class MainGUI extends JPanel {
      */
     private void buildFrame() {
         menuBar = new MainMenuBar();
-        frame = new JFrame("Carcasonne");
+        frame = new JFrame("Carcassonne");
         frame.getContentPane().add(this);
         frame.setJMenuBar(menuBar);
         setBackground(options.colorGUImain); // grey

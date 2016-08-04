@@ -1,7 +1,6 @@
 package carcassonne.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 
@@ -17,9 +16,10 @@ public class LayeredGUI {
     private JLayeredPane layeredPane;
     private JPanel panelBack;
     private JPanel panelFront;
+    private MainMenuBar menuBar;
     private GameOptions options;
-    public LayeredGUI()
-    {
+    
+    public LayeredGUI() {
         options = GameOptions.getInstance();
         frame = new JFrame();
         layeredPane = new JLayeredPane();
@@ -27,20 +27,25 @@ public class LayeredGUI {
         panelFront = new JPanel();
         frame.setPreferredSize(new Dimension(options.resolutionWidth, options.resolutionHeight));
         frame.setLayout(new BorderLayout());
+        
+        menuBar = new MainMenuBar();
+        frame.setJMenuBar(menuBar);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        
+        
         frame.add(layeredPane, BorderLayout.CENTER);   
         
-        layeredPane.setBounds(0, 0, options.resolutionWidth, options.resolutionHeight);
-        panelBack.setBackground(Color.BLUE); // TODO remove colors
-        panelBack.setBounds(0, 0, options.resolutionWidth, options.resolutionHeight);
+        layeredPane.setSize(options.resolutionWidth, options.resolutionHeight);
+        panelBack.setSize(options.resolutionWidth, options.resolutionHeight);
         panelBack.setOpaque(true);
         panelBack.setLayout(new GridBagLayout());
-        panelBack.add(new JButton());
+        panelBack.add(new JButton()); // TODO remove
         
-        panelFront.setBackground(Color.GREEN); // TODO remove colors
-        panelFront.setBounds(200, 100, 100, 100);
+        panelFront.setSize(options.resolutionWidth, options.resolutionHeight);
         panelFront.setOpaque(true);
         panelFront.setLayout(new GridBagLayout());
-        panelFront.add(new JButton());
+        panelFront.add(new JButton()); // TODO remove
         layeredPane.add(panelBack, 0, 0);
         layeredPane.add(panelFront, 1, 0);
         frame.pack();
