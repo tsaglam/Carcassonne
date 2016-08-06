@@ -1,5 +1,6 @@
 package carcassonne.model.grid;
 
+
 /**
  * @author Timur enum for the grid directions.
  */
@@ -74,5 +75,37 @@ public enum GridDirection {
 
     private static int bigOpposite(int ordinal) {
         return 4 + smallOpposite(ordinal - 4);
+    }
+    
+    /**
+     * TODO (MEDIUM) comment
+     * @param coordinate
+     * @param dir
+     * @return
+     */
+    public static int addX(int coordinate, GridDirection dir) {
+        int result = coordinate;
+        if (dir == TOP_RIGHT || dir == RIGHT || dir == BOTTOM_RIGHT) {
+            result++;
+        } else if (dir == TOP_LEFT || dir == LEFT || dir == BOTTOM_LEFT) {
+            result--;
+        }
+        return result;
+    }
+    
+    /**
+     * TODO (MEDIUM) comment
+     * @param coordinate
+     * @param dir
+     * @return
+     */
+    public static int addY(int coordinate, GridDirection dir) {
+        int result = coordinate;
+        if (dir == BOTTOM_LEFT || dir == BOTTOM || dir == BOTTOM_RIGHT) {
+            result++;
+        } else if (dir == TOP_LEFT || dir == TOP || dir == TOP_RIGHT) {
+            result--;
+        }
+        return result;
     }
 }

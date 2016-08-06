@@ -1,13 +1,5 @@
 package carcassonne.model.grid;
 
-import static carcassonne.model.grid.GridDirection.BOTTOM;
-import static carcassonne.model.grid.GridDirection.BOTTOM_LEFT;
-import static carcassonne.model.grid.GridDirection.BOTTOM_RIGHT;
-import static carcassonne.model.grid.GridDirection.LEFT;
-import static carcassonne.model.grid.GridDirection.RIGHT;
-import static carcassonne.model.grid.GridDirection.TOP;
-import static carcassonne.model.grid.GridDirection.TOP_LEFT;
-import static carcassonne.model.grid.GridDirection.TOP_RIGHT;
 import static carcassonne.model.grid.GridDirection.directNeighbors;
 import static carcassonne.model.grid.GridDirection.neighbors;
 
@@ -123,27 +115,14 @@ public class Grid {
      * Returns a specific neighbor of a tile if the neighbor exists.
      * @param x is the tiles x coordinate
      * @param y is the tiles y coordinate
-     * @param dir is the direction where the neighbor should be
+     * @param direction is the direction where the neighbor should be
      * @return the neighbor, or null if it does not exist.
      */
-    public Tile getNeighbour(int x, int y, GridDirection dir) {
-        int newX = x;
-        int newY = y;
-        // changes the x coordinate according to direction:
-        if (dir == TOP_RIGHT || dir == RIGHT || dir == BOTTOM_RIGHT) {
-            newX++;
-        } else if (dir == TOP_LEFT || dir == LEFT || dir == BOTTOM_LEFT) {
-            newX--;
-        }
-        // changes the y coordinate according to direction:
-        if (dir == BOTTOM_LEFT || dir == BOTTOM || dir == BOTTOM_RIGHT) {
-            newY++;
-        } else if (dir == TOP_LEFT || dir == TOP || dir == TOP_RIGHT) {
-            newY--;
-        }
-        // return calculated neighbor if valid:
+    public Tile getNeighbour(int x, int y, GridDirection direction) {
+        int newX = GridDirection.addX(x, direction);
+        int newY = GridDirection.addY(y, direction);
         if (isOnGrid(newX, newY)) {
-            return tile[newX][newY];
+            return tile[newX][newY]; // return calculated neighbor if valid:
         }
         return null;  // return null if tile not placed or not on grid.
     }
