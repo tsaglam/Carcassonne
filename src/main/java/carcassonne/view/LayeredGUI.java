@@ -2,7 +2,6 @@ package carcassonne.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -11,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
@@ -20,7 +20,7 @@ import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 import carcassonne.view.tileLabel.TileLabel;
 
-public class LayeredGUI {
+public class LayeredGUI{
     private JFrame frame;
     private JLayeredPane layeredPane;
     private JPanel panelBottom;
@@ -38,29 +38,34 @@ public class LayeredGUI {
     public LayeredGUI(MainController controller) {
         this.controller = controller;
         options = GameOptions.getInstance();
+        
+        
         // panel back:
         panelBottom = new JPanel();
         panelBottom.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
+        //panelBottom.setPreferredSize(new Dimension(options.gridResolutionWidth, options.gridResolutionHeight));
         panelBottom.setBackground(options.colorGUImain);
         panelBottom.setLayout(new GridBagLayout());
         buildTileGrid();
-        panelBottom.setSize(panelBottom.getMinimumSize());
-        panelBottom.revalidate();
+        
         // panel front:
         panelTop = new JPanel();
-        panelTop.setSize(options.gridResolutionWidth, options.gridResolutionHeight - 1);
-        panelTop.setBackground(new Color(0, 0, 100, 100));
+        panelTop.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
+        //panelTop.setPreferredSize(new Dimension(options.gridResolutionWidth, options.gridResolutionHeight));
+        panelTop.setBackground(new Color(0, 0, 0, 0));
         panelTop.setLayout(new GridBagLayout());
         buildMeepleGrid();
         // layered pane:
         layeredPane = new JLayeredPane();
-        layeredPane.add(panelBottom, 0, 0);
-        layeredPane.add(panelTop, 1, 0);
+        OverlayLayout layout = new OverlayLayout(layeredPane);
+        layeredPane.setLayout(layout);
+        layeredPane.add(panelBottom, new Integer(0), 1);
+        layeredPane.add(panelTop, new Integer(0), 0);
+        
         // frame building:
         frame = new JFrame();
         menuBar = new MainMenuBar();
         frame.setJMenuBar(menuBar);
-        frame.setPreferredSize(new Dimension(options.resolutionWidth - 10, options.resolutionHeight));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(layeredPane, BorderLayout.CENTER);
@@ -113,7 +118,7 @@ public class LayeredGUI {
             }
         }
     }
-
+    
     private void buildMeepleGrid() {
         constraints = new GridBagConstraints();
         gridWidth = options.gridWidth * 3;
