@@ -82,6 +82,16 @@ public final class GameOptions {
      * The height of the grid in tiles.
      */
     public int gridHeight;
+    
+    /**
+     * The width of the grid in pixel.
+     */
+    public int gridResolutionWidth;
+
+    /**
+     * The height of the grid in pixel.
+     */
+    public int gridResolutionHeight;
 
     /**
      * The x coordinates of the grid center.
@@ -125,8 +135,10 @@ public final class GameOptions {
         maximalPlayers = 4;
         tileSize = 100;
         resolutionHeightWindow = resolutionHeight - taskBarHeight;
-        gridHeight = (resolutionHeight - taskBarHeight) / 100;
-        gridWidth = resolutionWidth / 100;
+        gridHeight = (resolutionHeight - taskBarHeight) / tileSize;
+        gridWidth = resolutionWidth / tileSize;
+        gridResolutionHeight = gridHeight * tileSize;
+        gridResolutionWidth = gridWidth * tileSize;
         gridCenterX = Math.round((gridWidth - 1) / 2);
         gridCenterY = Math.round((gridHeight - 1) / 2);
         foundationType = TileType.CastleWallRoad;
