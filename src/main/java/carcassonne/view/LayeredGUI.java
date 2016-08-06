@@ -15,6 +15,7 @@ import javax.swing.OverlayLayout;
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
+import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
@@ -39,6 +40,9 @@ public class LayeredGUI {
     private GridBagConstraints constraints;
     private int gridWidth;
     private int gridHeight;
+    private int meepleGridWidth;
+    private int meepleGridHeight;
+    private Tile defaultTile;
 
     public LayeredGUI(MainController controller) {
         this.controller = controller;
@@ -48,30 +52,36 @@ public class LayeredGUI {
         buildLayeredPane();
         buildFrame();
     }
-    
+
     /**
-     * Rebuilds the label grid if the game should be restarted.
+     * Rebuilds the label grid and the meeple grid if the game should be restarted.
      */
-    public void rebuildLabelGrid() {
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                panelBottom.remove(labelGrid[x][y]);
+    public void rebuildLabelGrid() { // TODO (MEDIUM) rename to rebuildGrid()
+        ImageIcon empty = new ImageIcon(options.buildImagePath(TerrainType.OTHER));
+        for (int y = 0; y < meepleGridHeight; y++) {
+            for (int x = 0; x < meepleGridWidth; x++) {
+                if (x < gridWidth && y < gridHeight) {
+                    labelGrid[x][y].setIcon(defaultTile.getImage());
+                }
+                meepleGrid[x][y] = new JLabel(new ImageIcon(options.buildImagePath(TerrainType.OTHER)));
             }
         }
-        buildTileGrid();
-        frame.pack();
-        // TODO (HIGHEST) rebuild meeple grid
     }
-    
+
     /**
      * Draws meeple on a tile on the grid.
      * @param meeple is the meeple to draw.
      * @param x is the x position of the tile.
      * @param y is the y position of the tile.
      * @param position is the position of the meeple on the specific tile.
+     * @param playerNumber TODO
+     * @param terrain TODO
      */
-    public void set(Meeple meeple, int x, int y, GridDirection position) {
-        // TODO (MEDIUM) implement paint meeple method.
+    public void set(Meeple meeple, int x, int y, GridDirection position, int playerNumber, TerrainType terrain) {
+        ;
+        int xpos = GridDirection.addX(x * 3 + 1, position);
+        int ypos = GridDirection.addY(y * 3 + 1, position);
+        meepleGrid[xpos][ypos].setIcon(new ImageIcon(options.buildImagePath(terrain, playerNumber)));
     }
 
     /**
@@ -91,9 +101,37 @@ public class LayeredGUI {
     /**
      * Main method for testing. //TODO (LOWEST) remove main method sometime.
      * @param args are the arguments.
+     * @throws InterruptedException exception.
      */
-    public static void main(String[] args) {
-        new LayeredGUI(null);
+    public static void main(String[] args) throws InterruptedException {
+        LayeredGUI gui = new LayeredGUI(null);
+        int pause = 15;
+        Thread.sleep(50 * pause);
+
+        Tile tile = TileFactory.create(TileType.CastleWallCurveRight);
+        for (int y = 0; y < 7; y++) {
+            for (int x = 0; x < 12; x++) {
+                gui.set(tile, x, y);
+                for (GridDirection dir : GridDirection.values()) {
+                    Thread.sleep(pause / 3);
+                    gui.set(new Meeple(new Player()), x, y, dir, 1, TerrainType.ROAD);
+                }
+                tile.rotateRight();
+                Thread.sleep(pause);
+            }
+        }
+        Thread.sleep(100 * pause);
+        gui.rebuildLabelGrid();
+        Thread.sleep(100 * pause);
+        for (int y = 0; y < 7; y++) {
+            for (int x = 0; x < 12; x++) {
+                gui.set(tile, x, y);
+                Thread.sleep(pause);
+                gui.set(new Meeple(new Player()), x, y, GridDirection.MIDDLE, 1, TerrainType.CASTLE);
+                tile.rotateRight();
+                Thread.sleep(pause);
+            }
+        }
     }
 
     private void buildPanelBack() {
@@ -137,11 +175,11 @@ public class LayeredGUI {
      * Creates the grid of labels.
      */
     private void buildTileGrid() {
+        defaultTile = TileFactory.create(TileType.Null);
         constraints = new GridBagConstraints();
         gridWidth = options.gridWidth;
         gridHeight = options.gridHeight;
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
-        Tile defaultTile = TileFactory.create(TileType.Null);
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 labelGrid[x][y] = new TileLabel(defaultTile.getImage(), controller, x, y);
@@ -154,13 +192,13 @@ public class LayeredGUI {
 
     private void buildMeepleGrid() {
         constraints = new GridBagConstraints();
-        gridWidth = options.gridWidth * 3;
-        gridHeight = options.gridHeight * 3;
+        meepleGridWidth = options.gridWidth * 3;
+        meepleGridHeight = options.gridHeight * 3;
         constraints.weightx = 1;
         constraints.weighty = 1;
-        meepleGrid = new JLabel[gridWidth][gridHeight]; // build array of labels.
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
+        meepleGrid = new JLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
+        for (int x = 0; x < meepleGridWidth; x++) {
+            for (int y = 0; y < meepleGridHeight; y++) {
                 meepleGrid[x][y] = new JLabel(new ImageIcon(options.buildImagePath(TerrainType.OTHER)));
                 constraints.gridx = x;
                 constraints.gridy = y;
