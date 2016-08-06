@@ -39,6 +39,11 @@ public final class GameOptions {
     public final int resolutionHeight;
 
     /**
+     * is the height value of the resolution without the taskbar height.
+     */
+    public final int resolutionHeightWindow;
+
+    /**
      * is the name of the operating system.
      */
     public final String operatingSystemName;
@@ -87,7 +92,7 @@ public final class GameOptions {
      * The y coordinates of the grid center.
      */
     public int gridCenterY;
-    
+
     /**
      * The tile type of the foundation.
      */
@@ -109,16 +114,17 @@ public final class GameOptions {
             taskBarHeight = 40;
             break;
         case "Mac OS X":
-            taskBarHeight = 22;
+            taskBarHeight = 27;
             break;
         default:
-            taskBarHeight = 40;
+            taskBarHeight = 50;
         }
         buttonFont = new Font("Helvetica", Font.BOLD, 12);
         colorGUImain = new Color(190, 190, 190); // grey
         colorGUIsmall = new Color(217, 217, 217); // light grey
         maximalPlayers = 4;
         tileSize = 100;
+        resolutionHeightWindow = resolutionHeight - taskBarHeight;
         gridHeight = (resolutionHeight - taskBarHeight) / 100;
         gridWidth = resolutionWidth / 100;
         gridCenterX = Math.round((gridWidth - 1) / 2);
