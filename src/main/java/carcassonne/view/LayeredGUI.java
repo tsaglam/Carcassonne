@@ -14,12 +14,18 @@ import javax.swing.OverlayLayout;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
+import carcassonne.model.Meeple;
+import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 import carcassonne.view.tileLabel.TileLabel;
 
+/**
+ * The main GUI class, extending a JPanel.
+ * @author Timur Saglam
+ */
 public class LayeredGUI {
     private JFrame frame;
     private JLayeredPane layeredPane;
@@ -42,7 +48,50 @@ public class LayeredGUI {
         buildLayeredPane();
         buildFrame();
     }
+    
+    /**
+     * Rebuilds the label grid if the game should be restarted.
+     */
+    public void rebuildLabelGrid() {
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
+                panelBottom.remove(labelGrid[x][y]);
+            }
+        }
+        buildTileGrid();
+        frame.pack();
+        // TODO (HIGHEST) rebuild meeple grid
+    }
+    
+    /**
+     * Draws meeple on a tile on the grid.
+     * @param meeple is the meeple to draw.
+     * @param x is the x position of the tile.
+     * @param y is the y position of the tile.
+     * @param position is the position of the meeple on the specific tile.
+     */
+    public void set(Meeple meeple, int x, int y, GridDirection position) {
+        // TODO (MEDIUM) implement paint meeple method.
+    }
 
+    /**
+     * Draws the tile on a specific position on the GUI.
+     * @param tile is the tile.
+     * @param x is the x coordinate.
+     * @param y is the y coordinate.
+     */
+    public void set(Tile tile, int x, int y) {
+        if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
+            labelGrid[x][y].setIcon(tile.getImage());
+        } else {
+            throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
+        }
+    }
+
+    /**
+     * Main method for testing. //TODO (LOWEST) remove main method sometime.
+     * @param args are the arguments.
+     */
     public static void main(String[] args) {
         new LayeredGUI(null);
     }
@@ -78,6 +127,7 @@ public class LayeredGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(layeredPane, BorderLayout.CENTER);
+        // frame.setResizable(false);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
