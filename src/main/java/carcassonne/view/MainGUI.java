@@ -14,6 +14,7 @@ import javax.swing.OverlayLayout;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
+import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
@@ -26,44 +27,6 @@ import carcassonne.view.tileLabel.TileLabel;
  * @author Timur Saglam
  */
 public class MainGUI {
-    /**
-     * Main method for testing. //TODO (LOWEST) remove main method sometime.
-     * @param args are the arguments.
-     * @throws InterruptedException exception.
-     */
-    public static void main(String[] args) throws InterruptedException {
-        MainGUI gui = new MainGUI(null);
-        int pause = 15;
-        Thread.sleep(50 * pause);
-        TerrainType[] terrain = { TerrainType.ROAD, TerrainType.CASTLE, TerrainType.MONASTRY };
-        Tile tile = TileFactory.create(TileType.CastleWallCurveRight);
-        for (int y = 0; y < 7; y++) {
-            for (int x = 0; x < 12; x++) {
-                gui.set(tile, x, y);
-                for (GridDirection dir : GridDirection.values()) {
-                    Thread.sleep(pause / 3);
-                    gui.setMeeple(x, y, dir, y % 4, terrain[x % 3]);
-                }
-                tile.rotateRight();
-                Thread.sleep(pause);
-            }
-        }
-        // Thread.sleep(100 * pause);
-        // gui.rebuildLabelGrid();
-        // Thread.sleep(100 * pause);
-        // for (int y = 0; y < 7; y++) {
-        // for (int x = 0; x < 12; x++) {
-        // gui.set(tile, x, y);
-        // Thread.sleep(pause);
-        // for (GridDirection dir : GridDirection.values()) {
-        // Thread.sleep(pause/3);
-        // gui.setMeeple(x, y, dir, x % 4, terrain[y % 3]);
-        // }
-        // tile.rotateRight();
-        // Thread.sleep(pause);
-        // }
-        // }
-    }
 
     private JFrame frame;
     private JLayeredPane layeredPane;
@@ -79,7 +42,6 @@ public class MainGUI {
     private int gridHeight;
     private int meepleGridWidth;
     private int meepleGridHeight;
-
     private Tile defaultTile;
 
     public MainGUI(MainController controller) {
@@ -108,18 +70,15 @@ public class MainGUI {
 
     /**
      * Draws meeple on a tile on the grid.
-     * @param meeple is the meeple to draw.
-     * @param x is the x position of the tile.
-     * @param y is the y position of the tile.
-     * @param position is the position of the meeple on the specific tile.
-     * @param playerNumber is the number of the current player.
-     * @param terrain is the type of the meeple, depending on the terrain.
+     * @param tile is the tile where the meeple gets drawn.
+     * @param position is the position on the tile where the meeple gets drawn.
+     * @param owner is the player that owns the meeple.
      */
-    public void setMeeple(int x, int y, GridDirection position, int playerNumber, TerrainType terrain) {
-        // TODO (HIGHEST) let this method take only a player and a tile.
-        int xpos = GridDirection.addX(x * 3 + 1, position);
-        int ypos = GridDirection.addY(y * 3 + 1, position);
-        meepleGrid[xpos][ypos].setIcon(new ImageIcon(options.buildImagePath(terrain, playerNumber)));
+    public void setMeeple(Tile tile, GridDirection position, Player owner) {
+        int xpos = GridDirection.addX(tile.getX() * 3 + 1, position);
+        int ypos = GridDirection.addY(tile.getY() * 3 + 1, position);
+        ImageIcon icon = new ImageIcon(options.buildImagePath(tile.getTerrain(position), owner.getNumber()));
+        meepleGrid[xpos][ypos].setIcon(icon);
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 

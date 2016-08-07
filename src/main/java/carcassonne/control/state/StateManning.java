@@ -47,7 +47,7 @@ public class StateManning extends ControllerState {
         if (player.hasUnusedMeeples()) {
             Tile tile = round.getCurrentTile();
             player.placeMeepleAt(tile, position);
-            mainGUI.setMeeple(tile.getX(), tile.getY(), position, player.getNumber(), tile.getTerrain(position));
+            mainGUI.setMeeple(tile, position, player);
             placementGUI.disableFrame();
             round.nextTurn();
             changeState(StatePlacing.class);
