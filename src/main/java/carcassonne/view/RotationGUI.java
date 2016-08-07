@@ -23,7 +23,8 @@ public class RotationGUI extends SecondaryGUI {
     private static final long serialVersionUID = -5179683977081970564L;
 
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        //UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Simulate Windows
+        // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Simulate
+        // Windows
         RotationGUI g = new RotationGUI(null); // TODO (LOWEST) remove main method sometime.
         g.setTile(TileFactory.create(TileType.CastleEdgeRoad));
     }
@@ -43,8 +44,11 @@ public class RotationGUI extends SecondaryGUI {
         finishFrame();
     }
 
-    public Tile useTile() {
-        frame.setVisible(false);
+    /**
+     * Getter for the tile.
+     * @return the tile.
+     */
+    public Tile getTile() {
         return tile;
     }
 

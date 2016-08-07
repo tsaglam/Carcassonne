@@ -70,7 +70,6 @@ public class PlacementGUI extends SecondaryGUI {
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 terrain = tile.getTerrain(directions[x][y]);
-                System.out.println(directions[x][y] + " --> " + terrain);
                 if (terrain == null || terrain == TerrainType.CASTLE_AND_ROAD) {
                     button[x][y].setEnabled(false);
                     terrain = TerrainType.OTHER;
