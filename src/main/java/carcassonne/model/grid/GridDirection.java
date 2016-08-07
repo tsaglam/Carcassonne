@@ -78,10 +78,10 @@ public enum GridDirection {
     }
     
     /**
-     * TODO (MEDIUM) comment
-     * @param coordinate
-     * @param dir
-     * @return
+     * Adds a x coordinate and a <code> GridDirection</code>.
+     * @param coordinate is the x coordinate.
+     * @param dir is the <code> GridDirection</code>.
+     * @return the sum as an x coordinate.
      */
     public static int addX(int coordinate, GridDirection dir) {
         int result = coordinate;
@@ -94,10 +94,10 @@ public enum GridDirection {
     }
     
     /**
-     * TODO (MEDIUM) comment
-     * @param coordinate
-     * @param dir
-     * @return
+     * Adds a y coordinate and a <code> GridDirection</code>.
+     * @param coordinate is the y coordinate.
+     * @param dir is the <code> GridDirection</code>.
+     * @return the sum as an y coordinate.
      */
     public static int addY(int coordinate, GridDirection dir) {
         int result = coordinate;

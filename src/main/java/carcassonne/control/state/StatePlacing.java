@@ -42,7 +42,6 @@ public class StatePlacing extends ControllerState {
     @Override
     public boolean placeTile(int x, int y) {
         Tile tile = rotationGUI.getTile();
-        // TODO (HIGHEST) what if not? is the GUI active?
         if (grid.place(x, y, tile)) {
             rotationGUI.disableFrame();
             tile.setPosition(x, y);
