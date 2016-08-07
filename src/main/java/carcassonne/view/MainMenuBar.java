@@ -1,8 +1,5 @@
 package carcassonne.view;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -41,7 +38,6 @@ public class MainMenuBar extends JMenuBar {
      * Starts a new game with the controller.
      */
     public void newGame() {
-        System.out.println("menu new game");
         controller.requestNewGame(playerCount);
     }
 
@@ -49,7 +45,6 @@ public class MainMenuBar extends JMenuBar {
      * Aborts the current game with the controller.
      */
     public void abortGame() {
-        System.out.println("menu abort game");
         controller.requestAbortGame();
     }
 
@@ -58,7 +53,6 @@ public class MainMenuBar extends JMenuBar {
      * @param players sets the amount of players.
      */
     public void setPlayerCount(int players) {
-        System.out.println("menu set players " + players);
         playerCount = players;
     }
 
@@ -66,18 +60,8 @@ public class MainMenuBar extends JMenuBar {
         // build items:
         itemNewGame = new JMenuItem("Start new game");
         itemAbortGame = new JMenuItem("Abort current game");
-        itemNewGame.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                ((MainMenuBar) e.getSource()).newGame();
-            }
-        });
-        itemAbortGame.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                ((MainMenuBar) e.getSource()).abortGame();
-            }
-        });
+        itemNewGame.addMouseListener(new NewGameMouseAdapter(this));
+        itemAbortGame.addMouseListener(new AbortGameMouseAdapter(this));
         // build menu:
         menuGame = new JMenu("Game");
         menuGame.add(itemNewGame);

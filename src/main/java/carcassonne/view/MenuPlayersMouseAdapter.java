@@ -26,7 +26,7 @@ public class MenuPlayersMouseAdapter extends MouseAdapter {
      * Calls method on main menu bar for setting the player count.
      */
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
         menuBar.setPlayerCount(playerCount);
     }
 

@@ -44,7 +44,7 @@ public class MainController {
         new StateManning(this, mainGUI, rotationGUI, placementGUI);
         new StatePlacing(this, mainGUI, rotationGUI, placementGUI);
         new StateGameOver(this, mainGUI, rotationGUI, placementGUI);
-        requestNewGame(2); // TODO (HIGH) make GUI button for the start game function.
+        //requestNewGame(2); // TODO (HIGH) make GUI button for the start game function.
     }
 
     /**
