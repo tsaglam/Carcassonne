@@ -29,7 +29,7 @@ public class MainMenuBar extends JMenuBar {
      */
     public MainMenuBar(MainController controller) {
         super();
-        this.controller = controller; // TODO (HIGHEST) Fix menu!
+        this.controller = controller;
         playerCount = 2;
         buildMenuGame();
         buildMenuOptions();
