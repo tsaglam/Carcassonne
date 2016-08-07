@@ -41,25 +41,25 @@ public class LayeredGUI {
             for (int x = 0; x < 12; x++) {
                 gui.set(tile, x, y);
                 for (GridDirection dir : GridDirection.values()) {
-                    Thread.sleep(pause / 3);
+                    Thread.sleep(pause);
                     gui.setMeeple(x, y, dir, y % 4, terrain[x % 3]);
                 }
                 tile.rotateRight();
                 Thread.sleep(pause);
             }
         }
-        Thread.sleep(100 * pause);
-        gui.rebuildLabelGrid();
-        Thread.sleep(100 * pause);
-        for (int y = 0; y < 7; y++) {
-            for (int x = 0; x < 12; x++) {
-                gui.set(tile, x, y);
-                Thread.sleep(pause);
-                gui.setMeeple(x, y, GridDirection.MIDDLE, 1, TerrainType.CASTLE);
-                tile.rotateRight();
-                Thread.sleep(pause);
-            }
-        }
+//        Thread.sleep(100 * pause);
+//        gui.rebuildLabelGrid();
+//        Thread.sleep(100 * pause);
+//        for (int y = 0; y < 7; y++) {
+//            for (int x = 0; x < 12; x++) {
+//                gui.set(tile, x, y);
+//                Thread.sleep(pause);
+//                gui.setMeeple(x, y, GridDirection.MIDDLE, 1, TerrainType.CASTLE);
+//                tile.rotateRight();
+//                Thread.sleep(pause);
+//            }
+//        }
     }
 
     private JFrame frame;
@@ -116,6 +116,8 @@ public class LayeredGUI {
         int xpos = GridDirection.addX(x * 3 + 1, position);
         int ypos = GridDirection.addY(y * 3 + 1, position);
         meepleGrid[xpos][ypos].setIcon(new ImageIcon(options.buildImagePath(terrain, playerNumber)));
+        frame.setSize(frame.getWidth()-1, frame.getHeight()-1);
+        frame.setSize(frame.getWidth()+1, frame.getHeight()+1);
     }
 
     /**
