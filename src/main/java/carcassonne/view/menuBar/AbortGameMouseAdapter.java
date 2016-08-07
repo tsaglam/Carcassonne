@@ -1,10 +1,11 @@
 package carcassonne.view.menuBar;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
  * A simple mouse adapter for the abort game button.
- * @author Timur
+ * @author Timur Saglam
  */
 public class AbortGameMouseAdapter extends MouseAdapter {
     private MainMenuBar menuBar;

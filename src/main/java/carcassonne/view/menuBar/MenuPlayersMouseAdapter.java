@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 
 /**
  * A simple mouse adapter for the player selection menu items.
- * @author Timur
+ * @author Timur Saglam
  */
 public class MenuPlayersMouseAdapter extends MouseAdapter {
 

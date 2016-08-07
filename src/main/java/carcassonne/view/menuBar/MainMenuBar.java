@@ -1,5 +1,6 @@
 package carcassonne.view.menuBar;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -8,8 +9,8 @@ import javax.swing.JRadioButtonMenuItem;
 import carcassonne.control.MainController;
 
 /**
- * The menu bar for the main gui.
- * @author Timur
+ * The menu bar for the main GUI.
+ * @author Timur Saglam
  */
 public class MainMenuBar extends JMenuBar {
 
@@ -73,9 +74,11 @@ public class MainMenuBar extends JMenuBar {
         // build player menu
         menuPlayers = new JMenu("Players");
         itemPlayerCount = new JRadioButtonMenuItem[3];
+        ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
             itemPlayerCount[i] = new JRadioButtonMenuItem((i + 2) + " Players");
             itemPlayerCount[i].addMouseListener(new MenuPlayersMouseAdapter(this, (i + 2)));
+            group.add(itemPlayerCount[i]);
             menuPlayers.add(itemPlayerCount[i]);
         }
         itemPlayerCount[0].setSelected(true);
