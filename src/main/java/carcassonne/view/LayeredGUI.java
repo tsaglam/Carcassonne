@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
+import javax.swing.border.LineBorder;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
@@ -41,7 +42,7 @@ public class LayeredGUI {
             for (int x = 0; x < 12; x++) {
                 gui.set(tile, x, y);
                 for (GridDirection dir : GridDirection.values()) {
-                    Thread.sleep(pause);
+                    Thread.sleep(pause/3);
                     gui.setMeeple(x, y, dir, y % 4, terrain[x % 3]);
                 }
                 tile.rotateRight();
@@ -55,7 +56,10 @@ public class LayeredGUI {
 //            for (int x = 0; x < 12; x++) {
 //                gui.set(tile, x, y);
 //                Thread.sleep(pause);
-//                gui.setMeeple(x, y, GridDirection.MIDDLE, 1, TerrainType.CASTLE);
+//                for (GridDirection dir : GridDirection.values()) {
+//                    Thread.sleep(pause/3);
+//                    gui.setMeeple(x, y, dir, x % 4, terrain[y % 3]);
+//                }
 //                tile.rotateRight();
 //                Thread.sleep(pause);
 //            }
@@ -91,7 +95,7 @@ public class LayeredGUI {
     /**
      * Rebuilds the label grid and the meeple grid if the game should be restarted.
      */
-    public void rebuildLabelGrid() { // TODO (MEDIUM) rename to rebuildGrid()
+    public void rebuildGrids() {
         ImageIcon imageEmpty = new ImageIcon(options.buildImagePath(TerrainType.OTHER));
         for (int y = 0; y < meepleGridHeight; y++) {
             for (int x = 0; x < meepleGridWidth; x++) {
@@ -109,15 +113,14 @@ public class LayeredGUI {
      * @param x is the x position of the tile.
      * @param y is the y position of the tile.
      * @param position is the position of the meeple on the specific tile.
-     * @param playerNumber TODO
-     * @param terrain TODO
+     * @param playerNumber is the number of the current player.
+     * @param terrain is the type of the meeple, depending on the terrain.
      */
     public void setMeeple(int x, int y, GridDirection position, int playerNumber, TerrainType terrain) {
         int xpos = GridDirection.addX(x * 3 + 1, position);
         int ypos = GridDirection.addY(y * 3 + 1, position);
         meepleGrid[xpos][ypos].setIcon(new ImageIcon(options.buildImagePath(terrain, playerNumber)));
-        frame.setSize(frame.getWidth()-1, frame.getHeight()-1);
-        frame.setSize(frame.getWidth()+1, frame.getHeight()+1);
+        frame.repaint(); // This is required! Removing this will paint black background.
     }
 
     /**
@@ -186,6 +189,7 @@ public class LayeredGUI {
         panelTop.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
         panelTop.setBackground(new Color(0, 0, 0, 0));
         panelTop.setLayout(new GridBagLayout());
+        panelTop.setBorder(new LineBorder(Color.RED));
         buildMeepleGrid();
     }
 
