@@ -1,4 +1,4 @@
-package carcassonne.view;
+package carcassonne.view.menuBar;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

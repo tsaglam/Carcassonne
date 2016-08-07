@@ -20,6 +20,7 @@ import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
+import carcassonne.view.menuBar.MainMenuBar;
 import carcassonne.view.tileLabel.TileLabel;
 
 /**
