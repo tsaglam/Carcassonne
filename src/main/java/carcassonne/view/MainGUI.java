@@ -98,7 +98,7 @@ public class MainGUI {
 
     private void buildFrame() {
         frame = new JFrame();
-        menuBar = new MainMenuBar();
+        menuBar = new MainMenuBar(controller);
         frame.setJMenuBar(menuBar);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
