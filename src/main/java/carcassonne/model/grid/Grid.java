@@ -297,7 +297,9 @@ public class Grid {
     private void placeFoundation(TileType tileType) {
         int centerX = Math.round((width - 1) / 2);
         int centerY = Math.round((height - 1) / 2);
-        forcePlacement(centerX, centerY, TileFactory.create(tileType));
+        Tile foundation = TileFactory.create(tileType);
+        foundation.setPosition(centerX, centerY);
+        forcePlacement(centerX, centerY, foundation);
     }
 
 }

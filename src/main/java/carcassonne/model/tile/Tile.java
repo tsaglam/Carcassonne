@@ -19,6 +19,8 @@ public class Tile {
     private Boolean tag;
     private TileType type;
     private Meeple meeple;
+    private int x;
+    private int y;
 
     /**
      * Simple constructor.
@@ -39,6 +41,8 @@ public class Tile {
         meeple = null;
         buildTerrainMap(top, right, bottom, left, middle);
         loadImages(tilePath, fileType);
+        x = -1;
+        y = -1;
     }
 
     /**
@@ -72,6 +76,28 @@ public class Tile {
      */
     public TileType getType() {
         return type;
+    }
+
+    /**
+     * Getter for the x coordinate.
+     * @return the x coordinate
+     */
+    public int getX() {
+        if (x == -1) {
+            throw new IllegalStateException("The position of the tile has not been set yet");
+        }
+        return x;
+    }
+
+    /**
+     * Getter for the y coordinate.
+     * @return the y coordinate
+     */
+    public int getY() {
+        if (y == -1) {
+            throw new IllegalStateException("The position of the tile has not been set yet");
+        }
+        return y;
     }
 
     /**
@@ -146,6 +172,19 @@ public class Tile {
             throw new IllegalArgumentException("Tile can not have already a meeple placed on it.");
         }
         this.meeple = meeple;
+    }
+    
+    /**
+     * Gives the tile the position where it has been placed.
+     * @param x sets the x coordinate.
+     * @param y sets the y coordinate.
+     */
+    public void setPosition(int x, int y) {
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException("Coordinates can't be smaller than zero: " + x + ", " + y);
+        }
+        this.x = x;
+        this.y = y;
     }
 
     /**
