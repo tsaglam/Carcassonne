@@ -15,12 +15,14 @@ public class Player {
     private int points;
     private LinkedList<Meeple> usedMeeples;
     private LinkedList<Meeple> unusedMeeples;
+    private int number;
 
     /**
      * Simple constructor.
      * @param playerNumber is the number of the player.
      */
-    public Player() {
+    public Player(int number) {
+        this.number = number;
         points = 0;
         unusedMeeples = new LinkedList<Meeple>();
         usedMeeples = new LinkedList<Meeple>();
@@ -45,6 +47,14 @@ public class Player {
         return points;
     }
     
+    /**
+     * Getter for number of the player.
+     * @return the player number.
+     */
+    public int getNumber() {
+        return number;
+    }
+
     /**
      * Checks whether the player can still place Meeples.
      * @return true if he has at least one unused Meeple.

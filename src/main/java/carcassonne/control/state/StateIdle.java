@@ -29,7 +29,7 @@ public class StateIdle extends ControllerState {
      */
     @Override
     protected void entry() {
-        mainGUI.rebuildLabelGrid();
+        mainGUI.rebuildGrids();
     }
 
     /**

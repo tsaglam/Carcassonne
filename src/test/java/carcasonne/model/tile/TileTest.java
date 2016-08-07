@@ -179,7 +179,7 @@ public class TileTest {
 
     @Test
     public void meepleTest() {
-        Player p = new Player();
+        Player p = new Player(0);
         tile = TileFactory.create(TileType.Null);
         assertFalse(tile.hasMeeple());
         p.placeMeepleAt(tile, GridDirection.TOP);

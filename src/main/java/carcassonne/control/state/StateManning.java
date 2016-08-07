@@ -3,6 +3,7 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.tile.Tile;
 import carcassonne.view.MainGUI;
 import carcassonne.view.PlacementGUI;
 import carcassonne.view.RotationGUI;
@@ -29,8 +30,6 @@ public class StateManning extends ControllerState {
      */
     @Override
     protected void entry() {
-        System.out.println(round);
-        System.out.println(placementGUI);
         placementGUI.setTile(round.getCurrentTile());
     }
 
@@ -46,8 +45,9 @@ public class StateManning extends ControllerState {
     public boolean placeMeeple(GridDirection position) {
         Player player = round.getActivePlayer();
         if (player.hasUnusedMeeples()) {
-            player.placeMeepleAt(round.getCurrentTile(), position);
-            mainGUI.set(null, 0, 0, position); // TODO (HIGH) get real information from method above
+            Tile tile = round.getCurrentTile();
+            player.placeMeepleAt(tile, position);
+            mainGUI.setMeeple(tile.getX(), tile.getY(), position, player.getNumber(), tile.getTerrain(position));
             placementGUI.disableFrame();
             round.nextTurn();
             changeState(StatePlacing.class);
