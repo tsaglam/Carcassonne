@@ -1,8 +1,10 @@
 package carcassonne.model;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
 
 /**
@@ -13,6 +15,7 @@ public class Player {
 
     private static final int MEEPLE_COUNT = 5;
     private int points;
+    private HashMap<TerrainType, Integer> pointMap;
     private LinkedList<Meeple> usedMeeples;
     private LinkedList<Meeple> unusedMeeples;
     private int number;
@@ -24,6 +27,10 @@ public class Player {
     public Player(int number) {
         this.number = number;
         points = 0;
+        pointMap = new HashMap<TerrainType, Integer>();
+        for (int i = 0; i < TerrainType.values().length - 2; i++) {
+            pointMap.put(TerrainType.values()[i], 0);
+        }
         unusedMeeples = new LinkedList<Meeple>();
         usedMeeples = new LinkedList<Meeple>();
         for (int i = 0; i < MEEPLE_COUNT; i++) {
@@ -32,11 +39,29 @@ public class Player {
     }
 
     /**
-     * Adds points to the players point value.
+     * Adds points to the players point value and keeps track of the type of points.
      * @param points are the points to add.
      */
-    public void addPoints(int points) {
-        this.points += points;
+    public void addPoints(int amount, TerrainType pointType) {
+        int pointsToAdd = reweightPoints(amount, pointType);
+        pointMap.put(pointType, pointMap.get(pointType) + pointsToAdd);
+        points += pointsToAdd;
+    }
+
+    /**
+     * Multiplies the amount of points by the multiplier of the type of the points.
+     * @param amount sets the amount of points.
+     * @param pointType is the type of points, which influences the multiplier.
+     * @return the multiplied points.
+     */
+    private int reweightPoints(int amount, TerrainType pointType) {
+        if (pointType == TerrainType.CASTLE) {
+            return amount * 2;
+        } else if (pointType == TerrainType.FIELDS) {
+            return amount * 9;
+        } else {
+            return amount;
+        }
     }
 
     /**
@@ -46,7 +71,7 @@ public class Player {
     public int getPoints() {
         return points;
     }
-    
+
     /**
      * Getter for number of the player.
      * @return the player number.
@@ -60,7 +85,7 @@ public class Player {
      * @return true if he has at least one unused Meeple.
      */
     public boolean hasUnusedMeeples() {
-    	return unusedMeeples.size() > 0;
+        return unusedMeeples.size() > 0;
     }
 
     /**
