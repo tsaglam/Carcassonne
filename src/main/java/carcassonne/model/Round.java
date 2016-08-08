@@ -16,6 +16,7 @@ public class Round {
 	private Player[] player;
     private int activePlayer;
     private int playerCount;
+    private int turnCounter;
     private TileStack tileStack;
     private Tile currentTile;
 
@@ -30,6 +31,7 @@ public class Round {
         tileStack = new TileStack();
         createPlayers();
         currentTile = grid.getFoundation();
+        turnCounter = 1;
     }
 
     /**
@@ -102,6 +104,7 @@ public class Round {
         activePlayer++;
         if (activePlayer == player.length) {
             activePlayer = 0;
+            turnCounter++;
         }
         currentTile = tileStack.drawTile();
     }
