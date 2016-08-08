@@ -7,6 +7,8 @@ import static carcassonne.model.tile.TerrainType.MONASTRY;
 import static carcassonne.model.tile.TerrainType.OTHER;
 import static carcassonne.model.tile.TerrainType.ROAD;
 
+import org.omg.CORBA.PRIVATE_MEMBER;
+
 /**
  * Factory class for building tile objects. Used this because there are so many types of tile with
  * little differences.
@@ -67,7 +69,10 @@ public final class TileFactory {
             return new Tile(FIELDS, ROAD, ROAD, ROAD, ROAD, path, FILE_TYPE, type);
         default:
             return new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, path, FILE_TYPE, type);
-        }
-
+        } 
+    }
+    
+    private TileFactory() {
+        // PRIVATE CONSTRUCTOR, PREVENTS INSTANTIATION!
     }
 }
