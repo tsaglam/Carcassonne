@@ -144,22 +144,19 @@ public class Tile {
      * Turns a tile 90 degree to the left.
      */
     public void rotateLeft() {
-        TerrainType temporary = terrainMap.get(GridDirection.RIGHT);
         GridDirection[] directions = { GridDirection.TOP, GridDirection.LEFT, GridDirection.BOTTOM, GridDirection.RIGHT };
-        for (GridDirection direction : directions) { // rotate terrain:
-            temporary = terrainMap.put(direction, temporary);
-        }
+        rotateTerrain(directions);
+        GridDirection[] directions2 = { GridDirection.TOP_RIGHT, GridDirection.TOP_LEFT, GridDirection.BOTTOM_LEFT, GridDirection.BOTTOM_RIGHT };
+        rotateTerrain(directions2);
         rotation = (rotation <= 0) ? 3 : rotation - 1; // rotation indicator
     }
 
     /**
-     * TODO (HIGHEST) adjust rotating to additional terrain Turns a tile 90 degree to the right.
+     * Turns a tile 90 degree to the right.
      */
     public void rotateRight() {
-        TerrainType temporary = terrainMap.get(GridDirection.LEFT);
-        for (GridDirection direction : GridDirection.directNeighbors()) {
-            temporary = terrainMap.put(direction, temporary); // rotate terrain:
-        }
+        rotateTerrain(GridDirection.directNeighbors());
+        rotateTerrain(GridDirection.indirectNeighbors());
         rotation = (rotation >= 3) ? 0 : rotation + 1; // rotation indicator
     }
 
@@ -231,6 +228,13 @@ public class Tile {
         image = new ImageIcon[4]; // create image array.
         for (int i = 0; i <= 3; i++) { // for every image:
             image[i] = new ImageIcon(tilePath + i + fileType); // load it from path.
+        }
+    }
+
+    private void rotateTerrain(GridDirection[] directions) {
+        TerrainType temporary = terrainMap.get(directions[directions.length - 1]); // get last one
+        for (GridDirection direction : directions) { // rotate terrain through temporary:
+            temporary = terrainMap.put(direction, temporary);
         }
     }
 }
