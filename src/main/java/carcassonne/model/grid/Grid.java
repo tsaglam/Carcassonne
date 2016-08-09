@@ -40,7 +40,7 @@ public class Grid {
      */
     public void patternCheck(int x, int y) {
         // TODO (HIGH) create pattern object and use submethod results.
-        if (tile[x][y].getType() != TileType.Monastry) {
+        if (tile[x][y].getType() != TileType.Monastery) {
             for (GridDirection direction : GridDirection.neighbors()) {
                 int neighborX = GridDirection.addX(x, direction);
                 int neighborY = GridDirection.addY(y, direction);

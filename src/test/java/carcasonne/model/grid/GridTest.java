@@ -22,14 +22,14 @@ public class GridTest {
 
     @Before
     public void setUp() throws Exception {
-        tile = TileFactory.create(Monastry);
-        testGrid = new Grid(7, 7, Monastry);
+        tile = TileFactory.create(Monastery);
+        testGrid = new Grid(7, 7, Monastery);
     }
 
     @Test
     public void tilePlacementTest() {
         System.out.println("Tile placement test:");
-        Tile tmp = TileFactory.create(Monastry);
+        Tile tmp = TileFactory.create(Monastery);
         tmp.rotateRight();
         assertTrue(testGrid.place(2, 3, tmp));
         tmp = TileFactory.create(RoadCurve);
@@ -43,7 +43,7 @@ public class GridTest {
         tmp = TileFactory.create(CastleSides);
         tmp.rotateRight();
         assertTrue(testGrid.place(0, 0, tmp));
-        assertTrue(testGrid.place(0, 1, TileFactory.create(Monastry)));
+        assertTrue(testGrid.place(0, 1, TileFactory.create(Monastery)));
         tmp = TileFactory.create(Road);
         tmp.rotateRight();
         assertTrue(testGrid.place(0, 2, tmp));

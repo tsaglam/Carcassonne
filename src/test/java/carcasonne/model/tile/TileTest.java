@@ -2,7 +2,7 @@ package carcasonne.model.tile;
 
 import static carcassonne.model.tile.TerrainType.CASTLE;
 import static carcassonne.model.tile.TerrainType.FIELDS;
-import static carcassonne.model.tile.TerrainType.MONASTRY;
+import static carcassonne.model.tile.TerrainType.MONASTERY;
 import static carcassonne.model.tile.TerrainType.OTHER;
 import static carcassonne.model.tile.TerrainType.ROAD;
 import static org.junit.Assert.assertEquals;

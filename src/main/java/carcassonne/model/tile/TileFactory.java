@@ -2,7 +2,7 @@ package carcassonne.model.tile;
 
 import static carcassonne.model.tile.TerrainType.CASTLE;
 import static carcassonne.model.tile.TerrainType.FIELDS;
-import static carcassonne.model.tile.TerrainType.MONASTRY;
+import static carcassonne.model.tile.TerrainType.MONASTERY;
 import static carcassonne.model.tile.TerrainType.OTHER;
 import static carcassonne.model.tile.TerrainType.ROAD;
 
@@ -51,10 +51,10 @@ public class TileFactory {
             return produce(CASTLE, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, type);
         case CastleWallRoad:
             return produce(CASTLE, ROAD, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
-        case Monastry:
-            return produce(FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTRY, type);
-        case MonastryRoad:
-            return produce(FIELDS, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTRY, type);
+        case Monastery:
+            return produce(FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTERY, type);
+        case MonasteryRoad:
+            return produce(FIELDS, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTERY, type);
         case Road:
             return produce(ROAD, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
         case RoadCurve:
