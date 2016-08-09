@@ -7,11 +7,11 @@ import static carcassonne.model.tile.TerrainType.OTHER;
 import static carcassonne.model.tile.TerrainType.ROAD;
 
 /**
- * Factory class for building tile objects. Used this because there are so many types of tile with
- * little differences.
- * @author Timur
+ * Factory class for building tile objects. Because of the large amount of different tile objects
+ * this factory class enables easy tile creation with the <code>TileType</code> enum.
+ * @author Timur Saglam
  */
-public final class TileFactory {
+public class TileFactory {
     private static final String FOLDER = "src/main/ressources/tiles/";
     private static final String FILE_TYPE = ".jpg";
 
@@ -24,52 +24,59 @@ public final class TileFactory {
         if (type == null) { // null is invalid argument.
             throw new IllegalArgumentException("TileFactory can't create tile from TileType value null.");
         }
-        String path = FOLDER + type.name(); // generate path.
         switch (type) {
         case CastleCenter:
-            return new Tile(CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, path, FILE_TYPE, type);
+            return produce(CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, type);
         case CastleCenterEntry:
-            return new Tile(CASTLE, CASTLE, ROAD, CASTLE, CASTLE, path, FILE_TYPE, type);
+            return produce(CASTLE, CASTLE, ROAD, CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, CASTLE, type);
         case CastleCenterSide:
-            return new Tile(CASTLE, CASTLE, FIELDS, CASTLE, CASTLE, path, FILE_TYPE, type);
+            return produce(CASTLE, CASTLE, FIELDS, CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, CASTLE, type);
         case CastleEdge:
-            return new Tile(CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, path, FILE_TYPE, type);
+            return produce(CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, type);
         case CastleEdgeRoad:
-            return new Tile(CASTLE, CASTLE, ROAD, ROAD, ROAD, path, FILE_TYPE, type);
+            return produce(CASTLE, CASTLE, ROAD, ROAD, CASTLE, FIELDS, FIELDS, FIELDS, ROAD, type);
         case CastleSides:
-            return new Tile(CASTLE, FIELDS, CASTLE, FIELDS, FIELDS, path, FILE_TYPE, type);
+            return produce(CASTLE, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, type);
         case CastleSidesEdge:
-            return new Tile(CASTLE, FIELDS, FIELDS, CASTLE, FIELDS, path, FILE_TYPE, type);
+            return produce(CASTLE, FIELDS, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, OTHER, FIELDS, type);
         case CastleTube:
-            return new Tile(FIELDS, CASTLE, FIELDS, CASTLE, FIELDS, path, FILE_TYPE, type);
+            return produce(FIELDS, CASTLE, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, CASTLE, type);
         case CastleWall:
-            return new Tile(CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, path, FILE_TYPE, type);
+            return produce(CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, type);
         case CastleWallCurveLeft:
-            return new Tile(CASTLE, FIELDS, ROAD, ROAD, ROAD, path, FILE_TYPE, type);
+            return produce(CASTLE, FIELDS, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
         case CastleWallCurveRight:
-            return new Tile(CASTLE, ROAD, ROAD, FIELDS, ROAD, path, FILE_TYPE, type);
+            return produce(CASTLE, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
         case CastleWallJunction:
-            return new Tile(CASTLE, ROAD, ROAD, ROAD, FIELDS, path, FILE_TYPE, type);
+            return produce(CASTLE, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, type);
         case CastleWallRoad:
-            return new Tile(CASTLE, ROAD, FIELDS, ROAD, ROAD, path, FILE_TYPE, type);
+            return produce(CASTLE, ROAD, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
         case Monastry:
-            return new Tile(FIELDS, FIELDS, FIELDS, FIELDS, MONASTRY, path, FILE_TYPE, type);
+            return produce(FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTRY, type);
         case MonastryRoad:
-            return new Tile(FIELDS, FIELDS, ROAD, FIELDS, MONASTRY, path, FILE_TYPE, type);
+            return produce(FIELDS, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTRY, type);
         case Road:
-            return new Tile(ROAD, FIELDS, ROAD, FIELDS, ROAD, path, FILE_TYPE, type);
+            return produce(ROAD, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
         case RoadCurve:
-            return new Tile(FIELDS, FIELDS, ROAD, ROAD, ROAD, path, FILE_TYPE, type);
+            return produce(FIELDS, FIELDS, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, type);
         case RoadJunctionLarge:
-            return new Tile(ROAD, ROAD, ROAD, ROAD, FIELDS, path, FILE_TYPE, type);
+            return produce(ROAD, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, type);
         case RoadJunctionSmall:
-            return new Tile(FIELDS, ROAD, ROAD, ROAD, ROAD, path, FILE_TYPE, type);
+            return produce(FIELDS, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, type);
         default:
-            return new Tile(OTHER, OTHER, OTHER, OTHER, OTHER, path, FILE_TYPE, type);
-        } 
+            return produce(OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, type);
+        }
     }
-    
-    private TileFactory() {
+
+    // fills array, actually creates tile object with type and path.
+    private static Tile produce(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType topRight, TerrainType bottomRight, TerrainType bottomLeft, TerrainType topLeft,
+            TerrainType middle, TileType type) {
+        TerrainType[] terrain = { top, right, bottom, left, topRight, bottomRight, bottomLeft, topLeft, middle };
+        String path = FOLDER + type.name(); // generate path.
+        return new Tile(terrain, type, path, FILE_TYPE);
+    }
+
+    public TileFactory() {
         // PRIVATE CONSTRUCTOR, PREVENTS INSTANTIATION!
     }
 }
