@@ -33,6 +33,31 @@ public class Grid {
     }
 
     /**
+     * Method checks for newly terminated patterns on the grid. As a basis it uses the coordinates
+     * of the last placed tile.
+     * @param x is the x coordinate of the last placed tile.
+     * @param y is the y coordinate of the last placed tile.
+     */
+    public void patternCheck(int x, int y) {
+
+    }
+
+    // checks tile on a finished monastery pattern.
+    private void monasteryCheck(int x, int y) {
+
+    }
+
+    // checks tile on a finished castle pattern.
+    private void castleCheck(int x, int y) {
+
+    }
+
+    // checks tile on a finished road pattern.
+    private void roadCheck(int x, int y) {
+
+    }
+
+    /**
      * Creates a list of tiles that are connected to a specific tile with the terrain in a specific
      * direction on the tile.
      * @param x is the x coordinate
