@@ -1,12 +1,43 @@
 package carcassonne.model.grid;
 
-
 /**
  * @author Timur enum for the grid directions.
  */
 public enum GridDirection {
 
     TOP, RIGHT, BOTTOM, LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT, MIDDLE;
+
+    /**
+     * Adds a x coordinate and a <code> GridDirection</code>.
+     * @param coordinate is the x coordinate.
+     * @param dir is the <code> GridDirection</code>.
+     * @return the sum as an x coordinate.
+     */
+    public static int addX(int coordinate, GridDirection dir) {
+        int result = coordinate;
+        if (dir == TOP_RIGHT || dir == RIGHT || dir == BOTTOM_RIGHT) {
+            result++;
+        } else if (dir == TOP_LEFT || dir == LEFT || dir == BOTTOM_LEFT) {
+            result--;
+        }
+        return result;
+    }
+
+    /**
+     * Adds a y coordinate and a <code> GridDirection</code>.
+     * @param coordinate is the y coordinate.
+     * @param dir is the <code> GridDirection</code>.
+     * @return the sum as an y coordinate.
+     */
+    public static int addY(int coordinate, GridDirection dir) {
+        int result = coordinate;
+        if (dir == BOTTOM_LEFT || dir == BOTTOM || dir == BOTTOM_RIGHT) {
+            result++;
+        } else if (dir == TOP_LEFT || dir == TOP || dir == TOP_RIGHT) {
+            result--;
+        }
+        return result;
+    }
 
     /**
      * Generates an array of the GridDirections for a direct neighbor on the grid.
@@ -36,25 +67,6 @@ public enum GridDirection {
     }
 
     /**
-     * Generates an array of the GridDirections for all positions on a tile.
-     * @return an array of an array of TOP, RIGHT, BOTTOM, LEFT and MIDDLE.
-     */
-    public static GridDirection[] tilePositions() {
-        GridDirection[] directions = { TOP, RIGHT, BOTTOM, LEFT, MIDDLE };
-        return directions;
-    }
-
-    /**
-     * Generates a two dimensional array of the GridDirections for their orientation on a tile.
-     * @return a 2D array of an array of TOP_LEFT, LEFT, BOTTOM_LEFT, TOP, MIDDLE, BOTTOM,
-     * TOP_RIGHT, RIGHT and BOTTOM_RIGHT.
-     */
-    public static GridDirection[][] values2D() {
-        GridDirection[][] directions = { { TOP_LEFT, LEFT, BOTTOM_LEFT }, { TOP, MIDDLE, BOTTOM }, { TOP_RIGHT, RIGHT, BOTTOM_RIGHT } };
-        return directions;
-    }
-
-    /**
      * Calculates the opposite <code>GridDirection</code> for a specific <code>GridDirection</code>.
      * @param from is the <code>GridDirection</code> the opposite gets calculated from.
      * @return the opposite <code>GridDirection</code>.
@@ -69,43 +81,52 @@ public enum GridDirection {
         return MIDDLE; // middle is the opposite of itself.
     }
 
-    private static int smallOpposite(int ordinal) {
-        return (ordinal + 2) % 4;
+    /**
+     * Generates an array of the GridDirections for all positions on a tile.
+     * @return an array of an array of TOP, RIGHT, BOTTOM, LEFT and MIDDLE.
+     */
+    public static GridDirection[] tilePositions() {
+        GridDirection[] directions = { TOP, RIGHT, BOTTOM, LEFT, MIDDLE };
+        return directions;
+    }
+
+    public static GridDirection toTheLeft(GridDirection ofDirection) {
+        return next(ofDirection, -1);
+    }
+
+    public static GridDirection toTheRight(GridDirection ofDirection) {
+        return next(ofDirection, 1);
+    }
+
+    /**
+     * Generates a two dimensional array of the GridDirections for their orientation on a tile.
+     * @return a 2D array of an array of TOP_LEFT, LEFT, BOTTOM_LEFT, TOP, MIDDLE, BOTTOM,
+     * TOP_RIGHT, RIGHT and BOTTOM_RIGHT.
+     */
+    public static GridDirection[][] values2D() {
+        GridDirection[][] directions = { { TOP_LEFT, LEFT, BOTTOM_LEFT }, { TOP, MIDDLE, BOTTOM }, { TOP_RIGHT, RIGHT, BOTTOM_RIGHT } };
+        return directions;
     }
 
     private static int bigOpposite(int ordinal) {
         return 4 + smallOpposite(ordinal - 4);
     }
-    
-    /**
-     * Adds a x coordinate and a <code> GridDirection</code>.
-     * @param coordinate is the x coordinate.
-     * @param dir is the <code> GridDirection</code>.
-     * @return the sum as an x coordinate.
-     */
-    public static int addX(int coordinate, GridDirection dir) {
-        int result = coordinate;
-        if (dir == TOP_RIGHT || dir == RIGHT || dir == BOTTOM_RIGHT) {
-            result++;
-        } else if (dir == TOP_LEFT || dir == LEFT || dir == BOTTOM_LEFT) {
-            result--;
+
+    private static GridDirection next(GridDirection direction, int side) {
+        if (direction == MIDDLE) {
+            return direction;
         }
-        return result;
+        GridDirection[] cycle = { TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT };
+        int position = -2; // error case, sum with parameter side is negative
+        for (int i = 0; i < cycle.length; i++) {
+            if (cycle[i] == direction) { // find in cycle
+                position = i; // save cycle position
+            }
+        }
+        return cycle[(8 + position + side) % 8];
     }
-    
-    /**
-     * Adds a y coordinate and a <code> GridDirection</code>.
-     * @param coordinate is the y coordinate.
-     * @param dir is the <code> GridDirection</code>.
-     * @return the sum as an y coordinate.
-     */
-    public static int addY(int coordinate, GridDirection dir) {
-        int result = coordinate;
-        if (dir == BOTTOM_LEFT || dir == BOTTOM || dir == BOTTOM_RIGHT) {
-            result++;
-        } else if (dir == TOP_LEFT || dir == TOP || dir == TOP_RIGHT) {
-            result--;
-        }
-        return result;
+
+    private static int smallOpposite(int ordinal) {
+        return (ordinal + 2) % 4;
     }
 }
