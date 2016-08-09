@@ -5,7 +5,7 @@ package carcassonne.model.tile;
  * @author Timur Saglam
  */
 public enum TerrainType {
-    CASTLE, ROAD, MONASTRY, FIELDS, OTHER, CASTLE_AND_ROAD;
+    CASTLE, ROAD, MONASTRY, FIELDS, OTHER;
 
     /**
      * Generates an array of the basic terrain types.
