@@ -10,7 +10,7 @@ import carcassonne.model.grid.GridDirection;
  * coordinates of the button on the button grid.
  * @author Timur
  */
-public class MeepleButton extends JButton {
+public class PlacementButton extends JButton {
     private static final long serialVersionUID = -4580099806988033224L;
 
     /**
@@ -19,11 +19,11 @@ public class MeepleButton extends JButton {
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
-    public MeepleButton(MainController controller, int x, int y) {
+    public PlacementButton(MainController controller, int x, int y) {
         setup(controller, x, y);
     }
 
     private void setup(MainController controller, int x, int y) {
-        addMouseListener(new MeepleButtonMouseAdapter(GridDirection.values2D()[x][y], controller, this));
+        addMouseListener(new PlacementButtonMouseAdapter(GridDirection.values2D()[x][y], controller, this));
     }
 }

@@ -12,18 +12,18 @@ import carcassonne.model.grid.GridDirection;
  * <code>java.awt.event.MouseAdapter</code>.
  * @author Timur
  */
-public class MeepleButtonMouseAdapter extends MouseAdapter {
+public class PlacementButtonMouseAdapter extends MouseAdapter {
 
     private GridDirection direction;
     private MainController controller;
-    private MeepleButton button;
+    private PlacementButton button;
 
     /**
      * Basic constructor with the button and the controller to set.
      * @param meepleButton should be the button that uses the adapter.
      * @param controller sets the controller that is notified.
      */
-    public MeepleButtonMouseAdapter(GridDirection direction, MainController controller, MeepleButton button) {
+    public PlacementButtonMouseAdapter(GridDirection direction, MainController controller, PlacementButton button) {
         this.direction = direction;
         this.controller = controller;
         this.button = button;

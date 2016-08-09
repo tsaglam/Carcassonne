@@ -9,7 +9,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
-import carcassonne.view.secondary.placementButton.MeepleButton;
+import carcassonne.view.secondary.placementButton.PlacementButton;
 
 /**
  * A GUI for the placement of Meeples on the Tile that was placed previously.
@@ -23,7 +23,7 @@ public class PlacementGUI extends SecondaryGUI {
         g.setTile(TileFactory.create(TileType.CastleEdgeRoad));
     }
 
-    private MeepleButton[][] button;
+    private PlacementButton[][] button;
 
     /**
      * Simple constructor which uses the constructor of the <code>SmallGUI</code>.
@@ -46,10 +46,10 @@ public class PlacementGUI extends SecondaryGUI {
             constraints.weightx = 0.5;
             constraints.weightx = 0.5;
         }
-        button = new MeepleButton[3][3];
+        button = new PlacementButton[3][3];
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                button[x][y] = new MeepleButton(controller, x, y);
+                button[x][y] = new PlacementButton(controller, x, y);
                 button[x][y].setToolTipText("Place Meeple on the " + toolTipText[x][y] + " of the tile.");
                 button[x][y].setBorder(null);
                 constraints.gridx = x;
