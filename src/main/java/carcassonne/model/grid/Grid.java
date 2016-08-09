@@ -39,22 +39,32 @@ public class Grid {
      * @param y is the y coordinate of the last placed tile.
      */
     public void patternCheck(int x, int y) {
-
+        // TODO (HIGH) create pattern object and use submethod results.
+        if (tile[x][y].getType() != TileType.Monastry) {
+            for (GridDirection direction : GridDirection.neighbors()) {
+                int neighborX = GridDirection.addX(x, direction);
+                int neighborY = GridDirection.addY(y, direction);
+                monasteryCheck(neighborX, neighborY); // TODO (HIGH) use results.
+                castleCheck(neighborX, neighborY); // TODO (HIGH) use results.
+                roadCheck(neighborX, neighborY); // TODO (HIGH) use results.
+            }
+        }
+        monasteryCheck(x, y); // TODO (HIGH) use results.
     }
 
     // checks tile on a finished monastery pattern.
     private void monasteryCheck(int x, int y) {
-
+        // TODO (HIGH) implement check.
     }
 
     // checks tile on a finished castle pattern.
     private void castleCheck(int x, int y) {
-
+        // TODO (HIGH) implement check.
     }
 
     // checks tile on a finished road pattern.
     private void roadCheck(int x, int y) {
-
+        // TODO (HIGH) implement check.
     }
 
     /**
