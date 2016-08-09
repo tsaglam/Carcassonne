@@ -10,9 +10,9 @@ import carcassonne.control.state.StatePlacing;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.view.MainGUI;
-import carcassonne.view.PlacementGUI;
-import carcassonne.view.RotationGUI;
+import carcassonne.view.main.MainGUI;
+import carcassonne.view.secondary.PlacementGUI;
+import carcassonne.view.secondary.RotationGUI;
 
 /**
  * The MainController is the central class of the game. The game is started with the instantiation

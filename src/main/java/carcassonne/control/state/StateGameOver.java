@@ -1,9 +1,9 @@
 package carcassonne.control.state;
 
 import carcassonne.control.MainController;
-import carcassonne.view.MainGUI;
-import carcassonne.view.PlacementGUI;
-import carcassonne.view.RotationGUI;
+import carcassonne.view.main.MainGUI;
+import carcassonne.view.secondary.PlacementGUI;
+import carcassonne.view.secondary.RotationGUI;
 
 /**
  * The specific state where the stats are shown can be placed.

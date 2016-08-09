@@ -4,9 +4,9 @@ import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
-import carcassonne.view.MainGUI;
-import carcassonne.view.PlacementGUI;
-import carcassonne.view.RotationGUI;
+import carcassonne.view.main.MainGUI;
+import carcassonne.view.secondary.PlacementGUI;
+import carcassonne.view.secondary.RotationGUI;
 
 /**
  * The specific state when a Meeple can be placed.

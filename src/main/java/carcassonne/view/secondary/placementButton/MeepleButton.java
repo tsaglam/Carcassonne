@@ -1,4 +1,4 @@
-package carcassonne.view.meepleButton;
+package carcassonne.view.secondary.placementButton;
 
 import javax.swing.JButton;
 

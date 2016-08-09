@@ -1,4 +1,4 @@
-package carcassonne.view;
+package carcassonne.view.secondary;
 
 import java.awt.GridBagConstraints;
 
@@ -9,7 +9,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
-import carcassonne.view.meepleButton.MeepleButton;
+import carcassonne.view.secondary.placementButton.MeepleButton;
 
 /**
  * A GUI for the placement of Meeples on the Tile that was placed previously.

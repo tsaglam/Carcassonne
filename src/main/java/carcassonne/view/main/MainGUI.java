@@ -1,4 +1,4 @@
-package carcassonne.view;
+package carcassonne.view.main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,8 +20,8 @@ import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
-import carcassonne.view.menuBar.MainMenuBar;
-import carcassonne.view.tileLabel.TileLabel;
+import carcassonne.view.main.menuBar.MainMenuBar;
+import carcassonne.view.main.tileLabel.TileLabel;
 
 /**
  * The main GUI class, extending a JPanel.

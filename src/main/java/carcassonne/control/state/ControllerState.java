@@ -5,9 +5,9 @@ import carcassonne.control.MainController;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.view.MainGUI;
-import carcassonne.view.PlacementGUI;
-import carcassonne.view.RotationGUI;
+import carcassonne.view.main.MainGUI;
+import carcassonne.view.secondary.PlacementGUI;
+import carcassonne.view.secondary.RotationGUI;
 
 /**
  * Is the abstract state of the state machine.

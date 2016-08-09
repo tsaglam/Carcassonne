@@ -2,9 +2,9 @@ package carcassonne.control.state;
 
 import carcassonne.control.MainController;
 import carcassonne.model.tile.Tile;
-import carcassonne.view.MainGUI;
-import carcassonne.view.PlacementGUI;
-import carcassonne.view.RotationGUI;
+import carcassonne.view.main.MainGUI;
+import carcassonne.view.secondary.PlacementGUI;
+import carcassonne.view.secondary.RotationGUI;
 
 /**
  * The specific state when a Tile can be placed.

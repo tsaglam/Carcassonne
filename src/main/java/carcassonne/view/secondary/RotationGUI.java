@@ -1,4 +1,4 @@
-package carcassonne.view;
+package carcassonne.view.secondary;
 
 import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
