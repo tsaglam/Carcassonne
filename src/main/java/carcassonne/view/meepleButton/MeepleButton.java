@@ -24,6 +24,6 @@ public class MeepleButton extends JButton {
     }
 
     private void setup(MainController controller, int x, int y) {
-        addMouseListener(new MeepleButtonMouseAdapter(GridDirection.values2D()[x][y], controller));
+        addMouseListener(new MeepleButtonMouseAdapter(GridDirection.values2D()[x][y], controller, this));
     }
 }

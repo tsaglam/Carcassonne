@@ -24,22 +24,23 @@ public class Tile {
 
     /**
      * Simple constructor.
-     * @param top is the top terrain type.
-     * @param right is the right terrain type.
-     * @param bottom is the bottom terrain. type
-     * @param left is the left terrain type.
-     * @param middle is the middle terrain type.
+     * @param terrain is the array containing the terrain information.
+     * @param type is the tile type enum value of the tile.
+     * @param tilePath is the path to the tiles.
+     * @param fileType is the file type of the tiles.
      */
-    public Tile(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle, String tilePath, String fileType, TileType type) {
-        if (!new File(tilePath + rotation + fileType).exists()) {
-            throw new IllegalArgumentException("Image path is not valid : " + tilePath);
-        } else if (type == null) {
-            throw new IllegalArgumentException("Tile can't be null");
+    public Tile(TerrainType[] terrain, TileType type, String tilePath, String fileType) {
+        if (type == null || terrain == null || fileType == null || tilePath == null) {
+            throw new IllegalArgumentException("Parameters can't be null");
+        } else if (!new File(tilePath + rotation + fileType).exists()) {
+            throw new IllegalArgumentException("Image path is not valid: " + tilePath);
+        } else if (terrain.length != 9) {
+            throw new IllegalArgumentException("Terrain array is invalid: " + terrain.toString());
         }
         this.type = type;
         tag = false;
         meeple = null;
-        buildTerrainMap(top, right, bottom, left, middle);
+        buildTerrainMap(terrain);
         loadImages(tilePath, fileType);
         x = -1;
         y = -1;
@@ -114,14 +115,13 @@ public class Tile {
      * @param to is the terrain to check to.
      * @return true if connected, false if not.
      */
-    public boolean isConnected(GridDirection fromDirection, GridDirection toDirection) {
-        TerrainType middle = getTerrain(GridDirection.MIDDLE);
-        TerrainType from = getTerrain(fromDirection);
-        TerrainType to = getTerrain(toDirection);
-        if (middle == TerrainType.CASTLE_AND_ROAD) { // special case.
-            return from.equals(to) && (from.equals(TerrainType.CASTLE) || from.equals(TerrainType.ROAD));
+    public boolean isConnected(GridDirection from, GridDirection to) {
+        if (isDirectConnected(from, to)) {
+            return true;
+        } else if (from != GridDirection.MIDDLE && to != GridDirection.MIDDLE) {
+            return isindirectConnected(from, to, 1) || isindirectConnected(from, to, -1);
         }
-        return from.equals(middle) && (middle.equals(to)); // normal case. basic connection.
+        return false;
     }
 
     /**
@@ -141,26 +141,23 @@ public class Tile {
     }
 
     /**
-     * Turns a tile 90 degree to the right.
-     */
-    public void rotateRight() {
-        TerrainType temporary = terrainMap.get(GridDirection.LEFT);
-        for (GridDirection direction : GridDirection.directNeighbors()) {
-            temporary = terrainMap.put(direction, temporary); // rotate terrain:
-        }
-        rotation = (rotation >= 3) ? 0 : rotation + 1; // rotation indicator
-    }
-
-    /**
      * Turns a tile 90 degree to the left.
      */
     public void rotateLeft() {
-        TerrainType temporary = terrainMap.get(GridDirection.RIGHT);
         GridDirection[] directions = { GridDirection.TOP, GridDirection.LEFT, GridDirection.BOTTOM, GridDirection.RIGHT };
-        for (GridDirection direction : directions) { // rotate terrain:
-            temporary = terrainMap.put(direction, temporary);
-        }
+        rotateTerrain(directions);
+        GridDirection[] directions2 = { GridDirection.TOP_RIGHT, GridDirection.TOP_LEFT, GridDirection.BOTTOM_LEFT, GridDirection.BOTTOM_RIGHT };
+        rotateTerrain(directions2);
         rotation = (rotation <= 0) ? 3 : rotation - 1; // rotation indicator
+    }
+
+    /**
+     * Turns a tile 90 degree to the right.
+     */
+    public void rotateRight() {
+        rotateTerrain(GridDirection.directNeighbors());
+        rotateTerrain(GridDirection.indirectNeighbors());
+        rotation = (rotation >= 3) ? 0 : rotation + 1; // rotation indicator
     }
 
     /**
@@ -173,7 +170,7 @@ public class Tile {
         }
         this.meeple = meeple;
     }
-    
+
     /**
      * Gives the tile the position where it has been placed.
      * @param x sets the x coordinate.
@@ -195,19 +192,49 @@ public class Tile {
         tag = value;
     }
 
-    private void buildTerrainMap(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle) {
+    // maps TerrainType from terrain array to GridDirection with same index:
+    private void buildTerrainMap(TerrainType[] terrain) {
         terrainMap = new HashMap<GridDirection, TerrainType>(5); // create terrain map.
-        terrainMap.put(GridDirection.TOP, top); // map the terrain types to the tile position.
-        terrainMap.put(GridDirection.RIGHT, right);
-        terrainMap.put(GridDirection.BOTTOM, bottom); // TODO (LOW) Update model!
-        terrainMap.put(GridDirection.LEFT, left);
-        terrainMap.put(GridDirection.MIDDLE, middle);
+        GridDirection[] tilePosition = GridDirection.values();
+        for (int i = 0; i < terrain.length; i++) {
+            terrainMap.put(tilePosition[i], terrain[i]);
+        }
     }
 
+    // checks for direct connection through middle:
+    private boolean isDirectConnected(GridDirection from, GridDirection to) {
+        TerrainType middle = getTerrain(GridDirection.MIDDLE);
+        return (getTerrain(from).equals(middle) && getTerrain(to).equals(middle));
+    }
+
+    // checks for indirect connection through the specified side from a specific start to a specific
+    // destination. Side is either 1 (right) or -1 (left.)
+    private boolean isindirectConnected(GridDirection from, GridDirection to, int side) {
+        GridDirection current = from;
+        GridDirection next;
+        while (current != to) { // while not at destination:
+            next = GridDirection.next(current, side); // get the next direction
+            if (getTerrain(current) != getTerrain(next)) { // check if still connected
+                return false;
+
+            }
+            current = next; // set new current
+        }
+        return true; // found connection from start to destination.
+    }
+
+    // uses path to load images for all rotations.
     private void loadImages(String tilePath, String fileType) {
         image = new ImageIcon[4]; // create image array.
         for (int i = 0; i <= 3; i++) { // for every image:
             image[i] = new ImageIcon(tilePath + i + fileType); // load it from path.
+        }
+    }
+
+    private void rotateTerrain(GridDirection[] directions) {
+        TerrainType temporary = terrainMap.get(directions[directions.length - 1]); // get last one
+        for (GridDirection direction : directions) { // rotate terrain through temporary:
+            temporary = terrainMap.put(direction, temporary);
         }
     }
 }

@@ -16,15 +16,17 @@ public class MeepleButtonMouseAdapter extends MouseAdapter {
 
     private GridDirection direction;
     private MainController controller;
+    private MeepleButton button;
 
     /**
      * Basic constructor with the button and the controller to set.
      * @param meepleButton should be the button that uses the adapter.
      * @param controller sets the controller that is notified.
      */
-    public MeepleButtonMouseAdapter(GridDirection direction, MainController controller) {
+    public MeepleButtonMouseAdapter(GridDirection direction, MainController controller, MeepleButton button) {
         this.direction = direction;
         this.controller = controller;
+        this.button = button;
     }
 
     /**
@@ -34,7 +36,9 @@ public class MeepleButtonMouseAdapter extends MouseAdapter {
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        controller.requestMeeplePlacement(direction);
+        if (button.isEnabled()) {
+            controller.requestMeeplePlacement(direction);
+        }
     }
 
 }
