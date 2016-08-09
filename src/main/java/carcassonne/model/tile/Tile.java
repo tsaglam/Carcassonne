@@ -116,14 +116,33 @@ public class Tile {
      * @param to is the terrain to check to.
      * @return true if connected, false if not.
      */
-    public boolean isConnected(GridDirection fromDirection, GridDirection toDirection) {
+    public boolean isConnected(GridDirection from, GridDirection to) {
+        return isDirectConnected(from, to) || isindirectConnected(from, to, 1) || isindirectConnected(from, to, -1);
+    }
+
+    /**
+     * checks for direct connection through middle:
+     */
+    private boolean isDirectConnected(GridDirection from, GridDirection to) {
         TerrainType middle = getTerrain(GridDirection.MIDDLE);
-        TerrainType from = getTerrain(fromDirection);
-        TerrainType to = getTerrain(toDirection);
-        if (middle == TerrainType.CASTLE_AND_ROAD) { // special case.
-            return from.equals(to) && (from.equals(TerrainType.CASTLE) || from.equals(TerrainType.ROAD));
+        return (getTerrain(from).equals(middle) && getTerrain(from).equals(middle));
+    }
+
+    /**
+     * checks for indirect connection through the specified side from a specific start to a specific
+     * destination. Side is either 1 (right) or -1 (left.)
+     */
+    private boolean isindirectConnected(GridDirection from, GridDirection to, int side) {
+        GridDirection current = from;
+        GridDirection next;
+        while (current != to) { // while not at destination:
+            next = GridDirection.next(current, side); // get the next direction
+            if (current != next) { // check if still connected
+                return false;
+            }
+            current = next; // set new current
         }
-        return from.equals(middle) && (middle.equals(to)); // normal case. basic connection.
+        return true; // found connection from start to destination.
     }
 
     /**
