@@ -90,14 +90,6 @@ public enum GridDirection {
         return directions;
     }
 
-    public static GridDirection toTheLeft(GridDirection ofDirection) {
-        return next(ofDirection, -1);
-    }
-
-    public static GridDirection toTheRight(GridDirection ofDirection) {
-        return next(ofDirection, 1);
-    }
-
     /**
      * Generates a two dimensional array of the GridDirections for their orientation on a tile.
      * @return a 2D array of an array of TOP_LEFT, LEFT, BOTTOM_LEFT, TOP, MIDDLE, BOTTOM,
@@ -112,7 +104,16 @@ public enum GridDirection {
         return 4 + smallOpposite(ordinal - 4);
     }
 
-    private static GridDirection next(GridDirection direction, int side) {
+    /**
+     * Gets the next direction on the specified side of the current direction.
+     * @param direction is the current direction.
+     * @param side sets the side. -1 for left and 1 for right.
+     * @return the next direction
+     */
+    public static GridDirection next(GridDirection direction, int side) {
+        if (side != 1 && side != -1) {
+            throw new IllegalArgumentException("Parameter side has to be -1 for left or 1 for right.");
+        }
         if (direction == MIDDLE) {
             return direction;
         }
