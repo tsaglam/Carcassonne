@@ -67,6 +67,29 @@ public enum GridDirection {
     }
 
     /**
+     * Gets the next direction on the specified side of the current direction.
+     * @param direction is the current direction.
+     * @param side sets the side. -1 for left and 1 for right.
+     * @return the next direction
+     */
+    public static GridDirection next(GridDirection direction, int side) {
+        if (side != 1 && side != -1) {
+            throw new IllegalArgumentException("Parameter side has to be -1 for left or 1 for right.");
+        }
+        if (direction == MIDDLE) {
+            return direction;
+        }
+        GridDirection[] cycle = { TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT };
+        int position = -2; // error case, sum with parameter side is negative
+        for (int i = 0; i < cycle.length; i++) {
+            if (cycle[i] == direction) { // find in cycle
+                position = i; // save cycle position
+            }
+        }
+        return cycle[(8 + position + side) % 8];
+    }
+
+    /**
      * Calculates the opposite <code>GridDirection</code> for a specific <code>GridDirection</code>.
      * @param from is the <code>GridDirection</code> the opposite gets calculated from.
      * @return the opposite <code>GridDirection</code>.
@@ -102,29 +125,6 @@ public enum GridDirection {
 
     private static int bigOpposite(int ordinal) {
         return 4 + smallOpposite(ordinal - 4);
-    }
-
-    /**
-     * Gets the next direction on the specified side of the current direction.
-     * @param direction is the current direction.
-     * @param side sets the side. -1 for left and 1 for right.
-     * @return the next direction
-     */
-    public static GridDirection next(GridDirection direction, int side) {
-        if (side != 1 && side != -1) {
-            throw new IllegalArgumentException("Parameter side has to be -1 for left or 1 for right.");
-        }
-        if (direction == MIDDLE) {
-            return direction;
-        }
-        GridDirection[] cycle = { TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT };
-        int position = -2; // error case, sum with parameter side is negative
-        for (int i = 0; i < cycle.length; i++) {
-            if (cycle[i] == direction) { // find in cycle
-                position = i; // save cycle position
-            }
-        }
-        return cycle[(8 + position + side) % 8];
     }
 
     private static int smallOpposite(int ordinal) {

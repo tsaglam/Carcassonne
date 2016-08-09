@@ -110,39 +110,18 @@ public class Tile {
     }
 
     /**
-     * TODO (HIGHEST) check connection also via the MIDDLE position Checks whether two parts of a
-     * tile are connected through same terrain.
+     * Checks whether two parts of a tile are connected through same terrain.
      * @param from is the part to check from.
      * @param to is the terrain to check to.
      * @return true if connected, false if not.
      */
     public boolean isConnected(GridDirection from, GridDirection to) {
-        return isDirectConnected(from, to) || isindirectConnected(from, to, 1) || isindirectConnected(from, to, -1);
-    }
-
-    /**
-     * checks for direct connection through middle:
-     */
-    private boolean isDirectConnected(GridDirection from, GridDirection to) {
-        TerrainType middle = getTerrain(GridDirection.MIDDLE);
-        return (getTerrain(from).equals(middle) && getTerrain(from).equals(middle));
-    }
-
-    /**
-     * checks for indirect connection through the specified side from a specific start to a specific
-     * destination. Side is either 1 (right) or -1 (left.)
-     */
-    private boolean isindirectConnected(GridDirection from, GridDirection to, int side) {
-        GridDirection current = from;
-        GridDirection next;
-        while (current != to) { // while not at destination:
-            next = GridDirection.next(current, side); // get the next direction
-            if (current != next) { // check if still connected
-                return false;
-            }
-            current = next; // set new current
+        if (isDirectConnected(from, to)) {
+            return true;
+        } else if (from != GridDirection.MIDDLE && to != GridDirection.MIDDLE) {
+            return isindirectConnected(from, to, 1) || isindirectConnected(from, to, -1);
         }
-        return true; // found connection from start to destination.
+        return false;
     }
 
     /**
@@ -162,17 +141,6 @@ public class Tile {
     }
 
     /**
-     * TODO (HIGHEST) adjust rotating to additional terrain Turns a tile 90 degree to the right.
-     */
-    public void rotateRight() {
-        TerrainType temporary = terrainMap.get(GridDirection.LEFT);
-        for (GridDirection direction : GridDirection.directNeighbors()) {
-            temporary = terrainMap.put(direction, temporary); // rotate terrain:
-        }
-        rotation = (rotation >= 3) ? 0 : rotation + 1; // rotation indicator
-    }
-
-    /**
      * Turns a tile 90 degree to the left.
      */
     public void rotateLeft() {
@@ -182,6 +150,17 @@ public class Tile {
             temporary = terrainMap.put(direction, temporary);
         }
         rotation = (rotation <= 0) ? 3 : rotation - 1; // rotation indicator
+    }
+
+    /**
+     * TODO (HIGHEST) adjust rotating to additional terrain Turns a tile 90 degree to the right.
+     */
+    public void rotateRight() {
+        TerrainType temporary = terrainMap.get(GridDirection.LEFT);
+        for (GridDirection direction : GridDirection.directNeighbors()) {
+            temporary = terrainMap.put(direction, temporary); // rotate terrain:
+        }
+        rotation = (rotation >= 3) ? 0 : rotation + 1; // rotation indicator
     }
 
     /**
@@ -216,7 +195,7 @@ public class Tile {
         tag = value;
     }
 
-    // TODO (HIGHEST) use array
+    // maps TerrainType from terrain array to GridDirection with same index:
     private void buildTerrainMap(TerrainType[] terrain) {
         terrainMap = new HashMap<GridDirection, TerrainType>(5); // create terrain map.
         GridDirection[] tilePosition = GridDirection.values();
@@ -225,6 +204,29 @@ public class Tile {
         }
     }
 
+    // checks for direct connection through middle:
+    private boolean isDirectConnected(GridDirection from, GridDirection to) {
+        TerrainType middle = getTerrain(GridDirection.MIDDLE);
+        return (getTerrain(from).equals(middle) && getTerrain(to).equals(middle));
+    }
+
+    // checks for indirect connection through the specified side from a specific start to a specific
+    // destination. Side is either 1 (right) or -1 (left.)
+    private boolean isindirectConnected(GridDirection from, GridDirection to, int side) {
+        GridDirection current = from;
+        GridDirection next;
+        while (current != to) { // while not at destination:
+            next = GridDirection.next(current, side); // get the next direction
+            if (getTerrain(current) != getTerrain(next)) { // check if still connected
+                return false;
+
+            }
+            current = next; // set new current
+        }
+        return true; // found connection from start to destination.
+    }
+
+    // uses path to load images for all rotations.
     private void loadImages(String tilePath, String fileType) {
         image = new ImageIcon[4]; // create image array.
         for (int i = 0; i <= 3; i++) { // for every image:
