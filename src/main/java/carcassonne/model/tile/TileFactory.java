@@ -1,13 +1,10 @@
 package carcassonne.model.tile;
 
 import static carcassonne.model.tile.TerrainType.CASTLE;
-import static carcassonne.model.tile.TerrainType.CASTLE_AND_ROAD;
 import static carcassonne.model.tile.TerrainType.FIELDS;
 import static carcassonne.model.tile.TerrainType.MONASTRY;
 import static carcassonne.model.tile.TerrainType.OTHER;
 import static carcassonne.model.tile.TerrainType.ROAD;
-
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 /**
  * Factory class for building tile objects. Used this because there are so many types of tile with
@@ -38,7 +35,7 @@ public final class TileFactory {
         case CastleEdge:
             return new Tile(CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, path, FILE_TYPE, type);
         case CastleEdgeRoad:
-            return new Tile(CASTLE, CASTLE, ROAD, ROAD, CASTLE_AND_ROAD, path, FILE_TYPE, type);
+            return new Tile(CASTLE, CASTLE, ROAD, ROAD, ROAD, path, FILE_TYPE, type);
         case CastleSides:
             return new Tile(CASTLE, FIELDS, CASTLE, FIELDS, FIELDS, path, FILE_TYPE, type);
         case CastleSidesEdge:
