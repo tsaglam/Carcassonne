@@ -24,22 +24,23 @@ public class Tile {
 
     /**
      * Simple constructor.
-     * @param top is the top terrain type.
-     * @param right is the right terrain type.
-     * @param bottom is the bottom terrain. type
-     * @param left is the left terrain type.
-     * @param middle is the middle terrain type.
+     * @param terrain is the array containing the terrain information.
+     * @param type is the tile type enum value of the tile.
+     * @param tilePath is the path to the tiles.
+     * @param fileType is the file type of the tiles.
      */
-    public Tile(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle, String tilePath, String fileType, TileType type) {
-        if (!new File(tilePath + rotation + fileType).exists()) {
-            throw new IllegalArgumentException("Image path is not valid : " + tilePath);
-        } else if (type == null) {
-            throw new IllegalArgumentException("Tile can't be null");
+    public Tile(TerrainType[] terrain, TileType type, String tilePath, String fileType) {
+        if (type == null || terrain == null || fileType == null || tilePath == null) {
+            throw new IllegalArgumentException("Parameters can't be null");
+        } else if (!new File(tilePath + rotation + fileType).exists()) {
+            throw new IllegalArgumentException("Image path is not valid: " + tilePath);
+        } else if (terrain.length != 9) {
+            throw new IllegalArgumentException("Terrain array is invalid: " + terrain.toString());
         }
         this.type = type;
         tag = false;
         meeple = null;
-        buildTerrainMap(top, right, bottom, left, middle);
+        buildTerrainMap(terrain);
         loadImages(tilePath, fileType);
         x = -1;
         y = -1;
@@ -109,7 +110,8 @@ public class Tile {
     }
 
     /**
-     * Checks whether two parts of a tile are connected through same terrain.
+     * TODO (HIGHEST) check connection also via the MIDDLE position Checks whether two parts of a
+     * tile are connected through same terrain.
      * @param from is the part to check from.
      * @param to is the terrain to check to.
      * @return true if connected, false if not.
@@ -141,7 +143,7 @@ public class Tile {
     }
 
     /**
-     * Turns a tile 90 degree to the right.
+     * TODO (HIGHEST) adjust rotating to additional terrain Turns a tile 90 degree to the right.
      */
     public void rotateRight() {
         TerrainType temporary = terrainMap.get(GridDirection.LEFT);
@@ -173,7 +175,7 @@ public class Tile {
         }
         this.meeple = meeple;
     }
-    
+
     /**
      * Gives the tile the position where it has been placed.
      * @param x sets the x coordinate.
@@ -195,13 +197,13 @@ public class Tile {
         tag = value;
     }
 
-    private void buildTerrainMap(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType middle) {
+    // TODO (HIGHEST) use array
+    private void buildTerrainMap(TerrainType[] terrain) {
         terrainMap = new HashMap<GridDirection, TerrainType>(5); // create terrain map.
-        terrainMap.put(GridDirection.TOP, top); // map the terrain types to the tile position.
-        terrainMap.put(GridDirection.RIGHT, right);
-        terrainMap.put(GridDirection.BOTTOM, bottom); // TODO (LOW) Update model!
-        terrainMap.put(GridDirection.LEFT, left);
-        terrainMap.put(GridDirection.MIDDLE, middle);
+        GridDirection[] tilePosition = GridDirection.values();
+        for (int i = 0; i < terrain.length; i++) {
+            terrainMap.put(tilePosition[i], terrain[i]);
+        }
     }
 
     private void loadImages(String tilePath, String fileType) {
