@@ -40,7 +40,7 @@ public class Grid {
      */
     public List<GridPattern> patternCheck(int x, int y) {
         List<GridPattern> resultList = new LinkedList<GridPattern>();
-        // TODO (HIGH) use submethod results.
+        // TODO (HIGH) use sub method results.
         if (tile[x][y].getType() != TileType.Monastery) {
             for (GridDirection direction : GridDirection.neighbors()) {
                 int neighborX = GridDirection.addX(x, direction);
