@@ -38,8 +38,9 @@ public class Grid {
      * @param x is the x coordinate of the last placed tile.
      * @param y is the y coordinate of the last placed tile.
      */
-    public void patternCheck(int x, int y) {
-        // TODO (HIGH) create pattern object and use submethod results.
+    public List<GridPattern> patternCheck(int x, int y) {
+        List<GridPattern> resultList = new LinkedList<GridPattern>();
+        // TODO (HIGH) use submethod results.
         if (tile[x][y].getType() != TileType.Monastery) {
             for (GridDirection direction : GridDirection.neighbors()) {
                 int neighborX = GridDirection.addX(x, direction);
@@ -50,6 +51,7 @@ public class Grid {
             }
         }
         monasteryCheck(x, y); // TODO (HIGH) use results.
+        return resultList;
     }
 
     // checks tile on a finished monastery pattern.
