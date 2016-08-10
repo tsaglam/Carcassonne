@@ -21,6 +21,7 @@ public abstract class SecondaryGUI extends JPanel {
     protected JFrame frame;
     protected GridBagConstraints constraints;
     protected Tile tile;
+    protected int currentPlayer;
 
     /**
      * Constructor for the class. Sets the controller of the GUI and the window title.
@@ -32,6 +33,7 @@ public abstract class SecondaryGUI extends JPanel {
         this.controller = controller;
         options = GameOptions.getInstance();
         constraints = new GridBagConstraints();
+        currentPlayer = -1;
         buildFrame(title);
     }
 
@@ -41,11 +43,13 @@ public abstract class SecondaryGUI extends JPanel {
      * <code>update()</code>.
      * @param tile
      */
-    public void setTile(Tile tile) {
+    public void setTile(Tile tile, int currentPlayer) {
         if (tile == null) {
             throw new IllegalArgumentException("Tried to set the tile of the " + getClass().getSimpleName() + " to null.");
         }
         this.tile = tile;
+        this.currentPlayer = currentPlayer;
+        setBackground(options.playerColor(currentPlayer));
         update();
         frame.setVisible(true);
     }
@@ -56,7 +60,6 @@ public abstract class SecondaryGUI extends JPanel {
     private void buildFrame(String title) {
         frame = new JFrame(title);
         frame.getContentPane().add(this);
-        setBackground(options.colorGUIsmall);
         frame.setResizable(false);
         frame.setAlwaysOnTop(true);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

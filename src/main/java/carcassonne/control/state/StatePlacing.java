@@ -28,7 +28,7 @@ public class StatePlacing extends ControllerState {
      */
     @Override
     protected void entry() {
-        rotationGUI.setTile(round.getCurrentTile());
+        rotationGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
     }
 
     /**

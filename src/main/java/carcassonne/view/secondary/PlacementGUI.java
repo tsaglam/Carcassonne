@@ -20,7 +20,7 @@ public class PlacementGUI extends SecondaryGUI {
 
     public static void main(String[] args) { // TODO (LOWEST) remove main method sometime.
         PlacementGUI g = new PlacementGUI(null);
-        g.setTile(TileFactory.create(TileType.CastleEdgeRoad));
+        g.setTile(TileFactory.create(TileType.CastleEdgeRoad), 1);
     }
 
     private PlacementButton[][] button;
@@ -75,7 +75,7 @@ public class PlacementGUI extends SecondaryGUI {
                 } else {
                     button[x][y].setEnabled(true);
                 }
-                button[x][y].setIcon(new ImageIcon(options.buildImagePath(terrain, -1)));
+                button[x][y].setIcon(new ImageIcon(options.buildImagePath(terrain, currentPlayer)));
             }
         }
         finishFrame();

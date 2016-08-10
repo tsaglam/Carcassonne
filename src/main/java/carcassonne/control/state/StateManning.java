@@ -30,7 +30,7 @@ public class StateManning extends ControllerState {
      */
     @Override
     protected void entry() {
-        placementGUI.setTile(round.getCurrentTile());
+        placementGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
     }
 
     /**

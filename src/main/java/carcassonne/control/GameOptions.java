@@ -82,7 +82,7 @@ public final class GameOptions {
      * The height of the grid in tiles.
      */
     public int gridHeight;
-    
+
     /**
      * The width of the grid in pixel.
      */
@@ -109,6 +109,8 @@ public final class GameOptions {
     public TileType foundationType;
 
     private int taskBarHeight;
+
+    private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(254, 220, 50) };
 
     /**
      * Simple constructor that loads the information.
@@ -143,7 +145,14 @@ public final class GameOptions {
         gridCenterY = Math.round((gridHeight - 1) / 2);
         foundationType = TileType.CastleWallRoad;
     }
-    
+
+    public Color playerColor(int playerNumber) {
+        if (playerNumber < 0 || playerNumber >= playerColor.length) {
+            throw new IllegalArgumentException(playerNumber + " is a illegal player number for a player color.");
+        }
+        return playerColor[playerNumber];
+    }
+
     /**
      * Builds the path to the image of a specific meeple of a player.
      * @param type is the type of terrain the meeple occupies.
@@ -152,7 +161,7 @@ public final class GameOptions {
      */
     public String buildImagePath(TerrainType type, int playerNumber) {
         String pathBase = "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase();
-        if (playerNumber < 0 || type == TerrainType.OTHER) {
+        if (playerNumber < 0 || type == TerrainType.OTHER || type == TerrainType.FIELDS) {
             return pathBase + ".png";
         } else {
             return pathBase + "_" + playerNumber + ".png";
