@@ -58,7 +58,7 @@ public class MainGUI {
      * Rebuilds the label grid and the meeple grid if the game should be restarted.
      */
     public void rebuildGrids() {
-        ImageIcon imageEmpty = new ImageIcon(options.buildImagePath(TerrainType.OTHER));
+        ImageIcon imageEmpty = new ImageIcon(options.buildImagePath(TerrainType.OTHER, -1));
         for (int y = 0; y < meepleGridHeight; y++) {
             for (int x = 0; x < meepleGridWidth; x++) {
                 if (x < gridWidth && y < gridHeight) {
@@ -120,7 +120,7 @@ public class MainGUI {
 
     private void buildMeepleGrid() {
         constraints = new GridBagConstraints();
-        ImageIcon imageEmpty = new ImageIcon(options.buildImagePath(TerrainType.OTHER));
+        ImageIcon imageEmpty = new ImageIcon(options.buildImagePath(TerrainType.OTHER, -1));
         meepleGridWidth = options.gridWidth * 3;
         meepleGridHeight = options.gridHeight * 3;
         constraints.weightx = 1;

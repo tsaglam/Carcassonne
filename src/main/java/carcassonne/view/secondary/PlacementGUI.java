@@ -75,7 +75,7 @@ public class PlacementGUI extends SecondaryGUI {
                 } else {
                     button[x][y].setEnabled(true);
                 }
-                button[x][y].setIcon(new ImageIcon(options.buildImagePath(terrain)));
+                button[x][y].setIcon(new ImageIcon(options.buildImagePath(terrain, -1)));
             }
         }
         finishFrame();
