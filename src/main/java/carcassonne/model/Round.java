@@ -40,7 +40,7 @@ public class Round {
      * <code>GameOptions.maximalPlayers]</code>.
      */
     private void createPlayers() {
-        if (playerCount <= 1 || playerCount >= GameOptions.getInstance().maximalPlayers) {
+        if (playerCount <= 1 || playerCount > GameOptions.getInstance().maximalPlayers) {
             throw new IllegalArgumentException(playerCount + " is not a valid player count");
         }
         player = new Player[playerCount]; // initialize the player array.
