@@ -162,4 +162,19 @@ public final class GameOptions {
     public String buildImagePath(TerrainType type, int playerNumber) {
         return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + "_" + playerNumber + ".png";
     }
+    
+    /**
+     * Builds the path to the image of a specific meeple of a player.
+     * @param type is the type of terrain the meeple occupies.
+     * @param playerNumber is the number of the meeple owner. use -1 for a generic meeple.
+     * @return the path as a String.
+     */
+    public String buildImagePath2(TerrainType type, int playerNumber) { // TODO (HIGH) use this method.
+        String pathBase = "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase();
+        if (playerNumber < 0 || type == TerrainType.OTHER) {
+            return pathBase + ".png";
+        } else {
+            return pathBase + "_" + playerNumber + ".png";
+        }
+    }
 }
