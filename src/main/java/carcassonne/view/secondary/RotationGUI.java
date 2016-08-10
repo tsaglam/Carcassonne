@@ -70,7 +70,6 @@ public class RotationGUI extends SecondaryGUI {
             constraints.weightx = 0.5;
         }
         // set tool tips:
-        System.out.println(buttonSkip.getBackground());
         buttonSkip.setToolTipText("Don't place tile and skip turn");
         buttonRotateLeft.setToolTipText("Rotate left");
         buttonRotateRight.setToolTipText("Rotate right");
