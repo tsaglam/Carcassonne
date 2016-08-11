@@ -9,7 +9,7 @@ import carcassonne.view.secondary.RotationGUI;
  * The specific state where the stats are shown can be placed.
  * @author Timur Saglam
  */
-public class StateGameOver extends ControllerState {
+public class StateGameOver extends AbstractControllerState {
 
     /**
      * Constructor of the state.
@@ -23,7 +23,7 @@ public class StateGameOver extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#entry()
+     * @see carcassonne.control.state.AbstractControllerState#entry()
      */
     @Override
     protected void entry() {
@@ -32,7 +32,7 @@ public class StateGameOver extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#exit()
+     * @see carcassonne.control.state.AbstractControllerState#exit()
      */
     @Override
     protected void exit() {

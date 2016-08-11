@@ -17,18 +17,6 @@ public final class GameOptions {
     private static GameOptions instance;
 
     /**
-     * Access method for the GameProperties instance. Secures that only one property object can
-     * exist at a time.
-     * @return the instance.
-     */
-    public static GameOptions getInstance() {
-        if (instance == null) {
-            instance = new GameOptions();
-        }
-        return instance;
-    }
-
-    /**
      * is the width value of the resolution.
      */
     public final int resolutionWidth;
@@ -108,7 +96,7 @@ public final class GameOptions {
      */
     public TileType foundationType;
 
-    private int taskBarHeight;
+    private final int taskBarHeight;
 
     // Original dark colors: (30, 26, 197), (151, 4, 12), (14, 119, 25) and (254, 220, 50).
     private final Color[] playerColor = { new Color(143, 143, 214), new Color(220, 129, 134), new Color(98, 164, 105), new Color(230, 213, 125) };
@@ -147,11 +135,23 @@ public final class GameOptions {
         foundationType = TileType.CastleWallRoad;
     }
 
-    public Color playerColor(int playerNumber) {
+    public Color getPlayerColor(int playerNumber) {
         if (playerNumber < 0 || playerNumber >= playerColor.length) {
             throw new IllegalArgumentException(playerNumber + " is a illegal player number for a player color.");
         }
         return playerColor[playerNumber];
+    }
+    
+    /**
+     * Access method for the GameProperties instance. Secures that only one property object can
+     * exist at a time.
+     * @return the instance.
+     */
+    public static GameOptions getInstance() {
+        if (instance == null) {
+            instance = new GameOptions();
+        }
+        return instance;
     }
 
     /**

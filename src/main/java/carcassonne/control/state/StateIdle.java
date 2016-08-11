@@ -11,7 +11,7 @@ import carcassonne.view.secondary.RotationGUI;
  * The specific state if no game is running.
  * @author Timur Saglam
  */
-public class StateIdle extends ControllerState {
+public class StateIdle extends AbstractControllerState {
 
     /**
      * Constructor of the state.
@@ -25,7 +25,7 @@ public class StateIdle extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#entry()
+     * @see carcassonne.control.state.AbstractControllerState#entry()
      */
     @Override
     protected void entry() {
@@ -33,7 +33,7 @@ public class StateIdle extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#exit()
+     * @see carcassonne.control.state.AbstractControllerState#exit()
      */
     @Override
     protected void exit() {
@@ -41,7 +41,7 @@ public class StateIdle extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#newGame()
+     * @see carcassonne.control.state.AbstractControllerState#newGame()
      */
     @Override
     public boolean newGame(int playerCount) {

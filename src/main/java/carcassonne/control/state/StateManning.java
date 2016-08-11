@@ -12,7 +12,7 @@ import carcassonne.view.secondary.RotationGUI;
  * The specific state when a Meeple can be placed.
  * @author Timur Saglam
  */
-public class StateManning extends ControllerState {
+public class StateManning extends AbstractControllerState {
 
     /**
      * Constructor of the state.
@@ -26,7 +26,7 @@ public class StateManning extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#entry()
+     * @see carcassonne.control.state.AbstractControllerState#entry()
      */
     @Override
     protected void entry() {
@@ -34,7 +34,7 @@ public class StateManning extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#exit()
+     * @see carcassonne.control.state.AbstractControllerState#exit()
      */
     @Override
     protected void exit() {
@@ -57,7 +57,7 @@ public class StateManning extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#abortGame()
+     * @see carcassonne.control.state.AbstractControllerState#abortGame()
      */
     @Override
     public boolean abortGame() {

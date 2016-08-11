@@ -10,7 +10,7 @@ import carcassonne.view.secondary.RotationGUI;
  * The specific state when a Tile can be placed.
  * @author Timur Saglam
  */
-public class StatePlacing extends ControllerState {
+public class StatePlacing extends AbstractControllerState {
 
     /**
      * Constructor of the state.
@@ -24,7 +24,7 @@ public class StatePlacing extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#entry()
+     * @see carcassonne.control.state.AbstractControllerState#entry()
      */
     @Override
     protected void entry() {
@@ -32,7 +32,7 @@ public class StatePlacing extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#exit()
+     * @see carcassonne.control.state.AbstractControllerState#exit()
      */
     @Override
     protected void exit() {
@@ -62,7 +62,7 @@ public class StatePlacing extends ControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.ControllerState#abortGame()
+     * @see carcassonne.control.state.AbstractControllerState#abortGame()
      */
     @Override
     public boolean abortGame() {

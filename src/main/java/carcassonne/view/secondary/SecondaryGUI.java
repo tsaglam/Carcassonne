@@ -49,7 +49,7 @@ public abstract class SecondaryGUI extends JPanel {
         }
         this.tile = tile;
         this.currentPlayer = currentPlayer;
-        setBackground(options.playerColor(currentPlayer));
+        setBackground(options.getPlayerColor(currentPlayer));
         update();
         frame.setVisible(true);
     }

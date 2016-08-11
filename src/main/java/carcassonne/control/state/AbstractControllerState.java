@@ -13,7 +13,7 @@ import carcassonne.view.secondary.RotationGUI;
  * Is the abstract state of the state machine.
  * @author Timur Saglam
  */
-public abstract class ControllerState {
+public abstract class AbstractControllerState {
 
     protected MainController controller;
     protected MainGUI mainGUI;
@@ -28,7 +28,7 @@ public abstract class ControllerState {
      * state at the controller and calls the <code>entry()</code> method.
      * @param controller sets the controller.
      */
-    public ControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+    public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
         this.controller = controller;
         this.mainGUI = mainGUI;
         this.rotationGUI = rotationGUI;
@@ -37,9 +37,9 @@ public abstract class ControllerState {
         controller.registerState(this);
     }
 
-    protected void changeState(Class<? extends ControllerState> stateType) {
+    protected void changeState(Class<? extends AbstractControllerState> stateType) {
         exit();
-        ControllerState newState = controller.changeState(stateType);
+        AbstractControllerState newState = controller.changeState(stateType);
         newState.entry();
     }
 

@@ -1,8 +1,9 @@
 package carcassonne.control;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import carcassonne.control.state.ControllerState;
+import carcassonne.control.state.AbstractControllerState;
 import carcassonne.control.state.StateGameOver;
 import carcassonne.control.state.StateIdle;
 import carcassonne.control.state.StateManning;
@@ -31,8 +32,8 @@ public class MainController {
     private final MainGUI mainGUI;
     private final RotationGUI rotationGUI;
     private final PlacementGUI placementGUI;
-    private final HashMap<Class<? extends ControllerState>, ControllerState> stateMap;
-    private ControllerState currentState;
+    private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
+    private AbstractControllerState currentState;
 
     /**
      * Basic constructor. Creates the view and the model of the game.
@@ -41,7 +42,7 @@ public class MainController {
         mainGUI = new MainGUI(this);
         rotationGUI = new RotationGUI(this);
         placementGUI = new PlacementGUI(this);
-        stateMap = new HashMap<Class<? extends ControllerState>, ControllerState>();
+        stateMap = new HashMap<Class<? extends AbstractControllerState>, AbstractControllerState>();
         currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI);
         new StateManning(this, mainGUI, rotationGUI, placementGUI);
         new StatePlacing(this, mainGUI, rotationGUI, placementGUI);
@@ -53,7 +54,7 @@ public class MainController {
      * @param stateType specifies which state is the new state.
      * @return the new state.
      */
-    public ControllerState changeState(Class<? extends ControllerState> stateType) {
+    public AbstractControllerState changeState(Class<? extends AbstractControllerState> stateType) {
         // TODO (LOW) Remove debug output for state changes.
         System.out.println("change to " + stateType + " from " + currentState.getClass());                                          // (HIGH)
         currentState = stateMap.get(stateType);
@@ -68,7 +69,7 @@ public class MainController {
      * @param state is the specific state.
      * @param stateType is the class type of the specific state.
      */
-    public void registerState(ControllerState state) {
+    public void registerState(AbstractControllerState state) {
         if (stateMap.put(state.getClass(), state) != null) {
             throw new IllegalArgumentException("Can't register two states of a kind.");
         }
@@ -81,7 +82,7 @@ public class MainController {
      * @param newGrid sets the new grid.
      */
     public void updateStates(Round newRound, Grid newGrid) {
-        for (ControllerState state : stateMap.values()) {
+        for (AbstractControllerState state : stateMap.values()) {
             state.updateState(newRound, newGrid);
         }
     }
