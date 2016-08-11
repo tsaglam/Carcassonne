@@ -2,6 +2,7 @@ package carcassonne.model.tile;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 
@@ -13,11 +14,11 @@ import carcassonne.model.grid.GridDirection;
  * @author Timur Saglam
  */
 public class Tile {
-    private HashMap<GridDirection, TerrainType> terrainMap;
+    private Map<GridDirection, TerrainType> terrainMap;
     private ImageIcon[] image; // tile image
     private int rotation;
     private Boolean tag;
-    private TileType type;
+    private final TileType type;
     private Meeple meeple;
     private int x;
     private int y;
@@ -28,14 +29,14 @@ public class Tile {
      * @param type is the tile type enum value of the tile.
      * @param tilePath is the path to the tiles.
      * @param fileType is the file type of the tiles.
-     */ // TODO (HIGHEST) use varargs
+     */
     public Tile(TerrainType[] terrain, TileType type, String tilePath, String fileType) {
         if (type == null || terrain == null || fileType == null || tilePath == null) {
             throw new IllegalArgumentException("Parameters can't be null");
-        } else if (!new File(tilePath + rotation + fileType).exists()) {
-            throw new IllegalArgumentException("Image path is not valid: " + tilePath);
         } else if (terrain.length != 9) {
             throw new IllegalArgumentException("Terrain array is invalid: " + terrain.toString());
+        } else if (!new File(tilePath + rotation + fileType).exists()) {
+            throw new IllegalArgumentException("Image path is not valid: " + tilePath);
         }
         this.type = type;
         tag = false;
@@ -145,8 +146,8 @@ public class Tile {
      */
     public void rotateLeft() {
         rotateTerrain(GridDirection.TOP, GridDirection.LEFT, GridDirection.BOTTOM, GridDirection.RIGHT);
-        rotateTerrain(GridDirection.TOP_RIGHT, GridDirection.TOP_LEFT, GridDirection.BOTTOM_LEFT, GridDirection.BOTTOM_RIGHT );
-        rotation = (rotation <= 0) ? 3 : rotation - 1; // rotation indicator
+        rotateTerrain(GridDirection.TOP_RIGHT, GridDirection.TOP_LEFT, GridDirection.BOTTOM_LEFT, GridDirection.BOTTOM_RIGHT);
+        rotation = rotation <= 0 ? 3 : rotation - 1; // rotation indicator
     }
 
     /**
@@ -155,7 +156,7 @@ public class Tile {
     public void rotateRight() {
         rotateTerrain(GridDirection.directNeighbors());
         rotateTerrain(GridDirection.indirectNeighbors());
-        rotation = (rotation >= 3) ? 0 : rotation + 1; // rotation indicator
+        rotation = rotation >= 3 ? 0 : rotation + 1; // rotation indicator
     }
 
     /**
@@ -202,7 +203,7 @@ public class Tile {
     // checks for direct connection through middle:
     private boolean isDirectConnected(GridDirection from, GridDirection to) {
         TerrainType middle = getTerrain(GridDirection.MIDDLE);
-        return (getTerrain(from).equals(middle) && getTerrain(to).equals(middle));
+        return getTerrain(from).equals(middle) && getTerrain(to).equals(middle);
     }
 
     // checks for indirect connection through the specified side from a specific start to a specific
@@ -212,9 +213,8 @@ public class Tile {
         GridDirection next;
         while (current != to) { // while not at destination:
             next = GridDirection.next(current, side); // get the next direction
-            if (getTerrain(current) != getTerrain(next)) { // check if still connected
-                return false;
-
+            if (getTerrain(current) != getTerrain(next)) {
+                return false; // check if still connected
             }
             current = next; // set new current
         }
@@ -225,7 +225,7 @@ public class Tile {
     private void loadImages(String tilePath, String fileType) {
         image = new ImageIcon[4]; // create image array.
         for (int i = 0; i <= 3; i++) { // for every image:
-            image[i] = new ImageIcon(tilePath + i + fileType); // load it from path.
+            image[i] = new ImageIcon(tilePath + i + fileType); // load from path.
         }
     }
 

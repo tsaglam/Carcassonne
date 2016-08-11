@@ -2,6 +2,8 @@ package carcassonne.model;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
@@ -15,10 +17,10 @@ public class Player {
 
     private static final int MEEPLE_COUNT = 5;
     private int points;
-    private HashMap<TerrainType, Integer> pointMap;
-    private LinkedList<Meeple> usedMeeples;
-    private LinkedList<Meeple> unusedMeeples;
-    private int number;
+    private Map<TerrainType, Integer> pointMap;
+    private List<Meeple> usedMeeples;
+    private List<Meeple> unusedMeeples;
+    private final int number;
 
     /**
      * Simple constructor.
@@ -85,7 +87,7 @@ public class Player {
      * @return true if he has at least one unused Meeple.
      */
     public boolean hasUnusedMeeples() {
-        return unusedMeeples.size() > 0;
+        return unusedMeeples.size() != 0;
     }
 
     /**
@@ -97,7 +99,7 @@ public class Player {
         if (unusedMeeples.isEmpty()) {
             throw new IllegalStateException("No unused meeples are left.");
         }
-        Meeple meeple = unusedMeeples.poll(); // get free meeple.
+        Meeple meeple = unusedMeeples.remove(0); // get free meeple.
         meeple.placeOn(tile); // place it.
         usedMeeples.add(meeple); // and put it to the used ones.
     }

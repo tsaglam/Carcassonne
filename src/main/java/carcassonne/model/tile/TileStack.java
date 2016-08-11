@@ -1,14 +1,18 @@
 package carcassonne.model.tile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The stack of tiles for a game.
  * @author Timur
  */
 public class TileStack {
-    ArrayList<Tile> tileList;
+    final private List<Tile> tileList;
 
+    /**
+     * Simple constructor.
+     */
     public TileStack() {
         tileList = new ArrayList<Tile>();
         fillStack();

@@ -7,7 +7,7 @@ import carcassonne.model.tile.Tile;
  * @author Timur
  */
 public class Meeple {
-    private Player owner;
+    private final Player owner;
     private Tile placementLocation;
 
     /**

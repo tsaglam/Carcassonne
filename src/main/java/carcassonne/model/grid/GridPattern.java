@@ -16,11 +16,11 @@ import carcassonne.model.tile.Tile;
  */
 public class GridPattern {
 
-    private TerrainType patternType;
+    private final TerrainType patternType;
     private List<Tile> tileList;
     private Map<Player, Integer> involvedPlayers;
-    private boolean isComplete;
-    private boolean isDisbursed;
+    private boolean complete;
+    private boolean disbursed;
 
     /**
      * Basic constructor.
@@ -29,8 +29,8 @@ public class GridPattern {
         this.patternType = patternType;
         tileList = new LinkedList<Tile>();
         involvedPlayers = new HashMap<Player, Integer>();
-        isComplete = false;
-        isDisbursed = false;
+        complete = false;
+        disbursed = false;
     }
 
     /**
@@ -63,7 +63,7 @@ public class GridPattern {
      * meeples on the pattern. Can only be called once in the lifetime of a GridPttern object.
      */
     public void disburse() {
-        if (isComplete && !isDisbursed) {
+        if (complete && !disbursed) {
             int maximum = Collections.max(involvedPlayers.values());
             double divider = 0;
             for (Player player : involvedPlayers.keySet()) {
@@ -76,7 +76,7 @@ public class GridPattern {
             for (Player player : involvedPlayers.keySet()) {
                 player.addPoints((int) Math.ceil(getSize() / divider), patternType);
             }
-            isDisbursed = true;
+            disbursed = true;
         }
     }
 
@@ -93,6 +93,6 @@ public class GridPattern {
      * @return true if complete.
      */
     public boolean isComplete() {
-        return isComplete;
+        return complete;
     }
 }

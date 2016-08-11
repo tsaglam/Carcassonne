@@ -1,8 +1,5 @@
 package carcassonne.model.grid;
 
-import static carcassonne.model.grid.GridDirection.directNeighbors;
-import static carcassonne.model.grid.GridDirection.neighbors;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,8 +12,8 @@ import carcassonne.model.tile.TileType;
  * @author Timur Saglam
  */
 public class Grid {
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
     private Tile[][] tile;
 
     /**
@@ -81,7 +78,7 @@ public class Grid {
         checkParameters(x, y);
         List<Tile> list = new LinkedList<Tile>();
         Tile neighbor;
-        for (GridDirection to : directNeighbors()) {
+        for (GridDirection to : GridDirection.directNeighbors()) {
             if (tile[x][y].isConnected(from, to) && from != to) { // if connected
                 neighbor = getNeighbour(x, y, to);
                 if (neighbor != null) { // if is on grid
@@ -102,7 +99,7 @@ public class Grid {
         checkParameters(x, y);
         List<Tile> list = new LinkedList<Tile>();
         Tile neighbor;
-        for (GridDirection direction : directNeighbors()) {
+        for (GridDirection direction : GridDirection.directNeighbors()) {
             neighbor = getNeighbour(x, y, direction);
             if (neighbor != null) {
                 list.add(neighbor);
@@ -139,7 +136,7 @@ public class Grid {
         checkParameters(x, y);
         List<Tile> list = new LinkedList<Tile>();
         Tile neighbor;
-        for (GridDirection direction : neighbors()) {
+        for (GridDirection direction : GridDirection.neighbors()) {
             neighbor = getNeighbour(x, y, direction);
             if (neighbor != null) {
                 list.add(neighbor);
@@ -228,10 +225,7 @@ public class Grid {
      * @return true if it is on the grid.
      */
     public boolean isOnGrid(int x, int y) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
-            return true;
-        }
-        return false;
+        return x >= 0 && x < width && y >= 0 && y < height;
     }
 
     /**
@@ -315,7 +309,7 @@ public class Grid {
         }
         int neighborCount = 0;
         Tile other;
-        for (GridDirection direction : directNeighbors()) { // for every direction
+        for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
             other = getNeighbour(x, y, direction);
             if (other != null) { // if there is a neighbor in the direction.
                 neighborCount++;
@@ -324,7 +318,7 @@ public class Grid {
                 }
             }
         }
-        return (neighborCount > 0 || freePlacement); // can be placed beneath another tile.
+        return neighborCount > 0 || freePlacement; // can be placed beneath another tile.
     }
 
     /**

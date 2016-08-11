@@ -7,8 +7,9 @@ import static carcassonne.model.tile.TerrainType.OTHER;
 import static carcassonne.model.tile.TerrainType.ROAD;
 
 /**
- * Factory class for building tile objects. Because of the large amount of different tile objects
- * this factory class enables easy tile creation with the <code>TileType</code> enum.
+ * Factory class for building tile objects. Because of the large amount of
+ * different tile objects this factory class enables easy tile creation with the
+ * <code>TileType</code> enum.
  * @author Timur Saglam
  */
 public final class TileFactory {
@@ -16,7 +17,8 @@ public final class TileFactory {
     private static final String FILE_TYPE = ".jpg";
 
     /**
-     * Factory method of the class. Produces a specific tile for a specific tile type.
+     * Factory method of the class. Produces a specific tile for a specific tile
+     * type.
      * @param type is the tile type.
      * @return the tile object.
      */
@@ -26,58 +28,50 @@ public final class TileFactory {
         }
         switch (type) {
         case CastleCenter:
-            return produce(CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, type);
+            return produce(type, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE);
         case CastleCenterEntry:
-            return produce(CASTLE, CASTLE, ROAD, CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, CASTLE, type);
+            return produce(type, CASTLE, CASTLE, ROAD, CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, CASTLE);
         case CastleCenterSide:
-            return produce(CASTLE, CASTLE, FIELDS, CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, CASTLE, type);
+            return produce(type, CASTLE, CASTLE, FIELDS, CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, CASTLE);
         case CastleEdge:
-            return produce(CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, type);
+            return produce(type, CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS);
         case CastleEdgeRoad:
-            return produce(CASTLE, CASTLE, ROAD, ROAD, CASTLE, FIELDS, FIELDS, FIELDS, ROAD, type);
+            return produce(type, CASTLE, CASTLE, ROAD, ROAD, CASTLE, FIELDS, FIELDS, FIELDS, ROAD);
         case CastleSides:
-            return produce(CASTLE, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, type);
+            return produce(type, CASTLE, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS);
         case CastleSidesEdge:
-            return produce(CASTLE, FIELDS, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, OTHER, FIELDS, type);
+            return produce(type, CASTLE, FIELDS, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, OTHER, FIELDS);
         case CastleTube:
-            return produce(FIELDS, CASTLE, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, CASTLE, type);
+            return produce(type, FIELDS, CASTLE, FIELDS, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, CASTLE);
         case CastleWall:
-            return produce(CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, type);
+            return produce(type, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS);
         case CastleWallCurveLeft:
-            return produce(CASTLE, FIELDS, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
+            return produce(type, CASTLE, FIELDS, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD);
         case CastleWallCurveRight:
-            return produce(CASTLE, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
+            return produce(type, CASTLE, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, ROAD);
         case CastleWallJunction:
-            return produce(CASTLE, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, type);
+            return produce(type, CASTLE, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER);
         case CastleWallRoad:
-            return produce(CASTLE, ROAD, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
+            return produce(type, CASTLE, ROAD, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD);
         case Monastery:
-            return produce(FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTERY, type);
+            return produce(type, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTERY);
         case MonasteryRoad:
-            return produce(FIELDS, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTERY, type);
+            return produce(type, FIELDS, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, MONASTERY);
         case Road:
-            return produce(ROAD, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
+            return produce(type, ROAD, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, ROAD);
         case RoadCurve:
-            return produce(FIELDS, FIELDS, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
+            return produce(type, FIELDS, FIELDS, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD);
         case RoadJunctionLarge:
-            return produce(ROAD, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, type);
+            return produce(type, ROAD, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER);
         case RoadJunctionSmall:
-            return produce(FIELDS, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, type);
+            return produce(type, FIELDS, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER);
         default:
-            return produce(OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, type);
+            return produce(type, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER);
         }
     }
 
     // fills array, actually creates tile object with type and path.
-    private static Tile produce(TerrainType top, TerrainType right, TerrainType bottom, TerrainType left, TerrainType topRight, TerrainType bottomRight, TerrainType bottomLeft, TerrainType topLeft,
-            TerrainType middle, TileType type) {
-        TerrainType[] terrain = { top, right, bottom, left, topRight, bottomRight, bottomLeft, topLeft, middle };
-        String path = FOLDER + type.name(); // generate path.
-        return new Tile(terrain, type, path, FILE_TYPE);
-    }
-    
-    // TODO (HIGHEST) use this!!!
-    private static Tile produce(TileType type, TerrainType... terrain ) {
+    private static Tile produce(TileType type, TerrainType... terrain) {
         String path = FOLDER + type.name(); // generate path.
         return new Tile(terrain, type, path, FILE_TYPE);
     }

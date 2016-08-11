@@ -12,7 +12,6 @@ public enum TerrainType {
      * @return an array of an array of CASTLE, ROAD, MONASTERY, FIELDS, OTHER.
      */
     public static TerrainType[] basicTerrain() {
-        TerrainType[] directions = { CASTLE, ROAD, MONASTERY, FIELDS, OTHER };
-        return directions;
+        return new TerrainType[]{ CASTLE, ROAD, MONASTERY, FIELDS, OTHER };
     }
 }

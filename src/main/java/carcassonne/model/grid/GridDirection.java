@@ -44,8 +44,7 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      * @return an array of TOP, RIGHT, BOTTOM and LEFT.
      */
     public static GridDirection[] directNeighbors() {
-        GridDirection[] directions = { TOP, RIGHT, BOTTOM, LEFT };
-        return directions;
+        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT };
     }
 
     /**
@@ -53,8 +52,7 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      * @return an array of TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT.
      */
     public static GridDirection[] indirectNeighbors() {
-        GridDirection[] directions = { TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
-        return directions;
+        return new GridDirection[] { TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
     }
 
     /**
@@ -62,8 +60,7 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      * @return an array of all directions except MIDDLE.
      */
     public static GridDirection[] neighbors() {
-        GridDirection[] directions = { TOP, RIGHT, BOTTOM, LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
-        return directions;
+        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
     }
 
     /**
@@ -109,8 +106,7 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      * @return an array of an array of TOP, RIGHT, BOTTOM, LEFT and MIDDLE.
      */
     public static GridDirection[] tilePositions() {
-        GridDirection[] directions = { TOP, RIGHT, BOTTOM, LEFT, MIDDLE };
-        return directions;
+        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT, MIDDLE };
     }
 
     /**
@@ -119,8 +115,7 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      * TOP_RIGHT, RIGHT and BOTTOM_RIGHT.
      */
     public static GridDirection[][] values2D() {
-        GridDirection[][] directions = { { TOP_LEFT, LEFT, BOTTOM_LEFT }, { TOP, MIDDLE, BOTTOM }, { TOP_RIGHT, RIGHT, BOTTOM_RIGHT } };
-        return directions;
+        return new GridDirection[][] { { TOP_LEFT, LEFT, BOTTOM_LEFT }, { TOP, MIDDLE, BOTTOM }, { TOP_RIGHT, RIGHT, BOTTOM_RIGHT } };
     }
 
     private static int bigOpposite(int ordinal) {
