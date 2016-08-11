@@ -65,7 +65,7 @@ public class MainGUI {
                     labelGrid[x][y].setIcon(defaultTile.getImage());
                 }
                 meepleGrid[x][y] = new JLabel(imageEmpty);
-            }
+            } // TODO (HIGH) fix rebuild bug.
         }
     }
 
@@ -112,10 +112,9 @@ public class MainGUI {
 
     private void buildLayeredPane() {
         layeredPane = new JLayeredPane();
-        OverlayLayout layout = new OverlayLayout(layeredPane);
-        layeredPane.setLayout(layout);
-        layeredPane.add(panelBottom, new Integer(0), 1);
-        layeredPane.add(panelTop, new Integer(0), 0);
+        layeredPane.setLayout(new OverlayLayout(layeredPane));
+        layeredPane.add(panelBottom, Integer.valueOf(0), 1);
+        layeredPane.add(panelTop, Integer.valueOf(0), 0);
     }
 
     private void buildMeepleGrid() {

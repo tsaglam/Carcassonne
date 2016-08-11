@@ -28,7 +28,7 @@ public class Tile {
      * @param type is the tile type enum value of the tile.
      * @param tilePath is the path to the tiles.
      * @param fileType is the file type of the tiles.
-     */
+     */ // TODO (HIGHEST) use varargs
     public Tile(TerrainType[] terrain, TileType type, String tilePath, String fileType) {
         if (type == null || terrain == null || fileType == null || tilePath == null) {
             throw new IllegalArgumentException("Parameters can't be null");
@@ -144,10 +144,8 @@ public class Tile {
      * Turns a tile 90 degree to the left.
      */
     public void rotateLeft() {
-        GridDirection[] directions = { GridDirection.TOP, GridDirection.LEFT, GridDirection.BOTTOM, GridDirection.RIGHT };
-        rotateTerrain(directions);
-        GridDirection[] directions2 = { GridDirection.TOP_RIGHT, GridDirection.TOP_LEFT, GridDirection.BOTTOM_LEFT, GridDirection.BOTTOM_RIGHT };
-        rotateTerrain(directions2);
+        rotateTerrain(GridDirection.TOP, GridDirection.LEFT, GridDirection.BOTTOM, GridDirection.RIGHT);
+        rotateTerrain(GridDirection.TOP_RIGHT, GridDirection.TOP_LEFT, GridDirection.BOTTOM_LEFT, GridDirection.BOTTOM_RIGHT );
         rotation = (rotation <= 0) ? 3 : rotation - 1; // rotation indicator
     }
 
@@ -193,7 +191,7 @@ public class Tile {
     }
 
     // maps TerrainType from terrain array to GridDirection with same index:
-    private void buildTerrainMap(TerrainType[] terrain) {
+    private void buildTerrainMap(TerrainType... terrain) {
         terrainMap = new HashMap<GridDirection, TerrainType>(5); // create terrain map.
         GridDirection[] tilePosition = GridDirection.values();
         for (int i = 0; i < terrain.length; i++) {
@@ -231,7 +229,7 @@ public class Tile {
         }
     }
 
-    private void rotateTerrain(GridDirection[] directions) {
+    private void rotateTerrain(GridDirection... directions) {
         TerrainType temporary = terrainMap.get(directions[directions.length - 1]); // get last one
         for (GridDirection direction : directions) { // rotate terrain through temporary:
             temporary = terrainMap.put(direction, temporary);

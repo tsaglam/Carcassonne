@@ -11,7 +11,7 @@ import static carcassonne.model.tile.TerrainType.ROAD;
  * this factory class enables easy tile creation with the <code>TileType</code> enum.
  * @author Timur Saglam
  */
-public class TileFactory {
+public final class TileFactory {
     private static final String FOLDER = "src/main/ressources/tiles/";
     private static final String FILE_TYPE = ".jpg";
 
@@ -58,7 +58,7 @@ public class TileFactory {
         case Road:
             return produce(ROAD, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
         case RoadCurve:
-            return produce(FIELDS, FIELDS, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, type);
+            return produce(FIELDS, FIELDS, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD, type);
         case RoadJunctionLarge:
             return produce(ROAD, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, type);
         case RoadJunctionSmall:
@@ -75,8 +75,14 @@ public class TileFactory {
         String path = FOLDER + type.name(); // generate path.
         return new Tile(terrain, type, path, FILE_TYPE);
     }
+    
+    // TODO (HIGHEST) use this!!!
+    private static Tile produce(TileType type, TerrainType... terrain ) {
+        String path = FOLDER + type.name(); // generate path.
+        return new Tile(terrain, type, path, FILE_TYPE);
+    }
 
-    public TileFactory() {
+    private TileFactory() {
         // PRIVATE CONSTRUCTOR, PREVENTS INSTANTIATION!
     }
 }
