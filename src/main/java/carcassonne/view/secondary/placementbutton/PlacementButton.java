@@ -1,4 +1,4 @@
-package carcassonne.view.secondary.placementButton;
+package carcassonne.view.secondary.placementbutton;
 
 import javax.swing.JButton;
 
@@ -20,6 +20,7 @@ public class PlacementButton extends JButton {
      * @param y sets the y coordinate.
      */
     public PlacementButton(MainController controller, int x, int y) {
+        super();
         setup(controller, x, y);
     }
 

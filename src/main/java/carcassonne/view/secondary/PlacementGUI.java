@@ -7,9 +7,7 @@ import javax.swing.ImageIcon;
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
-import carcassonne.model.tile.TileFactory;
-import carcassonne.model.tile.TileType;
-import carcassonne.view.secondary.placementButton.PlacementButton;
+import carcassonne.view.secondary.placementbutton.PlacementButton;
 
 /**
  * A GUI for the placement of Meeples on the Tile that was placed previously.
@@ -17,12 +15,6 @@ import carcassonne.view.secondary.placementButton.PlacementButton;
  */
 public class PlacementGUI extends SecondaryGUI {
     private static final long serialVersionUID = 1449264387665531286L;
-
-    public static void main(String[] args) { // TODO (LOWEST) remove main method sometime.
-        PlacementGUI g = new PlacementGUI(null);
-        g.setTile(TileFactory.create(TileType.CastleEdgeRoad), 0);
-    }
-
     private PlacementButton[][] button;
 
     /**

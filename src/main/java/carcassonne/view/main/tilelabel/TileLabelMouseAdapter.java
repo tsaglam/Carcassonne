@@ -1,4 +1,4 @@
-package carcassonne.view.main.tileLabel;
+package carcassonne.view.main.tilelabel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,9 +13,9 @@ import carcassonne.control.MainController;
  */
 public class TileLabelMouseAdapter extends MouseAdapter {
 
-    private MainController controller;
-    private int x;
-    private int y;
+    private final MainController controller;
+    private final int x;
+    private final int y;
 
     /**
      * Basic constructor with the label and the controller to set.
@@ -23,6 +23,7 @@ public class TileLabelMouseAdapter extends MouseAdapter {
      * @param controller sets the controller that is notified.
      */
     public TileLabelMouseAdapter(MainController controller, int x, int y) {
+        super();
         this.controller = controller;
         this.x = x;
         this.y = y;

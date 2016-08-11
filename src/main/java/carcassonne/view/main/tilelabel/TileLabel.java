@@ -1,4 +1,4 @@
-package carcassonne.view.main.tileLabel;
+package carcassonne.view.main.tilelabel;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;

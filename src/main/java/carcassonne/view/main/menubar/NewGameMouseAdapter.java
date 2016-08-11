@@ -1,4 +1,4 @@
-package carcassonne.view.main.menuBar;
+package carcassonne.view.main.menubar;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -8,13 +8,14 @@ import java.awt.event.MouseEvent;
  * @author Timur Saglam
  */
 public class NewGameMouseAdapter extends MouseAdapter {
-    private MainMenuBar menuBar;
+    private final MainMenuBar menuBar;
 
     /**
      * Simple constructor.
      * @param menuBar sets the controller
      */
     public NewGameMouseAdapter(MainMenuBar menuBar) {
+        super();
         this.menuBar = menuBar;
     }
 

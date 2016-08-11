@@ -1,4 +1,4 @@
-package carcassonne.view.main.menuBar;
+package carcassonne.view.main.menubar;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JMenu;

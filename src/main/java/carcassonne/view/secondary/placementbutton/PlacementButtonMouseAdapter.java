@@ -1,4 +1,4 @@
-package carcassonne.view.secondary.placementButton;
+package carcassonne.view.secondary.placementbutton;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,9 +14,9 @@ import carcassonne.model.grid.GridDirection;
  */
 public class PlacementButtonMouseAdapter extends MouseAdapter {
 
-    private GridDirection direction;
-    private MainController controller;
-    private PlacementButton button;
+    private final GridDirection direction;
+    private final MainController controller;
+    private final PlacementButton button;
 
     /**
      * Basic constructor with the button and the controller to set.
@@ -24,6 +24,7 @@ public class PlacementButtonMouseAdapter extends MouseAdapter {
      * @param controller sets the controller that is notified.
      */
     public PlacementButtonMouseAdapter(GridDirection direction, MainController controller, PlacementButton button) {
+        super();
         this.direction = direction;
         this.controller = controller;
         this.button = button;

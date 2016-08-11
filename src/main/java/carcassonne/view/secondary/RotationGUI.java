@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import carcassonne.control.MainController;
 import carcassonne.model.tile.Tile;
@@ -21,14 +20,6 @@ import carcassonne.model.tile.TileType;
  */
 public class RotationGUI extends SecondaryGUI {
     private static final long serialVersionUID = -5179683977081970564L;
-
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Simulate
-        // Windows
-        RotationGUI g = new RotationGUI(null); // TODO (LOWEST) remove main method sometime.
-        g.setTile(TileFactory.create(TileType.CastleEdgeRoad), 1);
-    }
-
     private JButton buttonSkip;
     private JLabel tileLabel;
     private JButton buttonRotateLeft;
@@ -61,7 +52,6 @@ public class RotationGUI extends SecondaryGUI {
         buttonRotateRight = new JButton(new ImageIcon("src/main/ressources/icons/right.png"));
         // TODO (HIGH) add GUI compatibility for windows
         if (!options.operatingSystemName.startsWith("Mac")) {
-            System.out.println("NOT MAC OS");
             buttonSkip.setBorder(null);
             buttonRotateLeft.setBorder(null);
             buttonRotateRight.setBorder(null);

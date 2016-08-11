@@ -1,4 +1,4 @@
-package carcassonne.view.main.menuBar;
+package carcassonne.view.main.menubar;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
  */
 public class MenuPlayersMouseAdapter extends MouseAdapter {
 
-    private MainMenuBar menuBar;
+    private final MainMenuBar menuBar;
     private int playerCount;
 
     /**
@@ -18,6 +18,7 @@ public class MenuPlayersMouseAdapter extends MouseAdapter {
      * @param playerCount sets the amount of players.s
      */
     public MenuPlayersMouseAdapter(MainMenuBar menuBar, int playerCount) {
+        super();
         this.menuBar = menuBar;
         this.playerCount = playerCount;
     }

@@ -87,7 +87,7 @@ public class Player {
      * @return true if he has at least one unused Meeple.
      */
     public boolean hasUnusedMeeples() {
-        return unusedMeeples.size() != 0;
+        return unusedMeeples.isEmpty();
     }
 
     /**

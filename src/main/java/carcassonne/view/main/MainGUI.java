@@ -20,8 +20,8 @@ import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
-import carcassonne.view.main.menuBar.MainMenuBar;
-import carcassonne.view.main.tileLabel.TileLabel;
+import carcassonne.view.main.menubar.MainMenuBar;
+import carcassonne.view.main.tilelabel.TileLabel;
 
 /**
  * The main GUI class, extending a JPanel.
@@ -35,7 +35,7 @@ public class MainGUI {
     private JPanel panelTop;
     private MainMenuBar menuBar;
     private GameOptions options;
-    private MainController controller;
+    private final MainController controller;
     private TileLabel[][] labelGrid;
     private JLabel[][] meepleGrid;
     private GridBagConstraints constraints;
