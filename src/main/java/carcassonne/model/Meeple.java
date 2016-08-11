@@ -1,5 +1,6 @@
 package carcassonne.model;
 
+import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 
 /**
@@ -9,6 +10,7 @@ import carcassonne.model.tile.Tile;
 public class Meeple {
     private final Player owner;
     private Tile placementLocation;
+    private GridDirection placementPosition;
 
     /**
      * Basic constructor.
@@ -22,8 +24,16 @@ public class Meeple {
      * Getter for the placement location.
      * @return the tile where the meeple is placed.
      */
-    public Tile getJobLocation() {
+    public Tile getPlacementLocation() {
         return placementLocation;
+    }
+    
+    /**
+     * Getter for the placement position.
+     * @return the position on the tile where the meeple is placed.
+     */
+    public GridDirection getPlacementPosition() {
+        return placementPosition;
     }
 
     /**
@@ -46,13 +56,14 @@ public class Meeple {
      * Places meeple on a specific tile. This method calls Tile.setMeeple().
      * @param tile is the specific tile.
      */
-    public void placeOn(Tile tile) {
+    public void placeOn(Tile tile, GridDirection position) {
         if (tile == null) {
             throw new IllegalArgumentException("Job location cannot be null.");
         } else if (isPlaced()) {
             throw new IllegalStateException("Meeple (player " + owner + ") is already in use.");
         }
         placementLocation = tile;
+        placementPosition = position;
         tile.setMeeple(this);
     }
 

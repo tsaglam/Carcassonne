@@ -111,6 +111,18 @@ public class Tile {
     }
 
     /**
+     * Checks whether the tile has a meeple on a specific position.
+     * @param position is the specific position.
+     * @return true if there is a tile on that position.
+     */
+    public boolean hasMeepleAt(GridDirection position) {
+        if (hasMeeple()) {
+            return meeple.getPlacementPosition() == position;
+        }
+        return false;
+    }
+
+    /**
      * Checks whether two parts of a tile are connected through same terrain.
      * @param from is the part to check from.
      * @param to is the terrain to check to.

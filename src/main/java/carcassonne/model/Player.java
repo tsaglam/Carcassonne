@@ -100,7 +100,7 @@ public class Player {
             throw new IllegalStateException("No unused meeples are left.");
         }
         Meeple meeple = unusedMeeples.remove(0); // get free meeple.
-        meeple.placeOn(tile); // place it.
+        meeple.placeOn(tile, positionOnTile); // place it.
         usedMeeples.add(meeple); // and put it to the used ones.
     }
 

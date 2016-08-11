@@ -16,11 +16,11 @@ import carcassonne.model.tile.Tile;
  */
 public class GridPattern {
 
-    private final TerrainType patternType;
-    private List<Tile> tileList;
-    private Map<Player, Integer> involvedPlayers;
-    private boolean complete;
-    private boolean disbursed;
+    protected final TerrainType patternType;
+    protected List<Tile> tileList;
+    protected Map<Player, Integer> involvedPlayers;
+    protected boolean complete;
+    protected boolean disbursed;
 
     /**
      * Basic constructor.
