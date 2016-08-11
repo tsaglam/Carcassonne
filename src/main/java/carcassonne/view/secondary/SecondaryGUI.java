@@ -38,6 +38,13 @@ public abstract class SecondaryGUI extends JPanel {
     }
 
     /**
+     * Hides the GUI.
+     */
+    public void disableFrame() {
+        frame.setVisible(false);
+    }
+
+    /**
      * Sets the tile of the GUI, updates the GUI and then makes it visible. Should be called to show
      * the GUI. The method implements the template method pattern using the method
      * <code>update()</code>.
@@ -71,13 +78,6 @@ public abstract class SecondaryGUI extends JPanel {
      */
     protected void finishFrame() {
         frame.pack();
-    }
-
-    /**
-     * Hides the GUI.
-     */
-    public void disableFrame() {
-        frame.setVisible(false);
     }
 
     /**
