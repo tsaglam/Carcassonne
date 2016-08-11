@@ -6,7 +6,7 @@ import carcassonne.control.MainController;
  * Carcassonne main class for starting the game itself.
  * @author Timur
  */
-public abstract class CarcasonneMain {
+public final class CarcasonneMain {
     /**
      * Main method for the Carcassonne game.
      * @param args are not used.
@@ -18,5 +18,8 @@ public abstract class CarcasonneMain {
         // e.printStackTrace();
         // }
         new MainController();
+    }
+    
+    private CarcasonneMain() {
     }
 }
