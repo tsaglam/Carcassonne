@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * The stack of tiles for a game.
- * @author Timur
+ * @author Timur Saglam
  */
 public class TileStack {
     final private List<Tile> tileList;

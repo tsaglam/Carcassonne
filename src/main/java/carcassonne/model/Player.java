@@ -11,7 +11,7 @@ import carcassonne.model.tile.Tile;
 
 /**
  * The class for the player objects. It manages the meeples and the points.
- * @author Timur
+ * @author Timur Saglam
  */
 public class Player {
 
@@ -87,7 +87,7 @@ public class Player {
      * @return true if he has at least one unused Meeple.
      */
     public boolean hasUnusedMeeples() {
-        return unusedMeeples.isEmpty();
+        return !unusedMeeples.isEmpty();
     }
 
     /**

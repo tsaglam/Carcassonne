@@ -1,7 +1,9 @@
 package carcassonne.model.grid;
 
 /**
- * @author Timur enum for the grid directions.
+ * Enumeration for grid directions and tile positions. It is used either to specify a direction on
+ * the grid from a specific tile, or to specify a position on a tile.
+ * @author Timur Saglam
  */
 public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Grid
 

@@ -11,7 +11,7 @@ import carcassonne.view.secondary.placementbutton.PlacementButton;
 
 /**
  * A GUI for the placement of Meeples on the Tile that was placed previously.
- * @author Timur
+ * @author Timur Saglam
  */
 public class PlacementGUI extends SecondaryGUI {
     private static final long serialVersionUID = 1449264387665531286L;

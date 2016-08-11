@@ -8,7 +8,7 @@ import carcassonne.model.tile.TileStack;
 /**
  * An object of the round class simulates a game round. It does not actively control the game. It
  * represents the round and its information in an object.
- * @author Timur
+ * @author Timur Saglam
  */
 public class Round {
 

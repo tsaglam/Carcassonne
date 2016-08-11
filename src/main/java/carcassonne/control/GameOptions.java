@@ -11,7 +11,7 @@ import carcassonne.model.tile.TileType;
 /**
  * Singleton that stores the game options and other information. There is only one option instance
  * at a time. The use of singletons is heavily discussed.
- * @author Timur
+ * @author Timur Saglam
  */
 public final class GameOptions {
     private static GameOptions instance;

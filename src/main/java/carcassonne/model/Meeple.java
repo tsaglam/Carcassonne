@@ -4,7 +4,7 @@ import carcassonne.model.tile.Tile;
 
 /**
  * Meeples are the token that a player places on the grid.
- * @author Timur
+ * @author Timur Saglam
  */
 public class Meeple {
     private final Player owner;

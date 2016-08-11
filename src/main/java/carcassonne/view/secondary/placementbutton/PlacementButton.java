@@ -8,7 +8,7 @@ import carcassonne.model.grid.GridDirection;
 /**
  * Is a simple class derived form JButton, which stores (additionally to the JButton functions) the
  * coordinates of the button on the button grid.
- * @author Timur
+ * @author Timur Saglam
  */
 public class PlacementButton extends JButton {
     private static final long serialVersionUID = -4580099806988033224L;

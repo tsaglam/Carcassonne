@@ -10,7 +10,7 @@ import carcassonne.model.grid.GridDirection;
  * The class is a specific mouse adapter for a <code>MeepleButton</code>. It connects the buttons
  * with the <code>MainController</code>. The class is a subclass of
  * <code>java.awt.event.MouseAdapter</code>.
- * @author Timur
+ * @author Timur Saglam
  */
 public class PlacementButtonMouseAdapter extends MouseAdapter {
 

@@ -16,7 +16,7 @@ import carcassonne.model.tile.TileType;
 /**
  * GUI class for the tile rotation. It lets the user look at the tile to place and rotate it both
  * right and left.
- * @author Timur
+ * @author Timur Saglam
  */
 public class RotationGUI extends SecondaryGUI {
     private static final long serialVersionUID = -5179683977081970564L;

@@ -12,7 +12,7 @@ import carcassonne.model.tile.Tile;
 
 /**
  * Super class for all other smaller GUI beneath the main GUI.
- * @author Timur
+ * @author Timur Saglam
  */
 public abstract class SecondaryGUI extends JPanel {
     private static final long serialVersionUID = 4056347951568551115L;

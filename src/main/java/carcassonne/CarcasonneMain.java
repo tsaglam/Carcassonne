@@ -4,7 +4,7 @@ import carcassonne.control.MainController;
 
 /**
  * Carcassonne main class for starting the game itself.
- * @author Timur
+ * @author Timur Saglam
  */
 public final class CarcasonneMain {
     /**

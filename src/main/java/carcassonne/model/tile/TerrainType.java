@@ -1,7 +1,8 @@
 package carcassonne.model.tile;
 
 /**
- * enum for the terrain type.
+ * Enumeration for the terrain type. Is used to specify the terrain of a tile on its different
+ * positions.
  * @author Timur Saglam
  */
 public enum TerrainType {
@@ -12,6 +13,6 @@ public enum TerrainType {
      * @return an array of an array of CASTLE, ROAD, MONASTERY, FIELDS, OTHER.
      */
     public static TerrainType[] basicTerrain() {
-        return new TerrainType[]{ CASTLE, ROAD, MONASTERY, FIELDS, OTHER };
+        return new TerrainType[] { CASTLE, ROAD, MONASTERY, FIELDS, OTHER };
     }
 }

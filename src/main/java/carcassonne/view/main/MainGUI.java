@@ -24,7 +24,7 @@ import carcassonne.view.main.menubar.MainMenuBar;
 import carcassonne.view.main.tilelabel.TileLabel;
 
 /**
- * The main GUI class, extending a JPanel.
+ * The main GUI class.
  * @author Timur Saglam
  */
 public class MainGUI {
