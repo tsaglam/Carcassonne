@@ -58,17 +58,17 @@ public class Grid {
     }
 
     // checks tile on a finished monastery pattern.
-    // TODO (HIGH) rename checks.
     private List<GridPattern> monasteryPatternCheck(Tile monasteryTile) {
         List<GridPattern> results = new LinkedList<GridPattern>();
-        // TODO (HIGHEST) check tile has meeple on middle?
-        TileType tileType = monasteryTile.getType();
-        if (tileType == TileType.Monastery || tileType == TileType.MonasteryRoad) {
-            List<Tile> neighbors = getNeighbors(monasteryTile);
-            if (neighbors.size() == 8) {
-                neighbors.add(monasteryTile); // this tile belongs also to the pattern.
-                GridPattern pattern = new MonasteryGridPattern(neighbors); // create tiles.
-                results.add(pattern);
+        if (monasteryTile.hasMeepleAt(GridDirection.MIDDLE)) {
+            TileType tileType = monasteryTile.getType();
+            if (tileType == TileType.Monastery || tileType == TileType.MonasteryRoad) {
+                List<Tile> neighbors = getNeighbors(monasteryTile);
+                if (neighbors.size() == 8) {
+                    neighbors.add(monasteryTile); // this tile belongs also to the pattern.
+                    GridPattern pattern = new MonasteryGridPattern(neighbors); // create tiles.
+                    results.add(pattern);
+                }
             }
         }
         return results;
