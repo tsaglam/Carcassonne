@@ -2,6 +2,8 @@ package carcassonne.model.tile;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -17,7 +19,7 @@ public class Tile {
     private Map<GridDirection, TerrainType> terrainMap;
     private ImageIcon[] image; // tile image
     private int rotation;
-    private Boolean tag;
+    private List<GridDirection> tagList;
     private final TileType type;
     private Meeple meeple;
     private int x;
@@ -39,7 +41,7 @@ public class Tile {
             throw new IllegalArgumentException("Image path is not valid: " + tilePath);
         }
         this.type = type;
-        tag = false;
+        tagList = new LinkedList<GridDirection>();
         meeple = null;
         buildTerrainMap(terrain);
         loadImages(tilePath, fileType);
@@ -141,8 +143,15 @@ public class Tile {
      * Method determines if tile recently was tagged by grid pattern checks.
      * @return true if tagged.
      */
-    public Boolean isTagged() {
-        return tag;
+    public Boolean isTagged(GridDirection direction) {
+        return tagList.contains(direction);
+    }
+
+    /**
+     * Removes all the tags from the tile.
+     */
+    public void removeTag() {
+        tagList.clear();
     }
 
     /**
@@ -196,11 +205,11 @@ public class Tile {
     }
 
     /**
-     * tag or untag the tile as recently checked by grid pattern checks.
-     * @param value is the value to set the tag to.
+     * tag the tile as recently checked by grid pattern checks for a specific direction.
+     * @param direction is the tag direction.
      */
-    public void setTag(Boolean value) {
-        tag = value;
+    public void setTag(GridDirection direction) {
+        tagList.add(direction);
     }
 
     // maps TerrainType from terrain array to GridDirection with same index:
