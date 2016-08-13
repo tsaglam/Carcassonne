@@ -11,7 +11,9 @@ import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
 
 /**
- * A pattern of connected terrain on tiles of the grid.
+ * A pattern of connected terrain on tiles of the grid. A grid pattern contains information about
+ * the tiles of the pattern and the players involved in the pattern. Also it counts the amount of
+ * meeples per player on the tiles of the pattern.
  * @author Timur Saglam
  */
 public class GridPattern {
