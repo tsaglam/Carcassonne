@@ -46,23 +46,22 @@ public class Grid {
                 neighbor = getNeighbour(x, y, direction);
                 // call checks on neighbors, starting from the tile position at the border to the
                 // starting tile(the opposite of the direction). Adds all results to the list:
-                results.addAll(monasteryCheck(neighbor));
+                results.addAll(monasteryPatternCheck(neighbor));
                 if (direction.isSmallerOrEquals(GridDirection.LEFT)) { // only direct neighbors:
-                    results.addAll(castleCheck(neighbor, GridDirection.opposite(direction)));
-                    results.addAll(roadCheck(neighbor, GridDirection.opposite(direction)));
+                    results.addAll(castlePatternCheck(neighbor, GridDirection.opposite(direction)));
+                    results.addAll(roadPatternCheck(neighbor, GridDirection.opposite(direction)));
                 }
             }
         }
-        results.addAll(monasteryCheck(placedTile)); // This check is called for all tile types.
-        return results;
-        //TODO (HIGHEST) getting double pattern through multiple tiles?
+        results.addAll(monasteryPatternCheck(placedTile)); // is called for all tile types.
+        return results; // TODO (HIGHEST) getting double pattern through multiple tiles?
     }
 
     // checks tile on a finished monastery pattern.
     // TODO (HIGH) rename checks.
-    private List<GridPattern> monasteryCheck(Tile monasteryTile) {
+    private List<GridPattern> monasteryPatternCheck(Tile monasteryTile) {
         List<GridPattern> results = new LinkedList<GridPattern>();
-        //TODO (HIGHEST) check tile has meeple on middle?
+        // TODO (HIGHEST) check tile has meeple on middle?
         TileType tileType = monasteryTile.getType();
         if (tileType == TileType.Monastery || tileType == TileType.MonasteryRoad) {
             List<Tile> neighbors = getNeighbors(monasteryTile);
@@ -76,14 +75,14 @@ public class Grid {
     }
 
     // checks tile on a finished castle pattern.
-    private List<GridPattern> castleCheck(Tile startingTile, GridDirection startingPoint) {
+    private List<GridPattern> castlePatternCheck(Tile startingTile, GridDirection startingPoint) {
         List<GridPattern> results = new LinkedList<GridPattern>();
         // TODO (HIGH) implement check.
         return results;
     }
 
     // checks tile on a finished road pattern.
-    private List<GridPattern> roadCheck(Tile startingTile, GridDirection startingPoint) {
+    private List<GridPattern> roadPatternCheck(Tile startingTile, GridDirection startingPoint) {
         List<GridPattern> results = new LinkedList<GridPattern>();
         // TODO (HIGH) implement check.
         return results;
@@ -167,14 +166,14 @@ public class Grid {
         }
         return list;
     }
-    
+
     /**
      * Creates a list of neighbors of a tile.
      * @param ofTile is the tile.
      * @return the list of neighbors
      */
     public List<Tile> getNeighbors(Tile ofTile) {
-       return getNeighbors(ofTile.getX(), ofTile.getY());
+        return getNeighbors(ofTile.getX(), ofTile.getY());
     }
 
     /**
