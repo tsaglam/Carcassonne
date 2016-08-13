@@ -36,34 +36,57 @@ public class Grid {
      * @param y is the y coordinate of the last placed tile.
      */
     public List<GridPattern> patternCheck(int x, int y) {
-        List<GridPattern> resultList = new LinkedList<GridPattern>();
-        // TODO (HIGH) use sub method results.
-        if (tile[x][y].getType() != TileType.Monastery) {
-            for (GridDirection direction : GridDirection.neighbors()) {
-                int neighborX = GridDirection.addX(x, direction);
-                int neighborY = GridDirection.addY(y, direction);
-                monasteryCheck(neighborX, neighborY); // TODO (HIGH) use results.
-                castleCheck(neighborX, neighborY); // TODO (HIGH) use results.
-                roadCheck(neighborX, neighborY); // TODO (HIGH) use results.
+        List<GridPattern> results = new LinkedList<GridPattern>();
+        Tile placedTile = tile[x][y];
+        Tile neighbor;
+        // If tile is a (pure) monastery, only the own tile has to be checked. therefore other
+        // checks are only called if the tile is not a monastery:
+        if (placedTile.getType() != TileType.Monastery) {
+            for (GridDirection direction : GridDirection.neighbors()) { // for every neighbor
+                neighbor = getNeighbour(x, y, direction);
+                // call checks on neighbors, starting from the tile position at the border to the
+                // starting tile(the opposite of the direction). Adds all results to the list:
+                results.addAll(monasteryCheck(neighbor));
+                if (direction.isSmallerOrEquals(GridDirection.LEFT)) { // only direct neighbors:
+                    results.addAll(castleCheck(neighbor, GridDirection.opposite(direction)));
+                    results.addAll(roadCheck(neighbor, GridDirection.opposite(direction)));
+                }
             }
         }
-        monasteryCheck(x, y); // TODO (HIGH) use results.
-        return resultList;
+        results.addAll(monasteryCheck(placedTile)); // This check is called for all tile types.
+        return results;
+        //TODO (HIGHEST) getting double pattern through multiple tiles?
     }
 
     // checks tile on a finished monastery pattern.
-    private void monasteryCheck(int x, int y) {
-        // TODO (HIGH) implement check.
+    // TODO (HIGH) rename checks.
+    private List<GridPattern> monasteryCheck(Tile monasteryTile) {
+        List<GridPattern> results = new LinkedList<GridPattern>();
+        //TODO (HIGHEST) check tile has meeple on middle?
+        TileType tileType = monasteryTile.getType();
+        if (tileType == TileType.Monastery || tileType == TileType.MonasteryRoad) {
+            List<Tile> neighbors = getNeighbors(monasteryTile);
+            if (neighbors.size() == 8) {
+                neighbors.add(monasteryTile); // this tile belongs also to the pattern.
+                GridPattern pattern = new MonasteryGridPattern(neighbors); // create tiles.
+                results.add(pattern);
+            }
+        }
+        return results;
     }
 
     // checks tile on a finished castle pattern.
-    private void castleCheck(int x, int y) {
+    private List<GridPattern> castleCheck(Tile startingTile, GridDirection startingPoint) {
+        List<GridPattern> results = new LinkedList<GridPattern>();
         // TODO (HIGH) implement check.
+        return results;
     }
 
     // checks tile on a finished road pattern.
-    private void roadCheck(int x, int y) {
+    private List<GridPattern> roadCheck(Tile startingTile, GridDirection startingPoint) {
+        List<GridPattern> results = new LinkedList<GridPattern>();
         // TODO (HIGH) implement check.
+        return results;
     }
 
     /**
@@ -127,7 +150,7 @@ public class Grid {
     }
 
     /**
-     * Creates a list of neighbors.
+     * Creates a list of neighbors of a tile on specific coordinates.
      * @param x is the x coordinate
      * @param y is the y coordinate
      * @return the list of neighbors
@@ -143,6 +166,15 @@ public class Grid {
             }
         }
         return list;
+    }
+    
+    /**
+     * Creates a list of neighbors of a tile.
+     * @param ofTile is the tile.
+     * @return the list of neighbors
+     */
+    public List<Tile> getNeighbors(Tile ofTile) {
+       return getNeighbors(ofTile.getX(), ofTile.getY());
     }
 
     /**
