@@ -138,7 +138,7 @@ public class Tile {
     }
 
     /**
-     * Checks whether this tile was already tagged. This is used for the structure checks.
+     * Method determines if tile recently was tagged by grid pattern checks.
      * @return true if tagged.
      */
     public Boolean isTagged() {
@@ -196,8 +196,8 @@ public class Tile {
     }
 
     /**
-     * Sets the tag of the tile.
-     * @param value is the value the tag gets set to.
+     * tag or untag the tile as recently checked by grid pattern checks.
+     * @param value is the value to set the tag to.
      */
     public void setTag(Boolean value) {
         tag = value;
