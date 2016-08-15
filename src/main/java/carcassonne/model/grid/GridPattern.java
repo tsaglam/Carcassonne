@@ -40,6 +40,9 @@ public class GridPattern {
      * @param tile is the tile to add.
      */
     public void add(Tile tile) {
+        if (complete) {
+            throw new IllegalStateException("Can't add a tile to a completed pattern.");
+        }
         tileList.add(tile);
         if (tile.hasMeeple()) {
             Player player = tile.getMeeple().getOwner();
@@ -65,20 +68,32 @@ public class GridPattern {
      * meeples on the pattern. Can only be called once in the lifetime of a GridPttern object.
      */
     public void disburse() {
-        if (complete && !disbursed) {
-            int maximum = Collections.max(involvedPlayers.values());
-            double divider = 0;
-            for (Player player : involvedPlayers.keySet()) {
-                if (involvedPlayers.get(player) == maximum) {
-                    divider++;
-                } else {
-                    involvedPlayers.remove(player);
+        if (!disbursed) {
+            if (complete) {
+                int maximum = Collections.max(involvedPlayers.values());
+                double divider = 0;
+                for (Player player : involvedPlayers.keySet()) {
+                    if (involvedPlayers.get(player) == maximum) {
+                        divider++;
+                    } else {
+                        involvedPlayers.remove(player);
+                    }
+                }
+                for (Player player : involvedPlayers.keySet()) {
+                    player.addPoints((int) Math.ceil(getSize() / divider), patternType);
                 }
             }
-            for (Player player : involvedPlayers.keySet()) {
-                player.addPoints((int) Math.ceil(getSize() / divider), patternType);
-            }
             disbursed = true;
+        }
+    }
+
+    /**
+     * Removes the tags of the tile of the pattern. Should be called if the check for this kind of
+     * pattern is complete.
+     */
+    public void removeTileTags() {
+        for (Tile tile : tileList) {
+            tile.removeTags();
         }
     }
 
