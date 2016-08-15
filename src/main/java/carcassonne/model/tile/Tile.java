@@ -15,7 +15,7 @@ import carcassonne.model.grid.GridDirection;
  * The tile of a grid.
  * @author Timur Saglam
  */
-public class Tile {
+public class Tile { // TODO (MEDIUM) build tile grid as graph.
     private Map<GridDirection, TerrainType> terrainMap;
     private ImageIcon[] image; // tile image
     private int rotation;
@@ -125,6 +125,16 @@ public class Tile {
     }
 
     /**
+     * Checks whether the tile has same terrain on a specific side to another tile.
+     * @param direction is the specific direction.
+     * @param other is the other tile.
+     * @return true if it has same terrain.
+     */
+    public boolean hasSameTerrain(GridDirection direction, Tile other) {
+        return getTerrain(direction) == other.getTerrain(GridDirection.opposite(direction));
+    }
+
+    /**
      * Checks whether two parts of a tile are connected through same terrain.
      * @param from is the part to check from.
      * @param to is the terrain to check to.
@@ -148,18 +158,18 @@ public class Tile {
     }
 
     /**
-     * Removes all the tags from the tile.
-     */
-    public void removeTags() {
-        tagList.clear();
-    }
-
-    /**
      * Removes and returns the meeple from the tile. Calls Meeple.removePlacement.
      */
     public void removeMeeple() {
         meeple.removePlacement();
         meeple = null;
+    }
+
+    /**
+     * Removes all the tags from the tile.
+     */
+    public void removeTags() {
+        tagList.clear();
     }
 
     /**
