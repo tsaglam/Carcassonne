@@ -150,7 +150,7 @@ public class Tile {
     /**
      * Removes all the tags from the tile.
      */
-    public void removeTag() {
+    public void removeTags() {
         tagList.clear();
     }
 
