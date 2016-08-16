@@ -30,6 +30,7 @@ public class MonasteryGridPattern extends GridPattern {
         buildPattern(startingTile, grid);
     }
 
+    // TODO (HIGHEST) FIX can't detect pattern of size 1
     private void buildPattern(Tile monasteryTile, Grid grid) {
         if (monasteryTile.hasMeepleAt(GridDirection.MIDDLE)) {
             TileType tileType = monasteryTile.getType();
