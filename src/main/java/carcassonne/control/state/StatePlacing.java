@@ -1,6 +1,7 @@
 package carcassonne.control.state;
 
 import carcassonne.control.MainController;
+import carcassonne.model.grid.GridPattern;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
@@ -45,9 +46,12 @@ public class StatePlacing extends AbstractControllerState {
         if (grid.place(x, y, tile)) {
             rotationGUI.disableFrame();
             tile.setPosition(x, y);
+            for (GridPattern pattern : grid.getInfluencedPatterns(x, y)) {
+                System.out.println(pattern); // TODO (MEDIUM) remove pattern debug output:
+                pattern.disburse();
+            }
             round.updateCurrentTile(tile);
             mainGUI.set(tile, x, y);
-            rotationGUI.disableFrame();
             changeState(StateManning.class);
             return true;
         }
