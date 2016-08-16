@@ -24,15 +24,19 @@ public class CastleAndRoadPattern extends GridPattern {
         } else if (startingTile == null || startingDirection == null || grid == null) {
             throw new IllegalArgumentException("Arguments can't be null");
         }
-        startingTile.setTag(startingDirection);
+        buildPattern(startingTile, startingDirection, grid);
+    }
+
+    private void buildPattern(Tile startingTile, GridDirection startingPoint, Grid grid) {
+        startingTile.setTag(startingPoint);
         add(startingTile);
-        if (patternCheckRecursion(startingTile, startingDirection, grid)) {
+        if (buildingRecursion(startingTile, startingPoint, grid) && grid.getNeighbour(startingTile, startingPoint) != null) {
             complete = true;
         }
     }
 
-    // TODO (HIGHEST) FIX recursion, wrongly finished patterns.
-    private boolean patternCheckRecursion(Tile startingTile, GridDirection startingPoint, Grid grid) {
+    // TODO (HIGHEST) FIX recursion, wrongly finished patterns. Double patterns. See above.
+    private boolean buildingRecursion(Tile startingTile, GridDirection startingPoint, Grid grid) {
         boolean isClosed = true;
         Tile neighbor;
         GridDirection oppositeDirection;
@@ -45,7 +49,7 @@ public class CastleAndRoadPattern extends GridPattern {
                         startingTile.setTag(direction);
                         neighbor.setTag(oppositeDirection); // mark as visited
                         add(neighbor); // add to pattern
-                        isClosed = patternCheckRecursion(neighbor, oppositeDirection, grid);
+                        isClosed = buildingRecursion(neighbor, oppositeDirection, grid);
                     }
                 } else {
                     isClosed = false; // open connection, can't be finished pattern.
