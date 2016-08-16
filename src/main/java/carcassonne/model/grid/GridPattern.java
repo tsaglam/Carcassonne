@@ -25,7 +25,7 @@ public class GridPattern {
     protected boolean disbursed;
 
     /**
-     * Basic constructor taking only a tile type. 
+     * Basic constructor taking only a tile type.
      * @param patternType is the type of the pattern.
      */
     protected GridPattern(TerrainType patternType) {
@@ -112,5 +112,10 @@ public class GridPattern {
      */
     public boolean isComplete() {
         return complete;
+    }
+
+    @Override
+    public String toString() {
+        return "GridPattern of type " + patternType + ", size " + getSize() + " and is complete: " + complete;
     }
 }
