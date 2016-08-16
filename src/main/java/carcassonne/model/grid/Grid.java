@@ -56,7 +56,7 @@ public class Grid {
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.directNeighbors()) {
             terrain = startingTile.getTerrain(direction); // get terrain type.
-            if (terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) {
+            if ((terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) && !startingTile.isTagged(direction)) {
                 results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
 
             }
