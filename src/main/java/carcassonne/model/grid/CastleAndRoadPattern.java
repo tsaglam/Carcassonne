@@ -21,13 +21,14 @@ public class CastleAndRoadPattern extends GridPattern {
         super(patternType);
         if (patternType != TerrainType.CASTLE && patternType != TerrainType.ROAD) {
             throw new IllegalArgumentException("Can only create CastleAndRoadPatterns from type castle or road");
-        } else if(startingTile == null || startingDirection == null || grid == null) {
+        } else if (startingTile == null || startingDirection == null || grid == null) {
             throw new IllegalArgumentException("Arguments can't be null");
         } else if (!patternCheckRecursion(startingTile, startingDirection, grid)) {
             complete = true;
         }
     }
 
+    // TODO (HIGHEST) fix recursion
     private boolean patternCheckRecursion(Tile startingTile, GridDirection startingPoint, Grid grid) {
         boolean hasOpenEnd = false;
         Tile neighbor;
