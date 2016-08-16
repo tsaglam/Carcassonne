@@ -25,9 +25,10 @@ public class GridPattern {
     protected boolean disbursed;
 
     /**
-     * Basic constructor.
+     * Basic constructor taking only a tile type. 
+     * @param patternType is the type of the pattern.
      */
-    public GridPattern(TerrainType patternType) {
+    protected GridPattern(TerrainType patternType) {
         this.patternType = patternType;
         tileList = new LinkedList<Tile>();
         involvedPlayers = new HashMap<Player, Integer>();
@@ -39,7 +40,7 @@ public class GridPattern {
      * Adds a tile to the pattern, saving the tile, the owner of a potential Meeple on the tile.
      * @param tile is the tile to add.
      */
-    public void add(Tile tile) {
+    protected void add(Tile tile) {
         if (complete) {
             throw new IllegalStateException("Can't add a tile to a completed pattern.");
         }

@@ -37,82 +37,33 @@ public class Grid {
      * @param y is the y coordinate of the last placed tile.
      */
     public List<GridPattern> patternCheck(int x, int y) {
-        // TODO call all three list creations
+        checkParameters(x, y);
         List<GridPattern> results = new LinkedList<GridPattern>();
-        Tile placedTile = tile[x][y];
-        results.addAll(createPatternList(placedTile, TerrainType.CASTLE));
-        results.addAll(createPatternList(placedTile, TerrainType.ROAD));
-        results.addAll(monasteryPatternCheck(placedTile)); // is called for all tile types.
-        // TODO (HIGHEST) check neighbors
-        for (GridPattern pattern : results) { // TODO KEEP THIS
-            pattern.removeTileTags(); // remove tags of all tiles in every pattern.
-        }
-        return results; // TODO (HIGHEST) getting double pattern through multiple tiles?
-    }
-
-    // checks tile on a finished monastery pattern.
-    private List<GridPattern> monasteryPatternCheck(Tile monasteryTile) {
-        List<GridPattern> results = new LinkedList<GridPattern>();
-        if (monasteryTile.hasMeepleAt(GridDirection.MIDDLE)) {
-            TileType tileType = monasteryTile.getType();
-            if (tileType == TileType.Monastery || tileType == TileType.MonasteryRoad) {
-                List<Tile> neighbors = getNeighbors(monasteryTile);
-                if (neighbors.size() == 8) {
-                    neighbors.add(monasteryTile); // this tile belongs also to the pattern.
-                    GridPattern pattern = new MonasteryGridPattern(neighbors); // create tiles.
-                    results.add(pattern);
-                }
+        if (isOccupied(x, y)) {
+            // TODO call all three list creations
+            Tile placedTile = tile[x][y];
+            results.addAll(createPatternList(placedTile));
+            //results.addAll(monasteryPatternCheck(placedTile));
+            // TODO (HIGHEST) monastery check neighbors
+            for (GridPattern pattern : results) {
+                pattern.removeTileTags(); // remove tags of all tiles in every pattern.
             }
         }
         return results;
     }
 
+
+
     // checks tile on a finished castle pattern.
-    private List<GridPattern> createPatternList(Tile startingTile, TerrainType type) {
+    private List<GridPattern> createPatternList(Tile startingTile) {
+        // TODO integrate this into monastery pattern
         List<GridPattern> results = new LinkedList<GridPattern>();
+        TerrainType terrain;
         for (GridDirection direction : GridDirection.directNeighbors()) {
-            results.add(createPattern(startingTile, direction, type));
-        }
-        return results;
-    }
-
-    // checks tile on a finished castle pattern.
-    private GridPattern createPattern(Tile startingTile, GridDirection startingDirection, TerrainType type) {
-        GridPattern pattern = new GridPattern(TerrainType.CASTLE);
-        pattern.add(startingTile);
-        Tile neighbor = getNeighbour(startingTile, startingDirection);
-        patternCheckRecursion(neighbor, GridDirection.opposite(startingDirection), pattern);
-        return pattern;
-    }
-
-    private boolean patternCheckRecursion(Tile startingTile, GridDirection startingPoint, GridPattern pattern) {
-        boolean hasOpenEnd = false;
-        Tile neighbor;
-        GridDirection oppositeDirection;
-        for (GridDirection direction : GridDirection.directNeighbors()) { // for direction
-            if (startingTile.isConnected(startingPoint, direction)) { // if is connected side
-                neighbor = getNeighbour(startingTile, direction); // get the neighbor
-                if (neighbor != null) { // if the neighbor exists
-                    oppositeDirection = GridDirection.opposite(direction);
-                    if (!neighbor.isTagged(oppositeDirection)) { // if neighbor not visited yet
-                        neighbor.setTag(startingPoint); // mark as visited
-                        pattern.add(neighbor); // add to pattern
-                        hasOpenEnd = patternCheckRecursion(neighbor, oppositeDirection, pattern);
-                    }
-                } else {
-                    hasOpenEnd = true; // open connection, can't be finished pattern.
-                }
+            terrain = startingTile.getTerrain(direction);
+            if (terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) {
+                results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
             }
-        }
-        return hasOpenEnd;
-    }
-
-    // checks tile on a finished road pattern.
-    private List<GridPattern> roadPatternCheck(Tile startingTile, GridDirection startingPoint) {
-        List<GridPattern> results = new LinkedList<GridPattern>();
-        // TODO (HIGH) implement check.
-        for (GridPattern pattern : results) {
-            pattern.removeTileTags(); // remove tags of all tiles in every pattern.
         }
         return results;
     }
