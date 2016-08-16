@@ -23,14 +23,17 @@ public class CastleAndRoadPattern extends GridPattern {
             throw new IllegalArgumentException("Can only create CastleAndRoadPatterns from type castle or road");
         } else if (startingTile == null || startingDirection == null || grid == null) {
             throw new IllegalArgumentException("Arguments can't be null");
-        } else if (!patternCheckRecursion(startingTile, startingDirection, grid)) {
+        }
+        startingTile.setTag(startingDirection);
+        add(startingTile);
+        if (patternCheckRecursion(startingTile, startingDirection, grid)) {
             complete = true;
         }
     }
 
-    // TODO (HIGHEST) fix recursion
+    // TODO (HIGHEST) FIX recursion, wrongly finished patterns.
     private boolean patternCheckRecursion(Tile startingTile, GridDirection startingPoint, Grid grid) {
-        boolean hasOpenEnd = false;
+        boolean isClosed = true;
         Tile neighbor;
         GridDirection oppositeDirection;
         for (GridDirection direction : GridDirection.directNeighbors()) { // for direction
@@ -39,16 +42,17 @@ public class CastleAndRoadPattern extends GridPattern {
                 if (neighbor != null) { // if the neighbor exists
                     oppositeDirection = GridDirection.opposite(direction);
                     if (!neighbor.isTagged(oppositeDirection)) { // if neighbor not visited yet
-                        neighbor.setTag(startingPoint); // mark as visited
+                        startingTile.setTag(direction);
+                        neighbor.setTag(oppositeDirection); // mark as visited
                         add(neighbor); // add to pattern
-                        hasOpenEnd = patternCheckRecursion(neighbor, oppositeDirection, grid);
+                        isClosed = patternCheckRecursion(neighbor, oppositeDirection, grid);
                     }
                 } else {
-                    hasOpenEnd = true; // open connection, can't be finished pattern.
+                    isClosed = false; // open connection, can't be finished pattern.
                 }
             }
         }
-        return hasOpenEnd;
+        return isClosed;
     }
 
 }
