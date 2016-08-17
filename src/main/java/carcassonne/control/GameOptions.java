@@ -17,34 +17,16 @@ public final class GameOptions {
     private static GameOptions instance;
 
     /**
-     * is the width value of the resolution.
+     * Access method for the GameProperties instance. Secures that only one property object can
+     * exist at a time.
+     * @return the instance.
      */
-    public final int resolutionWidth;
-
-    /**
-     * is the height value of the resolution.
-     */
-    public final int resolutionHeight;
-
-    /**
-     * is the height value of the resolution without the taskbar height.
-     */
-    public final int resolutionHeightWindow;
-
-    /**
-     * is the name of the operating system.
-     */
-    public final String operatingSystemName;
-
-    /**
-     * maximal amount of players.
-     */
-    public final int maximalPlayers;
-
-    /**
-     * width and height of a tile in pixels.
-     */
-    public final int tileSize;
+    public static GameOptions getInstance() {
+        if (instance == null) {
+            instance = new GameOptions();
+        }
+        return instance;
+    }
 
     /**
      * Font type of the button.
@@ -62,24 +44,9 @@ public final class GameOptions {
     public final Color colorGUIsmall;
 
     /**
-     * The width of the grid in tiles.
+     * The tile type of the foundation.
      */
-    public int gridWidth;
-
-    /**
-     * The height of the grid in tiles.
-     */
-    public int gridHeight;
-
-    /**
-     * The width of the grid in pixel.
-     */
-    public int gridResolutionWidth;
-
-    /**
-     * The height of the grid in pixel.
-     */
-    public int gridResolutionHeight;
+    public TileType foundationType;
 
     /**
      * The x coordinates of the grid center.
@@ -92,14 +59,60 @@ public final class GameOptions {
     public int gridCenterY;
 
     /**
-     * The tile type of the foundation.
+     * The height of the grid in tiles.
      */
-    public TileType foundationType;
+    public int gridHeight;
+
+    /**
+     * The height of the grid in pixel.
+     */
+    public int gridResolutionHeight;
+
+    /**
+     * The width of the grid in pixel.
+     */
+    public int gridResolutionWidth;
+
+    /**
+     * The width of the grid in tiles.
+     */
+    public int gridWidth;
+
+    /**
+     * maximal amount of players.
+     */
+    public final int maximalPlayers;
+
+    /**
+     * is the name of the operating system.
+     */
+    public final String operatingSystemName;
+
+    /**
+     * is the height value of the resolution.
+     */
+    public final int resolutionHeight;
+
+    /**
+     * is the height value of the resolution without the taskbar height.
+     */
+    public final int resolutionHeightWindow;
+
+    /**
+     * is the width value of the resolution.
+     */
+    public final int resolutionWidth;
+
+    /**
+     * width and height of a tile in pixels.
+     */
+    public final int tileSize;
+
+    private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(254, 220, 50) };
+    
+    private final Color[] playerColorLight = { new Color(143, 143, 214), new Color(220, 129, 134), new Color(98, 164, 105), new Color(230, 213, 125) };
 
     private final int taskBarHeight;
-
-    // Original dark colors: (30, 26, 197), (151, 4, 12), (14, 119, 25) and (254, 220, 50).
-    private final Color[] playerColor = { new Color(143, 143, 214), new Color(220, 129, 134), new Color(98, 164, 105), new Color(230, 213, 125) };
 
     /**
      * Simple constructor that loads the information.
@@ -135,25 +148,6 @@ public final class GameOptions {
         foundationType = TileType.CastleWallRoad;
     }
 
-    public Color getPlayerColor(int playerNumber) {
-        if (playerNumber < 0 || playerNumber >= playerColor.length) {
-            throw new IllegalArgumentException(playerNumber + " is a illegal player number for a player color.");
-        }
-        return playerColor[playerNumber];
-    }
-    
-    /**
-     * Access method for the GameProperties instance. Secures that only one property object can
-     * exist at a time.
-     * @return the instance.
-     */
-    public static GameOptions getInstance() {
-        if (instance == null) {
-            instance = new GameOptions();
-        }
-        return instance;
-    }
-
     /**
      * Builds the path to the image of a specific meeple of a player.
      * @param type is the type of terrain the meeple occupies.
@@ -166,6 +160,22 @@ public final class GameOptions {
             return pathBase + ".png";
         } else {
             return pathBase + "_" + playerNumber + ".png";
+        }
+    }
+
+    public Color getPlayerColor(int playerNumber) {
+        check(playerNumber);
+        return playerColor[playerNumber];
+    }
+
+    public Color getPlayerColorLight(int playerNumber) {
+        check(playerNumber);
+        return playerColorLight[playerNumber];
+    }
+
+    private void check(int playerNumber) {
+        if (playerNumber < 0 || playerNumber >= playerColorLight.length) {
+            throw new IllegalArgumentException(playerNumber + " is a illegal player number for a player color.");
         }
     }
 }
