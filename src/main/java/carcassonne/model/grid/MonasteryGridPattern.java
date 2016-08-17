@@ -30,19 +30,16 @@ public class MonasteryGridPattern extends GridPattern {
         buildPattern(startingTile, grid);
     }
 
-    // TODO (HIGHEST) FIX can't detect pattern of size 1
     private void buildPattern(Tile monasteryTile, Grid grid) {
-        if (monasteryTile.hasMeepleAt(GridDirection.MIDDLE)) {
-            TileType tileType = monasteryTile.getType();
-            if (tileType == TileType.Monastery || tileType == TileType.MonasteryRoad) {
-                List<Tile> neighbors = grid.getNeighbors(monasteryTile);
-                super.add(monasteryTile); // add monastery
-                for (Tile neighbor : neighbors) {
-                    add(neighbor); // add neighbors.
-                }
-                if (neighbors.size() == 8) {
-                    complete = true;
-                }
+        TileType tileType = monasteryTile.getType();
+        if (tileType == TileType.Monastery || tileType == TileType.MonasteryRoad) {
+            List<Tile> neighbors = grid.getNeighbors(monasteryTile);
+            super.add(monasteryTile); // add monastery
+            for (Tile neighbor : neighbors) {
+                add(neighbor); // add neighbors.
+            }
+            if (neighbors.size() == 8) {
+                complete = true;
             }
         }
     }
