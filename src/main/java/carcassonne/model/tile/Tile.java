@@ -222,6 +222,11 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
         tagList.add(direction);
     }
 
+    @Override
+    public String toString() {
+        return type + "Tile[coordinates: (" + x + "|" + y + "), rotation: " + rotation + ", terrain" + terrainMap.toString() + ", Meeple: " + meeple + "]";
+    }
+
     // maps TerrainType from terrain array to GridDirection with same index:
     private void buildTerrainMap(TerrainType... terrain) {
         terrainMap = new HashMap<GridDirection, TerrainType>(5); // create terrain map.

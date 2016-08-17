@@ -27,7 +27,7 @@ public class Meeple {
     public Tile getPlacementLocation() {
         return placementLocation;
     }
-    
+
     /**
      * Getter for the placement position.
      * @return the position on the tile where the meeple is placed.
@@ -75,4 +75,8 @@ public class Meeple {
         owner.returnMeeple(this); // return me.
     }
 
+    @Override
+    public String toString() {
+        return "Meeple[placed: " + isPlaced() + ", position: " + placementPosition + ", owner: " + owner + "]";
+    }
 }

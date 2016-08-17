@@ -45,7 +45,7 @@ public class Player {
      * @param points are the points to add.
      */
     public void addPoints(int amount, TerrainType pointType) {
-        int pointsToAdd = reweightPoints(amount, pointType);
+        int pointsToAdd = calculatePoints(amount, pointType);
         pointMap.put(pointType, pointMap.get(pointType) + pointsToAdd);
         points += pointsToAdd;
     }
@@ -56,7 +56,7 @@ public class Player {
      * @param pointType is the type of points, which influences the multiplier.
      * @return the multiplied points.
      */
-    private int reweightPoints(int amount, TerrainType pointType) {
+    private int calculatePoints(int amount, TerrainType pointType) {
         if (pointType == TerrainType.CASTLE) {
             return amount * 2;
         } else if (pointType == TerrainType.FIELDS) {
@@ -113,6 +113,11 @@ public class Player {
             throw new IllegalArgumentException("This meeple is not in the used list.");
         }
         usedMeeples.add(meeple); // put in unused list if it was previously used.
+    }
+
+    @Override
+    public String toString() {
+        return "Player[number: " + number + ", points: " + points + ", used meeples: " + usedMeeples.size() + ", unused meeples: " + unusedMeeples.size() + "]";
     }
 
 }
