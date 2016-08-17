@@ -20,32 +20,28 @@ public class CastleAndRoadPattern extends GridPattern {
     public CastleAndRoadPattern(Tile startingTile, GridDirection startingDirection, TerrainType patternType, Grid grid) {
         super(patternType);
         checkArgs(startingTile, startingDirection, patternType, grid);
-        buildPattern(startingTile, startingDirection, grid);
+        startingTile.setTag(startingDirection); // initial tag
+        add(startingTile); // initial tile
+        complete = buildPattern(startingTile, startingDirection, grid); // recusive algorithm.
     }
 
-    private void buildPattern(Tile tile, GridDirection startingPosition, Grid grid) {
-        tile.setTag(startingPosition);
-        add(tile);
-        complete = buildingRecursion(tile, startingPosition, grid);
-    }
-
-    private boolean buildingRecursion(Tile startingTile, GridDirection startingPoint, Grid grid) {
+    private boolean buildPattern(Tile startingTile, GridDirection startingPoint, Grid grid) {
         boolean isClosed = true;
         Tile neighbor;
         GridDirection oppositeDirection;
         for (GridDirection direction : GridDirection.directNeighbors()) { // for direction
             if (startingTile.isConnected(startingPoint, direction)) { // if is connected side
                 neighbor = grid.getNeighbour(startingTile, direction); // get the neighbor
-                if (neighbor != null) { // if the neighbor exists
+                if (neighbor == null) { // if it has no neighbor
+                    isClosed = false; // open connection, can't be finished pattern.
+                } else {
                     oppositeDirection = GridDirection.opposite(direction);
-                    if (!neighbor.isTagged(oppositeDirection)) { // if neighbor not visited yet
+                    if (neighbor.isNotTagged(oppositeDirection)) { // if neighbor not visited yet
                         startingTile.setTag(direction);
                         neighbor.setTag(oppositeDirection); // mark as visited
                         add(neighbor); // add to pattern
-                        isClosed &= buildingRecursion(neighbor, oppositeDirection, grid);
+                        isClosed &= buildPattern(neighbor, oppositeDirection, grid);
                     }
-                } else {
-                    isClosed = false; // open connection, can't be finished pattern.
                 }
             }
         }

@@ -157,7 +157,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      */
     public Boolean isNotConnectedToTag(GridDirection tilePosition) {
         for (GridDirection otherPosition : GridDirection.neighbors()) {
-            if (isConnected(tilePosition, otherPosition) && isTagged(otherPosition)) {
+            if (isConnected(tilePosition, otherPosition) && tagList.contains(otherPosition)) {
                 return false;
             }
         }
@@ -165,12 +165,13 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     }
 
     /**
-     * Method determines if tile recently was tagged by grid pattern checks on a specific position.
+     * Method determines if tile recently was tagged by grid pattern checks on a specific position
+     * or not.
      * @param tilePosition is the specific position.
-     * @return true if tagged.
+     * @return true if it was not tagged.
      */
-    public Boolean isTagged(GridDirection tilePosition) {
-        return tagList.contains(tilePosition);
+    public Boolean isNotTagged(GridDirection tilePosition) {
+        return !tagList.contains(tilePosition);
     }
 
     /**
