@@ -56,9 +56,10 @@ public class Grid {
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.directNeighbors()) {
             terrain = startingTile.getTerrain(direction); // get terrain type.
-            if ((terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) && !startingTile.isTagged(direction)) {
-                results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
-
+            if ((terrain != TerrainType.FIELDS)) { // exclude fields
+                if (startingTile.isNotConnectedToTag(direction)) {
+                    results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
+                }
             }
         }
         // then check for monastery patterns:
