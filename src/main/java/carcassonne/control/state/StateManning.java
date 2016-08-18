@@ -3,6 +3,7 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.grid.GridPattern;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
@@ -48,6 +49,11 @@ public class StateManning extends AbstractControllerState {
             Tile tile = round.getCurrentTile();
             player.placeMeepleAt(tile, position);
             mainGUI.setMeeple(tile, position, player);
+            for (GridPattern pattern : grid.getInfluencedPatterns(tile.getX(), tile.getY())) {
+                System.out.println(pattern); // TODO (MEDIUM) remove pattern debug output:
+                pattern.disburse();
+                controller.updateScores(round.getScores());
+            }
             placementGUI.disableFrame();
             round.nextTurn();
             changeState(StatePlacing.class);
