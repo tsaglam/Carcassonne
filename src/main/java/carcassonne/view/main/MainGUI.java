@@ -21,6 +21,7 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 import carcassonne.view.main.menubar.MainMenuBar;
+import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.main.tilelabel.TileLabel;
 
 /**
@@ -34,6 +35,7 @@ public class MainGUI {
     private JPanel panelBottom;
     private JPanel panelTop;
     private MainMenuBar menuBar;
+    private Scoreboard scoreboard;
     private GameOptions options;
     private final MainController controller;
     private TileLabel[][] labelGrid;
@@ -45,7 +47,8 @@ public class MainGUI {
     private int meepleGridHeight;
     private Tile defaultTile;
 
-    public MainGUI(MainController controller) {
+    public MainGUI(Scoreboard scoreboard, MainController controller) {
+        this.scoreboard = scoreboard;
         this.controller = controller;
         options = GameOptions.getInstance();
         buildPanelBack();
@@ -99,7 +102,7 @@ public class MainGUI {
 
     private void buildFrame() {
         frame = new JFrame();
-        menuBar = new MainMenuBar(controller);
+        menuBar = new MainMenuBar(scoreboard, controller);
         frame.setJMenuBar(menuBar);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());

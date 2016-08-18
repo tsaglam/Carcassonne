@@ -1,6 +1,7 @@
 package carcassonne.view.main.menubar;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -27,12 +28,13 @@ public class MainMenuBar extends JMenuBar {
     /**
      * Simple constructor
      */
-    public MainMenuBar(MainController controller) {
+    public MainMenuBar(Scoreboard scoreboard, MainController controller) {
         super();
         this.controller = controller;
         playerCount = 2;
         buildMenuGame();
         buildMenuOptions();
+        add(scoreboard);
     }
 
     /**
@@ -86,5 +88,12 @@ public class MainMenuBar extends JMenuBar {
         menuOptions = new JMenu("Options");
         menuOptions.add(menuPlayers);
         add(menuOptions);
+    }
+
+    // adds labels of the scoreboard to the menu bar.
+    private void add(Scoreboard scoreboard) {
+        for (JLabel label : scoreboard.getLabels()) {
+            add(label);
+        }
     }
 }
