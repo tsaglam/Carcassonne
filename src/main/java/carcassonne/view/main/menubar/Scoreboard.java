@@ -19,8 +19,10 @@ public class Scoreboard {
         options = GameOptions.getInstance();
         scoreLabel = new JLabel[options.maximalPlayers];
         for (int i = 0; i < scoreLabel.length; i++) {
-            scoreLabel[i] = new JLabel("Player " + (i + 1) + ": 0P    ");
+            scoreLabel[i] = new JLabel();
+            update(i, 0);
             scoreLabel[i].setForeground(options.getPlayerColor(i));
+            scoreLabel[i].setVisible(false);
         }
 
     }
@@ -31,7 +33,11 @@ public class Scoreboard {
      * @param points is the amount of points the players has.
      */
     public void update(int playerNumber, int points) {
-        scoreLabel[playerNumber] = new JLabel("Player " + playerNumber + 1 + ": " + points + "P    ");
+        String playerName = "Player ";
+        for (int i = 0; i <= playerNumber; i++) {
+            playerName += "I";
+        }
+        scoreLabel[playerNumber].setText("[" + playerName + ": " + points + "]    ");
     }
 
     /**
@@ -39,9 +45,8 @@ public class Scoreboard {
      * @param playerCount is the amount of players to show labels for.
      */
     public void rebuild(int playerCount) {
-        int disabledPlayers = options.maximalPlayers - playerCount;
-        for (int i = disabledPlayers - 1; i < scoreLabel.length; i++) {
-            scoreLabel[i].setVisible(false);
+        for (int i = 0; i < playerCount; i++) {
+            scoreLabel[i].setVisible(true);
         }
     }
 
