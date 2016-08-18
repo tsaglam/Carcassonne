@@ -12,26 +12,26 @@ import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
 /**
- * The MainController is the central class of the game. The game is started with
- * the instantiation of this class. The class gets the user input from the
- * <code>MouseAdapter</code> in the <code>view package</code>, and controls both
- * the <code>view</code> and the <code>model</code>. The <code>controller</code>
- * package also contains the state machine, which consists out of the
- * <code>MainController</code> class and the state classes. This system
- * implements the model/view/controller architecture, which is not 100% formally
- * implemented. The reason for this is that in the user input is made in Swing
- * through the <code>MouseAdapters</code>, which belong to the <code>view</code>
- * package.
+ * The MainController is the central class of the game. The game is started with the instantiation
+ * of this class. The class gets the user input from the <code>MouseAdapter</code> in the
+ * <code>view package</code>, and controls both the <code>view</code> and the <code>model</code>.
+ * The <code>controller</code> package also contains the state machine, which consists out of the
+ * <code>MainController</code> class and the state classes. This system implements the
+ * model/view/controller architecture, which is not 100% formally implemented. The reason for this
+ * is that in the user input is made in Swing through the <code>MouseAdapters</code>, which belong
+ * to the <code>view</code> package.
  * @author Timur Saglam
  */
 public class MainController {
     private final MainGUI mainGUI;
     private final RotationGUI rotationGUI;
     private final PlacementGUI placementGUI;
+    private final Scoreboard scoreboard;
     private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
     private AbstractControllerState currentState;
 
@@ -39,7 +39,8 @@ public class MainController {
      * Basic constructor. Creates the view and the model of the game.
      */
     public MainController() {
-        mainGUI = new MainGUI(this);
+        scoreboard = new Scoreboard();
+        mainGUI = new MainGUI(scoreboard, this);
         rotationGUI = new RotationGUI(this);
         placementGUI = new PlacementGUI(this);
         stateMap = new HashMap<Class<? extends AbstractControllerState>, AbstractControllerState>();
@@ -76,14 +77,25 @@ public class MainController {
     }
 
     /**
-     * Updates the round and the grid of every state after a new round has been
-     * started.
+     * Updates the round and the grid of every state after a new round has been started.
      * @param newRound sets the new round.
      * @param newGrid sets the new grid.
      */
     public void updateStates(Round newRound, Grid newGrid) {
+        scoreboard.rebuild(newRound.getPlayerCount());
         for (AbstractControllerState state : stateMap.values()) {
             state.updateState(newRound, newGrid);
+        }
+    }
+
+    /**
+     * Updates the round and the grid of every state after a new round has been started.
+     * @param newRound sets the new round.
+     * @param newGrid sets the new grid.
+     */
+    public void updateScores(int[] scores) {
+        for (int i = 0; i < scores.length; i++) {
+            scoreboard.update(i, scores[i]);
         }
     }
 

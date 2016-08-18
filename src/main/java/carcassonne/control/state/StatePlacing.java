@@ -46,10 +46,6 @@ public class StatePlacing extends AbstractControllerState {
         if (grid.place(x, y, tile)) {
             rotationGUI.disableFrame();
             tile.setPosition(x, y);
-            for (GridPattern pattern : grid.getInfluencedPatterns(x, y)) {
-                System.out.println(pattern); // TODO (MEDIUM) remove pattern debug output:
-                pattern.disburse();
-            }
             round.updateCurrentTile(tile);
             mainGUI.set(tile, x, y);
             changeState(StateManning.class);
