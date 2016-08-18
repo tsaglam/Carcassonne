@@ -6,6 +6,7 @@ import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.secondary.GameMessage;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -69,7 +70,7 @@ public abstract class AbstractControllerState {
      * @return true if a new game was started.
      */
     public boolean newGame(int playerCount) {
-        System.err.println("You can't start a new game right now.");
+        GameMessage.showWarning("You can't start a new game right now.");
         return false;
     }
 
@@ -78,7 +79,7 @@ public abstract class AbstractControllerState {
      * @return true if the game was aborted.
      */
     public boolean abortGame() {
-        System.err.println("You can't abort a game right now.");
+        GameMessage.showWarning("You can't abort a game right now.");
         return false;
     }
 
@@ -89,7 +90,7 @@ public abstract class AbstractControllerState {
      * @return true if tile was placed.
      */
     public boolean placeTile(int x, int y) {
-        System.err.println("You can't place a tile right now.");
+        GameMessage.showWarning("You can't place a tile right now.");
         return false;
     }
 
@@ -98,7 +99,7 @@ public abstract class AbstractControllerState {
      * @return true if turn was skipped.
      */
     public boolean skip() {
-        System.err.println("You can't place a tile right now.");
+        GameMessage.showWarning("You can't place a tile right now.");
         return false;
     }
 
@@ -107,7 +108,7 @@ public abstract class AbstractControllerState {
      * @return true if Meeple was placed.
      */
     public boolean placeMeeple(GridDirection position) {
-        System.err.println("You can't place meeple tile right now.");
+        GameMessage.showWarning("You can't place meeple tile right now.");
         return false;
     }
 }
