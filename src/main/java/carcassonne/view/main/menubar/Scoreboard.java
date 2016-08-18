@@ -19,7 +19,7 @@ public class Scoreboard {
         options = GameOptions.getInstance();
         scoreLabel = new JLabel[options.maximalPlayers];
         for (int i = 0; i < scoreLabel.length; i++) {
-            scoreLabel[i] = new JLabel("Player " + i + ": 0");
+            scoreLabel[i] = new JLabel("Player " + (i + 1) + ": 0P    ");
             scoreLabel[i].setForeground(options.getPlayerColor(i));
         }
 
@@ -31,7 +31,7 @@ public class Scoreboard {
      * @param points is the amount of points the players has.
      */
     public void update(int playerNumber, int points) {
-        scoreLabel[playerNumber] = new JLabel("Player " + playerNumber + ": " + points);
+        scoreLabel[playerNumber] = new JLabel("Player " + playerNumber + 1 + ": " + points + "P    ");
     }
 
     /**
