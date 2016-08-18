@@ -12,8 +12,8 @@ import carcassonne.model.tile.TileStack;
  */
 public class Round {
 
-	private Grid grid;
-	private Player[] player;
+    private Grid grid;
+    private Player[] player;
     private int activePlayer;
     private int playerCount;
     private int turnCounter;
@@ -52,13 +52,25 @@ public class Round {
     }
 
     public Player getActivePlayer() {
-  		return player[activePlayer];
-  	}
+        return player[activePlayer];
+    }
+
+    /**
+     * Returns the array of scores of the players.
+     * @return the scores.
+     */
+    public int[] getScores() {
+        int[] scores = new int[playerCount];
+        for (int i = 0; i < playerCount; i++) {
+            scores[i] = player[i].getPoints();
+        }
+        return scores;
+    }
 
     public Tile getCurrentTile() {
-  		return currentTile;
-  	}
-    
+        return currentTile;
+    }
+
     /**
      * Setter for the current tile.
      * @param newTile is the new Tile to set.
@@ -70,16 +82,24 @@ public class Round {
     public Player getPlayer(int playerNumber) {
         return player[playerNumber];
     }
-    
+
     public int getPlayerCount() {
-  		return playerCount;
-  	}
+        return playerCount;
+    }
 
-  	public TileStack getTileStack() {
-  		return tileStack;
-  	}
+    /**
+     * Getter for the turn counter.
+     * @return the turn counter
+     */
+    public int getTurnCounter() {
+        return turnCounter;
+    }
 
-  	/**
+    public TileStack getTileStack() {
+        return tileStack;
+    }
+
+    /**
      * Checks whether the game round is NOT over. A game round is over if the grid is full or the
      * stack of tiles is empty (no tiles left).
      * @return true if the game is NOT over.
@@ -88,7 +108,7 @@ public class Round {
         return !isOver();
     }
 
-  	/**
+    /**
      * Checks whether the game round is over. A game round is over if the grid is full or the stack
      * of tiles is empty (no tiles left).
      * @return true if the game is over.
@@ -96,8 +116,8 @@ public class Round {
     public boolean isOver() {
         return grid.isFull() || tileStack.isEmpty();
     }
-  	
-  	/**
+
+    /**
      * Method the starts the turn of the next player a draws a tile from the stack.
      */
     public void nextTurn() {
@@ -109,8 +129,8 @@ public class Round {
         currentTile = tileStack.drawTile();
     }
 
-  	public void setCurrentTile(Tile currentTile) {
-  		this.currentTile = currentTile;
-  	}
+    public void setCurrentTile(Tile currentTile) {
+        this.currentTile = currentTile;
+    }
 
 }
