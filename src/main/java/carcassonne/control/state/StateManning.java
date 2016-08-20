@@ -46,6 +46,12 @@ public class StateManning extends AbstractControllerState {
         startNextTurn();
         return true;
     }
+    
+    @Override
+    public boolean skip() {
+        startNextTurn();
+        return true;
+    }
 
     // places meeple on grid an shows meeple on the GUI.
     private void placeAndShowMeeple(Tile tile, GridDirection position) {
