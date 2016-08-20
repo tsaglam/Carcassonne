@@ -12,13 +12,13 @@ import carcassonne.model.tile.TileStack;
  */
 public class Round {
 
+    private int activePlayer;
+    private Tile currentTile;
     private Grid grid;
     private Player[] player;
-    private int activePlayer;
     private int playerCount;
-    private int turnCounter;
     private TileStack tileStack;
-    private Tile currentTile;
+    private int turnCounter;
 
     /**
      * Simple constructor that creates the grid, the tile stack and the players.
@@ -34,48 +34,14 @@ public class Round {
         turnCounter = 1;
     }
 
-    /**
-     * creates the player objects and sets the first player as active player.
-     * @param playerCount is the number of players in the range of [1,
-     * <code>GameOptions.maximalPlayers]</code>.
-     */
-    private void createPlayers() {
-        if (playerCount <= 1 || playerCount > GameOptions.getInstance().maximalPlayers) {
-            throw new IllegalArgumentException(playerCount + " is not a valid player count");
-        }
-        player = new Player[playerCount]; // initialize the player array.
-        for (int i = 0; i < player.length; i++) {
-            player[i] = new Player(i); // create the players.
-        }
-        activePlayer = 0; // set first player as active.
-
-    }
-
     public Player getActivePlayer() {
         return player[activePlayer];
-    }
-    
-    /**
-     * Returns the score of a specific player.
-     * @param playerNumberis the number of the specific player.
-     * @return the score.
-     */
-    public int getScore(int playerNumber) {
-            return player[playerNumber].getPoints();
     }
 
     public Tile getCurrentTile() {
         return currentTile;
     }
-
-    /**
-     * Setter for the current tile.
-     * @param newTile is the new Tile to set.
-     */
-    public void updateCurrentTile(Tile newTile) {
-        currentTile = newTile;
-    }
-
+    
     public Player getPlayer(int playerNumber) {
         return player[playerNumber];
     }
@@ -85,15 +51,24 @@ public class Round {
     }
 
     /**
+     * Returns the score of a specific player.
+     * @param playerNumberis the number of the specific player.
+     * @return the score.
+     */
+    public int getScore(int playerNumber) {
+            return player[playerNumber].getPoints();
+    }
+
+    public TileStack getTileStack() {
+        return tileStack;
+    }
+
+    /**
      * Getter for the turn counter.
      * @return the turn counter
      */
     public int getTurnCounter() {
         return turnCounter;
-    }
-
-    public TileStack getTileStack() {
-        return tileStack;
     }
 
     /**
@@ -128,6 +103,31 @@ public class Round {
 
     public void setCurrentTile(Tile currentTile) {
         this.currentTile = currentTile;
+    }
+
+    /**
+     * Setter for the current tile.
+     * @param newTile is the new Tile to set.
+     */
+    public void updateCurrentTile(Tile newTile) {
+        currentTile = newTile;
+    }
+
+    /**
+     * creates the player objects and sets the first player as active player.
+     * @param playerCount is the number of players in the range of [1,
+     * <code>GameOptions.maximalPlayers]</code>.
+     */
+    private void createPlayers() {
+        if (playerCount <= 1 || playerCount > GameOptions.getInstance().maximalPlayers) {
+            throw new IllegalArgumentException(playerCount + " is not a valid player count");
+        }
+        player = new Player[playerCount]; // initialize the player array.
+        for (int i = 0; i < player.length; i++) {
+            player[i] = new Player(i); // create the players.
+        }
+        activePlayer = 0; // set first player as active.
+
     }
 
 }
