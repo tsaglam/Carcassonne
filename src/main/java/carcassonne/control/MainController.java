@@ -44,10 +44,10 @@ public class MainController {
         rotationGUI = new RotationGUI(this);
         placementGUI = new PlacementGUI(this);
         stateMap = new HashMap<Class<? extends AbstractControllerState>, AbstractControllerState>();
-        currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI);
-        new StateManning(this, mainGUI, rotationGUI, placementGUI);
-        new StatePlacing(this, mainGUI, rotationGUI, placementGUI);
-        new StateGameOver(this, mainGUI, rotationGUI, placementGUI);
+        currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, scoreboard);
+        new StateManning(this, mainGUI, rotationGUI, placementGUI, scoreboard);
+        new StatePlacing(this, mainGUI, rotationGUI, placementGUI, scoreboard);
+        new StateGameOver(this, mainGUI, rotationGUI, placementGUI, scoreboard);
     }
 
     /**
@@ -85,17 +85,6 @@ public class MainController {
         scoreboard.rebuild(newRound.getPlayerCount());
         for (AbstractControllerState state : stateMap.values()) {
             state.updateState(newRound, newGrid);
-        }
-    }
-
-    /**
-     * Updates the round and the grid of every state after a new round has been started.
-     * @param newRound sets the new round.
-     * @param newGrid sets the new grid.
-     */
-    public void updateScores(int[] scores) {
-        for (int i = 0; i < scores.length; i++) {
-            scoreboard.update(i, scores[i]);
         }
     }
 

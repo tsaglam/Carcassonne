@@ -54,17 +54,14 @@ public class Round {
     public Player getActivePlayer() {
         return player[activePlayer];
     }
-
+    
     /**
-     * Returns the array of scores of the players.
-     * @return the scores.
+     * Returns the score of a specific player.
+     * @param playerNumberis the number of the specific player.
+     * @return the score.
      */
-    public int[] getScores() {
-        int[] scores = new int[playerCount];
-        for (int i = 0; i < playerCount; i++) {
-            scores[i] = player[i].getPoints();
-        }
-        return scores;
+    public int getScore(int playerNumber) {
+            return player[playerNumber].getPoints();
     }
 
     public Tile getCurrentTile() {

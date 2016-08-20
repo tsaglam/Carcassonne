@@ -1,9 +1,9 @@
 package carcassonne.control.state;
 
 import carcassonne.control.MainController;
-import carcassonne.model.grid.GridPattern;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -20,8 +20,8 @@ public class StatePlacing extends AbstractControllerState {
      * @param rotationGUI sets the rotation GUI.
      * @param placementGUI sets the placement GUI.
      */
-    public StatePlacing(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
-        super(controller, mainGUI, rotationGUI, placementGUI);
+    public StatePlacing(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
+        super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
     }
 
     /**

@@ -6,6 +6,7 @@ import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.secondary.GameMessage;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
@@ -22,6 +23,7 @@ public abstract class AbstractControllerState {
     protected PlacementGUI placementGUI;
     protected Round round;
     protected Grid grid;
+    protected Scoreboard scoreboard;
     protected GameOptions options;
 
     /**
@@ -29,11 +31,12 @@ public abstract class AbstractControllerState {
      * state at the controller and calls the <code>entry()</code> method.
      * @param controller sets the controller.
      */
-    public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+    public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
         this.controller = controller;
         this.mainGUI = mainGUI;
         this.rotationGUI = rotationGUI;
         this.placementGUI = placementGUI;
+        this.scoreboard = scoreboard;
         options = GameOptions.getInstance();
         controller.registerState(this);
     }

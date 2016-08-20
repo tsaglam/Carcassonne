@@ -6,6 +6,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -22,8 +23,8 @@ public class StateManning extends AbstractControllerState {
      * @param rotationGUI sets the rotation GUI.
      * @param placementGUI sets the placement GUI.
      */
-    public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
-        super(controller, mainGUI, rotationGUI, placementGUI);
+    public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
+        super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
     }
 
     /**
@@ -52,7 +53,7 @@ public class StateManning extends AbstractControllerState {
             for (GridPattern pattern : grid.getInfluencedPatterns(tile.getX(), tile.getY())) {
                 System.out.println(pattern); // TODO (MEDIUM) remove pattern debug output:
                 pattern.disburse();
-                controller.updateScores(round.getScores());
+                updateScores();
             }
             placementGUI.disableFrame();
             round.nextTurn();
@@ -60,6 +61,15 @@ public class StateManning extends AbstractControllerState {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Updates the round and the grid of every state after a new round has been started.
+     */
+    private void updateScores() {
+        for (int player = 0; player < round.getPlayerCount(); player++) {
+            scoreboard.update(player, round.getScore(player));
+        }
     }
 
     /**
