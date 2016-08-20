@@ -45,7 +45,6 @@ public class StatePlacing extends AbstractControllerState {
         Tile tile = rotationGUI.getTile();
         if (grid.place(x, y, tile)) {
             round.updateCurrentTile(tile);
-            rotationGUI.disableFrame();
             mainGUI.set(tile, x, y);
             changeState(StateManning.class);
             return true;
