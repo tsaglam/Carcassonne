@@ -44,9 +44,8 @@ public class StatePlacing extends AbstractControllerState {
     public boolean placeTile(int x, int y) {
         Tile tile = rotationGUI.getTile();
         if (grid.place(x, y, tile)) {
-            rotationGUI.disableFrame();
-            tile.setPosition(x, y);
             round.updateCurrentTile(tile);
+            rotationGUI.disableFrame();
             mainGUI.set(tile, x, y);
             changeState(StateManning.class);
             return true;
@@ -66,6 +65,7 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     public boolean abortGame() {
+        scoreboard.disable();
         changeState(StateGameOver.class);
         return true;
     }

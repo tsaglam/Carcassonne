@@ -269,10 +269,10 @@ public class Grid {
         checkParameters(x, y);
         checkParameters(tile);
         if (isPlaceable(x, y, tile, false)) {
+            tile.setPosition(x, y);
             this.tile[x][y] = tile;
             return true; // tile was successfully placed.
         }
-
         return false; // tile can't be placed, spot is occupied.
     }
 
