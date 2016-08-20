@@ -34,7 +34,8 @@ public class GridPattern {
         involvedPlayers = new HashMap<Player, Integer>();
         complete = false;
         disbursed = false;
-    }
+    } // TODO (HIGH) Fix: Needs method that removes the meeples from the tiles and gives information
+      // about meeple removal to the GUI
 
     /**
      * Adds a tile to the pattern, saving the tile, the owner of a potential Meeple on the tile.
@@ -44,7 +45,7 @@ public class GridPattern {
         if (complete) {
             throw new IllegalStateException("Can't add a tile to a completed pattern.");
         }
-        tileList.add(tile);
+        tileList.add(tile); // TODO (HIGH) Fix: only meeples from the right terrain are counted.
         if (tile.hasMeeple()) {
             Player player = tile.getMeeple().getOwner();
             if (involvedPlayers.containsKey(player)) {
