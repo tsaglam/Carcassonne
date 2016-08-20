@@ -7,6 +7,7 @@ import carcassonne.model.grid.GridPattern;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
+import carcassonne.view.secondary.GameMessage;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -28,39 +29,44 @@ public class StateManning extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#entry()
+     * @see carcassonne.control.state.AbstractControllerState#abortGame()
      */
     @Override
-    protected void entry() {
-        placementGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
-    }
-
-    /**
-     * @see carcassonne.control.state.AbstractControllerState#exit()
-     */
-    @Override
-    protected void exit() {
-        placementGUI.disableFrame();
+    public boolean abortGame() {
+        scoreboard.disable();
+        changeState(StateGameOver.class);
+        return true;
     }
 
     @Override
     public boolean placeMeeple(GridDirection position) {
+        Tile tile = round.getCurrentTile();
+        placeAndShowMeeple(tile, position);
+        processGridPatterns(tile);
+        startNextTurn();
+        return true;
+    }
+
+    // places meeple on grid an shows meeple on the GUI.
+    private void placeAndShowMeeple(Tile tile, GridDirection position) {
         Player player = round.getActivePlayer();
-        if (player.hasUnusedMeeples()) {
-            Tile tile = round.getCurrentTile();
-            player.placeMeepleAt(tile, position);
-            mainGUI.setMeeple(tile, position, player);
-            for (GridPattern pattern : grid.getInfluencedPatterns(tile.getX(), tile.getY())) {
-                System.out.println(pattern); // TODO (MEDIUM) remove pattern debug output:
-                pattern.disburse();
-                updateScores();
-            }
-            placementGUI.disableFrame();
-            round.nextTurn();
-            changeState(StatePlacing.class);
-            return true;
+        player.placeMeepleAt(tile, position);
+        mainGUI.setMeeple(tile, position, player);
+    }
+
+    // gives the players the points they earned.
+    private void processGridPatterns(Tile tile) {
+        for (GridPattern pattern : grid.getInfluencedPatterns(tile.getX(), tile.getY())) {
+            System.out.println(pattern); // TODO (MEDIUM) remove pattern debug output:
+            pattern.disburse();
+            updateScores();
         }
-        return false;
+    }
+
+    // starts the next turn and changes the state to state placing.
+    private void startNextTurn() {
+        round.nextTurn();
+        changeState(StatePlacing.class);
     }
 
     /**
@@ -73,12 +79,24 @@ public class StateManning extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#abortGame()
+     * @see carcassonne.control.state.AbstractControllerState#entry()
      */
     @Override
-    public boolean abortGame() {
-        changeState(StateGameOver.class);
-        return true;
+    protected void entry() {
+        if (round.getActivePlayer().hasUnusedMeeples()) {
+            placementGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
+        } else {
+            GameMessage.showMessage("You have no Meeples left. Regain meeples by Completion to place Meepels again. ");
+            startNextTurn();
+        }
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#exit()
+     */
+    @Override
+    protected void exit() {
+        placementGUI.disableFrame();
     }
 
 }
