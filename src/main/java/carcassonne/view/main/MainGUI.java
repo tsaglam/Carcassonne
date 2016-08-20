@@ -67,8 +67,9 @@ public class MainGUI {
                 if (x < gridWidth && y < gridHeight) {
                     labelGrid[x][y].setIcon(defaultTile.getImage());
                 }
-                meepleGrid[x][y] = new JLabel(imageEmpty);
-            } // TODO (HIGH) fix rebuild bug.
+                meepleGrid[x][y].setIcon(imageEmpty);
+                frame.repaint();
+            }
         }
     }
 
