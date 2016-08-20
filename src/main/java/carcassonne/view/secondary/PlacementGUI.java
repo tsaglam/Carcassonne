@@ -1,6 +1,8 @@
 package carcassonne.view.secondary;
 
 import java.awt.GridBagConstraints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,16 +27,15 @@ public class PlacementGUI extends SecondaryGUI {
      */
     public PlacementGUI(MainController controller) {
         super(controller, "");
-        buildContent();
+        constraints.fill = GridBagConstraints.BOTH;
+        osAdaption();
+        buildButtonSkip();
+        buildButtonGrid();
         finishFrame();
     }
 
     // build button grid
     private void buildButtonGrid() {
-        buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
-        buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
-        constraints.gridwidth = 3;
-        add(buttonSkip, constraints);
         constraints.gridwidth = 1;
         String[][] toolTipText = { { "top left", "top", "top right" }, { "left", "middle", "right" }, { "bottom left", "bottom", "bottom right" } };
         button = new PlacementButton[3][3];
@@ -50,11 +51,17 @@ public class PlacementGUI extends SecondaryGUI {
         }
     }
 
-    // build the GUI content
-    private void buildContent() {
-        constraints.fill = GridBagConstraints.BOTH;
-        osAdaption();
-        buildButtonGrid();
+    private void buildButtonSkip() {
+        buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
+        buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
+        constraints.gridwidth = 3;
+        add(buttonSkip, constraints);
+        buttonSkip.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controller.requestSkip();
+            }
+        });
     }
 
     // adapts gui for ms windows
