@@ -3,6 +3,7 @@ package carcassonne.view.secondary;
 import java.awt.GridBagConstraints;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
@@ -16,6 +17,7 @@ import carcassonne.view.secondary.placementbutton.PlacementButton;
 public class PlacementGUI extends SecondaryGUI {
     private static final long serialVersionUID = 1449264387665531286L;
     private PlacementButton[][] button;
+    private JButton buttonSkip;
 
     /**
      * Simple constructor which uses the constructor of the <code>SmallGUI</code>.
@@ -27,27 +29,40 @@ public class PlacementGUI extends SecondaryGUI {
         finishFrame();
     }
 
-    // build the GUI content
-    private void buildContent() {
+    // build button grid
+    private void buildButtonGrid() {
+        buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
+        buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
+        constraints.gridwidth = 3;
+        add(buttonSkip, constraints);
+        constraints.gridwidth = 1;
         String[][] toolTipText = { { "top left", "top", "top right" }, { "left", "middle", "right" }, { "bottom left", "bottom", "bottom right" } };
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.ipadx = 0;
-        constraints.ipady = 0;
-        if (!options.operatingSystemName.startsWith("Mac")) {
-            constraints.ipady = 15;
-            constraints.weightx = 0.5;
-            constraints.weightx = 0.5;
-        }
         button = new PlacementButton[3][3];
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 button[x][y] = new PlacementButton(controller, x, y);
                 button[x][y].setToolTipText("Place Meeple on the " + toolTipText[x][y] + " of the tile.");
-                button[x][y].setBorder(null);
+                button[x][y].setBorder(null); // TODO (MEDIUM) analyse this line.
                 constraints.gridx = x;
-                constraints.gridy = y;
+                constraints.gridy = y + 1;
                 add(button[x][y], constraints);
             }
+        }
+    }
+
+    // build the GUI content
+    private void buildContent() {
+        constraints.fill = GridBagConstraints.BOTH;
+        osAdaption();
+        buildButtonGrid();
+    }
+
+    // adapts gui for ms windows
+    private void osAdaption() {
+        if (!options.operatingSystemName.startsWith("Mac")) {
+            constraints.ipady = 15;
+            constraints.weightx = 0.5;
+            constraints.weightx = 0.5;
         }
     }
 
