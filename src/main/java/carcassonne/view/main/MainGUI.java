@@ -14,6 +14,7 @@ import javax.swing.OverlayLayout;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
+import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
@@ -46,11 +47,13 @@ public class MainGUI {
     private int meepleGridWidth;
     private int meepleGridHeight;
     private Tile defaultTile;
+    private final ImageIcon imageEmpty;
 
     public MainGUI(Scoreboard scoreboard, MainController controller) {
         this.scoreboard = scoreboard;
         this.controller = controller;
         options = GameOptions.getInstance();
+        imageEmpty = new ImageIcon(options.buildImagePath(TerrainType.OTHER, -1));
         buildPanelBack();
         buildPanelFront();
         buildLayeredPane();
@@ -61,7 +64,6 @@ public class MainGUI {
      * Rebuilds the label grid and the meeple grid if the game should be restarted.
      */
     public void rebuildGrids() {
-        ImageIcon imageEmpty = new ImageIcon(options.buildImagePath(TerrainType.OTHER, -1));
         for (int y = 0; y < meepleGridHeight; y++) {
             for (int x = 0; x < meepleGridWidth; x++) {
                 if (x < gridWidth && y < gridHeight) {
@@ -71,6 +73,22 @@ public class MainGUI {
                 frame.repaint();
             }
         }
+    }
+
+    /**
+     * Removes meeple on a tile on the grid.
+     * @param tile is the tile where the meeple gets drawn.
+     * @param position is the position on the tile where the meeple gets drawn.
+     * @param owner is the player that owns the meeple.
+     */
+    public void removeMeeple(Meeple meeple) {
+        Tile tile = meeple.getPlacementLocation();
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                meepleGrid[tile.getX() * 3 + x][tile.getY() * 3 + y].setIcon(imageEmpty);
+            }
+        }
+        frame.repaint();
     }
 
     /**
@@ -123,7 +141,6 @@ public class MainGUI {
 
     private void buildMeepleGrid() {
         constraints = new GridBagConstraints();
-        ImageIcon imageEmpty = new ImageIcon(options.buildImagePath(TerrainType.OTHER, -1));
         meepleGridWidth = options.gridWidth * 3;
         meepleGridHeight = options.gridHeight * 3;
         constraints.weightx = 1;

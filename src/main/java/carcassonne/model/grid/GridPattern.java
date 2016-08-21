@@ -22,6 +22,7 @@ public class GridPattern {
     protected final TerrainType patternType;
     protected List<Tile> tileList;
     protected Map<Player, Integer> involvedPlayers;
+    protected List<Meeple> meepleList;
     protected boolean complete;
     protected boolean disbursed;
 
@@ -32,6 +33,7 @@ public class GridPattern {
     protected GridPattern(TerrainType patternType) {
         this.patternType = patternType;
         tileList = new LinkedList<Tile>();
+        meepleList = new LinkedList<Meeple>();
         involvedPlayers = new HashMap<Player, Integer>();
         complete = false;
         disbursed = false;
@@ -63,6 +65,7 @@ public class GridPattern {
             } else {
                 involvedPlayers.put(player, 1);
             }
+            meepleList.add(meeple);
         }
     }
 
@@ -77,7 +80,8 @@ public class GridPattern {
 
     /**
      * Gives every involved player points if he is one of the players with the maximal amount of
-     * meeples on the pattern. Can only be called once in the lifetime of a GridPttern object.
+     * meeples on the pattern. Removes the meeple placement and returns them to the players. Can
+     * only be called once in the lifetime of a GridPttern object.
      */
     public void disburse() {
         if (!disbursed) {
@@ -90,12 +94,15 @@ public class GridPattern {
                     } else {
                         involvedPlayers.remove(player);
                     }
-                }
+                } // TODO (HIGH) use meeple list instead of involvedPlayers map
                 for (Player player : involvedPlayers.keySet()) {
                     player.addPoints((int) Math.ceil(getSize() / divider), patternType);
                 }
+                for (Meeple meeple : meepleList) {
+                    meeple.removePlacement();
+                }
+                disbursed = true;
             }
-            disbursed = true;
         }
     }
 
@@ -115,6 +122,14 @@ public class GridPattern {
      */
     public int getSize() {
         return tileList.size();
+    }
+
+    /**
+     * Getter for the meeple list.
+     * @return the meeple list.
+     */
+    public List<Meeple> getMeepleList() {
+        return meepleList;
     }
 
     /**

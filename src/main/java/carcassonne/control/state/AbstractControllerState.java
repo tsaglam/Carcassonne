@@ -56,6 +56,15 @@ public abstract class AbstractControllerState {
      * Exit method of the state.
      */
     protected abstract void exit();
+    
+    /**
+     * Updates the round and the grid of every state after a new round has been started.
+     */
+    protected void updateScores() {
+        for (int player = 0; player < round.getPlayerCount(); player++) {
+            scoreboard.update(player, round.getScore(player));
+        }
+    }
 
     /**
      * Updates the round and the grid object after a new round was started.

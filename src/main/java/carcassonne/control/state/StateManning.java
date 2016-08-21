@@ -1,6 +1,7 @@
 package carcassonne.control.state;
 
 import carcassonne.control.MainController;
+import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
@@ -63,8 +64,13 @@ public class StateManning extends AbstractControllerState {
     // gives the players the points they earned.
     private void processGridPatterns(Tile tile) {
         for (GridPattern pattern : grid.getInfluencedPatterns(tile.getX(), tile.getY())) {
-            pattern.disburse();
-            updateScores();
+            if (pattern.isComplete()) {
+                for (Meeple meeple : pattern.getMeepleList()) {
+                    mainGUI.removeMeeple(meeple);
+                }
+                pattern.disburse();
+                updateScores();
+            }
         }
     }
 
@@ -72,15 +78,6 @@ public class StateManning extends AbstractControllerState {
     private void startNextTurn() {
         round.nextTurn();
         changeState(StatePlacing.class);
-    }
-
-    /**
-     * Updates the round and the grid of every state after a new round has been started.
-     */
-    private void updateScores() {
-        for (int player = 0; player < round.getPlayerCount(); player++) {
-            scoreboard.update(player, round.getScore(player));
-        }
     }
 
     /**
