@@ -37,8 +37,7 @@ public class GridPattern {
         involvedPlayers = new HashMap<Player, Integer>();
         complete = false;
         disbursed = false;
-    } // TODO (HIGH) Fix: Needs method that removes the meeples from the tiles and gives information
-      // about meeple removal to the GUI
+    }
 
     /**
      * Adds a tile to the pattern, saving the tile, the owner of a potential Meeple on the tile.
