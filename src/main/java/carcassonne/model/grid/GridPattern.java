@@ -94,7 +94,7 @@ public class GridPattern {
                     } else {
                         involvedPlayers.remove(player);
                     }
-                } // TODO (HIGH) use meeple list instead of involvedPlayers map
+                }
                 for (Player player : involvedPlayers.keySet()) {
                     player.addPoints((int) Math.ceil(getSize() / divider), patternType);
                 }
