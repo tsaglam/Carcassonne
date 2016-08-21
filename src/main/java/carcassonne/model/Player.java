@@ -112,7 +112,7 @@ public class Player {
         if (!usedMeeples.remove(meeple)) { // if it can not find the meeple in the used list.
             throw new IllegalArgumentException("This meeple is not in the used list.");
         }
-        usedMeeples.add(meeple); // put in unused list if it was previously used.
+        unusedMeeples.add(meeple); // put in unused list if it was previously used.
     }
 
     @Override
