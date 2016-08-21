@@ -23,6 +23,7 @@ public class CastleAndRoadPattern extends GridPattern {
         startingTile.setTag(startingDirection); // initial tag
         add(startingTile); // initial tile
         complete = buildPattern(startingTile, startingDirection, grid); // recusive algorithm.
+        removeTileTags();
     }
 
     private boolean buildPattern(Tile startingTile, GridDirection startingPoint, Grid grid) {

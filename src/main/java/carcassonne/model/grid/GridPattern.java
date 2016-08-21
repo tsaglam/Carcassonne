@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
@@ -45,9 +46,18 @@ public class GridPattern {
         if (complete) {
             throw new IllegalStateException("Can't add a tile to a completed pattern.");
         }
-        tileList.add(tile); // TODO (HIGH) Fix: only meeples from the right terrain are counted.
+        tileList.add(tile);
         if (tile.hasMeeple()) {
-            Player player = tile.getMeeple().getOwner();
+            addMeepleFrom(tile);
+        }
+    }
+
+    // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
+    private void addMeepleFrom(Tile tile) {
+        Meeple meeple = tile.getMeeple(); // Meeple on the tile.
+        Player player = meeple.getOwner(); // owner of the meeple.
+        GridDirection position = meeple.getPlacementPosition(); // position of meeple on tile.
+        if (tile.getTerrain(position) == patternType && tile.isConnectedToTag(position)) {
             if (involvedPlayers.containsKey(player)) {
                 involvedPlayers.put(player, involvedPlayers.get(player) + 1);
             } else {
@@ -71,7 +81,7 @@ public class GridPattern {
      */
     public void disburse() {
         if (!disbursed) {
-            if (complete) {
+            if (complete && involvedPlayers.size() > 0) {
                 int maximum = Collections.max(involvedPlayers.values());
                 double divider = 0;
                 for (Player player : involvedPlayers.keySet()) {

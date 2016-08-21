@@ -46,7 +46,7 @@ public class StateManning extends AbstractControllerState {
         startNextTurn();
         return true;
     }
-    
+
     @Override
     public boolean skip() {
         startNextTurn();
@@ -63,7 +63,6 @@ public class StateManning extends AbstractControllerState {
     // gives the players the points they earned.
     private void processGridPatterns(Tile tile) {
         for (GridPattern pattern : grid.getInfluencedPatterns(tile.getX(), tile.getY())) {
-            System.out.println(pattern); // TODO (MEDIUM) remove pattern debug output:
             pattern.disburse();
             updateScores();
         }

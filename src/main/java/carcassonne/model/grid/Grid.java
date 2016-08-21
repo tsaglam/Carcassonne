@@ -42,11 +42,7 @@ public class Grid {
             throw new IllegalArgumentException("Can't check for patterns on an free grid space");
         }
         Tile placedTile = tile[x][y]; // get tile.
-        List<GridPattern> results = createPatternList(placedTile); // get patterns.
-        for (GridPattern pattern : results) {
-            pattern.removeTileTags(); // remove tags of all tiles in every pattern.
-        }
-        return results;
+        return createPatternList(placedTile); // get patterns.
     }
 
     // creates list of all patterns.
