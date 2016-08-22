@@ -37,7 +37,7 @@ public class PlacementButtonMouseAdapter extends MouseAdapter {
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (button.isEnabled()) {
+        if (button.isHackyEnabled()) {
             controller.requestMeeplePlacement(direction);
         }
     }
