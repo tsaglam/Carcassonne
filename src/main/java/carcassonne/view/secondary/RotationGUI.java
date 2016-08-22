@@ -20,10 +20,10 @@ import carcassonne.model.tile.TileType;
  */
 public class RotationGUI extends SecondaryGUI {
     private static final long serialVersionUID = -5179683977081970564L;
-    private JButton buttonSkip;
-    private JLabel tileLabel;
     private JButton buttonRotateLeft;
     private JButton buttonRotateRight;
+    private JButton buttonSkip;
+    private JLabel tileLabel;
 
     /**
      * Simple constructor which uses the constructor of the <code>SmallGUI</code>.
@@ -41,6 +41,30 @@ public class RotationGUI extends SecondaryGUI {
      */
     public Tile getTile() {
         return tile;
+    }
+
+    // simple mouser adapters TODO (LOW) make own classes
+    private void addMouseAdapters() {
+        buttonSkip.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controller.requestSkip();
+            }
+        });
+        buttonRotateLeft.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                tile.rotateLeft();
+                update();
+            }
+        });
+        buttonRotateRight.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                tile.rotateRight();
+                update();
+            }
+        });
     }
 
     // build the GUI content
@@ -68,30 +92,6 @@ public class RotationGUI extends SecondaryGUI {
         constraints.ipady = 0;
         constraints.gridwidth = 3;
         add(tileLabel, constraints);
-    }
-
-    // simple mouser adapters TODO (LOW) make own classes
-    private void addMouseAdapters() {
-        buttonSkip.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                controller.requestSkip();
-            }
-        });
-        buttonRotateLeft.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                tile.rotateLeft();
-                update();
-            }
-        });
-        buttonRotateRight.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                tile.rotateRight();
-                update();
-            }
-        });
     }
 
     /**

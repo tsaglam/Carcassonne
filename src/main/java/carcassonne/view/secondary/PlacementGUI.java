@@ -45,7 +45,6 @@ public class PlacementGUI extends SecondaryGUI {
 			for (int x = 0; x < 3; x++) {
 				button[x][y] = new PlacementButton(controller, x, y);
 				button[x][y].setToolTipText("Place Meeple on the " + toolTipText[x][y] + " of the tile.");
-				// button[x][y].setOpaque(true); // TODO
 				constraints.gridx = x;
 				constraints.gridy = y + 1;
 				add(button[x][y], constraints);

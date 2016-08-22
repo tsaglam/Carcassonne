@@ -16,12 +16,12 @@ import carcassonne.model.tile.Tile;
  */
 public abstract class SecondaryGUI extends JPanel {
     private static final long serialVersionUID = 4056347951568551115L;
-    protected MainController controller;
-    protected GameOptions options;
-    protected JFrame frame;
     protected GridBagConstraints constraints;
-    protected Tile tile;
+    protected MainController controller;
     protected int currentPlayer;
+    protected JFrame frame;
+    protected GameOptions options;
+    protected Tile tile;
 
     /**
      * Constructor for the class. Sets the controller of the GUI and the window title.

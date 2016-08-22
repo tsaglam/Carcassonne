@@ -31,23 +31,23 @@ import carcassonne.view.main.tilelabel.TileLabel;
  */
 public class MainGUI {
 
+    private GridBagConstraints constraints;
+    private final MainController controller;
+    private Tile defaultTile;
     private JFrame frame;
+    private int gridHeight;
+    private int gridWidth;
+    private final ImageIcon imageEmpty;
+    private TileLabel[][] labelGrid;
     private JLayeredPane layeredPane;
+    private JLabel[][] meepleGrid;
+    private int meepleGridHeight;
+    private int meepleGridWidth;
+    private MainMenuBar menuBar;
+    private GameOptions options;
     private JPanel panelBottom;
     private JPanel panelTop;
-    private MainMenuBar menuBar;
     private Scoreboard scoreboard;
-    private GameOptions options;
-    private final MainController controller;
-    private TileLabel[][] labelGrid;
-    private JLabel[][] meepleGrid;
-    private GridBagConstraints constraints;
-    private int gridWidth;
-    private int gridHeight;
-    private int meepleGridWidth;
-    private int meepleGridHeight;
-    private Tile defaultTile;
-    private final ImageIcon imageEmpty;
 
     public MainGUI(Scoreboard scoreboard, MainController controller) {
         this.scoreboard = scoreboard;
@@ -92,20 +92,6 @@ public class MainGUI {
     }
 
     /**
-     * Draws meeple on a tile on the grid.
-     * @param tile is the tile where the meeple gets drawn.
-     * @param position is the position on the tile where the meeple gets drawn.
-     * @param owner is the player that owns the meeple.
-     */
-    public void setMeeple(Tile tile, GridDirection position, Player owner) {
-        int xpos = GridDirection.addX(tile.getX() * 3 + 1, position);
-        int ypos = GridDirection.addY(tile.getY() * 3 + 1, position);
-        ImageIcon icon = new ImageIcon(options.buildImagePath(tile.getTerrain(position), owner.getNumber()));
-        meepleGrid[xpos][ypos].setIcon(icon);
-        frame.repaint(); // This is required! Removing this will paint black background.
-    }
-
-    /**
      * Draws the tile on a specific position on the GUI.
      * @param tile is the tile.
      * @param x is the x coordinate.
@@ -117,6 +103,20 @@ public class MainGUI {
         } else {
             throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
         }
+    }
+
+    /**
+     * Draws meeple on a tile on the grid.
+     * @param tile is the tile where the meeple gets drawn.
+     * @param position is the position on the tile where the meeple gets drawn.
+     * @param owner is the player that owns the meeple.
+     */
+    public void setMeeple(Tile tile, GridDirection position, Player owner) {
+        int xpos = GridDirection.addX(tile.getX() * 3 + 1, position);
+        int ypos = GridDirection.addY(tile.getY() * 3 + 1, position);
+        ImageIcon icon = new ImageIcon(options.buildImagePath(tile.getTerrain(position), owner.getNumber()));
+        meepleGrid[xpos][ypos].setIcon(icon);
+        frame.repaint(); // This is required! Removing this will paint black background.
     }
 
     private void buildFrame() {
