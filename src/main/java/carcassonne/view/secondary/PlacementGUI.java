@@ -74,7 +74,7 @@ public class PlacementGUI extends SecondaryGUI {
 	protected void update() {
 		GridDirection[][] directions = GridDirection.values2D();
 		TerrainType terrain;
-		buttonSkip.setBackground(options.getPlayerColorLight(currentPlayer));
+		//buttonSkip.setBackground(options.getPlayerColorLight(currentPlayer));
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
 				terrain = tile.getTerrain(directions[x][y]);
