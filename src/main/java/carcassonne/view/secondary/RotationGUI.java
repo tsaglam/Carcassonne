@@ -50,15 +50,6 @@ public class RotationGUI extends SecondaryGUI {
         buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
         buttonRotateLeft = new JButton(new ImageIcon("src/main/ressources/icons/left.png"));
         buttonRotateRight = new JButton(new ImageIcon("src/main/ressources/icons/right.png"));
-        // TODO (HIGH) add GUI compatibility for windows
-        if (!options.operatingSystemName.startsWith("Mac")) {
-            buttonSkip.setBorder(null);
-            buttonRotateLeft.setBorder(null);
-            buttonRotateRight.setBorder(null);
-            constraints.ipady = 10;
-            constraints.weightx = 0.5;
-            constraints.weightx = 0.5;
-        }
         // set tool tips:
         buttonSkip.setToolTipText("Don't place tile and skip turn");
         buttonRotateLeft.setToolTipText("Rotate left");
@@ -111,5 +102,4 @@ public class RotationGUI extends SecondaryGUI {
     protected void update() {
         tileLabel.setIcon(tile.getImage());
     }
-
 }
