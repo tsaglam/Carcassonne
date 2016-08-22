@@ -102,7 +102,7 @@ public abstract class AbstractControllerState {
      * @return true if tile was placed.
      */
     public boolean placeTile(int x, int y) {
-        GameMessage.showWarning("You can't place a tile right now.");
+        // GameMessage.showWarning("You can't place a tile right now.");
         return false;
     }
 
