@@ -50,6 +50,8 @@ public class StateManning extends AbstractControllerState {
 
     @Override
     public boolean skip() {
+        Tile tile = round.getCurrentTile();
+        processGridPatterns(tile);
         startNextTurn();
         return true;
     }
