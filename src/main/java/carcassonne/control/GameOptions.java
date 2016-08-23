@@ -108,7 +108,7 @@ public final class GameOptions {
      */
     public final int tileSize;
 
-    private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(254, 220, 50) };
+    private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(255, 214, 0) };
     
     private final Color[] playerColorLight = { new Color(143, 143, 214), new Color(220, 129, 134), new Color(98, 164, 105), new Color(230, 213, 125) };
 
