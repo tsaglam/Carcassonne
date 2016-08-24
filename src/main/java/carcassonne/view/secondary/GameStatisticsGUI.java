@@ -1,6 +1,8 @@
 package carcassonne.view.secondary;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,7 +18,7 @@ import carcassonne.model.tile.TileType;
  */
 public class GameStatisticsGUI {
 
-    private MainController controller;
+    protected MainController controller;
     private JFrame frame;
     private JButton buttonClose;
     private JTable table;
@@ -38,7 +40,15 @@ public class GameStatisticsGUI {
 
     private void buildButtonClose() {
         buttonClose = new JButton("Close");
-        // TODO (HIGHEST) button operation.
+        buttonClose.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (controller.requestSkip()) {
+                    frame.setVisible(false);
+                    frame.dispose();
+                }
+            }
+        });
     }
 
     private void buildFrame() {
