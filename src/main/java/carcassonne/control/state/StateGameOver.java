@@ -25,6 +25,15 @@ public class StateGameOver extends AbstractControllerState {
     }
 
     /**
+     * @see carcassonne.control.state.AbstractControllerState#skip()
+     */
+    @Override
+    public boolean skip() {
+        changeState(StateIdle.class);
+        return true;
+    }
+
+    /**
      * @see carcassonne.control.state.AbstractControllerState#entry()
      */
     @Override
@@ -38,15 +47,6 @@ public class StateGameOver extends AbstractControllerState {
     @Override
     protected void exit() {
         // No exit functions.
-    }
-
-    /**
-     * @see carcassonne.control.state.AbstractControllerState#skip()
-     */
-    @Override
-    public boolean skip() {
-        changeState(StateIdle.class);
-        return true;
     }
 
 }
