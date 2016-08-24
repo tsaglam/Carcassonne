@@ -3,6 +3,7 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
+import carcassonne.view.secondary.GameStatisticsGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -28,8 +29,7 @@ public class StateGameOver extends AbstractControllerState {
      */
     @Override
     protected void entry() {
-        // TODO (MEDIUM) show stats in StateGameOver instead of jump to next state
-        changeState(StateIdle.class);
+        new GameStatisticsGUI(controller, round);
     }
 
     /**
@@ -37,7 +37,16 @@ public class StateGameOver extends AbstractControllerState {
      */
     @Override
     protected void exit() {
-        // TODO (MEDIUM) hide stats in StateGameOver
+        // No exit functions.
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#skip()
+     */
+    @Override
+    public boolean skip() {
+        changeState(StateIdle.class);
+        return true;
     }
 
 }
