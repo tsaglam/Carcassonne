@@ -41,30 +41,30 @@ public class StateManning extends AbstractControllerState {
 
     @Override
     public boolean placeMeeple(GridDirection position) {
-        Tile tile = round.getCurrentTile();
-        placeAndShowMeeple(tile, position);
-        processGridPatterns(tile);
+        placeAndShowMeeple(position);
+        processGridPatterns();
         startNextTurn();
         return true;
     }
 
     @Override
     public boolean skip() {
-        Tile tile = round.getCurrentTile();
-        processGridPatterns(tile);
+        processGridPatterns();
         startNextTurn();
         return true;
     }
 
     // places meeple on grid an shows meeple on the GUI.
-    private void placeAndShowMeeple(Tile tile, GridDirection position) {
+    private void placeAndShowMeeple(GridDirection position) {
+        Tile tile = round.getCurrentTile();
         Player player = round.getActivePlayer();
         player.placeMeepleAt(tile, position);
         mainGUI.setMeeple(tile, position, player);
     }
 
     // gives the players the points they earned.
-    private void processGridPatterns(Tile tile) {
+    private void processGridPatterns() {
+        Tile tile = round.getCurrentTile();
         for (GridPattern pattern : grid.getInfluencedPatterns(tile.getX(), tile.getY())) {
             if (pattern.isComplete()) {
                 for (Meeple meeple : pattern.getMeepleList()) {
@@ -91,6 +91,7 @@ public class StateManning extends AbstractControllerState {
             placementGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
         } else {
             GameMessage.showMessage("You have no Meeples left. Regain meeples by Completion to place Meepels again. ");
+            processGridPatterns();
             startNextTurn();
         }
     }
