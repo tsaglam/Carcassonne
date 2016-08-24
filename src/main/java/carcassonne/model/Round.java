@@ -56,7 +56,7 @@ public class Round {
      * @return the score.
      */
     public int getScore(int playerNumber) {
-            return player[playerNumber].getPoints();
+            return player[playerNumber].getScore();
     }
 
     public TileStack getTileStack() {

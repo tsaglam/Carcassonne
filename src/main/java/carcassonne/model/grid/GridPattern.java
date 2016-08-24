@@ -95,7 +95,7 @@ public class GridPattern {
                     }
                 }
                 for (Player player : involvedPlayers.keySet()) {
-                    player.addPoints((int) Math.ceil(getSize() / divider), patternType);
+                    player.addScore((int) Math.ceil(getSize() / divider), patternType);
                 }
                 for (Meeple meeple : meepleList) {
                     meeple.removePlacement();
