@@ -4,18 +4,22 @@ import javax.swing.table.AbstractTableModel;
 
 import carcassonne.model.Round;
 
+/**
+ * Model class for the game statistics GUI.
+ * @author Timur Saglam
+ */
 public class GameStatisticsModel extends AbstractTableModel {
 
     private static final long serialVersionUID = -7138458001360243937L;
     private Round round;
     private String[] header = { "player", "castle points", "road points", "field points", "overall score" };
 
+    /**
+     * Creates the game statistics model with the current round.
+     * @param round is the current round.
+     */
     public GameStatisticsModel(Round round) {
         this.round = round;
-    }
-
-    public String[] getHeader() {
-        return header;
     }
 
     @Override

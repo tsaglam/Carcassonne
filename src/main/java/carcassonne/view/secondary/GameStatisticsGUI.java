@@ -10,10 +10,9 @@ import javax.swing.JTable;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Round;
-import carcassonne.model.grid.Grid;
-import carcassonne.model.tile.TileType;
 
 /**
+ * A class for the game statistics GUI.
  * @author Timur Saglam
  */
 public class GameStatisticsGUI {
@@ -23,13 +22,10 @@ public class GameStatisticsGUI {
     private JButton buttonClose;
     private JTable table;
 
-    public static void main(String[] args) {
-        new GameStatisticsGUI(null, new Round(4, new Grid(5, 5, TileType.CastleCenter)));
-    }
-
     /**
-     * TODO (HIGHEST) comment class.
-     * @param controller
+     * Creates the GUI and extracts the data from the current round.
+     * @param controller is the game controller.
+     * @param round is the current round.
      */
     public GameStatisticsGUI(MainController controller, Round round) {
         this.controller = controller;
@@ -53,8 +49,7 @@ public class GameStatisticsGUI {
 
     private void buildFrame() {
         frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // TODO (HIGHEST) remove line
-        // frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); TODO (HIGHEST) enable line
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
         frame.add(table, BorderLayout.CENTER);
