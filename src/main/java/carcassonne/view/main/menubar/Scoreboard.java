@@ -33,10 +33,7 @@ public class Scoreboard {
      * @param points is the amount of points the players has.
      */
     public void update(int playerNumber, int points) {
-        String playerName = "Player ";
-        for (int i = 0; i <= playerNumber; i++) {
-            playerName += "I";
-        }
+        String playerName = options.playerNames[playerNumber] + " ";
         scoreLabel[playerNumber].setText("[" + playerName + ": " + points + "]    ");
     }
 
