@@ -25,19 +25,13 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#entry()
+     * @see carcassonne.control.state.AbstractControllerState#abortGame()
      */
     @Override
-    protected void entry() {
-        rotationGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
-    }
-
-    /**
-     * @see carcassonne.control.state.AbstractControllerState#exit()
-     */
-    @Override
-    protected void exit() {
-        rotationGUI.disableFrame();
+    public boolean abortGame() {
+        scoreboard.disable();
+        changeState(StateGameOver.class);
+        return true;
     }
 
     @Override
@@ -60,13 +54,19 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#abortGame()
+     * @see carcassonne.control.state.AbstractControllerState#entry()
      */
     @Override
-    public boolean abortGame() {
-        scoreboard.disable();
-        changeState(StateGameOver.class);
-        return true;
+    protected void entry() {
+        rotationGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#exit()
+     */
+    @Override
+    protected void exit() {
+        rotationGUI.disableFrame();
     }
 
 }

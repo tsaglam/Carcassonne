@@ -78,8 +78,12 @@ public class StateManning extends AbstractControllerState {
 
     // starts the next turn and changes the state to state placing.
     private void startNextTurn() {
-        round.nextTurn();
-        changeState(StatePlacing.class);
+        if(round.isOver()) {
+            changeState(StateGameOver.class);
+        } else {
+            round.nextTurn();
+            changeState(StatePlacing.class);
+        }
     }
 
     /**

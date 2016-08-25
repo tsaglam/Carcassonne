@@ -26,6 +26,20 @@ public class StateIdle extends AbstractControllerState {
     }
 
     /**
+     * @see carcassonne.control.state.AbstractControllerState#newGame()
+     */
+    @Override
+    public boolean newGame(int playerCount) {
+        Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
+        Round newRound = new Round(playerCount, newGrid);
+        controller.updateStates(newRound, newGrid);
+        updateScores();
+        mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
+        changeState(StateManning.class);
+        return true;
+    }
+
+    /**
      * @see carcassonne.control.state.AbstractControllerState#entry()
      */
     @Override
@@ -39,20 +53,6 @@ public class StateIdle extends AbstractControllerState {
     @Override
     protected void exit() {
         // No exit functions.
-    }
-
-    /**
-     * @see carcassonne.control.state.AbstractControllerState#newGame()
-     */
-    @Override
-    public boolean newGame(int playerCount) {
-        Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
-        Round newRound = new Round(playerCount, newGrid);
-        controller.updateStates(newRound, newGrid);
-        updateScores();
-        mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
-        changeState(StateManning.class);
-        return true;
     }
 
 }
