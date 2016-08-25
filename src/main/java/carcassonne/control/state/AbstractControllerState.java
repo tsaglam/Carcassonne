@@ -56,7 +56,7 @@ public abstract class AbstractControllerState {
      * Exit method of the state.
      */
     protected abstract void exit();
-    
+
     /**
      * Updates the round and the grid of every state after a new round has been started.
      */

@@ -7,9 +7,8 @@ import static carcassonne.model.tile.TerrainType.OTHER;
 import static carcassonne.model.tile.TerrainType.ROAD;
 
 /**
- * Factory class for building tile objects. Because of the large amount of
- * different tile objects this factory class enables easy tile creation with the
- * <code>TileType</code> enum.
+ * Factory class for building tile objects. Because of the large amount of different tile objects
+ * this factory class enables easy tile creation with the <code>TileType</code> enum.
  * @author Timur Saglam
  */
 public final class TileFactory {
@@ -17,8 +16,7 @@ public final class TileFactory {
     private static final String FILE_TYPE = ".jpg";
 
     /**
-     * Factory method of the class. Produces a specific tile for a specific tile
-     * type.
+     * Factory method of the class. Produces a specific tile for a specific tile type.
      * @param type is the tile type.
      * @return the tile object.
      */

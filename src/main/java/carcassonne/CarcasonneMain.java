@@ -12,26 +12,26 @@ import carcassonne.view.secondary.GameMessage;
  * @author Timur Saglam
  */
 public final class CarcasonneMain {
-	/**
-	 * Main method for the Carcassonne game.
-	 * @param args are not used.
-	 */
-	public static void main(String[] args) {
-		if (!GameOptions.getInstance().operatingSystemName.startsWith("Mac")) {
-			try {
-				for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-					if ("Nimbus".equals(info.getName())) {
-						UIManager.setLookAndFeel(info.getClassName());
-						break;
-					}
-				}
-			} catch (Exception e) {
-				GameMessage.showError("Nimbus Look and Feel is not installed. Using default look and feel instead.");
-			}
-		}
-		new MainController();
-	}
+    /**
+     * Main method for the Carcassonne game.
+     * @param args are not used.
+     */
+    public static void main(String[] args) {
+        if (!GameOptions.getInstance().operatingSystemName.startsWith("Mac")) {
+            try {
+                for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                GameMessage.showError("Nimbus Look and Feel is not installed. Using default look and feel instead.");
+            }
+        }
+        new MainController();
+    }
 
-	private CarcasonneMain() {
-	}
+    private CarcasonneMain() {
+    }
 }
