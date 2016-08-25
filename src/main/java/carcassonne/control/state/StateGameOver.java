@@ -18,10 +18,11 @@ public class StateGameOver extends AbstractControllerState {
 
     /**
      * Constructor of the state.
-     * @param controller sets the controller.
-     * @param mainGUI sets the main GUI.
-     * @param rotationGUI sets the rotation GUI.
-     * @param placementGUI sets the placement GUI.
+     * @param controller sets the Controller
+     * @param mainGUI sets the MainGUI
+     * @param rotationGUI sets the RotationGUI
+     * @param placementGUI sets the PlacementGUI
+     * @param scoreboard sets the Scoreboard
      */
     public StateGameOver(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
         super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
@@ -31,10 +32,9 @@ public class StateGameOver extends AbstractControllerState {
      * @see carcassonne.control.state.AbstractControllerState#skip()
      */
     @Override
-    public boolean skip() {
+    public void skip() {
         scoreboard.disable();
         changeState(StateIdle.class);
-        return true;
     }
 
     /**

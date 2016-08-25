@@ -68,7 +68,6 @@ public class MainController {
     /**
      * Registers a specific state at the controller.
      * @param state is the specific state.
-     * @param stateType is the class type of the specific state.
      */
     public void registerState(AbstractControllerState state) {
         if (stateMap.put(state.getClass(), state) != null) {
@@ -78,46 +77,41 @@ public class MainController {
 
     /**
      * Requests to abort the round.
-     * @param playerCount sets the amount of players.
-     * @return true if request was granted.
      */
-    public boolean requestAbortGame() {
-        return currentState.abortGame();
+    public void requestAbortGame() {
+        currentState.abortGame();
     }
 
     /**
      * Method for the view to call if a user mans a tile with a meeple.
-     * @return true if request was granted.
+     * @param position is the position the user wants to place on.
      */
-    public boolean requestMeeplePlacement(GridDirection position) {
-        return currentState.placeMeeple(position);
+    public void requestMeeplePlacement(GridDirection position) {
+        currentState.placeMeeple(position);
     }
 
     /**
      * Requests to start a new round with a specific amount of players.
      * @param playerCount sets the amount of players.
-     * @return true if request was granted.
      */
-    public boolean requestNewGame(int playerCount) {
-        return currentState.newGame(playerCount);
+    public void requestNewGame(int playerCount) {
+        currentState.newGame(playerCount);
     }
 
     /**
      * Method for the view to call if the user wants to skip a round.
-     * @return true if request was granted.
      */
-    public boolean requestSkip() {
-        return currentState.skip();
+    public void requestSkip() {
+        currentState.skip();
     }
 
     /**
      * Method for the view to call if a user places a tile.
      * @param x is the x coordinate.
      * @param y is the y coordinate.
-     * @return true if request was granted.
      */
-    public boolean requestTilePlacement(int x, int y) {
-        return currentState.placeTile(x, y);
+    public void requestTilePlacement(int x, int y) {
+        currentState.placeTile(x, y);
     }
 
     /**

@@ -21,9 +21,10 @@ public class StateManning extends AbstractControllerState {
     /**
      * Constructor of the state.
      * @param controller sets the controller.
-     * @param mainGUI sets the main GUI.
-     * @param rotationGUI sets the rotation GUI.
-     * @param placementGUI sets the placement GUI.
+     * @param mainGUI sets the MainGUI
+     * @param rotationGUI sets the RotationGUI
+     * @param placementGUI sets the PlacementGUI
+     * @param scoreboard sets the Scoreboard
      */
     public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
         super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
@@ -33,24 +34,21 @@ public class StateManning extends AbstractControllerState {
      * @see carcassonne.control.state.AbstractControllerState#abortGame()
      */
     @Override
-    public boolean abortGame() {
+    public void abortGame() {
         changeState(StateGameOver.class);
-        return true;
     }
 
     @Override
-    public boolean placeMeeple(GridDirection position) {
+    public void placeMeeple(GridDirection position) {
         placeAndShowMeeple(position);
         processGridPatterns();
         startNextTurn();
-        return true;
     }
 
     @Override
-    public boolean skip() {
+    public void skip() {
         processGridPatterns();
         startNextTurn();
-        return true;
     }
 
     // places meeple on grid an shows meeple on the GUI.

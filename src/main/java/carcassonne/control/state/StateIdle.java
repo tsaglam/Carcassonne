@@ -16,10 +16,11 @@ public class StateIdle extends AbstractControllerState {
 
     /**
      * Constructor of the state.
-     * @param controller sets the controller.
-     * @param mainGUI sets the main GUI.
-     * @param rotationGUI sets the rotation GUI.
-     * @param placementGUI sets the placement GUI.
+     * @param controller sets the Controller
+     * @param mainGUI sets the MainGUI
+     * @param rotationGUI sets the RotationGUI
+     * @param placementGUI sets the PlacementGUI
+     * @param scoreboard sets the Scoreboard
      */
     public StateIdle(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
         super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
@@ -29,14 +30,13 @@ public class StateIdle extends AbstractControllerState {
      * @see carcassonne.control.state.AbstractControllerState#newGame()
      */
     @Override
-    public boolean newGame(int playerCount) {
+    public void newGame(int playerCount) {
         Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
         Round newRound = new Round(playerCount, newGrid);
         controller.updateStates(newRound, newGrid);
         updateScores();
         mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
         changeState(StateManning.class);
-        return true;
     }
 
     /**

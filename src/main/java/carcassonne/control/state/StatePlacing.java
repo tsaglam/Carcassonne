@@ -16,9 +16,10 @@ public class StatePlacing extends AbstractControllerState {
     /**
      * Constructor of the state.
      * @param controller sets the controller.
-     * @param mainGUI sets the main GUI.
-     * @param rotationGUI sets the rotation GUI.
-     * @param placementGUI sets the placement GUI.
+     * @param mainGUI sets the MainGUI
+     * @param rotationGUI sets the RotationGUI
+     * @param placementGUI sets the PlacementGUI
+     * @param scoreboard sets the Scoreboard
      */
     public StatePlacing(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
         super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
@@ -28,28 +29,24 @@ public class StatePlacing extends AbstractControllerState {
      * @see carcassonne.control.state.AbstractControllerState#abortGame()
      */
     @Override
-    public boolean abortGame() {
+    public void abortGame() {
         changeState(StateGameOver.class);
-        return true;
     }
 
     @Override
-    public boolean placeTile(int x, int y) {
+    public void placeTile(int x, int y) {
         Tile tile = rotationGUI.getTile();
         if (grid.place(x, y, tile)) {
             round.updateCurrentTile(tile);
             mainGUI.set(tile, x, y);
             changeState(StateManning.class);
-            return true;
         }
-        return false;
     }
 
     @Override
-    public boolean skip() {
+    public void skip() {
         round.nextTurn();
         entry();
-        return true;
     }
 
     /**

@@ -29,7 +29,11 @@ public abstract class AbstractControllerState {
     /**
      * Constructor of the abstract state, sets the controller from the parameter, registers the
      * state at the controller and calls the <code>entry()</code> method.
-     * @param controller sets the controller.
+     * @param controller sets the Controller
+     * @param mainGUI sets the MainGUI
+     * @param rotationGUI sets the RotationGUI
+     * @param placementGUI sets the PlacementGUI
+     * @param scoreboard sets the Scoreboard
      */
     public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
         this.controller = controller;
@@ -43,50 +47,41 @@ public abstract class AbstractControllerState {
 
     /**
      * Starts new round with a specific amount of players.
-     * @return true if the game was aborted.
      */
-    public boolean abortGame() {
+    public void abortGame() {
         GameMessage.showWarning("You can't abort a game right now.");
-        return false;
     }
 
     /**
      * Starts new round with a specific amount of players.
      * @param playerCount sets the amount of players.
-     * @return true if a new game was started.
      */
-    public boolean newGame(int playerCount) {
+    public void newGame(int playerCount) {
         GameMessage.showWarning("You can't start a new game right now.");
-        return false;
     }
 
     /**
      * Method for the view to call if a user mans a tile with a Meeple.
-     * @return true if Meeple was placed.
+     * @param position is the placement position.
      */
-    public boolean placeMeeple(GridDirection position) {
+    public void placeMeeple(GridDirection position) {
         GameMessage.showWarning("You can't place meeple tile right now.");
-        return false;
     }
 
     /**
      * Method for the view to call if a user places a tile.
      * @param x is the x coordinate.
      * @param y is the y coordinate.
-     * @return true if tile was placed.
      */
-    public boolean placeTile(int x, int y) {
+    public void placeTile(int x, int y) {
         // GameMessage.showWarning("You can't place a tile right now.");
-        return false;
     }
 
     /**
      * Method for the view to call if the user wants to skip a round.
-     * @return true if turn was skipped.
      */
-    public boolean skip() {
+    public void skip() {
         GameMessage.showWarning("You can't place a tile right now.");
-        return false;
     }
 
     /**
@@ -99,6 +94,10 @@ public abstract class AbstractControllerState {
         this.grid = grid;
     }
 
+    /**
+     * Changes the state to a new state.
+     * @param stateType is the type of the new state.
+     */
     protected void changeState(Class<? extends AbstractControllerState> stateType) {
         exit();
         AbstractControllerState newState = controller.changeState(stateType);

@@ -40,10 +40,9 @@ public class GameStatisticsGUI {
         buttonClose.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (controller.requestSkip()) {
-                    frame.setVisible(false);
-                    frame.dispose();
-                }
+                frame.setVisible(false);
+                frame.dispose();
+                controller.requestSkip();
             }
         });
     }
