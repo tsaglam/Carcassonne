@@ -1,8 +1,11 @@
 package carcassonne.control.state;
 
+import java.util.List;
+
 import carcassonne.control.MainController;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
+import carcassonne.view.secondary.GameMessage;
 import carcassonne.view.secondary.GameStatisticsGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
@@ -39,6 +42,8 @@ public class StateGameOver extends AbstractControllerState {
      */
     @Override
     protected void entry() {
+        List<String> winners = round.getWinningPlayers();
+        GameMessage.showMessage("The game is over. Winning player(s): " + winners);
         new GameStatisticsGUI(controller, round);
     }
 
