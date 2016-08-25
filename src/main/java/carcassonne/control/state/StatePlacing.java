@@ -29,7 +29,6 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     public boolean abortGame() {
-        scoreboard.disable();
         changeState(StateGameOver.class);
         return true;
     }
@@ -58,7 +57,11 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     protected void entry() {
-        rotationGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
+        if (round.isOver()) {
+            changeState(StateGameOver.class);
+        } else {
+            rotationGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
+        }
     }
 
     /**

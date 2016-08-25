@@ -29,6 +29,7 @@ public class StateGameOver extends AbstractControllerState {
      */
     @Override
     public boolean skip() {
+        scoreboard.disable();
         changeState(StateIdle.class);
         return true;
     }

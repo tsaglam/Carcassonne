@@ -34,7 +34,6 @@ public class StateManning extends AbstractControllerState {
      */
     @Override
     public boolean abortGame() {
-        scoreboard.disable();
         changeState(StateGameOver.class);
         return true;
     }
@@ -78,12 +77,8 @@ public class StateManning extends AbstractControllerState {
 
     // starts the next turn and changes the state to state placing.
     private void startNextTurn() {
-        if(round.isOver()) {
-            changeState(StateGameOver.class);
-        } else {
-            round.nextTurn();
-            changeState(StatePlacing.class);
-        }
+        round.nextTurn();
+        changeState(StatePlacing.class);
     }
 
     /**
