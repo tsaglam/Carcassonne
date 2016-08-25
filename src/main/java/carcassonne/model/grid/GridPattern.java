@@ -44,9 +44,6 @@ public class GridPattern {
      * @param tile is the tile to add.
      */
     protected void add(Tile tile) {
-        if (complete) {
-            throw new IllegalStateException("Can't add a tile to a completed pattern.");
-        }
         tileList.add(tile);
         if (tile.hasMeeple()) {
             addMeepleFrom(tile);
@@ -58,7 +55,7 @@ public class GridPattern {
         Meeple meeple = tile.getMeeple(); // Meeple on the tile.
         Player player = meeple.getOwner(); // owner of the meeple.
         GridDirection position = meeple.getPlacementPosition(); // position of meeple on tile.
-        if (tile.getTerrain(position) == patternType && tile.isConnectedToTag(position)) {
+        if (tile.getTerrain(position) == patternType && (tile.isConnectedToTag(position) || patternType == TerrainType.MONASTERY)) {
             if (involvedPlayers.containsKey(player)) {
                 involvedPlayers.put(player, involvedPlayers.get(player) + 1);
             } else {

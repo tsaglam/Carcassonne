@@ -31,24 +31,13 @@ public class MonasteryGridPattern extends GridPattern {
     }
 
     private void buildPattern(Tile monasteryTile, Grid grid) {
-        TileType tileType = monasteryTile.getType();
-        if (tileType == TileType.Monastery || tileType == TileType.MonasteryRoad) {
-            List<Tile> neighbors = grid.getNeighbors(monasteryTile);
-            super.add(monasteryTile); // add monastery
-            for (Tile neighbor : neighbors) {
-                add(neighbor); // add neighbors.
-            }
-            if (neighbors.size() == 8) {
-                complete = true;
-            }
+        List<Tile> neighbors = grid.getNeighbors(monasteryTile);
+        add(monasteryTile); // add monastery
+        for (Tile neighbor : neighbors) {
+            tileList.add(neighbor);
         }
-    }
-
-    @Override
-    public void add(Tile tile) {
-        if (complete) {
-            throw new IllegalStateException("Can't add a tile to a completed pattern.");
+        if (neighbors.size() == 8) {
+            complete = true;
         }
-        tileList.add(tile);
     }
 }
