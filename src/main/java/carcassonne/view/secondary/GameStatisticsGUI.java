@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.WindowConstants;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Round;
@@ -49,7 +50,7 @@ public class GameStatisticsGUI {
 
     private void buildFrame() {
         frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
         frame.add(table, BorderLayout.CENTER);

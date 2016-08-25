@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
@@ -69,7 +70,7 @@ public abstract class SecondaryGUI extends JPanel {
         frame.getContentPane().add(this);
         frame.setResizable(false);
         frame.setAlwaysOnTop(true);
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setLocation(options.resolutionWidth / 20, options.resolutionHeight / 5);
     }
 
