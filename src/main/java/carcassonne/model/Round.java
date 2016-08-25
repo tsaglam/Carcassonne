@@ -54,25 +54,6 @@ public class Round {
     }
 
     /**
-     * Method determines the winning players by the highest score.
-     * @return a list of names of the winning players.
-     */
-    public List<String> getWinningPlayers() {
-        String[] playerNames = GameOptions.getInstance().playerNames;
-        List<String> winnerList = new LinkedList<String>();
-        int maxScore = 0;
-        for (Player player : this.player) {
-            if (player.getScore() >= maxScore) {
-                if (player.getScore() > maxScore) {
-                    winnerList.clear();
-                }
-                winnerList.add(playerNames[player.getNumber()]);
-            }
-        }
-        return winnerList;
-    }
-
-    /**
      * Returns the score of a specific player.
      * @param playerNumberis the number of the specific player.
      * @return the score.
@@ -91,6 +72,25 @@ public class Round {
      */
     public int getTurnCounter() {
         return turnCounter;
+    }
+
+    /**
+     * Method determines the winning players by the highest score.
+     * @return a list of names of the winning players.
+     */
+    public List<String> getWinningPlayers() {
+        String[] playerNames = GameOptions.getInstance().playerNames;
+        List<String> winnerList = new LinkedList<String>();
+        int maxScore = 0;
+        for (Player player : this.player) {
+            if (player.getScore() >= maxScore) {
+                if (player.getScore() > maxScore) {
+                    winnerList.clear();
+                }
+                winnerList.add(playerNames[player.getNumber()]);
+            }
+        }
+        return winnerList;
     }
 
     /**

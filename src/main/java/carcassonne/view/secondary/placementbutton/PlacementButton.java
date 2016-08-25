@@ -30,8 +30,15 @@ public class PlacementButton extends JButton {
         setup(controller, x, y);
     }
 
-    private void setup(MainController controller, int x, int y) {
-        addMouseListener(new PlacementButtonMouseAdapter(GridDirection.values2D()[x][y], controller, this));
+    public boolean isHackyEnabled() {
+        if (options.operatingSystemName.startsWith("Mac")) {
+            return isEnabled(); // normal function on mac os x
+        } else {
+            // own implementation to fix the functionality which is destroyed by the hack. If the
+            // original isEnabled method is overwritten, it breaks some functionality (e.g.updating
+            // the background):
+            return enabled;
+        }
     }
 
     @Override
@@ -50,14 +57,7 @@ public class PlacementButton extends JButton {
         }
     }
 
-    public boolean isHackyEnabled() {
-        if (options.operatingSystemName.startsWith("Mac")) {
-            return isEnabled(); // normal function on mac os x
-        } else {
-            // own implementation to fix the functionality which is destroyed by the hack. If the
-            // original isEnabled method is overwritten, it breaks some functionality (e.g.updating
-            // the background):
-            return enabled;
-        }
+    private void setup(MainController controller, int x, int y) {
+        addMouseListener(new PlacementButtonMouseAdapter(GridDirection.values2D()[x][y], controller, this));
     }
 }

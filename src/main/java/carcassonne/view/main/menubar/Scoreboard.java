@@ -28,22 +28,11 @@ public class Scoreboard {
     }
 
     /**
-     * Updates a label of the scoreboard.
-     * @param playerNumber is the number of the player whose label should get updated.
-     * @param points is the amount of points the players has.
+     * Disables all the scoreboard labels.
      */
-    public void update(int playerNumber, int points) {
-        String playerName = options.playerNames[playerNumber] + " ";
-        scoreLabel[playerNumber].setText("[" + playerName + ": " + points + "]    ");
-    }
-
-    /**
-     * Only shows the specified amount of labels.
-     * @param playerCount is the amount of players to show labels for.
-     */
-    public void rebuild(int playerCount) {
-        for (int i = 0; i < playerCount; i++) {
-            scoreLabel[i].setVisible(true);
+    public void disable() {
+        for (JLabel label : scoreLabel) {
+            label.setVisible(false);
         }
     }
 
@@ -57,20 +46,31 @@ public class Scoreboard {
     }
 
     /**
-     * Disables all the scoreboard labels.
-     */
-    public void disable() {
-        for (JLabel label : scoreLabel) {
-            label.setVisible(false);
-        }
-    }
-
-    /**
      * Grants access to the labels themselves.
      * @return the array of labels.
      */
     public JLabel[] getLabels() {
         return scoreLabel;
+    }
+
+    /**
+     * Only shows the specified amount of labels.
+     * @param playerCount is the amount of players to show labels for.
+     */
+    public void rebuild(int playerCount) {
+        for (int i = 0; i < playerCount; i++) {
+            scoreLabel[i].setVisible(true);
+        }
+    }
+
+    /**
+     * Updates a label of the scoreboard.
+     * @param playerNumber is the number of the player whose label should get updated.
+     * @param points is the amount of points the players has.
+     */
+    public void update(int playerNumber, int points) {
+        String playerName = options.playerNames[playerNumber] + " ";
+        scoreLabel[playerNumber].setText("[" + playerName + ": " + points + "]    ");
     }
 
 }

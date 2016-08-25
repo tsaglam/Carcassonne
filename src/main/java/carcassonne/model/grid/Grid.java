@@ -31,49 +31,6 @@ public class Grid {
     }
 
     /**
-     * Method checks for changed patterns on the grid. As a basis it uses the coordinates of the
-     * last placed tile.
-     * @param x is the x coordinate of the last placed tile.
-     * @param y is the y coordinate of the last placed tile.
-     */
-    public List<GridPattern> getInfluencedPatterns(int x, int y) {
-        checkParameters(x, y);
-        if (isFree(x, y)) {
-            throw new IllegalArgumentException("Can't check for patterns on an free grid space");
-        }
-        Tile placedTile = tile[x][y]; // get tile.
-        return createPatternList(placedTile); // get patterns.
-    }
-
-    // creates list of all patterns.
-    private List<GridPattern> createPatternList(Tile startingTile) {
-        List<GridPattern> results = new LinkedList<GridPattern>();
-        TerrainType terrain;
-        // first, check for castle and road patterns:
-        for (GridDirection direction : GridDirection.directNeighbors()) {
-            terrain = startingTile.getTerrain(direction); // get terrain type.
-            if ((terrain != TerrainType.FIELDS)) { // exclude fields
-                if (startingTile.isNotConnectedToTag(direction)) {
-                    results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
-                }
-            }
-        }
-        // then check for monastery patterns:
-        addPatternIfMonastery(startingTile, results); // the tile itself
-        for (Tile neighbour : getNeighbors(startingTile)) {
-            addPatternIfMonastery(neighbour, results); // neighbors
-        }
-        return results; // return all patterns.
-    }
-
-    private void addPatternIfMonastery(Tile startingTile, List<GridPattern> patternList) {
-        TileType type = startingTile.getType();
-        if (type == TileType.Monastery || type == TileType.MonasteryRoad) {
-            patternList.add(new MonasteryGridPattern(startingTile, this));
-        }
-    }
-
-    /**
      * Creates a list of tiles that are connected to a specific tile with the terrain in a specific
      * direction on the tile.
      * @param x is the x coordinate
@@ -131,6 +88,21 @@ public class Grid {
      */
     public int getHeight() {
         return height;
+    }
+
+    /**
+     * Method checks for changed patterns on the grid. As a basis it uses the coordinates of the
+     * last placed tile.
+     * @param x is the x coordinate of the last placed tile.
+     * @param y is the y coordinate of the last placed tile.
+     */
+    public List<GridPattern> getInfluencedPatterns(int x, int y) {
+        checkParameters(x, y);
+        if (isFree(x, y)) {
+            throw new IllegalArgumentException("Can't check for patterns on an free grid space");
+        }
+        Tile placedTile = tile[x][y]; // get tile.
+        return createPatternList(placedTile); // get patterns.
     }
 
     /**
@@ -272,6 +244,13 @@ public class Grid {
         return false; // tile can't be placed, spot is occupied.
     }
 
+    private void addPatternIfMonastery(Tile startingTile, List<GridPattern> patternList) {
+        TileType type = startingTile.getType();
+        if (type == TileType.Monastery || type == TileType.MonasteryRoad) {
+            patternList.add(new MonasteryGridPattern(startingTile, this));
+        }
+    }
+
     /**
      * Error checker method for other methods in this class. It just checks whether specific
      * coordinates are on the grid and throws an error if not.
@@ -295,6 +274,27 @@ public class Grid {
         } else if (tile.getType() == TileType.Null) {
             throw new IllegalArgumentException("Tile from type TileType.Null can't be placed.");
         }
+    }
+
+    // creates list of all patterns.
+    private List<GridPattern> createPatternList(Tile startingTile) {
+        List<GridPattern> results = new LinkedList<GridPattern>();
+        TerrainType terrain;
+        // first, check for castle and road patterns:
+        for (GridDirection direction : GridDirection.directNeighbors()) {
+            terrain = startingTile.getTerrain(direction); // get terrain type.
+            if ((terrain != TerrainType.FIELDS)) { // exclude fields
+                if (startingTile.isNotConnectedToTag(direction)) {
+                    results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
+                }
+            }
+        }
+        // then check for monastery patterns:
+        addPatternIfMonastery(startingTile, results); // the tile itself
+        for (Tile neighbour : getNeighbors(startingTile)) {
+            addPatternIfMonastery(neighbour, results); // neighbors
+        }
+        return results; // return all patterns.
     }
 
     /**

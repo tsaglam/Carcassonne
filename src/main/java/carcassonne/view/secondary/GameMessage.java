@@ -8,8 +8,12 @@ import javax.swing.JOptionPane;
  */
 public final class GameMessage {
 
-    private GameMessage() {
-        // Private constructor for helper class.
+    /**
+     * Shows a custom error message.
+     * @param messageText is the message text.
+     */
+    public static void showError(String messageText) {
+        show(messageText, JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -28,15 +32,11 @@ public final class GameMessage {
         show(messageText, JOptionPane.WARNING_MESSAGE);
     }
 
-    /**
-     * Shows a custom error message.
-     * @param messageText is the message text.
-     */
-    public static void showError(String messageText) {
-        show(messageText, JOptionPane.ERROR_MESSAGE);
-    }
-
     private static void show(String messageText, int type) {
         JOptionPane.showMessageDialog(null, messageText, "Carcassonne", type);
+    }
+
+    private GameMessage() {
+        // Private constructor for helper class.
     }
 }

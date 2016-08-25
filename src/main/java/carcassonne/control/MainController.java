@@ -77,15 +77,20 @@ public class MainController {
     }
 
     /**
-     * Updates the round and the grid of every state after a new round has been started.
-     * @param newRound sets the new round.
-     * @param newGrid sets the new grid.
+     * Requests to abort the round.
+     * @param playerCount sets the amount of players.
+     * @return true if request was granted.
      */
-    public void updateStates(Round newRound, Grid newGrid) {
-        scoreboard.rebuild(newRound.getPlayerCount());
-        for (AbstractControllerState state : stateMap.values()) {
-            state.updateState(newRound, newGrid);
-        }
+    public boolean requestAbortGame() {
+        return currentState.abortGame();
+    }
+
+    /**
+     * Method for the view to call if a user mans a tile with a meeple.
+     * @return true if request was granted.
+     */
+    public boolean requestMeeplePlacement(GridDirection position) {
+        return currentState.placeMeeple(position);
     }
 
     /**
@@ -98,12 +103,11 @@ public class MainController {
     }
 
     /**
-     * Requests to abort the round.
-     * @param playerCount sets the amount of players.
+     * Method for the view to call if the user wants to skip a round.
      * @return true if request was granted.
      */
-    public boolean requestAbortGame() {
-        return currentState.abortGame();
+    public boolean requestSkip() {
+        return currentState.skip();
     }
 
     /**
@@ -117,18 +121,14 @@ public class MainController {
     }
 
     /**
-     * Method for the view to call if the user wants to skip a round.
-     * @return true if request was granted.
+     * Updates the round and the grid of every state after a new round has been started.
+     * @param newRound sets the new round.
+     * @param newGrid sets the new grid.
      */
-    public boolean requestSkip() {
-        return currentState.skip();
-    }
-
-    /**
-     * Method for the view to call if a user mans a tile with a meeple.
-     * @return true if request was granted.
-     */
-    public boolean requestMeeplePlacement(GridDirection position) {
-        return currentState.placeMeeple(position);
+    public void updateStates(Round newRound, Grid newGrid) {
+        scoreboard.rebuild(newRound.getPlayerCount());
+        for (AbstractControllerState state : stateMap.values()) {
+            state.updateState(newRound, newGrid);
+        }
     }
 }

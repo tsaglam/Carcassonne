@@ -51,30 +51,6 @@ public class Player {
     }
 
     /**
-     * Multiplies the amount of score by the multiplier of the type of the score.
-     * @param amount sets the amount of score.
-     * @param scoreType is the type of score, which influences the multiplier.
-     * @return the multiplied score.
-     */
-    private int calculatescore(int amount, TerrainType scoreType) {
-        if (scoreType == TerrainType.CASTLE) {
-            return amount * 2;
-        } else if (scoreType == TerrainType.FIELDS) {
-            return amount * 9;
-        } else {
-            return amount;
-        }
-    }
-
-    /**
-     * Getter for the score of the player.
-     * @return the score
-     */
-    public int getScore() {
-        return overallScore;
-    }
-
-    /**
      * Getter for all scores of the player: the different scores from the scoreMap and the overall
      * score.
      * @return the scores.
@@ -96,6 +72,14 @@ public class Player {
      */
     public int getNumber() {
         return number;
+    }
+
+    /**
+     * Getter for the score of the player.
+     * @return the score
+     */
+    public int getScore() {
+        return overallScore;
     }
 
     /**
@@ -134,6 +118,22 @@ public class Player {
     @Override
     public String toString() {
         return "Player[number: " + number + ", score: " + overallScore + ", used meeples: " + usedMeeples.size() + ", unused meeples: " + unusedMeeples.size() + "]";
+    }
+
+    /**
+     * Multiplies the amount of score by the multiplier of the type of the score.
+     * @param amount sets the amount of score.
+     * @param scoreType is the type of score, which influences the multiplier.
+     * @return the multiplied score.
+     */
+    private int calculatescore(int amount, TerrainType scoreType) {
+        if (scoreType == TerrainType.CASTLE) {
+            return amount * 2;
+        } else if (scoreType == TerrainType.FIELDS) {
+            return amount * 9;
+        } else {
+            return amount;
+        }
     }
 
 }

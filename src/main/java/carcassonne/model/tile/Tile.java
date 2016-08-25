@@ -153,16 +153,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * Method determines if tile recently was tagged by grid pattern checks on a specific position
      * or a position connected to the specific position.
      * @param tilePosition is the specific position.
-     * @return true if not tagged.
-     */
-    public Boolean isNotConnectedToTag(GridDirection tilePosition) {
-        return !isConnectedToTag(tilePosition);
-    }
-
-    /**
-     * Method determines if tile recently was tagged by grid pattern checks on a specific position
-     * or a position connected to the specific position.
-     * @param tilePosition is the specific position.
      * @return true if tagged.
      */
     public Boolean isConnectedToTag(GridDirection tilePosition) {
@@ -172,6 +162,16 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
             }
         }
         return false;
+    }
+
+    /**
+     * Method determines if tile recently was tagged by grid pattern checks on a specific position
+     * or a position connected to the specific position.
+     * @param tilePosition is the specific position.
+     * @return true if not tagged.
+     */
+    public Boolean isNotConnectedToTag(GridDirection tilePosition) {
+        return !isConnectedToTag(tilePosition);
     }
 
     /**

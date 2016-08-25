@@ -41,39 +41,13 @@ public abstract class AbstractControllerState {
         controller.registerState(this);
     }
 
-    protected void changeState(Class<? extends AbstractControllerState> stateType) {
-        exit();
-        AbstractControllerState newState = controller.changeState(stateType);
-        newState.entry();
-    }
-
     /**
-     * Entry method of the state.
+     * Starts new round with a specific amount of players.
+     * @return true if the game was aborted.
      */
-    protected abstract void entry();
-
-    /**
-     * Exit method of the state.
-     */
-    protected abstract void exit();
-
-    /**
-     * Updates the round and the grid of every state after a new round has been started.
-     */
-    protected void updateScores() {
-        for (int player = 0; player < round.getPlayerCount(); player++) {
-            scoreboard.update(player, round.getScore(player));
-        }
-    }
-
-    /**
-     * Updates the round and the grid object after a new round was started.
-     * @param round sets the new round.
-     * @param grid sets the new grid.
-     */
-    public void updateState(Round round, Grid grid) {
-        this.round = round;
-        this.grid = grid;
+    public boolean abortGame() {
+        GameMessage.showWarning("You can't abort a game right now.");
+        return false;
     }
 
     /**
@@ -87,11 +61,11 @@ public abstract class AbstractControllerState {
     }
 
     /**
-     * Starts new round with a specific amount of players.
-     * @return true if the game was aborted.
+     * Method for the view to call if a user mans a tile with a Meeple.
+     * @return true if Meeple was placed.
      */
-    public boolean abortGame() {
-        GameMessage.showWarning("You can't abort a game right now.");
+    public boolean placeMeeple(GridDirection position) {
+        GameMessage.showWarning("You can't place meeple tile right now.");
         return false;
     }
 
@@ -116,11 +90,37 @@ public abstract class AbstractControllerState {
     }
 
     /**
-     * Method for the view to call if a user mans a tile with a Meeple.
-     * @return true if Meeple was placed.
+     * Updates the round and the grid object after a new round was started.
+     * @param round sets the new round.
+     * @param grid sets the new grid.
      */
-    public boolean placeMeeple(GridDirection position) {
-        GameMessage.showWarning("You can't place meeple tile right now.");
-        return false;
+    public void updateState(Round round, Grid grid) {
+        this.round = round;
+        this.grid = grid;
+    }
+
+    protected void changeState(Class<? extends AbstractControllerState> stateType) {
+        exit();
+        AbstractControllerState newState = controller.changeState(stateType);
+        newState.entry();
+    }
+
+    /**
+     * Entry method of the state.
+     */
+    protected abstract void entry();
+
+    /**
+     * Exit method of the state.
+     */
+    protected abstract void exit();
+
+    /**
+     * Updates the round and the grid of every state after a new round has been started.
+     */
+    protected void updateScores() {
+        for (int player = 0; player < round.getPlayerCount(); player++) {
+            scoreboard.update(player, round.getScore(player));
+        }
     }
 }

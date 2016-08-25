@@ -23,13 +23,18 @@ public class GameStatisticsModel extends AbstractTableModel {
     }
 
     @Override
-    public int getRowCount() {
-        return round.getPlayerCount();
+    public int getColumnCount() {
+        return header.length;
     }
 
     @Override
-    public int getColumnCount() {
-        return header.length;
+    public String getColumnName(int column) {
+        return header[column];
+    }
+
+    @Override
+    public int getRowCount() {
+        return round.getPlayerCount();
     }
 
     @Override
@@ -39,11 +44,6 @@ public class GameStatisticsModel extends AbstractTableModel {
         } else {
             return round.getPlayer(rowIndex).getAllScores()[columnIndex - 1];
         }
-    }
-
-    @Override
-    public String getColumnName(int column) {
-        return header[column];
     }
 
 }

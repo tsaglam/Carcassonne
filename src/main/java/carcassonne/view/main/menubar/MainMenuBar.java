@@ -38,17 +38,17 @@ public class MainMenuBar extends JMenuBar {
     }
 
     /**
-     * Starts a new game with the controller.
-     */
-    public void newGame() {
-        controller.requestNewGame(playerCount);
-    }
-
-    /**
      * Aborts the current game with the controller.
      */
     public void abortGame() {
         controller.requestAbortGame();
+    }
+
+    /**
+     * Starts a new game with the controller.
+     */
+    public void newGame() {
+        controller.requestNewGame(playerCount);
     }
 
     /**
@@ -57,6 +57,13 @@ public class MainMenuBar extends JMenuBar {
      */
     public void setPlayerCount(int players) {
         playerCount = players;
+    }
+
+    // adds labels of the scoreboard to the menu bar.
+    private void add(Scoreboard scoreboard) {
+        for (JLabel label : scoreboard.getLabels()) {
+            add(label);
+        }
     }
 
     private void buildMenuGame() {
@@ -88,12 +95,5 @@ public class MainMenuBar extends JMenuBar {
         menuOptions = new JMenu("Options");
         menuOptions.add(menuPlayers);
         add(menuOptions);
-    }
-
-    // adds labels of the scoreboard to the menu bar.
-    private void add(Scoreboard scoreboard) {
-        for (JLabel label : scoreboard.getLabels()) {
-            add(label);
-        }
     }
 }

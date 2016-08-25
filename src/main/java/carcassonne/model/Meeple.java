@@ -21,6 +21,14 @@ public class Meeple {
     }
 
     /**
+     * Getter for the player that owns the meeple.
+     * @return the owner.
+     */
+    public Player getOwner() {
+        return owner;
+    }
+
+    /**
      * Getter for the placement location.
      * @return the tile where the meeple is placed.
      */
@@ -34,14 +42,6 @@ public class Meeple {
      */
     public GridDirection getPlacementPosition() {
         return placementPosition;
-    }
-
-    /**
-     * Getter for the player that owns the meeple.
-     * @return the owner.
-     */
-    public Player getOwner() {
-        return owner;
     }
 
     /**

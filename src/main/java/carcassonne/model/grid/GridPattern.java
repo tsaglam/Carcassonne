@@ -40,32 +40,6 @@ public class GridPattern {
     }
 
     /**
-     * Adds a tile to the pattern, saving the tile, the owner of a potential Meeple on the tile.
-     * @param tile is the tile to add.
-     */
-    protected void add(Tile tile) {
-        tileList.add(tile);
-        if (tile.hasMeeple()) {
-            addMeepleFrom(tile);
-        }
-    }
-
-    // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
-    private void addMeepleFrom(Tile tile) {
-        Meeple meeple = tile.getMeeple(); // Meeple on the tile.
-        Player player = meeple.getOwner(); // owner of the meeple.
-        GridDirection position = meeple.getPlacementPosition(); // position of meeple on tile.
-        if (tile.getTerrain(position) == patternType && (tile.isConnectedToTag(position) || patternType == TerrainType.MONASTERY)) {
-            if (involvedPlayers.containsKey(player)) {
-                involvedPlayers.put(player, involvedPlayers.get(player) + 1);
-            } else {
-                involvedPlayers.put(player, 1);
-            }
-            meepleList.add(meeple);
-        }
-    }
-
-    /**
      * Checks whether the pattern already contains a tile.
      * @param tile is the tile to check.
      * @return true if the pattern already contains the tile.
@@ -103,13 +77,11 @@ public class GridPattern {
     }
 
     /**
-     * Removes the tags of the tile of the pattern. Should be called if the check for this kind of
-     * pattern is complete.
+     * Getter for the meeple list.
+     * @return the meeple list.
      */
-    public void removeTileTags() {
-        for (Tile tile : tileList) {
-            tile.removeTags();
-        }
+    public List<Meeple> getMeepleList() {
+        return meepleList;
     }
 
     /**
@@ -121,14 +93,6 @@ public class GridPattern {
     }
 
     /**
-     * Getter for the meeple list.
-     * @return the meeple list.
-     */
-    public List<Meeple> getMeepleList() {
-        return meepleList;
-    }
-
-    /**
      * Checks whether the pattern is complete or not. That means there cannot be
      * @return true if complete.
      */
@@ -136,8 +100,44 @@ public class GridPattern {
         return complete;
     }
 
+    /**
+     * Removes the tags of the tile of the pattern. Should be called if the check for this kind of
+     * pattern is complete.
+     */
+    public void removeTileTags() {
+        for (Tile tile : tileList) {
+            tile.removeTags();
+        }
+    }
+
     @Override
     public String toString() {
         return "GridPattern of type " + patternType + ", size " + getSize() + " and is complete: " + complete;
+    }
+
+    // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
+    private void addMeepleFrom(Tile tile) {
+        Meeple meeple = tile.getMeeple(); // Meeple on the tile.
+        Player player = meeple.getOwner(); // owner of the meeple.
+        GridDirection position = meeple.getPlacementPosition(); // position of meeple on tile.
+        if (tile.getTerrain(position) == patternType && (tile.isConnectedToTag(position) || patternType == TerrainType.MONASTERY)) {
+            if (involvedPlayers.containsKey(player)) {
+                involvedPlayers.put(player, involvedPlayers.get(player) + 1);
+            } else {
+                involvedPlayers.put(player, 1);
+            }
+            meepleList.add(meeple);
+        }
+    }
+
+    /**
+     * Adds a tile to the pattern, saving the tile, the owner of a potential Meeple on the tile.
+     * @param tile is the tile to add.
+     */
+    protected void add(Tile tile) {
+        tileList.add(tile);
+        if (tile.hasMeeple()) {
+            addMeepleFrom(tile);
+        }
     }
 }
