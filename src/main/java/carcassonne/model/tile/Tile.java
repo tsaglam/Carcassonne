@@ -156,7 +156,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * @return true if tagged.
      */
     public Boolean isConnectedToTag(GridDirection tilePosition) {
-        for (GridDirection otherPosition : GridDirection.neighbors()) {
+        for (GridDirection otherPosition : GridDirection.values()) {
             if (isConnected(tilePosition, otherPosition) && tagList.contains(otherPosition)) {
                 return true;
             }
