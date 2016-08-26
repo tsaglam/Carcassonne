@@ -24,7 +24,7 @@ public class Player {
 
     /**
      * Simple constructor.
-     * @param playerNumber is the number of the player.
+     * @param number is the number of the player.
      */
     public Player(int number) {
         this.number = number;
@@ -42,7 +42,8 @@ public class Player {
 
     /**
      * Adds score to the players score value and keeps track of the type of score.
-     * @param overallScore are the score to add.
+     * @param amount is the amount of points the player gets.
+     * @param scoreType determines the score multiplier.
      */
     public void addScore(int amount, TerrainType scoreType) {
         int scoreToAdd = calculatescore(amount, scoreType);
@@ -101,14 +102,14 @@ public class Player {
     /**
      * Places one of its meeples on a tile. Tells the meeple it was placed.
      * @param tile is the tile to place a meeple on.
-     * @return
+     * @param position is the position the meeple gets placed on.
      */
-    public void placeMeepleAt(Tile tile, GridDirection positionOnTile) {
+    public void placeMeepleAt(Tile tile, GridDirection position) {
         if (unusedMeeples.isEmpty()) {
             throw new IllegalStateException("No unused meeples are left.");
         }
         Meeple meeple = unusedMeeples.remove(0); // get free meeple.
-        meeple.placeOn(tile, positionOnTile); // place it.
+        meeple.placeOn(tile, position); // place it.
         usedMeeples.add(meeple); // and put it to the used ones.
     }
 

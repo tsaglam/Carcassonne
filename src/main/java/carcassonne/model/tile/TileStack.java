@@ -8,7 +8,7 @@ import java.util.List;
  * @author Timur Saglam
  */
 public class TileStack {
-    final private List<Tile> tileList;
+    private final List<Tile> tileList;
 
     /**
      * Simple constructor.

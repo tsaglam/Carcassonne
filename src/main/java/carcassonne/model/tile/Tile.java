@@ -59,7 +59,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
 
     /**
      * Getter for the meeple of the tile.
-     * @return
+     * @return the meeple.
      */
     public Meeple getMeeple() {
         return meeple;

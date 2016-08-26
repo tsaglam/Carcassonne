@@ -49,6 +49,11 @@ public class MainGUI {
     private JPanel panelTop;
     private Scoreboard scoreboard;
 
+    /**
+     * Constructor of the main GUI. creates the GUI with a scoreboard.
+     * @param scoreboard sets the scoreboard.
+     * @param controller sets the connection to the game controller.
+     */
     public MainGUI(Scoreboard scoreboard, MainController controller) {
         this.scoreboard = scoreboard;
         this.controller = controller;
@@ -77,9 +82,7 @@ public class MainGUI {
 
     /**
      * Removes meeple on a tile on the grid.
-     * @param tile is the tile where the meeple gets drawn.
-     * @param position is the position on the tile where the meeple gets drawn.
-     * @param owner is the player that owns the meeple.
+     * @param meeple is the meeple that should be removed.
      */
     public void removeMeeple(Meeple meeple) {
         Tile tile = meeple.getPlacementLocation();

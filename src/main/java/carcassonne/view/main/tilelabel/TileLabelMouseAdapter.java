@@ -9,7 +9,7 @@ import carcassonne.control.MainController;
  * The class is a specific mouse adapter for a <code>TileLabel</code>. It connects the labels with
  * the <code>MainController</code>. The class is a subclass of
  * <code>java.awt.event.MouseAdapter</code>.
- * @author Timur
+ * @author Timur Saglam
  */
 public class TileLabelMouseAdapter extends MouseAdapter {
 
@@ -18,9 +18,10 @@ public class TileLabelMouseAdapter extends MouseAdapter {
     private final int y;
 
     /**
-     * Basic constructor with the label and the controller to set.
-     * @param tileLabel should be the label that uses the adapter.
+     * Basic constructor, creates the adapter.
      * @param controller sets the controller that is notified.
+     * @param x is the x coordinate of the label.
+     * @param y is the y coordinate of the label.
      */
     public TileLabelMouseAdapter(MainController controller, int x, int y) {
         super();

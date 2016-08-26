@@ -21,7 +21,7 @@ public final class GameOptions {
      * exist at a time.
      * @return the instance.
      */
-    public synchronized static GameOptions getInstance() {
+    public static synchronized GameOptions getInstance() {
         if (instance == null) {
             instance = new GameOptions();
         }
@@ -168,11 +168,21 @@ public final class GameOptions {
         }
     }
 
+    /**
+     * Getter for the player colors.
+     * @param playerNumber is the number of the player whose color is requested.
+     * @return the color of the player.
+     */
     public Color getPlayerColor(int playerNumber) {
         check(playerNumber);
         return playerColor[playerNumber];
     }
 
+    /**
+     * Getter for the light player colors.
+     * @param playerNumber is the number of the player whose color is requested.
+     * @return the light color of the player.
+     */
     public Color getPlayerColorLight(int playerNumber) {
         check(playerNumber);
         return playerColorLight[playerNumber];

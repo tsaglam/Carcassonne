@@ -49,7 +49,8 @@ public abstract class SecondaryGUI extends JPanel {
      * Sets the tile of the GUI, updates the GUI and then makes it visible. Should be called to show
      * the GUI. The method implements the template method pattern using the method
      * <code>update()</code>.
-     * @param tile
+     * @param tile sets the tile.
+     * @param currentPlayer sets the color scheme according to the player.
      */
     public void setTile(Tile tile, int currentPlayer) {
         if (tile == null) {

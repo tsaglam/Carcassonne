@@ -55,6 +55,7 @@ public class Meeple {
     /**
      * Places meeple on a specific tile. This method calls Tile.setMeeple().
      * @param tile is the specific tile.
+     * @param position is the position of the meeple on the tile.
      */
     public void placeOn(Tile tile, GridDirection position) {
         if (tile == null) {

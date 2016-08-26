@@ -128,6 +128,12 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
         return (ordinal + 2) % 4;
     }
 
+    /**
+     * Checks whether the ordinal of a direction is smaller or equal than the ordinal of another
+     * direction.
+     * @param other is the other direction.
+     * @return true if smaller or equal.
+     */
     public boolean isSmallerOrEquals(GridDirection other) {
         return this.ordinal() <= other.ordinal();
     }

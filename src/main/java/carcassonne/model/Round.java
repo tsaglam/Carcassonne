@@ -37,24 +37,37 @@ public class Round {
         turnCounter = 1;
     }
 
+    /**
+     * Getter for the active player of the round.
+     * @return the player whose turn it is.
+     */
     public Player getActivePlayer() {
         return player[activePlayer];
     }
 
+    /**
+     * Getter for the current tile, that was drawn from the tile stack.
+     * @return the current tile of the turn.
+     */
     public Tile getCurrentTile() {
         return currentTile;
     }
 
+    /**
+     * Getter for a specific player of the round.
+     * @param playerNumber is the number of the specific player.
+     * @return returns the player.
+     */
     public Player getPlayer(int playerNumber) {
         return player[playerNumber];
     }
 
+    /**
+     * Getter for the amount of players in the round.
+     * @return the amount of players.
+     */
     public int getPlayerCount() {
         return playerCount;
-    }
-
-    public TileStack getTileStack() {
-        return tileStack;
     }
 
     /**
@@ -114,6 +127,10 @@ public class Round {
         currentTile = tileStack.drawTile();
     }
 
+    /**
+     * Setter for the current tile. Is used e.g. if the tile was rotated.
+     * @param currentTile the new current tile.
+     */
     public void setCurrentTile(Tile currentTile) {
         this.currentTile = currentTile;
     }

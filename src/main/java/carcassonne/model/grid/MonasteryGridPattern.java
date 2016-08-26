@@ -17,9 +17,9 @@ import carcassonne.model.tile.TileType;
 public class MonasteryGridPattern extends GridPattern {
 
     /**
-     * Simple constructor. MonastryGridPatterns are created instantly with all tiles, because they
-     * are easy to detect. Also they are complete from object construction on.
-     * @param tiles the tiles to add to the pattern.
+     * Simple constructor that creates the pattern.
+     * @param startingTile is the starting tile of the pattern, containing a monastery.
+     * @param grid is the grid the pattern is created from.
      */
     public MonasteryGridPattern(Tile startingTile, Grid grid) {
         super(TerrainType.MONASTERY);

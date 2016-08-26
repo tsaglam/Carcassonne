@@ -69,6 +69,7 @@ public class Scoreboard {
      * Updates a label of the scoreboard.
      * @param playerNumber is the number of the player whose label should get updated.
      * @param points is the amount of points the players has.
+     * @param unusedMeeples is the amount of unused meeples of the player.
      */
     public void update(int playerNumber, int points, int unusedMeeples) {
         String playerName = options.playerNames[playerNumber] + " ";

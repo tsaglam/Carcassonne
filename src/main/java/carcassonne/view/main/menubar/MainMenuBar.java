@@ -26,7 +26,9 @@ public class MainMenuBar extends JMenuBar {
     private JRadioButtonMenuItem[] itemPlayerCount;
 
     /**
-     * Simple constructor
+     * Simple constructor creating the menu bar.
+     * @param scoreboard sets the scoreboard of the menu bar.
+     * @param controller sets the connection to game the controller.
      */
     public MainMenuBar(Scoreboard scoreboard, MainController controller) {
         super();

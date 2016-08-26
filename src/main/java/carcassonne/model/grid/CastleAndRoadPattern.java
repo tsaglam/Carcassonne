@@ -16,6 +16,7 @@ public class CastleAndRoadPattern extends GridPattern {
      * @param startingTile is the starting tile of the pattern.
      * @param startingDirection is the starting direction of the pattern.
      * @param patternType is the type of the pattern.
+     * @param grid is the grid the pattern is created on.
      */
     public CastleAndRoadPattern(Tile startingTile, GridDirection startingDirection, TerrainType patternType, Grid grid) {
         super(patternType);

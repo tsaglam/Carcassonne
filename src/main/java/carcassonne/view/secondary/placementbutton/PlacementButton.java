@@ -30,6 +30,12 @@ public class PlacementButton extends JButton {
         setup(controller, x, y);
     }
 
+    /**
+     * Method checks whether the button is enabled or not. On MAC OS X it uses the normal JButton
+     * functionality. On other systems it checks a custom variable set by the custom setEnabled
+     * method.
+     * @return true if the button is enabled.
+     */
     public boolean isHackyEnabled() {
         if (options.operatingSystemName.startsWith("Mac")) {
             return isEnabled(); // normal function on mac os x

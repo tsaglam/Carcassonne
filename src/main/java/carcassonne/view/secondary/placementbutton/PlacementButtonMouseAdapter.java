@@ -20,8 +20,9 @@ public class PlacementButtonMouseAdapter extends MouseAdapter {
 
     /**
      * Basic constructor with the button and the controller to set.
-     * @param meepleButton should be the button that uses the adapter.
+     * @param direction is the direction on a tile the adapter places meeples on.
      * @param controller sets the controller that is notified.
+     * @param button is the button which uses the adapter.
      */
     public PlacementButtonMouseAdapter(GridDirection direction, MainController controller, PlacementButton button) {
         super();

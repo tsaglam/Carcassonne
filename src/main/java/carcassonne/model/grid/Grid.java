@@ -95,6 +95,7 @@ public class Grid {
      * last placed tile.
      * @param x is the x coordinate of the last placed tile.
      * @param y is the y coordinate of the last placed tile.
+     * @return the list of the changed patterns.
      */
     public List<GridPattern> getInfluencedPatterns(int x, int y) {
         checkParameters(x, y);
