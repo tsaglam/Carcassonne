@@ -30,7 +30,7 @@ public class Player {
         this.number = number;
         overallScore = 0;
         scoreMap = new HashMap<TerrainType, Integer>();
-        for (int i = 0; i < TerrainType.values().length - 2; i++) {
+        for (int i = 0; i < TerrainType.values().length - 1; i++) {
             scoreMap.put(TerrainType.values()[i], 0);
         }
         unusedMeeples = new LinkedList<Meeple>();
@@ -57,13 +57,11 @@ public class Player {
      * @return the scores.
      */
     public int[] getAllScores() {
-        int[] allScores = new int[scoreMap.size() + 1];
-        int index = 0;
-        for (Integer score : scoreMap.values()) {
-            allScores[index] = score;
-            index++;
+        int[] allScores = new int[5];
+        for (int i = 0; i < TerrainType.values().length - 1; i++) {
+            allScores[i] = scoreMap.get(TerrainType.values()[i]);
         }
-        allScores[index] = overallScore;
+        allScores[4] = overallScore;
         return allScores;
     }
 

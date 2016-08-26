@@ -12,7 +12,7 @@ public class GameStatisticsModel extends AbstractTableModel {
 
     private static final long serialVersionUID = -7138458001360243937L;
     private Round round;
-    private String[] header = { "player", "castle points", "road points", "field points", "overall score" };
+    private String[] header = { "player", "castle points", "road points", "monastery points", "field points", "overall score" };
 
     /**
      * Creates the game statistics model with the current round.
