@@ -83,6 +83,9 @@ public class MainGUI {
      */
     public void removeMeeple(Meeple meeple) {
         Tile tile = meeple.getPlacementLocation();
+        if (tile == null) { // make sure meeple is placed
+            throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI");
+        }
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 meepleGrid[tile.getX() * 3 + x][tile.getY() * 3 + y].setIcon(imageEmpty);
