@@ -34,6 +34,7 @@ public class MainMenuBar extends JMenuBar {
         playerCount = 2;
         buildMenuGame();
         buildMenuOptions();
+        add(new JLabel("          "));
         add(scoreboard);
     }
 

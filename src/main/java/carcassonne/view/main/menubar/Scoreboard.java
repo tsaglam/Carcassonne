@@ -1,5 +1,7 @@
 package carcassonne.view.main.menubar;
 
+import java.awt.Font;
+
 import javax.swing.JLabel;
 
 import carcassonne.control.GameOptions;
@@ -18,11 +20,11 @@ public class Scoreboard {
     public Scoreboard() {
         options = GameOptions.getInstance();
         scoreLabel = new JLabel[options.maximalPlayers];
+        Font font = new Font("Helvetica", Font.BOLD, 12);
         for (int i = 0; i < scoreLabel.length; i++) {
             scoreLabel[i] = new JLabel();
-            update(i, 0, -1);
             scoreLabel[i].setForeground(options.getPlayerColor(i));
-            scoreLabel[i].setVisible(false);
+            scoreLabel[i].setFont(font);
         }
 
     }
@@ -70,7 +72,7 @@ public class Scoreboard {
      */
     public void update(int playerNumber, int points, int unusedMeeples) {
         String playerName = options.playerNames[playerNumber] + " ";
-        scoreLabel[playerNumber].setText("[ " + playerName + ": " + points + " points, " + unusedMeeples + " meeples]    ");
+        scoreLabel[playerNumber].setText("[" + playerName + ": " + points + " points, " + unusedMeeples + " meeples]    ");
     }
 
 }

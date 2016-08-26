@@ -111,7 +111,7 @@ public final class GameOptions {
     /**
      * Names of the players.
      */
-    public final String[] playerNames = { "blue", "red", "green", "yellow" };
+    public final String[] playerNames = { "BLUE", "RED", "GREEN", "YELLOW" };
 
     private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(255, 214, 0) };
 
