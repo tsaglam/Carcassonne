@@ -128,18 +128,13 @@ public class Round {
     }
 
     /**
-     * Setter for the current tile. Is used e.g. if the tile was rotated.
-     * @param currentTile the new current tile.
-     */
-    public void setCurrentTile(Tile currentTile) {
-        this.currentTile = currentTile;
-    }
-
-    /**
      * Setter for the current tile.
      * @param newTile is the new Tile to set.
      */
     public void updateCurrentTile(Tile newTile) {
+        if (currentTile.getType() != newTile.getType()) {
+            throw new IllegalArgumentException("type of new tile does not match old tile");
+        }
         currentTile = newTile;
     }
 
