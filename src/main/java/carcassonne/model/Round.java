@@ -53,15 +53,6 @@ public class Round {
         return playerCount;
     }
 
-    /**
-     * Returns the score of a specific player.
-     * @param playerNumberis the number of the specific player.
-     * @return the score.
-     */
-    public int getScore(int playerNumber) {
-        return player[playerNumber].getScore();
-    }
-
     public TileStack getTileStack() {
         return tileStack;
     }

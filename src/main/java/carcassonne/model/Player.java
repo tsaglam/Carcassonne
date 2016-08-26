@@ -75,6 +75,14 @@ public class Player {
     }
 
     /**
+     * Getter for the amount of unused meeples.
+     * @return the amount of unused meeples.
+     */
+    public int getUnusedMeepleCount() {
+        return unusedMeeples.size();
+    }
+
+    /**
      * Getter for the score of the player.
      * @return the score
      */

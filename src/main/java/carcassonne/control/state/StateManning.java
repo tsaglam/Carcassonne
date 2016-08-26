@@ -57,6 +57,7 @@ public class StateManning extends AbstractControllerState {
         Player player = round.getActivePlayer();
         player.placeMeepleAt(tile, position);
         mainGUI.setMeeple(tile, position, player);
+        updateScores();
     }
 
     // gives the players the points they earned.

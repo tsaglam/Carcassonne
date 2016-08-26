@@ -20,7 +20,7 @@ public class Scoreboard {
         scoreLabel = new JLabel[options.maximalPlayers];
         for (int i = 0; i < scoreLabel.length; i++) {
             scoreLabel[i] = new JLabel();
-            update(i, 0);
+            update(i, 0, -1);
             scoreLabel[i].setForeground(options.getPlayerColor(i));
             scoreLabel[i].setVisible(false);
         }
@@ -68,9 +68,9 @@ public class Scoreboard {
      * @param playerNumber is the number of the player whose label should get updated.
      * @param points is the amount of points the players has.
      */
-    public void update(int playerNumber, int points) {
+    public void update(int playerNumber, int points, int unusedMeeples) {
         String playerName = options.playerNames[playerNumber] + " ";
-        scoreLabel[playerNumber].setText("[" + playerName + ": " + points + "]    ");
+        scoreLabel[playerNumber].setText("[ " + playerName + ": " + points + " points, " + unusedMeeples + " meeples]    ");
     }
 
 }

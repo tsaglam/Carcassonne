@@ -2,6 +2,7 @@ package carcassonne.control.state;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
+import carcassonne.model.Player;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
@@ -118,8 +119,10 @@ public abstract class AbstractControllerState {
      * Updates the round and the grid of every state after a new round has been started.
      */
     protected void updateScores() {
-        for (int player = 0; player < round.getPlayerCount(); player++) {
-            scoreboard.update(player, round.getScore(player));
+        Player player;
+        for (int playerNumber = 0; playerNumber < round.getPlayerCount(); playerNumber++) {
+            player = round.getPlayer(playerNumber);
+            scoreboard.update(playerNumber, player.getScore(), player.getUnusedMeepleCount());
         }
     }
 }
