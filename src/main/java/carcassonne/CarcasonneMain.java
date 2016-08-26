@@ -26,7 +26,7 @@ public final class CarcasonneMain {
                     }
                 }
             } catch (Exception e) {
-                GameMessage.showError("Nimbus Look and Feel is not installed. Using default look and feel instead.");
+                GameMessage.showError("Could not use Nimbus LookAndFeel. Using default look and feel instead (" + e.getMessage() + ").");
             }
         }
         new MainController();
