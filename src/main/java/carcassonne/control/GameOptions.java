@@ -21,7 +21,7 @@ public final class GameOptions {
      * exist at a time.
      * @return the instance.
      */
-    public static GameOptions getInstance() {
+    public synchronized static GameOptions getInstance() {
         if (instance == null) {
             instance = new GameOptions();
         }
