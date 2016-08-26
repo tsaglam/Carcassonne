@@ -46,7 +46,7 @@ public class Player {
      * @param scoreType determines the score multiplier.
      */
     public void addScore(int amount, TerrainType scoreType) {
-        int scoreToAdd = calculatescore(amount, scoreType);
+        int scoreToAdd = calculateScore(amount, scoreType);
         scoreMap.put(scoreType, scoreMap.get(scoreType) + scoreToAdd);
         overallScore += scoreToAdd;
     }
@@ -133,11 +133,11 @@ public class Player {
      * @param scoreType is the type of score, which influences the multiplier.
      * @return the multiplied score.
      */
-    private int calculatescore(int amount, TerrainType scoreType) {
+    private int calculateScore(int amount, TerrainType scoreType) {
         if (scoreType == TerrainType.CASTLE) {
             return amount * 2;
         } else if (scoreType == TerrainType.FIELDS) {
-            return amount * 9;
+            return amount * 3;
         } else {
             return amount;
         }
