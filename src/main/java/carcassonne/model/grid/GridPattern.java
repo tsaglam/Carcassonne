@@ -101,8 +101,8 @@ public class GridPattern {
     }
 
     /**
-     * Removes the tags of the tile of the pattern. Should be called if the check for this kind of
-     * pattern is complete.
+     * Removes all tags of all tiles of the pattern. Needs to be called after ALL patterns of a tile
+     * have been created.
      */
     public void removeTileTags() {
         for (Tile tile : tileList) {
@@ -118,16 +118,24 @@ public class GridPattern {
     // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
     private void addMeepleFrom(Tile tile) {
         Meeple meeple = tile.getMeeple(); // Meeple on the tile.
-        Player player = meeple.getOwner(); // owner of the meeple.
-        GridDirection position = meeple.getPlacementPosition(); // position of meeple on tile.
-        if (tile.getTerrain(position) == patternType && (tile.isConnectedToTag(position) || patternType == TerrainType.MONASTERY)) {
-            if (involvedPlayers.containsKey(player)) {
-                involvedPlayers.put(player, involvedPlayers.get(player) + 1);
-            } else {
-                involvedPlayers.put(player, 1);
+        if (!meepleList.contains(meeple)) {
+            GridDirection position = meeple.getPlacementPosition(); // position of meeple on tile.
+            if (isPartOfPattern(tile, position)) {
+                Player player = meeple.getOwner(); // owner of the meeple.
+                if (involvedPlayers.containsKey(player)) {
+                    involvedPlayers.put(player, involvedPlayers.get(player) + 1);
+                } else {
+                    involvedPlayers.put(player, 1);
+                }
+                meepleList.add(meeple);
             }
-            meepleList.add(meeple);
         }
+    }
+
+    private boolean isPartOfPattern(Tile tile, GridDirection position) {
+        boolean isOnCorrectTerrain = tile.getTerrain(position) == patternType;
+        boolean isOnPattern = tile.isConnectedToTag(position) || patternType == TerrainType.MONASTERY;
+        return isOnCorrectTerrain && isOnPattern;
     }
 
     /**

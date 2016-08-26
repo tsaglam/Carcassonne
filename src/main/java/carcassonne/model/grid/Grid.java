@@ -294,6 +294,9 @@ public class Grid {
         for (Tile neighbour : getNeighbors(startingTile)) {
             addPatternIfMonastery(neighbour, results); // neighbors
         }
+        for (GridPattern pattern : results) {
+            pattern.removeTileTags(); // IMPORTANT
+        }
         return results; // return all patterns.
     }
 

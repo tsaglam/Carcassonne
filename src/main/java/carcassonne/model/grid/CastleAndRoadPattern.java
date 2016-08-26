@@ -22,27 +22,19 @@ public class CastleAndRoadPattern extends GridPattern {
         checkArgs(startingTile, startingDirection, patternType, grid);
         startingTile.setTag(startingDirection); // initial tag
         add(startingTile); // initial tile
-        complete = buildPattern(startingTile, startingDirection, grid); // recusive algorithm.
-        removeTileTags();
+        complete = buildPattern(startingTile, startingDirection, grid); // recursive algorithm.
     }
 
     private boolean buildPattern(Tile startingTile, GridDirection startingPoint, Grid grid) {
         boolean isClosed = true;
         Tile neighbor;
-        GridDirection oppositeDirection;
-        for (GridDirection direction : GridDirection.directNeighbors()) { // for direction
+        for (GridDirection direction : GridDirection.directNeighbors()) { // for every side
             if (startingTile.isConnected(startingPoint, direction)) { // if is connected side
                 neighbor = grid.getNeighbour(startingTile, direction); // get the neighbor
                 if (neighbor == null) { // if it has no neighbor
-                    isClosed = false; // open connection, can't be finished pattern.
-                } else {
-                    oppositeDirection = GridDirection.opposite(direction);
-                    if (neighbor.isNotTagged(oppositeDirection)) { // if neighbor not visited yet
-                        startingTile.setTag(direction);
-                        neighbor.setTag(oppositeDirection); // mark as visited
-                        add(neighbor); // add to pattern
-                        isClosed &= buildPattern(neighbor, oppositeDirection, grid);
-                    }
+                    isClosed = false; // open side, can't be finished pattern.
+                } else { // continue on neighbors
+                    isClosed &= checkNeighbor(startingTile, neighbor, direction, grid);
                 }
             }
         }
@@ -55,5 +47,16 @@ public class CastleAndRoadPattern extends GridPattern {
         } else if (tile == null || direction == null || grid == null) {
             throw new IllegalArgumentException("Arguments can't be null");
         }
+    }
+
+    private boolean checkNeighbor(Tile startingTile, Tile neighbor, GridDirection direction, Grid grid) {
+        GridDirection oppositeDirection = GridDirection.opposite(direction);
+        if (neighbor.isNotConnectedToTag(oppositeDirection)) { // if neighbor not visited yet
+            startingTile.setTag(direction);
+            neighbor.setTag(oppositeDirection); // mark as visited
+            add(neighbor); // add to pattern
+            return buildPattern(neighbor, oppositeDirection, grid);
+        }
+        return true;
     }
 }
