@@ -87,7 +87,7 @@ public class MainGUI {
     public void removeMeeple(Meeple meeple) {
         Tile tile = meeple.getPlacementLocation();
         if (tile == null) { // make sure meeple is placed
-            throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI");
+            throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI: " + meeple);
         }
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
@@ -104,10 +104,12 @@ public class MainGUI {
      * @param y is the y coordinate.
      */
     public void set(Tile tile, int x, int y) {
-        if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight) {
-            labelGrid[x][y].setIcon(tile.getImage());
-        } else {
+        if (tile == null) {
+            throw new IllegalArgumentException("Tile can't be null to be set on the GUI");
+        } else if (x < 0 && x >= gridWidth || y < 0 && y >= gridHeight) {
             throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
+        } else {
+            labelGrid[x][y].setIcon(tile.getImage());
         }
     }
 
@@ -118,6 +120,9 @@ public class MainGUI {
      * @param owner is the player that owns the meeple.
      */
     public void setMeeple(Tile tile, GridDirection position, Player owner) {
+        if (tile == null || position == null || owner == null) {
+            throw new IllegalArgumentException("Arguments can't be null to set a meeple on the GUI");
+        }
         int xpos = GridDirection.addX(tile.getX() * 3 + 1, position);
         int ypos = GridDirection.addY(tile.getY() * 3 + 1, position);
         ImageIcon icon = new ImageIcon(options.buildImagePath(tile.getTerrain(position), owner.getNumber()));
