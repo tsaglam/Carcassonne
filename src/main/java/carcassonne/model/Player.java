@@ -114,7 +114,7 @@ public class Player {
      */
     public void returnMeeple(Meeple meeple) {
         if (!usedMeeples.remove(meeple)) { // if it can not find the meeple in the used list.
-            throw new IllegalArgumentException("This meeple is not in the used list.");
+            throw new IllegalArgumentException("This meeple is not in the used list: " + meeple);
         }
         unusedMeeples.add(meeple); // put in unused list if it was previously used.
     }
