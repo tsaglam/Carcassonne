@@ -52,20 +52,6 @@ public class Player {
     }
 
     /**
-     * Getter for all scores of the player: the different scores from the scoreMap and the overall
-     * score.
-     * @return the scores.
-     */
-    public int[] getAllScores() {
-        int[] allScores = new int[5];
-        for (int i = 0; i < TerrainType.values().length - 1; i++) {
-            allScores[i] = scoreMap.get(TerrainType.values()[i]);
-        }
-        allScores[4] = overallScore;
-        return allScores;
-    }
-
-    /**
      * Getter for number of the player.
      * @return the player number.
      */
@@ -74,19 +60,30 @@ public class Player {
     }
 
     /**
-     * Getter for the amount of unused meeples.
-     * @return the amount of unused meeples.
-     */
-    public int getUnusedMeepleCount() {
-        return unusedMeeples.size();
-    }
-
-    /**
      * Getter for the score of the player.
      * @return the score
      */
     public int getScore() {
         return overallScore;
+    }
+
+    /**
+     * Getter for a specific terrain score.
+     * @return the specific score.
+     */
+    public int getTerrainScore(TerrainType scoreType) {
+        if (scoreMap.containsKey(scoreType)) {
+            return scoreMap.get(scoreType);
+        }
+        return -1; // error
+    }
+
+    /**
+     * Getter for the amount of unused meeples.
+     * @return the amount of unused meeples.
+     */
+    public int getUnusedMeepleCount() {
+        return unusedMeeples.size();
     }
 
     /**
