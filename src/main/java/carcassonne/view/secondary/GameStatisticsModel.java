@@ -44,7 +44,7 @@ public class GameStatisticsModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
-            return options.playerNames[rowIndex + 1];
+            return options.playerNames[rowIndex];
         } else if (columnIndex == 5) {
             return round.getPlayer(rowIndex).getScore();
         } else {
