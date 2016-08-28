@@ -298,6 +298,10 @@ public class Grid {
         for (GridPattern pattern : results) {
             pattern.removeTileTags(); // IMPORTANT
         }
+        System.out.println("Found patterns:"); // TODO (HIGHEST) remove debug output
+        for (GridPattern pattern : results) {
+            System.out.println(pattern); // TODO (HIGHEST) remove debug output
+        }
         return results; // return all patterns.
     }
 
