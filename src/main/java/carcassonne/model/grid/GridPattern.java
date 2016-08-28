@@ -61,8 +61,8 @@ public class GridPattern {
                 for (Player player : involvedPlayers.keySet()) {
                     if (involvedPlayers.get(player) == maximum) {
                         divider++;
-                    } else {
-                        involvedPlayers.remove(player);
+                    } else { // TODO (HIGH) Fix java.util.ConcurrentModificationException
+                        involvedPlayers.remove(player); // maybe just remove this after iterating
                     }
                 }
                 for (Player player : involvedPlayers.keySet()) {
@@ -112,7 +112,7 @@ public class GridPattern {
 
     @Override
     public String toString() {
-        return "GridPattern of type " + patternType + ", size " + getSize() + " and is complete: " + complete;
+        return "GridPattern[type: " + patternType + ", size: " + getSize() + ", complete: " + complete + ", meeples: " + meepleList;
     }
 
     // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
