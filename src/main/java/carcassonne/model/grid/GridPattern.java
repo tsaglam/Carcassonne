@@ -56,20 +56,21 @@ public class GridPattern {
     public void disburse() {
         if (!disbursed) {
             if (complete && involvedPlayers.size() > 0) {
-                int maximum = Collections.max(involvedPlayers.values());
-                double divider = 0;
-                for (Player player : involvedPlayers.keySet()) {
-                    if (involvedPlayers.get(player) == maximum) {
-                        divider++;
-                    } else { // TODO (HIGH) Fix java.util.ConcurrentModificationException
-                        involvedPlayers.remove(player); // maybe just remove this after iterating
+                List<Player> removalList = new LinkedList<Player>();
+                int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
+                for (Player player : involvedPlayers.keySet()) { // for all involved players
+                    if (involvedPlayers.get(player) != maximum) { // if has not enough meeples
+                        removalList.add(player); // add to removal list (remove later)
                     }
                 }
-                for (Player player : involvedPlayers.keySet()) {
-                    player.addScore((int) Math.ceil(getSize() / divider), patternType);
+                for (Player player : removalList) {
+                    involvedPlayers.remove(player); // remove players who don't get points
+                }
+                for (Player player : involvedPlayers.keySet()) { // other players split the pot
+                    player.addScore((int) Math.ceil(getSize() / involvedPlayers.size()), patternType);
                 }
                 for (Meeple meeple : meepleList) {
-                    meeple.removePlacement();
+                    meeple.removePlacement(); // remove meeples from tiles.
                 }
                 disbursed = true;
             }
