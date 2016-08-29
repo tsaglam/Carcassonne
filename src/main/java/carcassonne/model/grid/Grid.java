@@ -314,6 +314,27 @@ public class Grid {
         return results; // return all patterns.
     }
 
+    // method tries to find a path of free grid spaces to the grid border.
+    private boolean findBoundary(int x, int y, GridDirection direction, boolean[][] visitedPositions) {
+        int newX = GridDirection.addX(x, direction); // get coordinates
+        int newY = GridDirection.addY(y, direction); // of free space
+        if (isOnGrid(newX, newY)) { // if on grid
+            if (isOccupied(newX, newY)) {
+                return false; // is a tile, can't go through tiles
+            } else if (visitedPositions[newX][newY] == false) { // if not visited
+                visitedPositions[newX][newY] = true; // mark as visited
+                for (GridDirection newDirection : GridDirection.directNeighbors()) { // recursion
+                    if (findBoundary(newX, newY, newDirection, visitedPositions)) {
+                        return true; // found boundary
+                    }
+                }
+            }
+        } else { // if not on grid
+            return true; // found boundary
+        }
+        return false; // has not found boundary
+    }
+
     /**
      * Forces to place a tile on a spot on the grid.
      * @param x is the x coordinate
@@ -328,17 +349,14 @@ public class Grid {
             this.tile[x][y] = tile;
             return true; // tile was successfully placed.
         }
-
         return false; // tile can't be placed, spot is occupied.
     }
 
+    // method checks if a grid space is part of a walled off grid space set
     private boolean isClosingFreeSpaceOff(int x, int y, GridDirection direction) {
-        int newX = GridDirection.addX(x, direction); // get coordinates
-        int newY = GridDirection.addY(y, direction); // of free space
-        if (isOnGrid(newX, newY)) {
-            return getDirectNeighbors(newX, newY).size() > 2;
-        }
-        return false;
+        boolean[][] visitedPositions = new boolean[width][height];
+        visitedPositions[x][y] = true; // mark starting point as visited
+        return !findBoundary(x, y, direction, visitedPositions); // start recursion
     }
 
     /**
