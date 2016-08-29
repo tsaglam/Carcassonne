@@ -8,7 +8,6 @@ import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
-import carcassonne.view.secondary.GameMessage;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -36,7 +35,8 @@ public abstract class AbstractControllerState {
      * @param placementGUI sets the PlacementGUI
      * @param scoreboard sets the Scoreboard
      */
-    public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
+    public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI,
+            Scoreboard scoreboard) {
         this.controller = controller;
         this.mainGUI = mainGUI;
         this.rotationGUI = rotationGUI;
@@ -49,41 +49,31 @@ public abstract class AbstractControllerState {
     /**
      * Starts new round with a specific amount of players.
      */
-    public void abortGame() {
-        GameMessage.showWarning("You can't abort a game right now.");
-    }
+    public abstract void abortGame();
 
     /**
      * Starts new round with a specific amount of players.
      * @param playerCount sets the amount of players.
      */
-    public void newGame(int playerCount) {
-        GameMessage.showWarning("You can't start a new game right now.");
-    }
+    public abstract void newGame(int playerCount);
 
     /**
      * Method for the view to call if a user mans a tile with a Meeple.
      * @param position is the placement position.
      */
-    public void placeMeeple(GridDirection position) {
-        GameMessage.showWarning("You can't place meeple tile right now.");
-    }
+    public abstract void placeMeeple(GridDirection position);
 
     /**
      * Method for the view to call if a user places a tile.
      * @param x is the x coordinate.
      * @param y is the y coordinate.
      */
-    public void placeTile(int x, int y) {
-        // GameMessage.showWarning("You can't place a tile right now.");
-    }
+    public abstract void placeTile(int x, int y);
 
     /**
      * Method for the view to call if the user wants to skip a round.
      */
-    public void skip() {
-        GameMessage.showWarning("You can't place a tile right now.");
-    }
+    public abstract void skip();
 
     /**
      * Updates the round and the grid object after a new round was started.

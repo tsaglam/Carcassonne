@@ -1,9 +1,11 @@
 package carcassonne.control.state;
 
 import carcassonne.control.MainController;
+import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
+import carcassonne.view.secondary.GameMessage;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -33,6 +35,26 @@ public class StatePlacing extends AbstractControllerState {
         changeState(StateGameOver.class);
     }
 
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#newGame()
+     */
+    @Override
+    public void newGame(int playerCount) {
+        GameMessage.showWarning("Abort the current game before starting a new one.");
+
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#placeMeeple()
+     */
+    @Override
+    public void placeMeeple(GridDirection position) {
+        throw new IllegalStateException("Placing meeples in StatePlacing is not allowed.");
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#placeTile()
+     */
     @Override
     public void placeTile(int x, int y) {
         Tile tile = rotationGUI.getTile();
@@ -43,6 +65,9 @@ public class StatePlacing extends AbstractControllerState {
         }
     }
 
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#skip()
+     */
     @Override
     public void skip() {
         round.nextTurn();

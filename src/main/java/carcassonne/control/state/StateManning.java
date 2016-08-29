@@ -38,6 +38,17 @@ public class StateManning extends AbstractControllerState {
         changeState(StateGameOver.class);
     }
 
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#newGame()
+     */
+    @Override
+    public void newGame(int playerCount) {
+        GameMessage.showWarning("Abort the current game before starting a new one.");
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#placeMeeple()
+     */
     @Override
     public void placeMeeple(GridDirection position) {
         placeAndShowMeeple(position);
@@ -45,6 +56,17 @@ public class StateManning extends AbstractControllerState {
         startNextTurn();
     }
 
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#placeTile()
+     */
+    @Override
+    public void placeTile(int x, int y) {
+        throw new IllegalStateException("Placing tiles in StateManning is not allowed.");
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#skip()
+     */
     @Override
     public void skip() {
         processGridPatterns();

@@ -3,8 +3,10 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
+import carcassonne.model.grid.GridDirection;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
+import carcassonne.view.secondary.GameMessage;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -27,6 +29,14 @@ public class StateIdle extends AbstractControllerState {
     }
 
     /**
+     * @see carcassonne.control.state.AbstractControllerState#abortGame()
+     */
+    @Override
+    public void abortGame() {
+        GameMessage.showMessage("There is currently no game running.");
+    }
+
+    /**
      * @see carcassonne.control.state.AbstractControllerState#newGame()
      */
     @Override
@@ -37,6 +47,30 @@ public class StateIdle extends AbstractControllerState {
         updateScores();
         mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
         changeState(StateManning.class);
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#placeMeeple()
+     */
+    @Override
+    public void placeMeeple(GridDirection position) {
+        throw new IllegalStateException("Placing meeples in StateIdle is not allowed.");
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#placeTile()
+     */
+    @Override
+    public void placeTile(int x, int y) {
+        throw new IllegalStateException("Placing tiles in StateIdle is not allowed.");
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#skip()
+     */
+    @Override
+    public void skip() {
+        throw new IllegalStateException("There is nothing to skip in StateIdle.");
     }
 
     /**

@@ -3,6 +3,7 @@ package carcassonne.control.state;
 import java.util.List;
 
 import carcassonne.control.MainController;
+import carcassonne.model.grid.GridDirection;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.secondary.GameMessage;
@@ -11,7 +12,7 @@ import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
 /**
- * The specific state where the stats are shown can be placed.
+ * The specific state where the statistics are shown can be placed.
  * @author Timur Saglam
  */
 public class StateGameOver extends AbstractControllerState {
@@ -26,6 +27,39 @@ public class StateGameOver extends AbstractControllerState {
      */
     public StateGameOver(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
         super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#abortGame()
+     */
+    @Override
+    public void abortGame() {
+        GameMessage.showWarning("You already aborted the current game. Close the game statistics to start a new game.");
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#newGame()
+     */
+    @Override
+    public void newGame(int playerCount) {
+        GameMessage.showWarning("Close the game statistics to start a new game.");
+
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#placeMeeple()
+     */
+    @Override
+    public void placeMeeple(GridDirection position) {
+        throw new IllegalStateException("Placing meeples in StateGameOver is not allowed.");
+    }
+
+    /**
+     * @see carcassonne.control.state.AbstractControllerState#placeTile()
+     */
+    @Override
+    public void placeTile(int x, int y) {
+        throw new IllegalStateException("Placing tiles in StateGameOver is not allowed.");
     }
 
     /**
