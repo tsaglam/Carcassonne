@@ -61,6 +61,7 @@ public abstract class SecondaryGUI extends JPanel {
         setBackground(options.getPlayerColorLight(currentPlayer));
         update();
         frame.setVisible(true);
+        frame.toFront(); // sets the focus on the secondary GUI, removes need for double clicks
     }
 
     /*
