@@ -56,6 +56,7 @@ public class GameStatisticsGUI {
         frame.add(buttonClose, BorderLayout.SOUTH);
         frame.pack();
         frame.setLocationRelativeTo(null);
+        frame.setAlwaysOnTop(true);
         frame.setVisible(true);
     }
 }
