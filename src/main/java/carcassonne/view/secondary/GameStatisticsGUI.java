@@ -35,13 +35,19 @@ public class GameStatisticsGUI {
         buildFrame();
     }
 
+    /**
+     * Hides and disposes the GUI.
+     */
+    public void closeGUI() {
+        frame.setVisible(false);
+        frame.dispose();
+    }
+
     private void buildButtonClose() {
         buttonClose = new JButton("Close");
         buttonClose.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.setVisible(false);
-                frame.dispose();
                 controller.requestSkip();
             }
         });

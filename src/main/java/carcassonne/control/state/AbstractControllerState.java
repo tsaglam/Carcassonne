@@ -115,4 +115,13 @@ public abstract class AbstractControllerState {
             scoreboard.update(playerNumber, player.getScore(), player.getUnusedMeepleCount());
         }
     }
+
+    protected void startNewRound(int playerCount) {
+        Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
+        Round newRound = new Round(playerCount, newGrid);
+        controller.updateStates(newRound, newGrid);
+        updateScores();
+        mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
+        changeState(StateManning.class);
+    }
 }

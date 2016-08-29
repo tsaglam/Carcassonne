@@ -1,8 +1,6 @@
 package carcassonne.control.state;
 
 import carcassonne.control.MainController;
-import carcassonne.model.Round;
-import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
@@ -41,12 +39,7 @@ public class StateIdle extends AbstractControllerState {
      */
     @Override
     public void newGame(int playerCount) {
-        Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
-        Round newRound = new Round(playerCount, newGrid);
-        controller.updateStates(newRound, newGrid);
-        updateScores();
-        mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
-        changeState(StateManning.class);
+        startNewRound(playerCount);
     }
 
     /**

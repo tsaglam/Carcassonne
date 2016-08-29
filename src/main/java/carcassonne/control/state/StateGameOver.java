@@ -17,6 +17,8 @@ import carcassonne.view.secondary.RotationGUI;
  */
 public class StateGameOver extends AbstractControllerState {
 
+    private GameStatisticsGUI gameStatistics;
+
     /**
      * Constructor of the state.
      * @param controller sets the Controller
@@ -42,8 +44,9 @@ public class StateGameOver extends AbstractControllerState {
      */
     @Override
     public void newGame(int playerCount) {
-        GameMessage.showWarning("Close the game statistics to start a new game.");
-
+        exit();
+        changeState(StateIdle.class);
+        startNewRound(playerCount);
     }
 
     /**
@@ -68,6 +71,7 @@ public class StateGameOver extends AbstractControllerState {
     @Override
     public void skip() {
         scoreboard.disable();
+        exit();
         changeState(StateIdle.class);
     }
 
@@ -78,7 +82,7 @@ public class StateGameOver extends AbstractControllerState {
     protected void entry() {
         List<String> winners = round.getWinningPlayers();
         GameMessage.showMessage("The game is over. Winning player(s): " + winners);
-        new GameStatisticsGUI(controller, round);
+        gameStatistics = new GameStatisticsGUI(controller, round);
     }
 
     /**
@@ -86,7 +90,7 @@ public class StateGameOver extends AbstractControllerState {
      */
     @Override
     protected void exit() {
-        // No exit functions.
+        gameStatistics.closeGUI();
     }
 
 }
