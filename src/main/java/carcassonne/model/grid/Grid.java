@@ -73,6 +73,15 @@ public class Grid {
     }
 
     /**
+     * Creates a list of direct neighbors.
+     * @param tile is the tile the neighbors get created of
+     * @return the list of neighbors
+     */
+    public List<Tile> getDirectNeighbors(Tile tile) {
+        return getDirectNeighbors(tile.getX(), tile.getY());
+    }
+
+    /**
      * Returns the first tile of round, the foundation tile.
      * @return the tile.
      */
@@ -323,6 +332,15 @@ public class Grid {
         return false; // tile can't be placed, spot is occupied.
     }
 
+    private boolean isClosingFreeSpaceOff(int x, int y, GridDirection direction) {
+        int newX = GridDirection.addX(x, direction); // get coordinates
+        int newY = GridDirection.addY(y, direction); // of free space
+        if (isOnGrid(newX, newY)) {
+            return getDirectNeighbors(newX, newY).size() > 2;
+        }
+        return false;
+    }
+
     /**
      * Checks whether a tile is placeable on a specific position on the grid. First the parameters
      * are checked. Then the method checks whether the terrain on every side of the tile fits to the
@@ -342,12 +360,16 @@ public class Grid {
             return false; // can't be placed if spot is occupied.
         }
         int neighborCount = 0;
-        Tile other;
+        Tile neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
-            other = getNeighbour(x, y, direction);
-            if (other != null) { // if there is a neighbor in the direction.
+            neighbor = getNeighbour(x, y, direction);
+            if (neighbor == null) { // free space
+                if (isClosingFreeSpaceOff(x, y, direction)) {
+                    return false; // you can't close of free spaces
+                }
+            } else { // if there is a neighbor in the direction.
                 neighborCount++;
-                if (!tile.hasSameTerrain(direction, other)) {
+                if (!tile.hasSameTerrain(direction, neighbor)) {
                     return false; // if it does not fit to terrain, it can't be placed.
                 }
             }
