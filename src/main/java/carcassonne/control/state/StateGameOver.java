@@ -62,7 +62,7 @@ public class StateGameOver extends AbstractControllerState {
      */
     @Override
     public void placeTile(int x, int y) {
-        throw new IllegalStateException("Placing tiles in StateGameOver is not allowed.");
+        // do nothing.
     }
 
     /**

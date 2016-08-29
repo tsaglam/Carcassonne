@@ -61,7 +61,7 @@ public class StateManning extends AbstractControllerState {
      */
     @Override
     public void placeTile(int x, int y) {
-        throw new IllegalStateException("Placing tiles in StateManning is not allowed.");
+        // do nothing.
     }
 
     /**

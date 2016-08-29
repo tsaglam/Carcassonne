@@ -55,7 +55,7 @@ public class StateIdle extends AbstractControllerState {
      */
     @Override
     public void placeTile(int x, int y) {
-        throw new IllegalStateException("Placing tiles in StateIdle is not allowed.");
+        // do nothing.
     }
 
     /**
