@@ -116,19 +116,6 @@ public class Player {
         return false; // Can't place meeple.
     }
 
-    private boolean canPlaceMeepleAt(Tile tile, GridDirection position, Grid grid) {
-        TerrainType terrain = tile.getTerrain(position);
-        if (terrain == TerrainType.MONASTERY) {
-            return true; // you can place on monastery
-        } else { // castle or road
-            CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile, position, terrain, grid);
-            if (pattern.isNotOccupied() || pattern.isOccupiedBy(this)) {
-                return true; // can place meeple
-            }
-        }
-        return false; // conflict with pattern occupation, can't place meeple.
-    }
-
     /**
      * Returns a meeple from the used meeples to the unused meeples.
      * @param meeple is the meeple to return;
@@ -160,6 +147,19 @@ public class Player {
         } else {
             return amount;
         }
+    }
+
+    private boolean canPlaceMeepleAt(Tile tile, GridDirection position, Grid grid) {
+        TerrainType terrain = tile.getTerrain(position);
+        if (terrain == TerrainType.MONASTERY) {
+            return true; // you can place on monastery
+        } else { // castle or road
+            CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile, position, terrain, grid);
+            if (pattern.isNotOccupied() || pattern.isOccupiedBy(this)) {
+                return true; // can place meeple
+            }
+        }
+        return false; // conflict with pattern occupation, can't place meeple.
     }
 
 }

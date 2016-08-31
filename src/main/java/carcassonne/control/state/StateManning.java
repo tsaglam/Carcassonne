@@ -51,9 +51,10 @@ public class StateManning extends AbstractControllerState {
      */
     @Override
     public void placeMeeple(GridDirection position) {
-        placeAndShowMeeple(position);
-        processGridPatterns();
-        startNextTurn();
+        if (placeAndShowMeeple(position)) {
+            processGridPatterns();
+            startNextTurn();
+        }
     }
 
     /**
@@ -73,16 +74,21 @@ public class StateManning extends AbstractControllerState {
         startNextTurn();
     }
 
-    // places meeple on grid an shows meeple on the GUI.
-    private void placeAndShowMeeple(GridDirection position) {
+    // places meeple on grid an shows meeple on the GUI, if its possible.
+    private boolean placeAndShowMeeple(GridDirection position) {
         Tile tile = round.getCurrentTile();
         Player player = round.getActivePlayer();
+        Boolean couldPlaceMeeple = false;
         if (player.placeMeepleAt(tile, position, grid)) {
+            System.out.println("CAN PLACE MEEPLE!"); // TODO
             mainGUI.setMeeple(tile, position, player);
+            couldPlaceMeeple = true;
+            updateScores();
         } else {
+            System.out.println("CAN'T PLACE MEEPLE!"); // TODO
             GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!");
         }
-        updateScores();
+        return couldPlaceMeeple;
     }
 
     // gives the players the points they earned.
