@@ -362,14 +362,9 @@ public class Grid {
     /**
      * Checks whether a tile is placeable on a specific position on the grid. First the parameters
      * are checked. Then the method checks whether the terrain on every side of the tile fits to the
-     * terrain of the neighboring tile.
-     * @param x is the x position on the grid.
-     * @param y is the y position on the grid.
-     * @param tile is the tile to place.
-     * @param freePlacement is the boolean that decides whether a tile has to connect to another
-     * tile.
-     * @return true if the tile can be placed on the grid position specified through the
-     * coordinates.
+     * terrain of the neighboring tile. Then it checks whether the placed tile would close off free
+     * spaces from the remaining unoccupied grid. At the end it checks if there is at least one
+     * direct neighboring space that is occupied.
      */
     private boolean isPlaceable(int x, int y, Tile tile, boolean freePlacement) {
         checkParameters(x, y); // check coordinates.
