@@ -103,7 +103,7 @@ public class Player {
      * @param position is the position the meeple gets placed on.
      * @return true if the meeple was placed, false if not.
      */
-    public boolean placeMeepleAt(Tile tile, GridDirection position, Grid grid) { // TODO
+    public boolean placeMeepleAt(Tile tile, GridDirection position, Grid grid) {
         if (unusedMeeples.isEmpty()) {
             throw new IllegalStateException("No unused meeples are left.");
         }
@@ -156,8 +156,10 @@ public class Player {
         } else { // castle or road
             CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile, position, terrain, grid);
             if (pattern.isNotOccupied() || pattern.isOccupiedBy(this)) {
+                pattern.removeTileTags();
                 return true; // can place meeple
             }
+            pattern.removeTileTags();
         }
         return false; // conflict with pattern occupation, can't place meeple.
     }

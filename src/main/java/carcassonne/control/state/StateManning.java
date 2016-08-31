@@ -80,12 +80,10 @@ public class StateManning extends AbstractControllerState {
         Player player = round.getActivePlayer();
         Boolean couldPlaceMeeple = false;
         if (player.placeMeepleAt(tile, position, grid)) {
-            System.out.println("CAN PLACE MEEPLE!"); // TODO
             mainGUI.setMeeple(tile, position, player);
             couldPlaceMeeple = true;
             updateScores();
         } else {
-            System.out.println("CAN'T PLACE MEEPLE!"); // TODO
             GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!");
         }
         return couldPlaceMeeple;
