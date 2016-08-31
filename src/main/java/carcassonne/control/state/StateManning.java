@@ -77,8 +77,11 @@ public class StateManning extends AbstractControllerState {
     private void placeAndShowMeeple(GridDirection position) {
         Tile tile = round.getCurrentTile();
         Player player = round.getActivePlayer();
-        player.placeMeepleAt(tile, position);
-        mainGUI.setMeeple(tile, position, player);
+        if (player.placeMeepleAt(tile, position, grid)) {
+            mainGUI.setMeeple(tile, position, player);
+        } else {
+            GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!");
+        }
         updateScores();
     }
 

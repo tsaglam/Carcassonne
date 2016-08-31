@@ -102,6 +102,24 @@ public class GridPattern {
     }
 
     /**
+     * Checks whether no player has set a meeple on the pattern.
+     * @return true if the pattern is not occupied, false if not.
+     */
+    public boolean isNotOccupied() {
+        return involvedPlayers.size() == 0;
+    }
+
+    /**
+     * Checks whether a specific player is involved in the occupation of the pattern. That means he
+     * has at least one meeple on the pattern.
+     * @param player is the specific player.
+     * @return true if he is involved in the occupation of the pattern, false if not.
+     */
+    public boolean isOccupiedBy(Player player) {
+        return involvedPlayers.containsKey(player);
+    }
+
+    /**
      * Removes all tags of all tiles of the pattern. Needs to be called after ALL patterns of a tile
      * have been created.
      */

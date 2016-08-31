@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import carcassonne.model.grid.CastleAndRoadPattern;
+import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
@@ -95,17 +97,36 @@ public class Player {
     }
 
     /**
-     * Places one of its meeples on a tile. Tells the meeple it was placed.
+     * Places, if possible, one of the players meeples on a specific tile on the grid. Tells the
+     * meeple it was placed.
      * @param tile is the tile to place a meeple on.
      * @param position is the position the meeple gets placed on.
+     * @return true if the meeple was placed, false if not.
      */
-    public void placeMeepleAt(Tile tile, GridDirection position) {
+    public boolean placeMeepleAt(Tile tile, GridDirection position, Grid grid) { // TODO
         if (unusedMeeples.isEmpty()) {
             throw new IllegalStateException("No unused meeples are left.");
         }
-        Meeple meeple = unusedMeeples.remove(0); // get free meeple.
-        meeple.placeOn(tile, position); // place it.
-        usedMeeples.add(meeple); // and put it to the used ones.
+        if (canPlaceMeepleAt(tile, position, grid)) { // can place meeple:
+            Meeple meeple = unusedMeeples.remove(0); // get free meeple.
+            meeple.placeOn(tile, position); // place it.
+            usedMeeples.add(meeple); // and put it to the used ones.
+            return true;
+        }
+        return false; // Can't place meeple.
+    }
+
+    private boolean canPlaceMeepleAt(Tile tile, GridDirection position, Grid grid) {
+        TerrainType terrain = tile.getTerrain(position);
+        if (terrain == TerrainType.MONASTERY) {
+            return true; // you can place on monastery
+        } else { // castle or road
+            CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile, position, terrain, grid);
+            if (pattern.isNotOccupied() || pattern.isOccupiedBy(this)) {
+                return true; // can place meeple
+            }
+        }
+        return false; // conflict with pattern occupation, can't place meeple.
     }
 
     /**
@@ -121,7 +142,8 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player[number: " + number + ", score: " + overallScore + ", used meeples: " + usedMeeples.size() + ", unused meeples: " + unusedMeeples.size() + "]";
+        return "Player[number: " + number + ", score: " + overallScore + ", used meeples: " + usedMeeples.size() + ", unused meeples: "
+                + unusedMeeples.size() + "]";
     }
 
     /**
