@@ -31,6 +31,25 @@ public class Grid {
     }
 
     /**
+     * Returns list of all patterns on the grid.
+     * @return the list of patterns.
+     */
+    public List<GridPattern> getAllPatterns() {
+        List<GridPattern> patterns = new LinkedList<GridPattern>();
+        Tile currentTile;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                currentTile = tile[x][y]; // get tile.
+                patterns.addAll(createPatternList(currentTile));
+            }
+        }
+        for (GridPattern pattern : patterns) {
+            pattern.removeTileTags(); // IMPORTANT
+        }
+        return patterns; // get patterns.
+    }
+
+    /**
      * Creates a list of tiles that are connected to a specific tile with the terrain in a specific
      * direction on the tile.
      * @param x is the x coordinate
