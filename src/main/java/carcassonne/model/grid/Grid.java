@@ -39,8 +39,10 @@ public class Grid {
         Tile currentTile;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                currentTile = tile[x][y]; // get tile.
-                patterns.addAll(createPatternList(currentTile));
+                if (isOccupied(x, y)) {
+                    currentTile = tile[x][y]; // get tile.
+                    patterns.addAll(createPatternList(currentTile));
+                }
             }
         }
         for (GridPattern pattern : patterns) {
