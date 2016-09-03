@@ -46,9 +46,10 @@ public class Player {
      * Adds score to the players score value and keeps track of the type of score.
      * @param amount is the amount of points the player gets.
      * @param scoreType determines the score multiplier.
+     * @param gameOver determines if the game is running or not. Changes score multipliers.
      */
-    public void addScore(int amount, TerrainType scoreType) {
-        int scoreToAdd = calculateScore(amount, scoreType);
+    public void addScore(int amount, TerrainType scoreType, boolean gameOver) {
+        int scoreToAdd = calculateScore(amount, scoreType, gameOver);
         scoreMap.put(scoreType, scoreMap.get(scoreType) + scoreToAdd);
         overallScore += scoreToAdd;
     }
@@ -137,11 +138,17 @@ public class Player {
      * Multiplies the amount of score by the multiplier of the type of the score.
      * @param amount sets the amount of score.
      * @param scoreType is the type of score, which influences the multiplier.
+     * @param gameOver determines if the game is running or not. Changes score multipliers.
      * @return the multiplied score.
      */
-    private int calculateScore(int amount, TerrainType scoreType) {
+    private int calculateScore(int amount, TerrainType scoreType, boolean gameOver) {
         if (scoreType == TerrainType.CASTLE) {
-            return amount * 2;
+            if (gameOver) {
+                return amount;
+            } else {
+                return amount * 2;
+            }
+
         } else if (scoreType == TerrainType.FIELDS) {
             return amount * 3;
         } else {

@@ -24,7 +24,8 @@ public class GridPattern {
     protected Map<Player, Integer> involvedPlayers;
     protected List<Meeple> meepleList;
     protected boolean complete;
-    protected boolean disbursed;
+    private boolean disbursed;
+    private boolean reducedPoints;
 
     /**
      * Basic constructor taking only a tile type.
@@ -37,6 +38,7 @@ public class GridPattern {
         involvedPlayers = new HashMap<Player, Integer>();
         complete = false;
         disbursed = false;
+        reducedPoints = false;
     }
 
     /**
@@ -49,9 +51,9 @@ public class GridPattern {
     }
 
     /**
-     * Gives every involved player points if he is one of the players with the maximal amount of
-     * meeples on the pattern. Removes the meeple placement and returns them to the players. Can
-     * only be called once in the lifetime of a GridPttern object.
+     * Disburses complete patterns. Gives every involved player points if he is one of the players
+     * with the maximal amount of meeples on the pattern. Removes the meeple placement and returns
+     * them to the players. Can only be called once in the lifetime of a GridPttern object.
      */
     public void disburse() {
         if (!disbursed) {
@@ -67,13 +69,25 @@ public class GridPattern {
                     involvedPlayers.remove(player); // remove players who don't get points
                 }
                 for (Player player : involvedPlayers.keySet()) { // other players split the pot
-                    player.addScore((int) Math.ceil(getSize() / involvedPlayers.size()), patternType);
+                    player.addScore((int) Math.ceil(getSize() / involvedPlayers.size()), patternType, reducedPoints);
                 }
                 for (Meeple meeple : meepleList) {
                     meeple.removePlacement(); // remove meeples from tiles.
                 }
                 disbursed = true;
             }
+        }
+    }
+
+    /**
+     * Disburses pattern if it is incomplete. This should be used at the end of the round and does
+     * not disburse complete patterns.
+     */
+    public void forceDisburse() {
+        if (!complete) {
+            complete = true;
+            reducedPoints = true;
+            disburse();
         }
     }
 
