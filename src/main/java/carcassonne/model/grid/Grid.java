@@ -100,19 +100,23 @@ public class Grid {
     }
 
     /**
-     * Method checks for changed patterns on the grid. As a basis it uses the coordinates of the
+     * Method checks for modified patterns on the grid. As a basis it uses the coordinates of the
      * last placed tile.
      * @param x is the x coordinate of the last placed tile.
      * @param y is the y coordinate of the last placed tile.
-     * @return the list of the changed patterns.
+     * @return the list of the modified patterns.
      */
-    public List<GridPattern> getInfluencedPatterns(int x, int y) {
+    public List<GridPattern> getModifiedPatterns(int x, int y) {
         checkParameters(x, y);
         if (isFree(x, y)) {
             throw new IllegalArgumentException("Can't check for patterns on an free grid space");
         }
         Tile placedTile = tile[x][y]; // get tile.
-        return createPatternList(placedTile); // get patterns.
+        List<GridPattern> modifiedPatterns = createPatternList(placedTile);
+        for (GridPattern pattern : modifiedPatterns) {
+            pattern.removeTileTags(); // IMPORTANT
+        }
+        return modifiedPatterns; // get patterns.
     }
 
     /**
@@ -303,9 +307,6 @@ public class Grid {
         addPatternIfMonastery(startingTile, results); // the tile itself
         for (Tile neighbour : getNeighbors(startingTile)) {
             addPatternIfMonastery(neighbour, results); // neighbors
-        }
-        for (GridPattern pattern : results) {
-            pattern.removeTileTags(); // IMPORTANT
         }
         System.out.println("Found patterns:"); // TODO (HIGHEST) remove debug output
         for (GridPattern pattern : results) {
