@@ -4,6 +4,7 @@ import java.util.List;
 
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.grid.GridPattern;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.secondary.GameMessage;
@@ -81,6 +82,12 @@ public class StateGameOver extends AbstractControllerState {
     @Override
     protected void entry() {
         List<String> winners = round.getWinningPlayers();
+        System.out.println("FINAL PATTERNS:"); // TODO
+        for (GridPattern pattern : grid.getAllPatterns()) {
+            System.out.println(pattern); // TODO
+            pattern.forceDisburse();
+        }
+        updateScores();
         GameMessage.showMessage("The game is over. Winning player(s): " + winners);
         gameStatistics = new GameStatisticsGUI(controller, round);
     }
