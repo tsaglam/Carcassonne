@@ -21,6 +21,7 @@ public class CastleAndRoadPattern extends GridPattern {
     public CastleAndRoadPattern(Tile startingTile, GridDirection startingDirection, TerrainType patternType, Grid grid) {
         super(patternType);
         checkArgs(startingTile, startingDirection, patternType, grid);
+        System.out.println("create pattern " + startingDirection); // TODO
         startingTile.setTag(startingDirection); // initial tag
         add(startingTile); // initial tile
         complete = buildPattern(startingTile, startingDirection, grid); // recursive algorithm.

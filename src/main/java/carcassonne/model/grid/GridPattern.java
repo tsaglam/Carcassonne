@@ -152,8 +152,8 @@ public class GridPattern {
     private void addMeepleFrom(Tile tile) {
         Meeple meeple = tile.getMeeple(); // Meeple on the tile.
         if (!meepleList.contains(meeple)) {
-            GridDirection position = meeple.getPlacementPosition(); // position of meeple on tile.
-            if (isPartOfPattern(tile, position)) {
+            if (isPartOfPattern(tile, meeple.getPlacementPosition())) {
+                System.out.println("add meeple from tile. meeple is no " + (meepleList.size() + 1)); // TODO
                 Player player = meeple.getOwner(); // owner of the meeple.
                 if (involvedPlayers.containsKey(player)) {
                     involvedPlayers.put(player, involvedPlayers.get(player) + 1);
@@ -167,7 +167,9 @@ public class GridPattern {
 
     private boolean isPartOfPattern(Tile tile, GridDirection position) {
         boolean isOnCorrectTerrain = tile.getTerrain(position) == patternType;
+        System.out.print(isOnCorrectTerrain + " ");
         boolean isOnPattern = tile.isConnectedToTag(position) || patternType == TerrainType.MONASTERY;
+        System.out.println(isOnPattern + " ");
         return isOnCorrectTerrain && isOnPattern;
     }
 
@@ -176,6 +178,7 @@ public class GridPattern {
      * @param tile is the tile to add.
      */
     protected void add(Tile tile) {
+        System.out.println("add tile no " + (tileList.size() + 1)); // TODO
         tileList.add(tile);
         if (tile.hasMeeple()) {
             addMeepleFrom(tile);
