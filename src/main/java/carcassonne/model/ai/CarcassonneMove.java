@@ -1,4 +1,4 @@
-package carcassonne.model;
+package carcassonne.model.ai;
 
 /**
  * A <code>CarcassonneMove</code> represents a single move a player makes to play a turn.

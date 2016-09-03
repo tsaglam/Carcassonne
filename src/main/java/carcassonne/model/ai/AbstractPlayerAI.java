@@ -1,4 +1,4 @@
-package carcassonne.model;
+package carcassonne.model.ai;
 
 import java.util.List;
 
