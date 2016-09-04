@@ -33,6 +33,7 @@ public class MonasteryGridPattern extends GridPattern {
     private void buildPattern(Tile monasteryTile, Grid grid) {
         List<Tile> neighbors = grid.getNeighbors(monasteryTile);
         add(monasteryTile); // add monastery
+        monasteryTile.setTag(GridDirection.MIDDLE, this);
         for (Tile neighbor : neighbors) {
             tileList.add(neighbor);
         }
