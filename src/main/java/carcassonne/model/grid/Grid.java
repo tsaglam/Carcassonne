@@ -331,9 +331,9 @@ public class Grid {
         for (Tile neighbour : getNeighbors(startingTile)) {
             addPatternIfMonastery(neighbour, results); // neighbors
         }
-        System.out.println("Found patterns:"); // TODO (HIGHEST) remove debug output
+        System.out.println("Found patterns:"); // TODO (HIGH) remove debug output
         for (GridPattern pattern : results) {
-            System.out.println(pattern); // TODO (HIGHEST) remove debug output
+            System.out.println(pattern); // TODO (HIGH) remove debug output
         }
         return results; // return all patterns.
     }

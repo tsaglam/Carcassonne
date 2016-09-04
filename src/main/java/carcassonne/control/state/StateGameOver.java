@@ -82,9 +82,9 @@ public class StateGameOver extends AbstractControllerState {
     @Override
     protected void entry() {
         List<String> winners = round.getWinningPlayers();
-        System.out.println("FINAL PATTERNS:"); // TODO
+        System.out.println("FINAL PATTERNS:"); // TODO (HIGH) remove debug output
         for (GridPattern pattern : grid.getAllPatterns()) {
-            System.out.println(pattern); // TODO
+            System.out.println(pattern); // TODO (HIGH) remove debug output
             pattern.forceDisburse();
         }
         updateScores();
