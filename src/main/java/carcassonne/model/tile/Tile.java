@@ -8,7 +8,6 @@ import javax.swing.ImageIcon;
 
 import carcassonne.model.Meeple;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.model.grid.GridPattern;
 
 /**
  * The tile of a grid.
@@ -18,7 +17,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     private Map<GridDirection, TerrainType> terrainMap;
     private ImageIcon[] image; // tile image
     private int rotation;
-    private HashMap<GridDirection, GridPattern> tagMap; // maps tagged location to the patterns.
+    private HashMap<GridDirection, Object> tagMap; // maps tagged location to the patterns.
     private final TileType type;
     private Meeple meeple;
     private int x;
@@ -40,7 +39,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
             throw new IllegalArgumentException("Image path is not valid: " + tilePath);
         }
         this.type = type;
-        tagMap = new HashMap<GridDirection, GridPattern>();
+        tagMap = new HashMap<GridDirection, Object>();
         meeple = null;
         buildTerrainMap(terrain);
         loadImages(tilePath, fileType);
@@ -154,7 +153,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * @param tilePosition is the specific position.
      * @return true if tagged.
      */
-    public Boolean isConnectedToTag(GridDirection tilePosition, GridPattern taggedBy) {
+    public Boolean isConnectedToTag(GridDirection tilePosition, Object taggedBy) {
         for (GridDirection otherPosition : GridDirection.values()) {
             if (isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
                 if (tagMap.get(otherPosition) == taggedBy) {
@@ -252,7 +251,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * tag the tile as recently checked by grid pattern checks for a specific direction.
      * @param direction is the tag direction.
      */
-    public void setTag(GridDirection direction, GridPattern taggedBy) {
+    public void setTag(GridDirection direction, Object taggedBy) {
         tagMap.put(direction, taggedBy);
     }
 
