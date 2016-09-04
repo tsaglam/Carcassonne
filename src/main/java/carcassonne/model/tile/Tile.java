@@ -2,8 +2,6 @@ package carcassonne.model.tile;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -19,7 +17,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     private Map<GridDirection, TerrainType> terrainMap;
     private ImageIcon[] image; // tile image
     private int rotation;
-    private List<GridDirection> tagList;
+    private HashMap<GridDirection, Object> tagMap; // maps tagged location to the patterns.
     private final TileType type;
     private Meeple meeple;
     private int x;
@@ -41,7 +39,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
             throw new IllegalArgumentException("Image path is not valid: " + tilePath);
         }
         this.type = type;
-        tagList = new LinkedList<GridDirection>();
+        tagMap = new HashMap<GridDirection, Object>();
         meeple = null;
         buildTerrainMap(terrain);
         loadImages(tilePath, fileType);
@@ -150,28 +148,36 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     }
 
     /**
-     * Method determines if tile recently was tagged by grid pattern checks on a specific position
-     * or a position connected to the specific position.
+     * Method determines if tile recently was tagged by a specific grid pattern on a specific
+     * position or a position connected to the specific position.
      * @param tilePosition is the specific position.
      * @return true if tagged.
      */
-    public Boolean isConnectedToTag(GridDirection tilePosition) {
+    public Boolean isConnectedToTag(GridDirection tilePosition, Object taggedBy) {
         for (GridDirection otherPosition : GridDirection.values()) {
-            if (isConnected(tilePosition, otherPosition) && tagList.contains(otherPosition)) {
-                return true;
+            if (isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
+                if (tagMap.get(otherPosition) == taggedBy) {
+                    System.out.println("isConnectedToTag from start at " + tilePosition + " to " + otherPosition + "   tags are:" + tagMap);
+                    return true;
+                }
             }
         }
         return false;
     }
 
     /**
-     * Method determines if tile recently was tagged by grid pattern checks on a specific position
-     * or a position connected to the specific position.
+     * Method determines if tile recently was tagged by any grid pattern checks on a specific
+     * position or a position connected to the specific position.
      * @param tilePosition is the specific position.
      * @return true if not tagged.
      */
-    public Boolean isNotConnectedToTag(GridDirection tilePosition) {
-        return !isConnectedToTag(tilePosition);
+    public Boolean isNotConnectedToAnyTag(GridDirection tilePosition) {
+        for (GridDirection otherPosition : GridDirection.values()) {
+            if (isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -181,7 +187,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * @return true if it was not tagged.
      */
     public Boolean isNotTagged(GridDirection tilePosition) {
-        return !tagList.contains(tilePosition);
+        return !tagMap.containsKey(tilePosition);
     }
 
     /**
@@ -196,7 +202,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * Removes all the tags from the tile.
      */
     public void removeTags() {
-        tagList.clear();
+        tagMap.clear();
     }
 
     /**
@@ -245,8 +251,8 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * tag the tile as recently checked by grid pattern checks for a specific direction.
      * @param direction is the tag direction.
      */
-    public void setTag(GridDirection direction) {
-        tagList.add(direction);
+    public void setTag(GridDirection direction, Object taggedBy) {
+        tagMap.put(direction, taggedBy);
     }
 
     @Override

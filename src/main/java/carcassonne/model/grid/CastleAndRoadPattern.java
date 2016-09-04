@@ -21,8 +21,7 @@ public class CastleAndRoadPattern extends GridPattern {
     public CastleAndRoadPattern(Tile startingTile, GridDirection startingDirection, TerrainType patternType, Grid grid) {
         super(patternType);
         checkArgs(startingTile, startingDirection, patternType, grid);
-        System.out.println("create pattern " + startingDirection); // TODO
-        startingTile.setTag(startingDirection); // initial tag
+        startingTile.setTag(startingDirection, this); // initial tag
         add(startingTile); // initial tile
         complete = buildPattern(startingTile, startingDirection, grid); // recursive algorithm.
     }
@@ -53,9 +52,9 @@ public class CastleAndRoadPattern extends GridPattern {
 
     private boolean checkNeighbor(Tile startingTile, Tile neighbor, GridDirection direction, Grid grid) {
         GridDirection oppositeDirection = GridDirection.opposite(direction);
-        if (neighbor.isNotConnectedToTag(oppositeDirection)) { // if neighbor not visited yet
-            startingTile.setTag(direction);
-            neighbor.setTag(oppositeDirection); // mark as visited
+        if (!neighbor.isConnectedToTag(oppositeDirection, this)) { // if neighbor not visited yet
+            startingTile.setTag(direction, this);
+            neighbor.setTag(oppositeDirection, this); // mark as visited
             add(neighbor); // add to pattern
             return buildPattern(neighbor, oppositeDirection, grid);
         }
