@@ -134,6 +134,9 @@ public class Grid {
         }
         Tile placedTile = tile[x][y]; // get tile.
         List<GridPattern> modifiedPatterns = createPatternList(placedTile);
+        for (GridPattern pattern : modifiedPatterns) {
+            pattern.removeTileTags(); // VERY IMPORTANT!
+        }
         return modifiedPatterns; // get patterns.
     }
 
@@ -310,14 +313,13 @@ public class Grid {
 
     // creates list of all patterns.
     private List<GridPattern> createPatternList(Tile startingTile) {
-        System.out.println("Create pattern list!"); // TODO
         List<GridPattern> results = new LinkedList<GridPattern>();
         TerrainType terrain;
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.directNeighbors()) {
             terrain = startingTile.getTerrain(direction); // get terrain type.
             if ((terrain != TerrainType.FIELDS)) { // exclude fields
-                if (startingTile.isNotConnectedToTag(direction)) {
+                if (startingTile.isNotConnectedToAnyTag(direction)) {
                     results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
                 }
             }
@@ -329,7 +331,6 @@ public class Grid {
         }
         System.out.println("Found patterns:"); // TODO (HIGHEST) remove debug output
         for (GridPattern pattern : results) {
-            pattern.removeTileTags();
             System.out.println(pattern); // TODO (HIGHEST) remove debug output
         }
         return results; // return all patterns.
