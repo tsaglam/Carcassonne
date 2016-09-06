@@ -157,7 +157,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
         for (GridDirection otherPosition : GridDirection.values()) {
             if (isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
                 if (tagMap.get(otherPosition) == taggedBy) {
-                    System.out.println("isConnectedToTag from start at " + tilePosition + " to " + otherPosition + "   tags are:" + tagMap);
                     return true;
                 }
             }

@@ -36,12 +36,10 @@ public class Grid {
      */
     public List<GridPattern> getAllPatterns() {
         List<GridPattern> patterns = new LinkedList<GridPattern>();
-        Tile currentTile;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (isOccupied(x, y)) {
-                    currentTile = tile[x][y]; // get tile.
-                    patterns.addAll(createPatternList(currentTile));
+                    patterns.addAll(createPatternList(tile[x][y]));
                 }
             }
         }
@@ -330,10 +328,6 @@ public class Grid {
         addPatternIfMonastery(startingTile, results); // the tile itself
         for (Tile neighbour : getNeighbors(startingTile)) {
             addPatternIfMonastery(neighbour, results); // neighbors
-        }
-        System.out.println("Found patterns:"); // TODO (HIGH) remove debug output
-        for (GridPattern pattern : results) {
-            System.out.println(pattern); // TODO (HIGH) remove debug output
         }
         return results; // return all patterns.
     }

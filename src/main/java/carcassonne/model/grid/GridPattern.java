@@ -166,9 +166,7 @@ public class GridPattern {
 
     private boolean isPartOfPattern(Tile tile, GridDirection position) {
         boolean isOnCorrectTerrain = tile.getTerrain(position) == patternType;
-        System.out.print(isOnCorrectTerrain + " ");
         boolean isOnPattern = tile.isConnectedToTag(position, this) || patternType == TerrainType.MONASTERY;
-        System.out.println(isOnPattern + " ");
         return isOnCorrectTerrain && isOnPattern;
     }
 
