@@ -78,10 +78,8 @@ public class Meeple {
 
     @Override
     public String toString() {
-        String location;
-        if (placementLocation == null) {
-            location = "null";
-        } else {
+        String location = "null";
+        if (isPlaced()) {
             location = "(" + placementLocation.getX() + "|" + placementLocation.getY() + ")";
         }
         return "Meeple[placed: " + isPlaced() + ", location: " + location + ", position: " + placementPosition + ", owner: " + owner.getNumber()
