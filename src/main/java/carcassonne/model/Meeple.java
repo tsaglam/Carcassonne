@@ -72,7 +72,7 @@ public class Meeple {
      * Collects meeple from tile.
      */
     public void removePlacement() {
-        owner.returnMeeple(this); // return me.
+        owner.returnMeeple(); // return me.
         placementLocation = null; // mark as unplaced.
     }
 
