@@ -14,7 +14,6 @@ import carcassonne.model.tile.Tile;
  * @author Timur Saglam
  */
 public class Player {
-
     private static final int MAX_MEEPLES = 5;
     private int freeMeeples;
     private Map<TerrainType, Integer> multiplierMap;

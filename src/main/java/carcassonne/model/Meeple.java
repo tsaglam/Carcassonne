@@ -84,7 +84,6 @@ public class Meeple {
         if (isPlaced()) {
             location = "(" + placementLocation.getX() + "|" + placementLocation.getY() + ")";
         }
-        return "Meeple[placed: " + isPlaced() + ", location: " + location + ", position: " + placementPosition + ", owner: " + owner.getNumber()
-                + "]";
+        return "Meeple[placed: " + isPlaced() + ", location: " + location + ", position: " + placementPosition + ", owner: " + owner + "]";
     }
 }
