@@ -74,18 +74,18 @@ public class Player {
     }
 
     /**
-     * Getter for the amount of unused meeples.
-     * @return the amount of unused meeples.
+     * Getter for the amount of free meeples.
+     * @return the amount of free meeples.
      */
-    public int getUnusedMeepleCount() { // TODO (HIGHEST) rename to getFreeMeeples
+    public int getFreeMeeples() {
         return freeMeeples;
     }
 
     /**
      * Checks whether the player can still place Meeples.
-     * @return true if he has at least one unused Meeple.
+     * @return true if he has at least one free Meeple.
      */
-    public boolean hasUnusedMeeples() {
+    public boolean hasFreeMeeples() {
         return freeMeeples > 0;
     }
 
@@ -111,7 +111,7 @@ public class Player {
     }
 
     /**
-     * Returns a meeple from the used meeples to the unused meeples.
+     * Returns a meeple after its job is down. Allows the player to place another meeple.
      */
     public void returnMeeple() {
         freeMeeples++;

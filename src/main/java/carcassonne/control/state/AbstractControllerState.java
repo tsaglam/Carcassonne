@@ -112,7 +112,7 @@ public abstract class AbstractControllerState {
         Player player;
         for (int playerNumber = 0; playerNumber < round.getPlayerCount(); playerNumber++) {
             player = round.getPlayer(playerNumber);
-            scoreboard.update(playerNumber, player.getScore(), player.getUnusedMeepleCount());
+            scoreboard.update(playerNumber, player.getScore(), player.getFreeMeeples());
         }
     }
 
