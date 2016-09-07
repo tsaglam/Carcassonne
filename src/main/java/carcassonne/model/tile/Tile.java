@@ -193,6 +193,9 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * Removes and returns the meeple from the tile. Calls Meeple.removePlacement.
      */
     public void removeMeeple() {
+        if (meeple == null) {
+            throw new IllegalStateException("Meeple has already been removed.");
+        }
         meeple.removePlacement();
         meeple = null;
     }

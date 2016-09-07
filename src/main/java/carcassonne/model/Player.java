@@ -1,8 +1,6 @@
 package carcassonne.model;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import carcassonne.model.grid.CastleAndRoadPattern;
@@ -16,13 +14,12 @@ import carcassonne.model.tile.Tile;
  * @author Timur Saglam
  */
 public class Player {
-
-    private static final int MEEPLE_COUNT = 5;
+    private static final int MAX_MEEPLES = 5;
+    private int freeMeeples;
+    private Map<TerrainType, Integer> multiplierMap;
+    private final int number;
     private int overallScore;
     private Map<TerrainType, Integer> scoreMap;
-    private List<Meeple> usedMeeples;
-    private List<Meeple> unusedMeeples;
-    private final int number;
 
     /**
      * Simple constructor.
@@ -30,16 +27,9 @@ public class Player {
      */
     public Player(int number) {
         this.number = number;
-        overallScore = 0;
-        scoreMap = new HashMap<TerrainType, Integer>();
-        for (int i = 0; i < TerrainType.values().length - 1; i++) {
-            scoreMap.put(TerrainType.values()[i], 0);
-        }
-        unusedMeeples = new LinkedList<Meeple>();
-        usedMeeples = new LinkedList<Meeple>();
-        for (int i = 0; i < MEEPLE_COUNT; i++) {
-            unusedMeeples.add(new Meeple(this));
-        }
+        freeMeeples = MAX_MEEPLES;
+        initializeMultiplierMap();
+        initializeScores();
     }
 
     /**
@@ -72,6 +62,7 @@ public class Player {
 
     /**
      * Getter for a specific terrain score.
+     * @param scoreType is the type of the specific terrain score.
      * @return the specific score.
      */
     public int getTerrainScore(TerrainType scoreType) {
@@ -82,19 +73,19 @@ public class Player {
     }
 
     /**
-     * Getter for the amount of unused meeples.
-     * @return the amount of unused meeples.
+     * Getter for the amount of free meeples.
+     * @return the amount of free meeples.
      */
-    public int getUnusedMeepleCount() {
-        return unusedMeeples.size();
+    public int getFreeMeeples() {
+        return freeMeeples;
     }
 
     /**
      * Checks whether the player can still place Meeples.
-     * @return true if he has at least one unused Meeple.
+     * @return true if he has at least one free Meeple.
      */
-    public boolean hasUnusedMeeples() {
-        return !unusedMeeples.isEmpty();
+    public boolean hasFreeMeeples() {
+        return freeMeeples > 0;
     }
 
     /**
@@ -102,39 +93,32 @@ public class Player {
      * meeple it was placed.
      * @param tile is the tile to place a meeple on.
      * @param position is the position the meeple gets placed on.
+     * @param grid is the grid where the tile is placed.
      * @return true if the meeple was placed, false if not.
      */
     public boolean placeMeepleAt(Tile tile, GridDirection position, Grid grid) {
-        if (unusedMeeples.isEmpty()) {
+        if (freeMeeples == 0) {
             throw new IllegalStateException("No unused meeples are left.");
         }
         if (canPlaceMeepleAt(tile, position, grid)) { // can place meeple:
-            Meeple meeple = unusedMeeples.remove(0); // get free meeple.
+            Meeple meeple = new Meeple(this); // create meeple
+            freeMeeples--;
             meeple.placeOn(tile, position); // place it.
-            usedMeeples.add(meeple); // and put it to the used ones.
             return true;
         }
         return false; // Can't place meeple.
     }
 
     /**
-     * Returns a meeple from the used meeples to the unused meeples.
-     * @param meeple is the meeple to return;
+     * Returns a meeple after its job is down. Allows the player to place another meeple.
      */
-    public void returnMeeple(Meeple meeple) {
-        if (!usedMeeples.remove(meeple)) { // if it can not find the meeple in the used list.
-            System.err.println("This meeple is not in the used list: " + meeple);
-            System.err.println("Is it in the unusedList? " + unusedMeeples.contains(meeple)); // TODO
-            System.err.println("Problematic meeple is/was on: " + meeple.getOwner()); // TODO
-            // throw new IllegalArgumentException("This meeple is not in the used list: " + meeple);
-        }
-        unusedMeeples.add(meeple); // put in unused list if it was previously used.
+    public void returnMeeple() {
+        freeMeeples++;
     }
 
     @Override
     public String toString() {
-        return "Player[number: " + number + ", score: " + overallScore + ", used meeples: " + usedMeeples.size() + ", unused meeples: "
-                + unusedMeeples.size() + "]";
+        return "Player[number: " + number + ", score: " + overallScore + ", free meeples: " + freeMeeples + "]";
     }
 
     /**
@@ -145,33 +129,41 @@ public class Player {
      * @return the multiplied score.
      */
     private int calculateScore(int amount, TerrainType scoreType, boolean gameOver) {
-        if (scoreType == TerrainType.CASTLE) {
-            if (gameOver) {
-                return amount;
-            } else {
-                return amount * 2;
-            }
-
-        } else if (scoreType == TerrainType.FIELDS) {
-            return amount * 3;
-        } else {
-            return amount;
+        if (scoreType == TerrainType.CASTLE && gameOver) {
+            return amount * 2;
         }
+        return amount * multiplierMap.get(scoreType);
     }
 
     private boolean canPlaceMeepleAt(Tile tile, GridDirection position, Grid grid) {
         TerrainType terrain = tile.getTerrain(position);
+        boolean placeable = false;
         if (terrain == TerrainType.MONASTERY) {
-            return true; // you can place on monastery
+            placeable = true; // you can place on monastery
         } else { // castle or road
             CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile, position, terrain, grid);
             if (pattern.isNotOccupied() || pattern.isOccupiedBy(this)) {
-                pattern.removeTileTags();
-                return true; // can place meeple
+                placeable = true; // can place meeple
             }
             pattern.removeTileTags();
         }
-        return false; // conflict with pattern occupation, can't place meeple.
+        return placeable;
+    }
+
+    private void initializeMultiplierMap() {
+        multiplierMap = new HashMap<TerrainType, Integer>();
+        multiplierMap.put(TerrainType.CASTLE, 2);
+        multiplierMap.put(TerrainType.ROAD, 1);
+        multiplierMap.put(TerrainType.MONASTERY, 1);
+        multiplierMap.put(TerrainType.FIELDS, 3);
+    }
+
+    private void initializeScores() {
+        overallScore = 0;
+        scoreMap = new HashMap<TerrainType, Integer>();
+        for (int i = 0; i < TerrainType.values().length - 1; i++) {
+            scoreMap.put(TerrainType.values()[i], 0); // initial scores are zero
+        }
     }
 
 }
