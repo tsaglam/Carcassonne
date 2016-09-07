@@ -72,8 +72,10 @@ public class Meeple {
      * Collects meeple from tile.
      */
     public void removePlacement() {
-        owner.returnMeeple(); // return me.
-        placementLocation = null; // mark as unplaced.
+        if (placementLocation != null) {
+            owner.returnMeeple(); // return me.
+            placementLocation = null; // mark as unplaced.
+        }
     }
 
     @Override
