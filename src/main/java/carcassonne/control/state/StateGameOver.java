@@ -1,7 +1,5 @@
 package carcassonne.control.state;
 
-import java.util.List;
-
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
@@ -81,14 +79,13 @@ public class StateGameOver extends AbstractControllerState {
      */
     @Override
     protected void entry() {
-        List<String> winners = round.getWinningPlayers();
         System.out.println("FINAL PATTERNS:"); // TODO (HIGH) remove debug output
         for (GridPattern pattern : grid.getAllPatterns()) {
             System.out.println(pattern); // TODO (HIGH) remove debug output
             pattern.forceDisburse();
         }
         updateScores();
-        GameMessage.showMessage("The game is over. Winning player(s): " + winners);
+        GameMessage.showMessage("The game is over. Winning player(s): " + round.getWinningPlayers());
         gameStatistics = new GameStatisticsGUI(controller, round);
     }
 
