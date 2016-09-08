@@ -56,26 +56,24 @@ public class GridPattern {
      * them to the players. Can only be called once in the lifetime of a GridPttern object.
      */
     public void disburse() {
-        if (!disbursed) {
-            if (complete && involvedPlayers.size() > 0) {
-                List<Player> removalList = new LinkedList<Player>();
-                int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
-                for (Player player : involvedPlayers.keySet()) { // for all involved players
-                    if (involvedPlayers.get(player) != maximum) { // if has not enough meeples
-                        removalList.add(player); // add to removal list (remove later)
-                    }
+        if (!disbursed && complete && !involvedPlayers.isEmpty()) {
+            List<Player> removalList = new LinkedList<Player>();
+            int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
+            for (Player player : involvedPlayers.keySet()) { // for all involved players
+                if (involvedPlayers.get(player) != maximum) { // if has not enough meeples
+                    removalList.add(player); // add to removal list (remove later)
                 }
-                for (Player player : removalList) {
-                    involvedPlayers.remove(player); // remove players who don't get points
-                }
-                for (Player player : involvedPlayers.keySet()) { // other players split the pot
-                    player.addScore((int) Math.ceil(getSize() / involvedPlayers.size()), patternType, reducedPoints);
-                }
-                for (Meeple meeple : meepleList) {
-                    meeple.removePlacement(); // remove meeples from tiles.
-                }
-                disbursed = true;
             }
+            for (Player player : removalList) {
+                involvedPlayers.remove(player); // remove players who don't get points
+            }
+            for (Player player : involvedPlayers.keySet()) { // other players split the pot
+                player.addScore((int) Math.ceil(getSize() / involvedPlayers.size()), patternType, reducedPoints);
+            }
+            for (Meeple meeple : meepleList) {
+                meeple.removePlacement(); // remove meeples from tiles.
+            }
+            disbursed = true;
         }
     }
 
@@ -120,7 +118,7 @@ public class GridPattern {
      * @return true if the pattern is not occupied, false if not.
      */
     public boolean isNotOccupied() {
-        return involvedPlayers.size() == 0;
+        return involvedPlayers.isEmpty();
     }
 
     /**
@@ -151,23 +149,21 @@ public class GridPattern {
     // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
     private void addMeepleFrom(Tile tile) {
         Meeple meeple = tile.getMeeple(); // Meeple on the tile.
-        if (!meepleList.contains(meeple)) {
-            if (isPartOfPattern(tile, meeple.getPlacementPosition())) {
-                Player player = meeple.getOwner(); // owner of the meeple.
-                if (involvedPlayers.containsKey(player)) {
-                    involvedPlayers.put(player, involvedPlayers.get(player) + 1);
-                } else {
-                    involvedPlayers.put(player, 1);
-                }
-                meepleList.add(meeple);
+        if (!meepleList.contains(meeple) && isPartOfPattern(tile, meeple.getPlacementPosition())) {
+            Player player = meeple.getOwner(); // owner of the meeple.
+            if (involvedPlayers.containsKey(player)) {
+                involvedPlayers.put(player, involvedPlayers.get(player) + 1);
+            } else {
+                involvedPlayers.put(player, 1);
             }
+            meepleList.add(meeple);
         }
     }
 
     private boolean isPartOfPattern(Tile tile, GridDirection position) {
-        boolean isOnCorrectTerrain = tile.getTerrain(position) == patternType;
-        boolean isOnPattern = tile.isConnectedToTag(position, this) || patternType == TerrainType.MONASTERY;
-        return isOnCorrectTerrain && isOnPattern;
+        boolean onCorrectTerrain = tile.getTerrain(position) == patternType;
+        boolean onPattern = tile.isConnectedToTag(position, this) || patternType == TerrainType.MONASTERY;
+        return onCorrectTerrain && onPattern;
     }
 
     /**

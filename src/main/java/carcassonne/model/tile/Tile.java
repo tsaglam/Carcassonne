@@ -17,7 +17,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     private Map<GridDirection, TerrainType> terrainMap;
     private ImageIcon[] image; // tile image
     private int rotation;
-    private HashMap<GridDirection, Object> tagMap; // maps tagged location to the patterns.
+    private Map<GridDirection, Object> tagMap; // maps tagged location to the patterns.
     private final TileType type;
     private Meeple meeple;
     private int x;
@@ -33,7 +33,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     public Tile(TerrainType[] terrain, TileType type, String tilePath, String fileType) {
         if (type == null || terrain == null || fileType == null || tilePath == null) {
             throw new IllegalArgumentException("Parameters can't be null");
-        } else if (terrain.length != 9) {
+        } else if (terrain.length != GridDirection.values().length) {
             throw new IllegalArgumentException("Terrain array is invalid: " + terrain.toString());
         } else if (!new File(tilePath + rotation + fileType).exists()) {
             throw new IllegalArgumentException("Image path is not valid: " + tilePath);
@@ -155,10 +155,8 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      */
     public Boolean isConnectedToTag(GridDirection tilePosition, Object taggedBy) {
         for (GridDirection otherPosition : GridDirection.values()) {
-            if (isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
-                if (tagMap.get(otherPosition) == taggedBy) {
-                    return true;
-                }
+            if (isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition) && tagMap.get(otherPosition) == taggedBy) {
+                return true;
             }
         }
         return false;

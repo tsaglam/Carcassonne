@@ -318,10 +318,8 @@ public class Grid {
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.directNeighbors()) {
             terrain = startingTile.getTerrain(direction); // get terrain type.
-            if ((terrain != TerrainType.FIELDS)) { // exclude fields
-                if (startingTile.isNotConnectedToAnyTag(direction)) {
-                    results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
-                }
+            if (terrain != TerrainType.FIELDS && startingTile.isNotConnectedToAnyTag(direction)) {
+                results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
             }
         }
         // then check for monastery patterns:
@@ -339,7 +337,7 @@ public class Grid {
         if (isOnGrid(newX, newY)) { // if on grid
             if (isOccupied(newX, newY)) {
                 return false; // is a tile, can't go through tiles
-            } else if (visitedPositions[newX][newY] == false) { // if not visited
+            } else if (!visitedPositions[newX][newY]) { // if not visited
                 visitedPositions[newX][newY] = true; // mark as visited
                 for (GridDirection newDirection : GridDirection.directNeighbors()) { // recursion
                     if (findBoundary(newX, newY, newDirection, visitedPositions)) {
