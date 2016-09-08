@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 public class MenuPlayersMouseAdapter extends MouseAdapter {
 
     private final MainMenuBar menuBar;
-    private int playerCount;
+    private final int playerCount;
 
     /**
      * Simple constructor.

@@ -43,11 +43,10 @@ public class MainGUI {
     private JLabel[][] meepleGrid;
     private int meepleGridHeight;
     private int meepleGridWidth;
-    private MainMenuBar menuBar;
-    private GameOptions options;
+    private final GameOptions options;
     private JPanel panelBottom;
     private JPanel panelTop;
-    private Scoreboard scoreboard;
+    private final Scoreboard scoreboard;
 
     /**
      * Constructor of the main GUI. creates the GUI with a scoreboard.
@@ -132,7 +131,7 @@ public class MainGUI {
 
     private void buildFrame() {
         frame = new JFrame();
-        menuBar = new MainMenuBar(scoreboard, controller);
+        MainMenuBar menuBar = new MainMenuBar(scoreboard, controller);
         frame.setJMenuBar(menuBar);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());

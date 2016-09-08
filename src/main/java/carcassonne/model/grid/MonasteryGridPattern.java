@@ -37,7 +37,7 @@ public class MonasteryGridPattern extends GridPattern {
         for (Tile neighbor : neighbors) {
             tileList.add(neighbor);
         }
-        if (neighbors.size() == 8) {
+        if (neighbors.size() == GridDirection.neighbors().length) {
             complete = true;
         }
     }

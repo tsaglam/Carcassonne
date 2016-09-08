@@ -11,7 +11,7 @@ import carcassonne.control.GameOptions;
  * @author Timur Saglam
  */
 public class Scoreboard {
-    private JLabel[] scoreLabel;
+    private final JLabel[] scoreLabel;
     private final GameOptions options;
 
     /**

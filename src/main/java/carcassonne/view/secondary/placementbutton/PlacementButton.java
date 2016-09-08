@@ -16,7 +16,7 @@ import carcassonne.model.grid.GridDirection;
 public class PlacementButton extends JButton {
     private static final long serialVersionUID = -4580099806988033224L;
     private boolean enabled; // own enabled variable for fixing the isEnabled() method.
-    private GameOptions options;
+    private final GameOptions options;
 
     /**
      * Simple constructor calling the <codeJButton>JButton()</code> constructor.

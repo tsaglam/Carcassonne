@@ -279,7 +279,7 @@ public class Grid {
 
     private void addPatternIfMonastery(Tile startingTile, List<GridPattern> patternList) {
         TileType type = startingTile.getType();
-        if ((type == TileType.Monastery || type == TileType.MonasteryRoad)) {
+        if (type == TileType.Monastery || type == TileType.MonasteryRoad) {
             if (startingTile.isNotConnectedToAnyTag(GridDirection.MIDDLE)) {
                 patternList.add(new MonasteryGridPattern(startingTile, this));
             }

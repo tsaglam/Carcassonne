@@ -16,7 +16,7 @@ import carcassonne.control.MainController;
 public class MainMenuBar extends JMenuBar {
 
     private static final long serialVersionUID = -599734693130415390L;
-    private MainController controller;
+    private final MainController controller;
     private int playerCount;
     private JMenu menuGame;
     private JMenu menuOptions;

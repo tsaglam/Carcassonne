@@ -45,6 +45,14 @@ public class Player {
     }
 
     /**
+     * Getter for the amount of free meeples.
+     * @return the amount of free meeples.
+     */
+    public int getFreeMeeples() {
+        return freeMeeples;
+    }
+
+    /**
      * Getter for number of the player.
      * @return the player number.
      */
@@ -70,14 +78,6 @@ public class Player {
             return scoreMap.get(scoreType);
         }
         return -1; // error
-    }
-
-    /**
-     * Getter for the amount of free meeples.
-     * @return the amount of free meeples.
-     */
-    public int getFreeMeeples() {
-        return freeMeeples;
     }
 
     /**

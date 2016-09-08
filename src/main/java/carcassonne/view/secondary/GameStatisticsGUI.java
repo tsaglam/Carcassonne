@@ -21,7 +21,7 @@ public class GameStatisticsGUI {
     protected MainController controller;
     private JFrame frame;
     private JButton buttonClose;
-    private JTable table;
+    private final JTable table;
 
     /**
      * Creates the GUI and extracts the data from the current round.

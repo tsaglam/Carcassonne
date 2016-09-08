@@ -17,10 +17,10 @@ public class Round {
 
     private int activePlayer;
     private Tile currentTile;
-    private Grid grid;
+    private final Grid grid;
     private Player[] player;
-    private int playerCount;
-    private TileStack tileStack;
+    private final int playerCount;
+    private final TileStack tileStack;
     private int turnCounter;
 
     /**

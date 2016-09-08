@@ -1,8 +1,15 @@
 package carcasonne.model.grid;
 
+import static carcassonne.model.tile.TileType.CastleCenter;
+import static carcassonne.model.tile.TileType.CastleEdgeRoad;
+import static carcassonne.model.tile.TileType.CastleSides;
+import static carcassonne.model.tile.TileType.CastleWallCurveRight;
+import static carcassonne.model.tile.TileType.Monastery;
+import static carcassonne.model.tile.TileType.Road;
+import static carcassonne.model.tile.TileType.RoadCurve;
+import static carcassonne.model.tile.TileType.RoadJunctionLarge;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static carcassonne.model.tile.TileType.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +55,7 @@ public class GridTest {
         tmp.rotateRight();
         assertTrue(testGrid.place(0, 2, tmp));
         assertTrue(testGrid.place(1, 2, TileFactory.create(RoadJunctionLarge)));
-        assertTrue(testGrid.place(1, 1, TileFactory.create(CastleWallCurveRight)));   
+        assertTrue(testGrid.place(1, 1, TileFactory.create(CastleWallCurveRight)));
     }
 
     @Test

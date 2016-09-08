@@ -13,7 +13,7 @@ import carcassonne.model.tile.TileStack;
  * @author Timur
  */
 public class TileStackTest {
-    
+
     TileStack stack;
 
     @Before

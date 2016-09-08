@@ -13,15 +13,16 @@ import carcassonne.model.tile.TerrainType;
 public class GameStatisticsModel extends AbstractTableModel {
 
     private static final long serialVersionUID = -7138458001360243937L;
-    private Round round;
-    private String[] header = { "player", "castle points", "road points", "monastery points", "field points", "overall score" };
-    private GameOptions options;
+    private final Round round;
+    private final String[] header = { "player", "castle points", "road points", "monastery points", "field points", "overall score" };
+    private final GameOptions options;
 
     /**
      * Creates the game statistics model with the current round.
      * @param round is the current round.
      */
     public GameStatisticsModel(Round round) {
+        super();
         this.round = round;
         options = GameOptions.getInstance();
     }
