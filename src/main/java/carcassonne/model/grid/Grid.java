@@ -164,6 +164,16 @@ public class Grid {
     }
 
     /**
+     * Returns a specific neighbor of a spot if the neighbor exists.
+     * @param spot is the spot.
+     * @param direction is the direction where the neighbor should be
+     * @return the neighbor, or null if it does not exist.
+     */
+    public Tile getNeighbour(GridSpot spot, GridDirection direction) {
+        return getNeighbour(spot.getX(), spot.getY(), direction);
+    }
+
+    /**
      * Returns a specific neighbor of a tile if the neighbor exists.
      * @param x is the tiles x coordinate
      * @param y is the tiles y coordinate
@@ -177,16 +187,6 @@ public class Grid {
             return spots[newX][newY].getTile(); // return calculated neighbor if valid:
         }
         return null;  // return null if tile not placed or not on grid.
-    }
-
-    /**
-     * Returns a specific neighbor of a spot if the neighbor exists.
-     * @param spot is the spot.
-     * @param direction is the direction where the neighbor should be
-     * @return the neighbor, or null if it does not exist.
-     */
-    public Tile getNeighbour(GridSpot spot, GridDirection direction) {
-        return getNeighbour(spot.getX(), spot.getY(), direction);
     }
 
     /**
@@ -217,6 +217,13 @@ public class Grid {
      */
     public int getWidth() {
         return width;
+    }
+
+    // method checks if a grid space is part of a walled off grid space set TODO comment
+    public boolean isClosingFreeSpaceOff(GridSpot spot, GridDirection direction) {
+        boolean[][] visitedPositions = new boolean[width][height];
+        visitedPositions[spot.getX()][spot.getY()] = true; // mark starting point as visited
+        return !findBoundary(spot, direction, visitedPositions); // start recursion
     }
 
     /**
@@ -303,13 +310,6 @@ public class Grid {
         return false; // has not found boundary
     }
 
-    // method checks if a grid space is part of a walled off grid space set TODO comment
-    public boolean isClosingFreeSpaceOff(GridSpot spot, GridDirection direction) {
-        boolean[][] visitedPositions = new boolean[width][height];
-        visitedPositions[spot.getX()][spot.getY()] = true; // mark starting point as visited
-        return !findBoundary(spot, direction, visitedPositions); // start recursion
-    }
-
     /**
      * Places a specific tile in the middle of the grid.
      * @param tileType is the type of that specific tile.
@@ -318,9 +318,7 @@ public class Grid {
         int centerX = Math.round((width - 1) / 2);
         int centerY = Math.round((height - 1) / 2);
         foundation = spots[centerX][centerY];
-        Tile foundationTile = TileFactory.create(tileType);
-        foundationTile.setPosition(centerX, centerY); // TODO move this into the spot
-        foundation.forcePlacement(foundationTile);
+        foundation.forcePlacement(TileFactory.create(tileType));
     }
 
 }

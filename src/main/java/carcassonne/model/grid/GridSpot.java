@@ -13,8 +13,8 @@ import carcassonne.model.tile.TileType;
  */
 public class GridSpot {
 
-    private Tile tile;
     private final Grid grid;
+    private Tile tile;
     private final int x;
     private final int y;
 
@@ -24,18 +24,29 @@ public class GridSpot {
         this.y = y;
     }
 
-    public boolean set(Tile tile) {
-        if (isPlaceable(tile, false)) {
-            tile.setPosition(x, y);
-            this.tile = tile;
-            return true; // tile was successfully placed.
+    // creates list of all patterns.
+    public List<GridPattern> createPatternList() {
+        List<GridPattern> results = new LinkedList<GridPattern>();
+        TerrainType terrain;
+        // first, check for castle and road patterns:
+        for (GridDirection direction : GridDirection.directNeighbors()) {
+            terrain = tile.getTerrain(direction); // get terrain type.
+            if (terrain != TerrainType.FIELDS && tile.isNotConnectedToAnyTag(direction)) {
+                results.add(new CastleAndRoadPattern(this, direction, terrain, grid));
+            }
         }
-        return false; // tile can't be placed, spot is occupied.   
+        // then check for monastery patterns:
+        addPatternIfMonastery(tile, results); // the tile itself
+        for (Tile neighbour : grid.getNeighbors(tile)) {
+            addPatternIfMonastery(neighbour, results); // neighbors
+        }
+        return results; // return all patterns.
     }
     
     public boolean forcePlacement(Tile tile) {
         if (isPlaceable(tile, true)) {
             this.tile = tile;
+            tile.setPosition(x, y); // TODO move this into the spot
             return true; // tile was successfully placed.
         }
         return false; // tile can't be placed, spot is occupied.
@@ -71,23 +82,13 @@ public class GridSpot {
         return tile != null;
     }
     
- // creates list of all patterns.
-    public List<GridPattern> createPatternList() {
-        List<GridPattern> results = new LinkedList<GridPattern>();
-        TerrainType terrain;
-        // first, check for castle and road patterns:
-        for (GridDirection direction : GridDirection.directNeighbors()) {
-            terrain = tile.getTerrain(direction); // get terrain type.
-            if (terrain != TerrainType.FIELDS && tile.isNotConnectedToAnyTag(direction)) {
-                results.add(new CastleAndRoadPattern(this, direction, terrain, grid));
-            }
+ public boolean set(Tile tile) {
+        if (isPlaceable(tile, false)) {
+            tile.setPosition(x, y);
+            this.tile = tile;
+            return true; // tile was successfully placed.
         }
-        // then check for monastery patterns:
-        addPatternIfMonastery(tile, results); // the tile itself
-        for (Tile neighbour : grid.getNeighbors(tile)) {
-            addPatternIfMonastery(neighbour, results); // neighbors
-        }
-        return results; // return all patterns.
+        return false; // tile can't be placed, spot is occupied.   
     }
     
     private void addPatternIfMonastery(Tile startingTile, List<GridPattern> patternList) {
