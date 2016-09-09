@@ -42,7 +42,7 @@ public class CastleAndRoadPattern extends GridPattern {
         Tile neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) { // for every side
             if (startingTile.isConnected(startingPoint, direction)) { // if is connected side
-                neighbor = grid.getNeighbour(startingTile, direction); // get the neighbor
+                neighbor = grid.getNeighbor(startingTile, direction); // get the neighbor
                 if (neighbor == null) { // if it has no neighbor
                     isClosed = false; // open side, can't be finished pattern.
                 } else { // continue on neighbors

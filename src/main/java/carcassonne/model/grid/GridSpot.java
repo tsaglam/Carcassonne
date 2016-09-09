@@ -46,7 +46,7 @@ public class GridSpot {
     public boolean forcePlacement(Tile tile) {
         if (isPlaceable(tile, true)) {
             this.tile = tile;
-            tile.setPosition(x, y); // TODO move this into the spot
+            tile.setPosition(x, y);
             return true; // tile was successfully placed.
         }
         return false; // tile can't be placed, spot is occupied.
@@ -109,7 +109,7 @@ public class GridSpot {
         for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
             neighbor = grid.getNeighbour(this, direction);
             if (neighbor == null) { // free space
-                if (grid.isClosingFreeSpaceOff(this, direction)) {
+                if (grid.isClosingFreeSpotsOff(this, direction)) {
                     return false; // you can't close of free spaces
                 }
             } else { // if there is a neighbor in the direction.

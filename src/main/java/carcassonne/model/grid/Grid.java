@@ -63,7 +63,7 @@ public class Grid {
         Tile neighbor;
         for (GridDirection to : GridDirection.directNeighbors()) {
             if (spots[x][y].getTile().isConnected(from, to) && from != to) { // if connected
-                neighbor = getNeighbour(x, y, to);
+                neighbor = getNeighbor(x, y, to);
                 if (neighbor != null) { // if is on grid
                     list.add(neighbor);
                 }
@@ -83,7 +83,7 @@ public class Grid {
         List<Tile> list = new LinkedList<Tile>();
         Tile neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) {
-            neighbor = getNeighbour(x, y, direction);
+            neighbor = getNeighbor(x, y, direction);
             if (neighbor != null) {
                 list.add(neighbor);
             }
@@ -146,7 +146,7 @@ public class Grid {
         List<Tile> list = new LinkedList<Tile>();
         Tile neighbor;
         for (GridDirection direction : GridDirection.neighbors()) {
-            neighbor = getNeighbour(x, y, direction);
+            neighbor = getNeighbor(x, y, direction);
             if (neighbor != null) {
                 list.add(neighbor);
             }
@@ -170,7 +170,7 @@ public class Grid {
      * @return the neighbor, or null if it does not exist.
      */
     public Tile getNeighbour(GridSpot spot, GridDirection direction) {
-        return getNeighbour(spot.getX(), spot.getY(), direction);
+        return getNeighbor(spot.getX(), spot.getY(), direction);
     }
 
     /**
@@ -180,7 +180,7 @@ public class Grid {
      * @param direction is the direction where the neighbor should be
      * @return the neighbor, or null if it does not exist.
      */
-    public Tile getNeighbour(int x, int y, GridDirection direction) {
+    public Tile getNeighbor(int x, int y, GridDirection direction) {
         int newX = GridDirection.addX(x, direction);
         int newY = GridDirection.addY(y, direction);
         if (isOnGrid(newX, newY)) {
@@ -195,8 +195,8 @@ public class Grid {
      * @param direction is the direction where the neighbor should be
      * @return the neighbor, or null if it does not exist.
      */
-    public Tile getNeighbour(Tile tile, GridDirection direction) {
-        return getNeighbour(tile.getX(), tile.getY(), direction);
+    public Tile getNeighbor(Tile tile, GridDirection direction) {
+        return getNeighbor(tile.getX(), tile.getY(), direction);
     }
 
     /**
@@ -219,8 +219,7 @@ public class Grid {
         return width;
     }
 
-    // method checks if a grid space is part of a walled off grid space set TODO comment
-    public boolean isClosingFreeSpaceOff(GridSpot spot, GridDirection direction) {
+    public boolean isClosingFreeSpotsOff(GridSpot spot, GridDirection direction) {
         boolean[][] visitedPositions = new boolean[width][height];
         visitedPositions[spot.getX()][spot.getY()] = true; // mark starting point as visited
         return !findBoundary(spot, direction, visitedPositions); // start recursion
