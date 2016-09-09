@@ -6,8 +6,6 @@ import java.util.List;
 
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileFactory;
-import carcassonne.model.tile.TileType;
 
 /**
  * This class stores the information in which direction a corner with the terrain
