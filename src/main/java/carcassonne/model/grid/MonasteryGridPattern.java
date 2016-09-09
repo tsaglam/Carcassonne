@@ -5,7 +5,7 @@ package carcassonne.model.grid;
 
 import java.util.List;
 
-import carcassonne.model.tile.TerrainType;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 

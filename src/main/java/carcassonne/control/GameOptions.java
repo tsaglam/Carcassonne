@@ -5,7 +5,7 @@ import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
-import carcassonne.model.tile.TerrainType;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileType;
 
 /**

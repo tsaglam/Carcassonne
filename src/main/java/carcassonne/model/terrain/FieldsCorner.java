@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import carcassonne.model.grid.GridDirection;
-import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
 
 /**

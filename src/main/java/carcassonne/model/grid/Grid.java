@@ -3,7 +3,7 @@ package carcassonne.model.grid;
 import java.util.LinkedList;
 import java.util.List;
 
-import carcassonne.model.tile.TerrainType;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;

@@ -10,7 +10,7 @@ import javax.swing.JButton;
 
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.model.tile.TerrainType;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.view.secondary.placementbutton.PlacementButton;
 
 /**

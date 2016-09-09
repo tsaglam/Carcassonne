@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 
 import carcassonne.model.Meeple;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.terrain.TerrainType;
 
 /**
  * The tile of a grid.

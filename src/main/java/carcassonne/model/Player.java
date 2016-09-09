@@ -6,7 +6,7 @@ import java.util.Map;
 import carcassonne.model.grid.CastleAndRoadPattern;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.model.tile.TerrainType;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 
 /**

@@ -8,7 +8,7 @@ import java.util.Map;
 
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
-import carcassonne.model.tile.TerrainType;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 
 /**
