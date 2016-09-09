@@ -31,6 +31,22 @@ public class FieldsCorner {
         addIfConnected(RIGHT, tile);
     }
 
+    /**
+     * Getter for the list of connected directions.
+     * @return the connected directions.
+     */
+    public List<GridDirection> getConnectedDirections() {
+        return connectedDirections;
+    }
+
+    /**
+     * getter for the direction of the corner.
+     * @return the corner direction
+     */
+    public GridDirection getCornerDirection() {
+        return cornerDirection;
+    }
+
     // adds a side to the connection list if its connected. Use the class variables LEFT and RIGHT!
     private void addIfConnected(int side, Tile tile) {
         GridDirection sideDirection = getSide(side);
