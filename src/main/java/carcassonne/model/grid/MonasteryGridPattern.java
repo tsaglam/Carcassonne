@@ -21,8 +21,9 @@ public class MonasteryGridPattern extends GridPattern {
      * @param startingTile is the starting tile of the pattern, containing a monastery.
      * @param grid is the grid the pattern is created from.
      */
-    public MonasteryGridPattern(Tile startingTile, Grid grid) {
+    public MonasteryGridPattern(GridSpot spot, Grid grid) {
         super(TerrainType.MONASTERY);
+        Tile startingTile = spot.getTile();
         TileType tileType = startingTile.getType();
         if (tileType != TileType.Monastery && tileType != TileType.MonasteryRoad) {
             throw new IllegalArgumentException("Can't create monastery pattern from non monastery tile");

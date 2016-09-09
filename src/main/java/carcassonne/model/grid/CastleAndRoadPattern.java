@@ -26,6 +26,17 @@ public class CastleAndRoadPattern extends GridPattern {
         complete = buildPattern(startingTile, startingDirection, grid); // recursive algorithm.
     }
 
+    /**
+     * Public constructor for creating road and monastery patterns.
+     * @param spot is the starting spot of the pattern.
+     * @param startingDirection is the starting direction of the pattern.
+     * @param patternType is the type of the pattern.
+     * @param grid is the grid the pattern is created on.
+     */
+    public CastleAndRoadPattern(GridSpot spot, GridDirection startingDirection, TerrainType patternType, Grid grid) {
+        this(spot.getTile(), startingDirection, patternType, grid);
+    }
+
     private boolean buildPattern(Tile startingTile, GridDirection startingPoint, Grid grid) {
         boolean isClosed = true;
         Tile neighbor;

@@ -143,7 +143,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
         if (isDirectConnected(from, to)) {
             return true;
         } else if (from != GridDirection.MIDDLE && to != GridDirection.MIDDLE) {
-            return isindirectConnected(from, to, 1) || isindirectConnected(from, to, -1);
+            return isIndirectConnected(from, to, 1) || isIndirectConnected(from, to, -1);
         }
         return false;
     }
@@ -279,7 +279,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
 
     // checks for indirect connection through the specified side from a specific start to a specific
     // destination. Side is either 1 (right) or -1 (left.)
-    private boolean isindirectConnected(GridDirection from, GridDirection to, int side) {
+    private boolean isIndirectConnected(GridDirection from, GridDirection to, int side) {
         GridDirection current = from;
         GridDirection next;
         while (current != to) { // while not at destination:
