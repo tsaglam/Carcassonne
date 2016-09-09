@@ -6,6 +6,8 @@ import java.util.List;
 
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileFactory;
+import carcassonne.model.tile.TileType;
 
 /**
  * This class stores the information in which direction a corner with the terrain
@@ -45,6 +47,11 @@ public class FieldsCorner {
      */
     public GridDirection getCornerDirection() {
         return cornerDirection;
+    }
+
+    @Override
+    public String toString() {
+        return "FieldsCorner[direction: " + cornerDirection + ", connected to: " + connectedDirections + "]";
     }
 
     // adds a side to the connection list if its connected. Use the class variables LEFT and RIGHT!
