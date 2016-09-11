@@ -54,15 +54,10 @@ public class GridSpot {
     /**
      * Forces to place a tile on the grid spot.
      * @param tile is the tile to place.
-     * @return true if placing the tile was successful.
      */
-    public boolean forcePlacement(Tile tile) {
-        if (isPlaceable(tile, true)) {
-            this.tile = tile;
-            tile.setPosition(this);
-            return true; // tile was successfully placed.
-        }
-        return false; // tile can't be placed, spot is occupied.
+    public void forcePlacement(Tile tile) {
+        this.tile = tile;
+        tile.setPosition(this);
     }
 
     /**
