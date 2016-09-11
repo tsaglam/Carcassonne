@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 
 import carcassonne.model.Meeple;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.grid.GridSpot;
 import carcassonne.model.terrain.TerrainType;
 
 /**
@@ -21,8 +22,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     private Map<GridDirection, Object> tagMap; // maps tagged location to the patterns.
     private final TileType type;
     private Meeple meeple;
-    private int x;
-    private int y;
+    private GridSpot gridSpot;
 
     /**
      * Simple constructor.
@@ -44,8 +44,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
         meeple = null;
         buildTerrainMap(terrain);
         loadImages(tilePath, fileType);
-        x = -1;
-        y = -1;
     }
 
     /**
@@ -82,25 +80,14 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     }
 
     /**
-     * Getter for the x coordinate.
-     * @return the x coordinate
+     * Getter for spot where the tile is placed
+     * @return the grid spot.
      */
-    public int getX() {
-        if (x == -1) {
+    public GridSpot getGridSpot() {
+        if (gridSpot == null) {
             throw new IllegalStateException("The position of the tile has not been set yet");
         }
-        return x;
-    }
-
-    /**
-     * Getter for the y coordinate.
-     * @return the y coordinate
-     */
-    public int getY() {
-        if (y == -1) {
-            throw new IllegalStateException("The position of the tile has not been set yet");
-        }
-        return y;
+        return gridSpot;
     }
 
     /**
@@ -240,12 +227,11 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
-    public void setPosition(int x, int y) {
-        if (x < 0 || y < 0) {
-            throw new IllegalArgumentException("Coordinates can't be smaller than zero: " + x + ", " + y);
+    public void setPosition(GridSpot spot) {
+        if (spot == null) {
+            throw new IllegalArgumentException("Position can't be null");
         }
-        this.x = x;
-        this.y = y;
+        gridSpot = spot;
     }
 
     /**
@@ -258,8 +244,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
 
     @Override
     public String toString() {
-        return type + "Tile[coordinates: (" + x + "|" + y + "), rotation: " + rotation + ", terrain" + terrainMap.toString() + ", Meeple: " + meeple
-                + "]";
+        return type + "Tile[coordinates: " + gridSpot + ", rotation: " + rotation + ", terrain" + terrainMap.toString() + ", Meeple: " + meeple + "]";
     }
 
     // maps TerrainType from terrain array to GridDirection with same index:

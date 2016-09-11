@@ -33,7 +33,7 @@ public class Round {
         this.playerCount = playerCount;
         tileStack = new TileStack();
         createPlayers();
-        currentTile = grid.getFoundation();
+        currentTile = grid.getFoundation().getTile();
         turnCounter = 1;
     }
 

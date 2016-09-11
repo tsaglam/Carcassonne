@@ -82,7 +82,7 @@ public class Meeple {
     public String toString() {
         String location = "null";
         if (isPlaced()) {
-            location = "(" + placementLocation.getX() + "|" + placementLocation.getY() + ")";
+            location = placementLocation.getGridSpot().toString();
         }
         return "Meeple[placed: " + isPlaced() + ", location: " + location + ", position: " + placementPosition + ", owner: " + owner + "]";
     }

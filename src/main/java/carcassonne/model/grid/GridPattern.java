@@ -20,7 +20,7 @@ import carcassonne.model.tile.Tile;
 public class GridPattern {
 
     protected final TerrainType patternType;
-    protected List<Tile> tileList;
+    protected List<GridSpot> spotList;
     protected Map<Player, Integer> involvedPlayers;
     protected List<Meeple> meepleList;
     protected boolean complete;
@@ -33,7 +33,7 @@ public class GridPattern {
      */
     protected GridPattern(TerrainType patternType) {
         this.patternType = patternType;
-        tileList = new LinkedList<Tile>();
+        spotList = new LinkedList<GridSpot>();
         meepleList = new LinkedList<Meeple>();
         involvedPlayers = new HashMap<Player, Integer>();
         complete = false;
@@ -47,7 +47,7 @@ public class GridPattern {
      * @return true if the pattern already contains the tile.
      */
     public boolean contains(Tile tile) {
-        return tileList.contains(tile);
+        return spotList.contains(tile);
     }
 
     /**
@@ -102,7 +102,7 @@ public class GridPattern {
      * @return the size.
      */
     public int getSize() {
-        return tileList.size();
+        return spotList.size();
     }
 
     /**
@@ -136,8 +136,8 @@ public class GridPattern {
      * have been created.
      */
     public void removeTileTags() {
-        for (Tile tile : tileList) {
-            tile.removeTags();
+        for (GridSpot spot : spotList) {
+            spot.getTile().removeTags();
         }
     }
 
@@ -147,7 +147,8 @@ public class GridPattern {
     }
 
     // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
-    private void addMeepleFrom(Tile tile) {
+    private void addMeepleFrom(GridSpot spot) {
+        Tile tile = spot.getTile();
         Meeple meeple = tile.getMeeple(); // Meeple on the tile.
         if (!meepleList.contains(meeple) && isPartOfPattern(tile, meeple.getPlacementPosition())) {
             Player player = meeple.getOwner(); // owner of the meeple.
@@ -170,10 +171,10 @@ public class GridPattern {
      * Adds a tile to the pattern, saving the tile, the owner of a potential Meeple on the tile.
      * @param tile is the tile to add.
      */
-    protected void add(Tile tile) {
-        tileList.add(tile);
-        if (tile.hasMeeple()) {
-            addMeepleFrom(tile);
+    protected void add(GridSpot spot) {
+        spotList.add(spot);
+        if (spot.getTile().hasMeeple()) {
+            addMeepleFrom(spot);
         }
     }
 }

@@ -6,7 +6,6 @@ package carcassonne.model.grid;
 import java.util.List;
 
 import carcassonne.model.terrain.TerrainType;
-import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 
 /**
@@ -23,20 +22,19 @@ public class MonasteryGridPattern extends GridPattern {
      */
     public MonasteryGridPattern(GridSpot spot, Grid grid) {
         super(TerrainType.MONASTERY);
-        Tile startingTile = spot.getTile();
-        TileType tileType = startingTile.getType();
+        TileType tileType = spot.getTile().getType();
         if (tileType != TileType.Monastery && tileType != TileType.MonasteryRoad) {
             throw new IllegalArgumentException("Can't create monastery pattern from non monastery tile");
         }
-        buildPattern(startingTile, grid);
+        buildPattern(spot, grid);
     }
 
-    private void buildPattern(Tile monasteryTile, Grid grid) {
-        List<Tile> neighbors = grid.getNeighbors(monasteryTile);
-        add(monasteryTile); // add monastery
-        monasteryTile.setTag(GridDirection.MIDDLE, this);
-        for (Tile neighbor : neighbors) {
-            tileList.add(neighbor);
+    private void buildPattern(GridSpot monasterySpot, Grid grid) {
+        List<GridSpot> neighbors = grid.getNeighbors(monasterySpot);
+        add(monasterySpot); // add monastery
+        monasterySpot.getTile().setTag(GridDirection.MIDDLE, this);
+        for (GridSpot neighbor : neighbors) {
+            spotList.add(neighbor);
         }
         if (neighbors.size() == GridDirection.neighbors().length) {
             complete = true;

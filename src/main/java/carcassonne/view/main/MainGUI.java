@@ -17,6 +17,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.grid.GridSpot;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
@@ -84,13 +85,13 @@ public class MainGUI {
      * @param meeple is the meeple that should be removed.
      */
     public void removeMeeple(Meeple meeple) {
-        Tile tile = meeple.getPlacementLocation();
-        if (tile == null) { // make sure meeple is placed
+        GridSpot spot = meeple.getPlacementLocation().getGridSpot();
+        if (spot == null) { // make sure meeple is placed
             throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI: " + meeple);
         }
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                meepleGrid[tile.getX() * 3 + x][tile.getY() * 3 + y].setIcon(imageEmpty);
+                meepleGrid[spot.getX() * 3 + x][spot.getY() * 3 + y].setIcon(imageEmpty);
             }
         }
         frame.repaint();
@@ -122,8 +123,9 @@ public class MainGUI {
         if (tile == null || position == null || owner == null) {
             throw new IllegalArgumentException("Arguments can't be null to set a meeple on the GUI");
         }
-        int xpos = GridDirection.addX(tile.getX() * 3 + 1, position);
-        int ypos = GridDirection.addY(tile.getY() * 3 + 1, position);
+        GridSpot spot = tile.getGridSpot();
+        int xpos = GridDirection.addX(spot.getX() * 3 + 1, position);
+        int ypos = GridDirection.addY(spot.getY() * 3 + 1, position);
         ImageIcon icon = new ImageIcon(options.buildImagePath(tile.getTerrain(position), owner.getNumber()));
         meepleGrid[xpos][ypos].setIcon(icon);
         frame.repaint(); // This is required! Removing this will paint black background.

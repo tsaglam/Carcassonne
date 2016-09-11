@@ -37,8 +37,8 @@ public class GridSpot {
         }
         // then check for monastery patterns:
         addPatternIfMonastery(tile, results); // the tile itself
-        for (Tile neighbour : grid.getNeighbors(tile)) {
-            addPatternIfMonastery(neighbour, results); // neighbors
+        for (GridSpot neighbour : grid.getNeighbors(tile)) {
+            addPatternIfMonastery(neighbour.getTile(), results); // neighbors
         }
         return results; // return all patterns.
     }
@@ -46,7 +46,7 @@ public class GridSpot {
     public boolean forcePlacement(Tile tile) {
         if (isPlaceable(tile, true)) {
             this.tile = tile;
-            tile.setPosition(x, y);
+            tile.setPosition(this);
             return true; // tile was successfully placed.
         }
         return false; // tile can't be placed, spot is occupied.
@@ -84,7 +84,7 @@ public class GridSpot {
     
  public boolean set(Tile tile) {
         if (isPlaceable(tile, false)) {
-            tile.setPosition(x, y);
+            tile.setPosition(this);
             this.tile = tile;
             return true; // tile was successfully placed.
         }
@@ -105,7 +105,7 @@ public class GridSpot {
             return false; // can't be placed if spot is occupied.
         }
         int neighborCount = 0;
-        Tile neighbor;
+        GridSpot neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
             neighbor = grid.getNeighbour(this, direction);
             if (neighbor == null) { // free space
@@ -114,7 +114,7 @@ public class GridSpot {
                 }
             } else { // if there is a neighbor in the direction.
                 neighborCount++;
-                if (!tile.hasSameTerrain(direction, neighbor)) {
+                if (!tile.hasSameTerrain(direction, neighbor.getTile())) {
                     return false; // if it does not fit to terrain, it can't be placed.
                 }
             }

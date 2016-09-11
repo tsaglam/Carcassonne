@@ -110,6 +110,7 @@ public abstract class AbstractControllerState {
         Round newRound = new Round(playerCount, newGrid);
         controller.updateStates(newRound, newGrid);
         updateScores();
+        // TODO (HIGH) use spot instead of options:
         mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
         changeState(StateManning.class);
     }

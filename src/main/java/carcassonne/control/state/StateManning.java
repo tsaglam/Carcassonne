@@ -92,7 +92,7 @@ public class StateManning extends AbstractControllerState {
     // gives the players the points they earned.
     private void processGridPatterns() {
         Tile tile = round.getCurrentTile();
-        for (GridPattern pattern : grid.getModifiedPatterns(tile.getX(), tile.getY())) {
+        for (GridPattern pattern : grid.getModifiedPatterns(tile.getGridSpot())) {
             if (pattern.isComplete()) {
                 for (Meeple meeple : pattern.getMeepleList()) {
                     mainGUI.removeMeeple(meeple);
