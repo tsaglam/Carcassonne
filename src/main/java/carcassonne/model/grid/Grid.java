@@ -27,6 +27,11 @@ public class Grid {
         this.width = width;
         this.height = height;
         spotGrid = new GridSpot[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                spotGrid[x][y] = new GridSpot(this, x, y);
+            }
+        }
         placeFoundation(foundationType);
     }
 
