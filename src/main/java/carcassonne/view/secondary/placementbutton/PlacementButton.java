@@ -37,7 +37,7 @@ public class PlacementButton extends JButton {
      * @return true if the button is enabled.
      */
     public boolean isHackyEnabled() {
-        if (options.operatingSystemName.startsWith("Mac")) {
+        if (options.operatingSystemName.startsWith("Mac") || options.operatingSystemName.equals("Windows 10")) {
             return isEnabled(); // normal function on mac os x
         } else {
             // own implementation to fix the functionality which is destroyed by the hack. If the
@@ -49,7 +49,7 @@ public class PlacementButton extends JButton {
 
     @Override
     public void setEnabled(boolean b) {
-        if (options.operatingSystemName.startsWith("Mac")) {
+        if (options.operatingSystemName.startsWith("Mac") || options.operatingSystemName.equals("Windows 10")) {
             super.setEnabled(b); // normal function on mac os x
         } else {
             // Hacky method, some variated code from the class javax.swing.AbstractButton.
