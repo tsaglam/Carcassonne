@@ -36,13 +36,13 @@ public class GridSpot {
             }
         }
         // then check for monastery patterns:
-        addPatternIfMonastery(tile, results); // the tile itself
-        for (GridSpot neighbour : grid.getNeighbors(tile)) {
-            addPatternIfMonastery(neighbour.getTile(), results); // neighbors
+        addPatternIfMonastery(this, results); // the tile itself
+        for (GridSpot neighbour : grid.getNeighbors(this)) {
+            addPatternIfMonastery(neighbour, results); // neighbors
         }
         return results; // return all patterns.
     }
-    
+
     public boolean forcePlacement(Tile tile) {
         if (isPlaceable(tile, true)) {
             this.tile = tile;
@@ -55,16 +55,14 @@ public class GridSpot {
     public Tile getTile() {
         return tile;
     }
-    
+
     public int getX() {
         return x;
     }
-    
+
     public int getY() {
         return y;
     }
-
-    
 
     /**
      * Checks whether the grid spot is free.
@@ -81,21 +79,22 @@ public class GridSpot {
     public boolean isOccupied() {
         return tile != null;
     }
-    
- public boolean set(Tile tile) {
+
+    public boolean set(Tile tile) {
         if (isPlaceable(tile, false)) {
             tile.setPosition(this);
             this.tile = tile;
             return true; // tile was successfully placed.
         }
-        return false; // tile can't be placed, spot is occupied.   
+        return false; // tile can't be placed, spot is occupied.
     }
-    
-    private void addPatternIfMonastery(Tile startingTile, List<GridPattern> patternList) {
-        TileType type = startingTile.getType();
+
+    private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
+        Tile monasteryTile = spot.getTile();
+        TileType type = monasteryTile.getType();
         if (type == TileType.Monastery || type == TileType.MonasteryRoad) {
-            if (startingTile.isNotConnectedToAnyTag(GridDirection.MIDDLE)) {
-                patternList.add(new MonasteryGridPattern(this, grid));
+            if (monasteryTile.isNotConnectedToAnyTag(GridDirection.MIDDLE)) {
+                patternList.add(new MonasteryGridPattern(spot, grid));
             }
         }
     }
