@@ -18,13 +18,21 @@ public class GridSpot {
     private final int x;
     private final int y;
 
+    /**
+     * Creates a grid spot for a specific grid on a specific position.
+     * @param grid is the grid.
+     * @param x is the x coordinate of the position.
+     * @param y is the y coordinate of the position.
+     */
     public GridSpot(Grid grid, int x, int y) {
         this.grid = grid;
         this.x = x;
         this.y = y;
     }
 
-    // creates list of all patterns.
+    /**
+     * Creates list of all patterns on the spot.
+     */
     public List<GridPattern> createPatternList() {
         List<GridPattern> results = new LinkedList<GridPattern>();
         TerrainType terrain;
@@ -43,6 +51,11 @@ public class GridSpot {
         return results; // return all patterns.
     }
 
+    /**
+     * Forces to place a tile on the grid spot.
+     * @param tile is the tile to place.
+     * @return true if placing the tile was successful.
+     */
     public boolean forcePlacement(Tile tile) {
         if (isPlaceable(tile, true)) {
             this.tile = tile;
@@ -52,14 +65,26 @@ public class GridSpot {
         return false; // tile can't be placed, spot is occupied.
     }
 
+    /**
+     * Getter for the tile.
+     * @return the tile.
+     */
     public Tile getTile() {
         return tile;
     }
 
+    /**
+     * Getter for the x coordinate of the spot.
+     * @return the x coordinate.
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Getter for the y coordinate of the spot.
+     * @return the y coordinate.
+     */
     public int getY() {
         return y;
     }
@@ -80,6 +105,11 @@ public class GridSpot {
         return tile != null;
     }
 
+    /**
+     * Set tile on grid spot if possible.
+     * @param tile is the tile to set.
+     * @return true if the tile could be placed.
+     */
     public boolean set(Tile tile) {
         if (isPlaceable(tile, false)) {
             tile.setPosition(this);

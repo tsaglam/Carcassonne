@@ -141,7 +141,7 @@ public class Player {
         if (terrain == TerrainType.MONASTERY) {
             placeable = true; // you can place on monastery
         } else { // castle or road
-            CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile, position, terrain, grid);
+            CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile.getGridSpot(), position, terrain, grid);
             if (pattern.isNotOccupied() || pattern.isOccupiedBy(this)) {
                 placeable = true; // can place meeple
             }

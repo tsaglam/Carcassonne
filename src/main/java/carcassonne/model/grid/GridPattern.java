@@ -168,8 +168,9 @@ public class GridPattern {
     }
 
     /**
-     * Adds a tile to the pattern, saving the tile, the owner of a potential Meeple on the tile.
-     * @param tile is the tile to add.
+     * Adds a spot to the pattern, saving the tile on the spot, the owner of a potential Meeple on
+     * the tile.
+     * @param spot is the spot to add.
      */
     protected void add(GridSpot spot) {
         spotList.add(spot);

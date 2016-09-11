@@ -17,7 +17,7 @@ public class MonasteryGridPattern extends GridPattern {
 
     /**
      * Simple constructor that creates the pattern.
-     * @param startingTile is the starting tile of the pattern, containing a monastery.
+     * @param spot is the starting spot of the pattern, containing a monastery tile.
      * @param grid is the grid the pattern is created from.
      */
     public MonasteryGridPattern(GridSpot spot, Grid grid) {
