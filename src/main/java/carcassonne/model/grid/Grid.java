@@ -351,23 +351,6 @@ public class Grid {
         return false; // has not found boundary
     }
 
-    /**
-     * Forces to place a tile on a spot on the grid.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
-     * @param tile is the tile to place
-     * @return true if it was successful, false if spot is occupied.
-     */
-    private boolean forcePlacement(int x, int y, Tile tile) {
-        checkParameters(x, y);
-        checkParameters(tile);
-        if (isPlaceable(x, y, tile, true)) {
-            this.tile[x][y] = tile;
-            return true; // tile was successfully placed.
-        }
-        return false; // tile can't be placed, spot is occupied.
-    }
-
     // method checks if a grid space is part of a walled off grid space set
     private boolean isClosingFreeSpaceOff(int x, int y, GridDirection direction) {
         boolean[][] visitedPositions = new boolean[width][height];
@@ -415,7 +398,7 @@ public class Grid {
         int centerY = Math.round((height - 1) / 2);
         Tile foundation = TileFactory.create(tileType);
         foundation.setPosition(centerX, centerY);
-        forcePlacement(centerX, centerY, foundation);
+        this.tile[centerX][centerY] = foundation;
     }
 
 }
