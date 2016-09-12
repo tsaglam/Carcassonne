@@ -129,7 +129,7 @@ public class Grid {
     }
 
     /**
-     * Returns a specific neighbor of a tile if the neighbor exists.
+     * Returns a specific neighbor of a grid spot if the neighbor exists and has a tile.
      * @param spot is the spot of the tile.
      * @param direction is the direction where the neighbor should be
      * @return the neighbor, or null if it does not exist.
@@ -137,7 +137,7 @@ public class Grid {
     public GridSpot getNeighbor(GridSpot spot, GridDirection direction) {
         int newX = GridDirection.addX(spot.getX(), direction);
         int newY = GridDirection.addY(spot.getY(), direction);
-        if (isOnGrid(newX, newY)) {
+        if (isOnGrid(newX, newY) && spotGrid[newX][newY].isOccupied()) {
             return spotGrid[newX][newY]; // return calculated neighbor if valid:
         }
         return null;  // return null if tile not placed or not on grid.
@@ -159,16 +159,6 @@ public class Grid {
             }
         }
         return list;
-    }
-
-    /**
-     * Returns a specific neighbor of a spot if the neighbor exists.
-     * @param spot is the spot.
-     * @param direction is the direction where the neighbor should be
-     * @return the neighbor, or null if it does not exist.
-     */
-    public GridSpot getNeighbour(GridSpot spot, GridDirection direction) {
-        return getNeighbor(spot, direction);
     }
 
     /**

@@ -138,7 +138,7 @@ public class GridSpot {
         int neighborCount = 0;
         GridSpot neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
-            neighbor = grid.getNeighbour(this, direction);
+            neighbor = grid.getNeighbor(this, direction);
             if (neighbor == null) { // free space
                 if (grid.isClosingFreeSpotsOff(this, direction)) {
                     return false; // you can't close of free spaces
