@@ -130,7 +130,7 @@ public class Player {
      */
     private int calculateScore(int amount, TerrainType scoreType, boolean gameOver) {
         if (scoreType == TerrainType.CASTLE && gameOver) {
-            return amount * 2;
+            return amount;
         }
         return amount * multiplierMap.get(scoreType);
     }
