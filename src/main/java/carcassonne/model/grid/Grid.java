@@ -14,7 +14,7 @@ import carcassonne.model.tile.TileType;
 public class Grid {
     private final int width;
     private final int height;
-    private GridSpot[][] spotGrid;
+    private final GridSpot[][] spotGrid;
     private GridSpot foundation;
 
     /**
@@ -215,10 +215,7 @@ public class Grid {
      * @return true if it is on the grid.
      */
     public boolean isOnGrid(GridSpot spot) {
-        if (spot != null && spotGrid[spot.getX()][spot.getY()].equals(spot)) {
-            return true;
-        }
-        return false;
+        return spot != null && spot.equals(spotGrid[spot.getX()][spot.getY()]);
     }
 
     /**

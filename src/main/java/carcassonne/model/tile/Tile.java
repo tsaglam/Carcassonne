@@ -19,7 +19,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     private Map<GridDirection, TerrainType> terrainMap;
     private ImageIcon[] image; // tile image
     private int rotation;
-    private Map<GridDirection, Object> tagMap; // maps tagged location to the patterns.
     private final TileType type;
     private Meeple meeple;
     private GridSpot gridSpot;
@@ -40,10 +39,20 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
             throw new IllegalArgumentException("Image path is not valid: " + tilePath);
         }
         this.type = type;
-        tagMap = new HashMap<GridDirection, Object>();
         meeple = null;
         buildTerrainMap(terrain);
         loadImages(tilePath, fileType);
+    }
+
+    /**
+     * Getter for spot where the tile is placed
+     * @return the grid spot.
+     */
+    public GridSpot getGridSpot() {
+        if (gridSpot == null) {
+            throw new IllegalStateException("The position of the tile has not been set yet");
+        }
+        return gridSpot;
     }
 
     /**
@@ -77,17 +86,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      */
     public TileType getType() {
         return type;
-    }
-
-    /**
-     * Getter for spot where the tile is placed
-     * @return the grid spot.
-     */
-    public GridSpot getGridSpot() {
-        if (gridSpot == null) {
-            throw new IllegalStateException("The position of the tile has not been set yet");
-        }
-        return gridSpot;
     }
 
     /**
@@ -136,46 +134,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     }
 
     /**
-     * Method determines if tile recently was tagged by a specific grid pattern on a specific
-     * position or a position connected to the specific position.
-     * @param tilePosition is the specific position.
-     * @return true if tagged.
-     */
-    public Boolean isConnectedToTag(GridDirection tilePosition, Object taggedBy) {
-        for (GridDirection otherPosition : GridDirection.values()) {
-            if (isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition) && tagMap.get(otherPosition) == taggedBy) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Method determines if tile recently was tagged by any grid pattern checks on a specific
-     * position or a position connected to the specific position.
-     * @param tilePosition is the specific position.
-     * @return true if not tagged.
-     */
-    public Boolean isNotConnectedToAnyTag(GridDirection tilePosition) {
-        for (GridDirection otherPosition : GridDirection.values()) {
-            if (isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Method determines if tile recently was tagged by grid pattern checks on a specific position
-     * or not.
-     * @param tilePosition is the specific position.
-     * @return true if it was not tagged.
-     */
-    public Boolean isNotTagged(GridDirection tilePosition) {
-        return !tagMap.containsKey(tilePosition);
-    }
-
-    /**
      * Removes and returns the meeple from the tile. Calls Meeple.removePlacement.
      */
     public void removeMeeple() {
@@ -184,13 +142,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
         }
         meeple.removePlacement();
         meeple = null;
-    }
-
-    /**
-     * Removes all the tags from the tile.
-     */
-    public void removeTags() {
-        tagMap.clear();
     }
 
     /**
@@ -232,14 +183,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
             throw new IllegalArgumentException("Position can't be null");
         }
         gridSpot = spot;
-    }
-
-    /**
-     * tag the tile as recently checked by grid pattern checks for a specific direction.
-     * @param direction is the tag direction.
-     */
-    public void setTag(GridDirection direction, Object taggedBy) {
-        tagMap.put(direction, taggedBy);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package carcassonne.model.grid;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
@@ -14,6 +16,7 @@ import carcassonne.model.tile.TileType;
 public class GridSpot {
 
     private final Grid grid;
+    private final Map<GridDirection, Object> tagMap; // maps tagged location to the patterns.
     private Tile tile;
     private final int x;
     private final int y;
@@ -28,6 +31,7 @@ public class GridSpot {
         this.grid = grid;
         this.x = x;
         this.y = y;
+        tagMap = new HashMap<GridDirection, Object>();
     }
 
     /**
@@ -40,7 +44,7 @@ public class GridSpot {
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.directNeighbors()) {
             terrain = tile.getTerrain(direction); // get terrain type.
-            if (terrain != TerrainType.FIELDS && tile.isNotConnectedToAnyTag(direction)) {
+            if (terrain != TerrainType.FIELDS && isNotConnectedToAnyTag(direction)) {
                 results.add(new CastleAndRoadPattern(this, direction, terrain, grid));
             }
         }
@@ -86,6 +90,21 @@ public class GridSpot {
     }
 
     /**
+     * Method determines if tile recently was tagged by a specific grid pattern on a specific
+     * position or a position connected to the specific position.
+     * @param tilePosition is the specific position.
+     * @return true if tagged.
+     */
+    public Boolean isConnectedToTag(GridDirection tilePosition, Object taggedBy) {
+        for (GridDirection otherPosition : GridDirection.values()) {
+            if (tile.isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition) && tagMap.get(otherPosition) == taggedBy) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Checks whether the grid spot is free.
      * @return true if free
      */
@@ -94,11 +113,43 @@ public class GridSpot {
     }
 
     /**
+     * Method determines if tile recently was tagged by any grid pattern checks on a specific
+     * position or a position connected to the specific position.
+     * @param tilePosition is the specific position.
+     * @return true if not tagged.
+     */
+    public Boolean isNotConnectedToAnyTag(GridDirection tilePosition) {
+        for (GridDirection otherPosition : GridDirection.values()) {
+            if (tile.isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Method determines if tile recently was tagged by grid pattern checks on a specific position
+     * or not.
+     * @param tilePosition is the specific position.
+     * @return true if it was not tagged.
+     */
+    public Boolean isNotTagged(GridDirection tilePosition) {
+        return !tagMap.containsKey(tilePosition);
+    }
+
+    /**
      * Checks whether the grid spot is occupied.
      * @return true if occupied
      */
     public boolean isOccupied() {
         return tile != null;
+    }
+
+    /**
+     * Removes all the tags from the tile.
+     */
+    public void removeTags() {
+        tagMap.clear();
     }
 
     /**
@@ -115,11 +166,18 @@ public class GridSpot {
         return false; // tile can't be placed, spot is occupied.
     }
 
+    /**
+     * tag the tile as recently checked by grid pattern checks for a specific direction.
+     * @param direction is the tag direction.
+     */
+    public void setTag(GridDirection direction, Object taggedBy) {
+        tagMap.put(direction, taggedBy);
+    }
+
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
-        Tile monasteryTile = spot.getTile();
-        TileType type = monasteryTile.getType();
+        TileType type = spot.getTile().getType();
         if (type == TileType.Monastery || type == TileType.MonasteryRoad) {
-            if (monasteryTile.isNotConnectedToAnyTag(GridDirection.MIDDLE)) {
+            if (spot.isNotConnectedToAnyTag(GridDirection.MIDDLE)) {
                 patternList.add(new MonasteryGridPattern(spot, grid));
             }
         }

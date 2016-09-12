@@ -137,7 +137,7 @@ public class GridPattern {
      */
     public void removeTileTags() {
         for (GridSpot spot : spotList) {
-            spot.getTile().removeTags();
+            spot.removeTags();
         }
     }
 
@@ -148,9 +148,8 @@ public class GridPattern {
 
     // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
     private void addMeepleFrom(GridSpot spot) {
-        Tile tile = spot.getTile();
-        Meeple meeple = tile.getMeeple(); // Meeple on the tile.
-        if (!meepleList.contains(meeple) && isPartOfPattern(tile, meeple.getPlacementPosition())) {
+        Meeple meeple = spot.getTile().getMeeple(); // Meeple on the tile.
+        if (!meepleList.contains(meeple) && isPartOfPattern(spot, meeple.getPlacementPosition())) {
             Player player = meeple.getOwner(); // owner of the meeple.
             if (involvedPlayers.containsKey(player)) {
                 involvedPlayers.put(player, involvedPlayers.get(player) + 1);
@@ -161,9 +160,9 @@ public class GridPattern {
         }
     }
 
-    private boolean isPartOfPattern(Tile tile, GridDirection position) {
-        boolean onCorrectTerrain = tile.getTerrain(position) == patternType;
-        boolean onPattern = tile.isConnectedToTag(position, this) || patternType == TerrainType.MONASTERY;
+    private boolean isPartOfPattern(GridSpot spot, GridDirection position) {
+        boolean onCorrectTerrain = spot.getTile().getTerrain(position) == patternType;
+        boolean onPattern = spot.isConnectedToTag(position, this) || patternType == TerrainType.MONASTERY;
         return onCorrectTerrain && onPattern;
     }
 
