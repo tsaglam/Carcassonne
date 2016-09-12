@@ -162,7 +162,7 @@ public class GridPattern {
 
     private boolean isPartOfPattern(GridSpot spot, GridDirection position) {
         boolean onCorrectTerrain = spot.getTile().getTerrain(position) == patternType;
-        boolean onPattern = spot.isConnectedToTag(position, this) || patternType == TerrainType.MONASTERY;
+        boolean onPattern = spot.hasTagConnectedTo(position, this) || patternType == TerrainType.MONASTERY;
         return onCorrectTerrain && onPattern;
     }
 

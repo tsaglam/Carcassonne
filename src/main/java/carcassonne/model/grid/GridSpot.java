@@ -44,7 +44,7 @@ public class GridSpot {
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.directNeighbors()) {
             terrain = tile.getTerrain(direction); // get terrain type.
-            if (terrain != TerrainType.FIELDS && isNotConnectedToAnyTag(direction)) {
+            if (terrain != TerrainType.FIELDS && hasNoTagConnectionTo(direction)) {
                 results.add(new CastleAndRoadPattern(this, direction, terrain, grid));
             }
         }
@@ -95,7 +95,7 @@ public class GridSpot {
      * @param tilePosition is the specific position.
      * @return true if tagged.
      */
-    public Boolean isConnectedToTag(GridDirection tilePosition, Object taggedBy) {
+    public Boolean hasTagConnectedTo(GridDirection tilePosition, Object taggedBy) {
         for (GridDirection otherPosition : GridDirection.values()) {
             if (tile.isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition) && tagMap.get(otherPosition) == taggedBy) {
                 return true;
@@ -118,7 +118,7 @@ public class GridSpot {
      * @param tilePosition is the specific position.
      * @return true if not tagged.
      */
-    public Boolean isNotConnectedToAnyTag(GridDirection tilePosition) {
+    public Boolean hasNoTagConnectionTo(GridDirection tilePosition) {
         for (GridDirection otherPosition : GridDirection.values()) {
             if (tile.isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
                 return false;
@@ -133,7 +133,7 @@ public class GridSpot {
      * @param tilePosition is the specific position.
      * @return true if it was not tagged.
      */
-    public Boolean isNotTagged(GridDirection tilePosition) {
+    public Boolean isUntagged(GridDirection tilePosition) {
         return !tagMap.containsKey(tilePosition);
     }
 
@@ -177,7 +177,7 @@ public class GridSpot {
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
         TileType type = spot.getTile().getType();
         if (type == TileType.Monastery || type == TileType.MonasteryRoad) {
-            if (spot.isNotConnectedToAnyTag(GridDirection.MIDDLE)) {
+            if (spot.hasNoTagConnectionTo(GridDirection.MIDDLE)) {
                 patternList.add(new MonasteryGridPattern(spot, grid));
             }
         }
