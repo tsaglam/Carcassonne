@@ -34,6 +34,7 @@ public class GridSpot {
      * Creates list of all patterns on the spot.
      */
     public List<GridPattern> createPatternList() {
+        checkTile("createPatternList()");
         List<GridPattern> results = new LinkedList<GridPattern>();
         TerrainType terrain;
         // first, check for castle and road patterns:
@@ -62,7 +63,7 @@ public class GridSpot {
 
     /**
      * Getter for the tile.
-     * @return the tile.
+     * @return the tile, or null if the grid spot has no tile.
      */
     public Tile getTile() {
         return tile;
@@ -121,6 +122,12 @@ public class GridSpot {
             if (monasteryTile.isNotConnectedToAnyTag(GridDirection.MIDDLE)) {
                 patternList.add(new MonasteryGridPattern(spot, grid));
             }
+        }
+    }
+
+    private void checkTile(String methodName) {
+        if (isFree()) {
+            throw new IllegalStateException("GridSpot is free, can't call " + methodName);
         }
     }
 
