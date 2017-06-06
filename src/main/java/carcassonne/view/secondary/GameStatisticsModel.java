@@ -4,7 +4,7 @@ import javax.swing.table.AbstractTableModel;
 
 import carcassonne.control.GameOptions;
 import carcassonne.model.Round;
-import carcassonne.model.tile.TerrainType;
+import carcassonne.model.terrain.TerrainType;
 
 /**
  * Model class for the game statistics GUI.

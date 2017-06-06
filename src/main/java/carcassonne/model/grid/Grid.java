@@ -3,7 +3,6 @@ package carcassonne.model.grid;
 import java.util.LinkedList;
 import java.util.List;
 
-import carcassonne.model.tile.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
@@ -15,7 +14,8 @@ import carcassonne.model.tile.TileType;
 public class Grid {
     private final int width;
     private final int height;
-    private Tile[][] tile;
+    private final GridSpot[][] spots;
+    private GridSpot foundation;
 
     /**
      * Basic constructor
@@ -26,7 +26,12 @@ public class Grid {
     public Grid(int width, int height, TileType foundationType) {
         this.width = width;
         this.height = height;
-        tile = new Tile[width][height];
+        spots = new GridSpot[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                spots[x][y] = new GridSpot(this, x, y);
+            }
+        }
         placeFoundation(foundationType);
     }
 
@@ -38,8 +43,8 @@ public class Grid {
         List<GridPattern> patterns = new LinkedList<GridPattern>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (isOccupied(x, y)) {
-                    patterns.addAll(createPatternList(tile[x][y]));
+                if (spots[x][y].isOccupied()) {
+                    patterns.addAll(spots[x][y].createPatternList());
                 }
             }
         }
@@ -50,20 +55,19 @@ public class Grid {
     }
 
     /**
-     * Creates a list of tiles that are connected to a specific tile with the terrain in a specific
-     * direction on the tile.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
+     * Creates a list of spots that are connected to a specific spot with the terrain in a specific
+     * direction on the spot.
+     * @param spot is the spot on the grid where the tile is.
      * @param from is the direction the tile is connected from
      * @return the list of connected tiles.
      */
-    public List<Tile> getConnectedTiles(int x, int y, GridDirection from) {
-        checkParameters(x, y);
-        List<Tile> list = new LinkedList<Tile>();
-        Tile neighbor;
+    public List<GridSpot> getConnectedTiles(GridSpot spot, GridDirection from) {
+        checkParameters(spot);
+        List<GridSpot> list = new LinkedList<GridSpot>();
+        GridSpot neighbor;
         for (GridDirection to : GridDirection.directNeighbors()) {
-            if (tile[x][y].isConnected(from, to) && from != to) { // if connected
-                neighbor = getNeighbour(x, y, to);
+            if (spot.getTile().isConnected(from, to) && from != to) { // if connected
+                neighbor = getNeighbor(spot, to);
                 if (neighbor != null) { // if is on grid
                     list.add(neighbor);
                 }
@@ -74,16 +78,15 @@ public class Grid {
 
     /**
      * Creates a list of direct neighbors.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
+     * @param spot is the spot for which the neighbors are requested.
      * @return the list of neighbors
      */
-    public List<Tile> getDirectNeighbors(int x, int y) {
-        checkParameters(x, y);
-        List<Tile> list = new LinkedList<Tile>();
-        Tile neighbor;
+    public List<GridSpot> getDirectNeighbors(GridSpot spot) {
+        checkParameters(spot);
+        List<GridSpot> list = new LinkedList<GridSpot>();
+        GridSpot neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) {
-            neighbor = getNeighbour(x, y, direction);
+            neighbor = getNeighbor(spot, direction);
             if (neighbor != null) {
                 list.add(neighbor);
             }
@@ -92,22 +95,11 @@ public class Grid {
     }
 
     /**
-     * Creates a list of direct neighbors.
-     * @param tile is the tile the neighbors get created of
-     * @return the list of neighbors
+     * Returns the spot of the first tile of round, the foundation tile.
+     * @return the grid spot.
      */
-    public List<Tile> getDirectNeighbors(Tile tile) {
-        return getDirectNeighbors(tile.getX(), tile.getY());
-    }
-
-    /**
-     * Returns the first tile of round, the foundation tile.
-     * @return the tile.
-     */
-    public Tile getFoundation() {
-        int centerX = Math.round((width - 1) / 2);
-        int centerY = Math.round((height - 1) / 2);
-        return tile[centerX][centerY];
+    public GridSpot getFoundation() {
+        return foundation;
     }
 
     /**
@@ -121,17 +113,15 @@ public class Grid {
     /**
      * Method checks for modified patterns on the grid. As a basis it uses the coordinates of the
      * last placed tile.
-     * @param x is the x coordinate of the last placed tile.
-     * @param y is the y coordinate of the last placed tile.
+     * @param spot is the spot of the last placed tile.
      * @return the list of the modified patterns.
      */
-    public List<GridPattern> getModifiedPatterns(int x, int y) {
-        checkParameters(x, y);
-        if (isFree(x, y)) {
+    public List<GridPattern> getModifiedPatterns(GridSpot spot) {
+        checkParameters(spot);
+        if (spot.isFree()) {
             throw new IllegalArgumentException("Can't check for patterns on an free grid space");
         }
-        Tile placedTile = tile[x][y]; // get tile.
-        List<GridPattern> modifiedPatterns = createPatternList(placedTile);
+        List<GridPattern> modifiedPatterns = spot.createPatternList();
         for (GridPattern pattern : modifiedPatterns) {
             pattern.removeTileTags(); // VERY IMPORTANT!
         }
@@ -139,17 +129,31 @@ public class Grid {
     }
 
     /**
-     * Creates a list of neighbors of a tile on specific coordinates.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
+     * Returns a specific neighbor of a grid spot if the neighbor exists and has a tile.
+     * @param spot is the spot of the tile.
+     * @param direction is the direction where the neighbor should be
+     * @return the neighbor, or null if it does not exist.
+     */
+    public GridSpot getNeighbor(GridSpot spot, GridDirection direction) {
+        int newX = GridDirection.addX(spot.getX(), direction);
+        int newY = GridDirection.addY(spot.getY(), direction);
+        if (isOnGrid(newX, newY) && spots[newX][newY].isOccupied()) {
+            return spots[newX][newY]; // return calculated neighbor if valid:
+        }
+        return null;  // return null if tile not placed or not on grid.
+    }
+
+    /**
+     * Creates a list of neighbors of a tile on a specific spot.
+     * @param spot is the spot.
      * @return the list of neighbors
      */
-    public List<Tile> getNeighbors(int x, int y) {
-        checkParameters(x, y);
-        List<Tile> list = new LinkedList<Tile>();
-        Tile neighbor;
+    public List<GridSpot> getNeighbors(GridSpot spot) {
+        checkParameters(spot);
+        List<GridSpot> list = new LinkedList<GridSpot>();
+        GridSpot neighbor;
         for (GridDirection direction : GridDirection.neighbors()) {
-            neighbor = getNeighbour(x, y, direction);
+            neighbor = getNeighbor(spot, direction);
             if (neighbor != null) {
                 list.add(neighbor);
             }
@@ -158,50 +162,15 @@ public class Grid {
     }
 
     /**
-     * Creates a list of neighbors of a tile.
-     * @param ofTile is the tile.
-     * @return the list of neighbors
-     */
-    public List<Tile> getNeighbors(Tile ofTile) {
-        return getNeighbors(ofTile.getX(), ofTile.getY());
-    }
-
-    /**
-     * Returns a specific neighbor of a tile if the neighbor exists.
-     * @param x is the tiles x coordinate
-     * @param y is the tiles y coordinate
-     * @param direction is the direction where the neighbor should be
-     * @return the neighbor, or null if it does not exist.
-     */
-    public Tile getNeighbour(int x, int y, GridDirection direction) {
-        int newX = GridDirection.addX(x, direction);
-        int newY = GridDirection.addY(y, direction);
-        if (isOnGrid(newX, newY)) {
-            return tile[newX][newY]; // return calculated neighbor if valid:
-        }
-        return null;  // return null if tile not placed or not on grid.
-    }
-
-    /**
-     * Returns a specific neighbor of a tile if the neighbor exists.
-     * @param ofTile is the tile.
-     * @param direction is the direction where the neighbor should be
-     * @return the neighbor, or null if it does not exist.
-     */
-    public Tile getNeighbour(Tile ofTile, GridDirection direction) {
-        return getNeighbour(ofTile.getX(), ofTile.getY(), direction);
-    }
-
-    /**
      * Safe getter for tiles.
      * @param x is the x coordinate
      * @param y is the y coordinate
-     * @return the tile
+     * @return the spot
      * @throws IllegalArgumentException if the requested tile is out of grid.
      */
-    public Tile getTile(int x, int y) {
+    public GridSpot getSpot(int x, int y) {
         checkParameters(x, y);
-        return tile[x][y];
+        return spots[x][y];
     }
 
     /**
@@ -213,14 +182,16 @@ public class Grid {
     }
 
     /**
-     * Checks whether a specific tile of the grid is free.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
-     * @return true if free
+     * Checks whether a spot on the grid would close free spots off in a direction if a tile would
+     * be placed there.
+     * @param spot is the spot.
+     * @param direction is the direction.
+     * @return true if it does.
      */
-    public boolean isFree(int x, int y) {
-        checkParameters(x, y);
-        return tile[x][y] == null;
+    public boolean isClosingFreeSpotsOff(GridSpot spot, GridDirection direction) {
+        boolean[][] visitedPositions = new boolean[width][height];
+        visitedPositions[spot.getX()][spot.getY()] = true; // mark starting point as visited
+        return !findBoundary(spot, direction, visitedPositions); // start recursion
     }
 
     /**
@@ -230,7 +201,7 @@ public class Grid {
     public boolean isFull() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if (isFree(x, y)) {
+                if (spots[x][y].isFree()) {
                     return false; // grid is not full if one position is free
                 }
             }
@@ -239,14 +210,12 @@ public class Grid {
     }
 
     /**
-     * Checks whether a specific tile of the grid is occupied.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
-     * @return true if occupied
+     * Checks whether a specific spot on the grid is valid.
+     * @param spot is the spot
+     * @return true if it is on the grid.
      */
-    public boolean isOccupied(int x, int y) {
-        checkParameters(x, y);
-        return tile[x][y] != null;
+    public boolean isOnGrid(GridSpot spot) {
+        return spot != null && spot.equals(spots[spot.getX()][spot.getY()]);
     }
 
     /**
@@ -269,20 +238,14 @@ public class Grid {
     public boolean place(int x, int y, Tile tile) {
         checkParameters(x, y);
         checkParameters(tile);
-        if (isPlaceable(x, y, tile, false)) {
-            tile.setPosition(x, y);
-            this.tile[x][y] = tile;
-            return true; // tile was successfully placed.
-        }
-        return false; // tile can't be placed, spot is occupied.
+        return spots[x][y].set(tile);
     }
 
-    private void addPatternIfMonastery(Tile startingTile, List<GridPattern> patternList) {
-        TileType type = startingTile.getType();
-        if (type == TileType.Monastery || type == TileType.MonasteryRoad) {
-            if (startingTile.isNotConnectedToAnyTag(GridDirection.MIDDLE)) {
-                patternList.add(new MonasteryGridPattern(startingTile, this));
-            }
+    private void checkParameters(GridSpot spot) {
+        if (spot == null) {
+            throw new IllegalArgumentException("Spot can't be null!");
+        } else if (!spots[spot.getX()][spot.getY()].equals(spot)) {
+            throw new IllegalArgumentException("Spot is not on the grid!");
         }
     }
 
@@ -311,36 +274,17 @@ public class Grid {
         }
     }
 
-    // creates list of all patterns.
-    private List<GridPattern> createPatternList(Tile startingTile) {
-        List<GridPattern> results = new LinkedList<GridPattern>();
-        TerrainType terrain;
-        // first, check for castle and road patterns:
-        for (GridDirection direction : GridDirection.directNeighbors()) {
-            terrain = startingTile.getTerrain(direction); // get terrain type.
-            if (terrain != TerrainType.FIELDS && startingTile.isNotConnectedToAnyTag(direction)) {
-                results.add(new CastleAndRoadPattern(startingTile, direction, terrain, this));
-            }
-        }
-        // then check for monastery patterns:
-        addPatternIfMonastery(startingTile, results); // the tile itself
-        for (Tile neighbour : getNeighbors(startingTile)) {
-            addPatternIfMonastery(neighbour, results); // neighbors
-        }
-        return results; // return all patterns.
-    }
-
     // method tries to find a path of free grid spaces to the grid border.
-    private boolean findBoundary(int x, int y, GridDirection direction, boolean[][] visitedPositions) {
-        int newX = GridDirection.addX(x, direction); // get coordinates
-        int newY = GridDirection.addY(y, direction); // of free space
+    private boolean findBoundary(GridSpot spot, GridDirection direction, boolean[][] visitedPositions) {
+        int newX = GridDirection.addX(spot.getX(), direction); // get coordinates
+        int newY = GridDirection.addY(spot.getY(), direction); // of free space
         if (isOnGrid(newX, newY)) { // if on grid
-            if (isOccupied(newX, newY)) {
+            if (spots[newX][newY].isOccupied()) {
                 return false; // is a tile, can't go through tiles
             } else if (!visitedPositions[newX][newY]) { // if not visited
                 visitedPositions[newX][newY] = true; // mark as visited
                 for (GridDirection newDirection : GridDirection.directNeighbors()) { // recursion
-                    if (findBoundary(newX, newY, newDirection, visitedPositions)) {
+                    if (findBoundary(spots[newX][newY], newDirection, visitedPositions)) {
                         return true; // found boundary
                     }
                 }
@@ -351,44 +295,6 @@ public class Grid {
         return false; // has not found boundary
     }
 
-    // method checks if a grid space is part of a walled off grid space set
-    private boolean isClosingFreeSpaceOff(int x, int y, GridDirection direction) {
-        boolean[][] visitedPositions = new boolean[width][height];
-        visitedPositions[x][y] = true; // mark starting point as visited
-        return !findBoundary(x, y, direction, visitedPositions); // start recursion
-    }
-
-    /**
-     * Checks whether a tile is placeable on a specific position on the grid. First the parameters
-     * are checked. Then the method checks whether the terrain on every side of the tile fits to the
-     * terrain of the neighboring tile. Then it checks whether the placed tile would close off free
-     * spaces from the remaining unoccupied grid. At the end it checks if there is at least one
-     * direct neighboring space that is occupied.
-     */
-    private boolean isPlaceable(int x, int y, Tile tile, boolean freePlacement) {
-        checkParameters(x, y); // check coordinates.
-        checkParameters(tile); // check tile.
-        if (isOccupied(x, y)) {
-            return false; // can't be placed if spot is occupied.
-        }
-        int neighborCount = 0;
-        Tile neighbor;
-        for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
-            neighbor = getNeighbour(x, y, direction);
-            if (neighbor == null) { // free space
-                if (isClosingFreeSpaceOff(x, y, direction)) {
-                    return false; // you can't close of free spaces
-                }
-            } else { // if there is a neighbor in the direction.
-                neighborCount++;
-                if (!tile.hasSameTerrain(direction, neighbor)) {
-                    return false; // if it does not fit to terrain, it can't be placed.
-                }
-            }
-        }
-        return neighborCount > 0 || freePlacement; // can be placed beneath another tile.
-    }
-
     /**
      * Places a specific tile in the middle of the grid.
      * @param tileType is the type of that specific tile.
@@ -396,9 +302,8 @@ public class Grid {
     private void placeFoundation(TileType tileType) {
         int centerX = Math.round((width - 1) / 2);
         int centerY = Math.round((height - 1) / 2);
-        Tile foundation = TileFactory.create(tileType);
-        foundation.setPosition(centerX, centerY);
-        this.tile[centerX][centerY] = foundation;
+        foundation = spots[centerX][centerY];
+        foundation.forcePlacement(TileFactory.create(tileType));
     }
 
 }
