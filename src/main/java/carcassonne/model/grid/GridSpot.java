@@ -7,7 +7,6 @@ import java.util.Map;
 
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileType;
 
 /**
  * The class represents a spot on the grid.
@@ -90,8 +89,8 @@ public class GridSpot {
     }
 
     /**
-     * Method determines if tile recently was tagged by a specific grid pattern on a specific
-     * position or a position connected to the specific position.
+     * Method determines if tile recently was tagged by a specific grid pattern on a specific position or a position
+     * connected to the specific position.
      * @param tilePosition is the specific position.
      * @return true if tagged.
      */
@@ -113,8 +112,8 @@ public class GridSpot {
     }
 
     /**
-     * Method determines if tile recently was tagged by any grid pattern checks on a specific
-     * position or a position connected to the specific position.
+     * Method determines if tile recently was tagged by any grid pattern checks on a specific position or a position
+     * connected to the specific position.
      * @param tilePosition is the specific position.
      * @return true if not tagged.
      */
@@ -128,8 +127,7 @@ public class GridSpot {
     }
 
     /**
-     * Method determines if tile recently was tagged by grid pattern checks on a specific position
-     * or not.
+     * Method determines if tile recently was tagged by grid pattern checks on a specific position or not.
      * @param tilePosition is the specific position.
      * @return true if it was not tagged.
      */
@@ -175,8 +173,7 @@ public class GridSpot {
     }
 
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
-        TileType type = spot.getTile().getType();
-        if (type == TileType.Monastery || type == TileType.MonasteryRoad) {
+        if (spot.getTile().isMonastery()) {
             if (spot.hasNoTagConnectionTo(GridDirection.MIDDLE)) {
                 patternList.add(new MonasteryGridPattern(spot, grid));
             }

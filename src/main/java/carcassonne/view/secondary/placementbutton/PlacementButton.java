@@ -7,10 +7,10 @@ import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 
 /**
- * Is a simple class derived form JButton, which stores (additionally to the JButton functions) the
- * coordinates of the button on the button grid. It also uses a little hack to allow the GUI to set
- * the background color of a placementButton (while using Nimbus LookAndFeel), even if it is
- * disabled. Without the hack it's not so easy to accomplish that functionality.
+ * Is a simple class derived form JButton, which stores (additionally to the JButton functions) the coordinates of the
+ * button on the button grid. It also uses a little hack to allow the GUI to set the background color of a
+ * placementButton (while using Nimbus LookAndFeel), even if it is disabled. Without the hack it's not so easy to
+ * accomplish that functionality.
  * @author Timur Saglam
  */
 public class PlacementButton extends JButton {
@@ -31,9 +31,8 @@ public class PlacementButton extends JButton {
     }
 
     /**
-     * Method checks whether the button is enabled or not. On MAC OS X it uses the normal JButton
-     * functionality. On other systems it checks a custom variable set by the custom setEnabled
-     * method.
+     * Method checks whether the button is enabled or not. On MAC OS X it uses the normal JButton functionality. On
+     * other systems it checks a custom variable set by the custom setEnabled method.
      * @return true if the button is enabled.
      */
     public boolean isHackyEnabled() {

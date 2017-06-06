@@ -8,8 +8,8 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 
 /**
- * This class stores the information in which direction a corner with the terrain
- * <code>TerrainType.FIELDS</code> is connected to.
+ * This class stores the information in which direction a corner with the terrain <code>TerrainType.FIELDS</code> is
+ * connected to.
  * @author Timur Saglam
  */
 public class FieldsCorner {
@@ -67,8 +67,8 @@ public class FieldsCorner {
         } else if (!Arrays.asList(GridDirection.indirectNeighbors()).contains(cornerDirection)) {
             throw new IllegalArgumentException("Corner direction " + cornerDirection + " is not a corner.");
         } else if (tile.getTerrain(cornerDirection) != TerrainType.FIELDS) {
-            throw new IllegalArgumentException("The corner " + cornerDirection + " has not FIELDS terrain on tile " + tile
-                    + ". It can't be a FieldsCorner.");
+            throw new IllegalArgumentException(
+                    "The corner " + cornerDirection + " has not FIELDS terrain on tile " + tile + ". It can't be a FieldsCorner.");
         }
     }
 

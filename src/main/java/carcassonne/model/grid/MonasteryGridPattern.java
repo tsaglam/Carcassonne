@@ -6,11 +6,9 @@ package carcassonne.model.grid;
 import java.util.List;
 
 import carcassonne.model.terrain.TerrainType;
-import carcassonne.model.tile.TileType;
 
 /**
- * This class represents a specific kind of grid pattern, the grid patterns for the terrain type
- * MONASTERY.
+ * This class represents a specific kind of grid pattern, the grid patterns for the terrain type MONASTERY.
  * @author Timur Saglam
  */
 public class MonasteryGridPattern extends GridPattern {
@@ -22,11 +20,11 @@ public class MonasteryGridPattern extends GridPattern {
      */
     public MonasteryGridPattern(GridSpot spot, Grid grid) {
         super(TerrainType.MONASTERY);
-        TileType tileType = spot.getTile().getType();
-        if (tileType != TileType.Monastery && tileType != TileType.MonasteryRoad) {
+        if (spot.getTile().isMonastery()) {
+            buildPattern(spot, grid);
+        } else {
             throw new IllegalArgumentException("Can't create monastery pattern from non monastery tile");
         }
-        buildPattern(spot, grid);
     }
 
     private void buildPattern(GridSpot monasterySpot, Grid grid) {

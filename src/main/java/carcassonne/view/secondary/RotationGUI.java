@@ -9,13 +9,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import carcassonne.control.MainController;
+import carcassonne.model.tile.NullTile;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileFactory;
-import carcassonne.model.tile.TileType;
 
 /**
- * GUI class for the tile rotation. It lets the user look at the tile to place and rotate it both
- * right and left.
+ * GUI class for the tile rotation. It lets the user look at the tile to place and rotate it both right and left.
  * @author Timur Saglam
  */
 public class RotationGUI extends SecondaryGUI {
@@ -69,7 +67,7 @@ public class RotationGUI extends SecondaryGUI {
 
     // build the GUI content
     private void buildContent() {
-        tileLabel = new JLabel(TileFactory.create(TileType.Null).getImage());
+        tileLabel = new JLabel(new NullTile().getImage());
         // create buttons:
         buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
         buttonRotateLeft = new JButton(new ImageIcon("src/main/ressources/icons/left.png"));
@@ -95,8 +93,8 @@ public class RotationGUI extends SecondaryGUI {
     }
 
     /**
-     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update
-     * the GUI content according to the tiles properties.
+     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update the GUI content
+     * according to the tiles properties.
      */
     @Override
     protected void update() {

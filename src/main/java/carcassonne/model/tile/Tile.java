@@ -16,10 +16,11 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class Tile { // TODO (MEDIUM) build tile grid as graph.
+    private static final String FOLDER = "src/main/ressources/tiles/";
+    private static final String FILE_TYPE = ".jpg";
     private Map<GridDirection, TerrainType> terrainMap;
     private ImageIcon[] image; // tile image
     private int rotation;
-    private final TileType type;
     private Meeple meeple;
     private GridSpot gridSpot;
 
@@ -30,18 +31,18 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * @param tilePath is the path to the tiles.
      * @param fileType is the file type of the tiles.
      */
-    public Tile(TerrainType[] terrain, TileType type, String tilePath, String fileType) {
-        if (type == null || terrain == null || fileType == null || tilePath == null) {
+    public Tile(TerrainType... terrain) {
+        String path = FOLDER + getClass().getSimpleName();
+        if (terrain == null || path == null) {
             throw new IllegalArgumentException("Parameters can't be null");
         } else if (terrain.length != GridDirection.values().length) {
             throw new IllegalArgumentException("Terrain array is invalid: " + terrain.toString());
-        } else if (!new File(tilePath + rotation + fileType).exists()) {
-            throw new IllegalArgumentException("Image path is not valid: " + tilePath);
+        } else if (!new File(path + rotation + FILE_TYPE).exists()) {
+            throw new IllegalArgumentException("Image path is not valid: " + path);
         }
-        this.type = type;
         meeple = null;
         buildTerrainMap(terrain);
-        loadImages(tilePath, fileType);
+        loadImages(path, FILE_TYPE);
     }
 
     /**
@@ -78,14 +79,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      */
     public TerrainType getTerrain(GridDirection direction) {
         return terrainMap.get(direction);
-    }
-
-    /**
-     * Getter for the tile type.
-     * @return the type
-     */
-    public TileType getType() {
-        return type;
     }
 
     /**
@@ -131,6 +124,14 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
             return isIndirectConnected(from, to, 1) || isIndirectConnected(from, to, -1);
         }
         return false;
+    }
+
+    /**
+     * Checks of tile is a monastery tile, which means it has monastery terrain in the middle of the tile.
+     * @return true if is a monastery.
+     */
+    public boolean isMonastery() {
+        return getTerrain(GridDirection.MIDDLE) == TerrainType.MONASTERY;
     }
 
     /**
@@ -187,7 +188,8 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
 
     @Override
     public String toString() {
-        return type + "Tile[coordinates: " + gridSpot + ", rotation: " + rotation + ", terrain" + terrainMap.toString() + ", Meeple: " + meeple + "]";
+        return getClass().getSimpleName() + "Tile[coordinates: " + gridSpot + ", rotation: " + rotation + ", terrain" + terrainMap.toString()
+                + ", Meeple: " + meeple + "]";
     }
 
     // maps TerrainType from terrain array to GridDirection with same index:

@@ -37,12 +37,63 @@ public class TileStack {
         return tileList.isEmpty();
     }
 
-    private void fillStack() {
-        int[] tileAmount = { 1, 3, 4, 5, 5, 3, 2, 3, 5, 3, 3, 3, 4, 4, 2, 0, 8, 9, 1, 4 };
-        for (TileType tileType : TileType.values()) {
-            for (int i = 0; i < tileAmount[tileType.ordinal()]; i++) {
-                tileList.add(TileFactory.create(tileType));
-            }
+    private void fillStack() { // TODO (HIGHEST) replace temporary method
+        for (int i = 0; i < 3; i++) {
+            tileList.add(new CastleCenter());
+        }
+        for (int i = 0; i < 4; i++) {
+            tileList.add(new CastleCenterEntry());
+        }
+        for (int i = 0; i < 5; i++) {
+            tileList.add(new CastleCenterSide());
+        }
+        for (int i = 0; i < 5; i++) {
+            tileList.add(new CastleEdge());
+        }
+        for (int i = 0; i < 3; i++) {
+            tileList.add(new CastleEdgeRoad());
+        }
+        for (int i = 0; i < 2; i++) {
+            tileList.add(new CastleSides());
+        }
+        for (int i = 0; i < 3; i++) {
+            tileList.add(new CastleSidesEdge());
+        }
+        for (int i = 0; i < 5; i++) {
+            tileList.add(new CastleTube());
+        }
+        for (int i = 0; i < 1; i++) {
+            tileList.add(new CastleWall());
+        }
+        for (int i = 0; i < 3; i++) {
+            tileList.add(new CastleWallCurveLeft());
+        }
+        for (int i = 0; i < 3; i++) {
+            tileList.add(new CastleWallCurveRight());
+        }
+        for (int i = 0; i < 3; i++) {
+            tileList.add(new CastleWallJunction());
+        }
+        for (int i = 0; i < 4; i++) {
+            tileList.add(new CastleWallRoad());
+        }
+        for (int i = 0; i < 4; i++) {
+            tileList.add(new Monastery());
+        }
+        for (int i = 0; i < 2; i++) {
+            tileList.add(new MonasteryRoad());
+        }
+        for (int i = 0; i < 8; i++) {
+            tileList.add(new Road());
+        }
+        for (int i = 0; i < 9; i++) {
+            tileList.add(new RoadCurve());
+        }
+        for (int i = 0; i < 1; i++) {
+            tileList.add(new RoadJunctionLarge());
+        }
+        for (int i = 0; i < 4; i++) {
+            tileList.add(new RoadJunctionSmall());
         }
     }
 }
