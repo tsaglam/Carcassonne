@@ -16,7 +16,7 @@ import carcassonne.model.tile.TileType;
 public class GridSpot {
 
     private final Grid grid;
-    private final Map<GridDirection, Object> tagMap; // maps tagged location to the patterns.
+    private final Map<GridDirection, GridPattern> tagMap; // maps tagged location to the patterns.
     private Tile tile;
     private final int x;
     private final int y;
@@ -31,7 +31,7 @@ public class GridSpot {
         this.grid = grid;
         this.x = x;
         this.y = y;
-        tagMap = new HashMap<GridDirection, Object>();
+        tagMap = new HashMap<GridDirection, GridPattern>();
     }
 
     /**
@@ -170,7 +170,7 @@ public class GridSpot {
      * tag the tile as recently checked by grid pattern checks for a specific direction.
      * @param direction is the tag direction.
      */
-    public void setTag(GridDirection direction, Object taggedBy) {
+    public void setTag(GridDirection direction, GridPattern taggedBy) {
         tagMap.put(direction, taggedBy);
     }
 
