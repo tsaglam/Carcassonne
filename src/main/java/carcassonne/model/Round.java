@@ -9,8 +9,8 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
 
 /**
- * An object of the round class simulates a game round. It does not actively control the game. It
- * represents the round and its information in an object.
+ * An object of the round class simulates a game round. It does not actively control the game. It represents the round
+ * and its information in an object.
  * @author Timur Saglam
  */
 public class Round {
@@ -92,14 +92,15 @@ public class Round {
                     winnerList.clear();
                 }
                 winnerList.add(playerNames[player.getNumber()]);
+                maxScore = player.getScore();
             }
         }
         return winnerList;
     }
 
     /**
-     * Checks whether the game round is NOT over. A game round is over if the grid is full or the
-     * stack of tiles is empty (no tiles left).
+     * Checks whether the game round is NOT over. A game round is over if the grid is full or the stack of tiles is
+     * empty (no tiles left).
      * @return true if the game is NOT over.
      */
     public boolean isNotOver() {
@@ -107,8 +108,8 @@ public class Round {
     }
 
     /**
-     * Checks whether the game round is over. A game round is over if the grid is full or the stack
-     * of tiles is empty (no tiles left).
+     * Checks whether the game round is over. A game round is over if the grid is full or the stack of tiles is empty
+     * (no tiles left).
      * @return true if the game is over.
      */
     public boolean isOver() {
@@ -132,7 +133,7 @@ public class Round {
      * @param newTile is the new Tile to set.
      */
     public void updateCurrentTile(Tile newTile) {
-        if (currentTile.getType() != newTile.getType()) {
+        if (currentTile.getClass() != newTile.getClass()) {
             throw new IllegalArgumentException("type of new tile does not match old tile");
         }
         currentTile = newTile;
@@ -140,8 +141,7 @@ public class Round {
 
     /**
      * creates the player objects and sets the first player as active player.
-     * @param playerCount is the number of players in the range of [1,
-     * <code>GameOptions.maximalPlayers]</code>.
+     * @param playerCount is the number of players in the range of [1, <code>GameOptions.maximalPlayers]</code>.
      */
     private void createPlayers() {
         if (playerCount <= 1 || playerCount > GameOptions.getInstance().maximalPlayers) {
