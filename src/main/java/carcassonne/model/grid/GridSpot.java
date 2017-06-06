@@ -35,6 +35,7 @@ public class GridSpot {
 
     /**
      * Creates list of all patterns on the spot.
+     * @return the list of patterns.
      */
     public List<GridPattern> createPatternList() {
         checkTile("createPatternList()");
@@ -92,9 +93,10 @@ public class GridSpot {
      * Method determines if tile recently was tagged by a specific grid pattern on a specific position or a position
      * connected to the specific position.
      * @param tilePosition is the specific position.
+     * @param taggedBy is the {@link GridPattern} that tagged this spot.
      * @return true if tagged.
      */
-    public Boolean hasTagConnectedTo(GridDirection tilePosition, Object taggedBy) {
+    public Boolean hasTagConnectedTo(GridDirection tilePosition, GridPattern taggedBy) {
         for (GridDirection otherPosition : GridDirection.values()) {
             if (tile.isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition) && tagMap.get(otherPosition) == taggedBy) {
                 return true;
@@ -167,6 +169,7 @@ public class GridSpot {
     /**
      * tag the tile as recently checked by grid pattern checks for a specific direction.
      * @param direction is the tag direction.
+     * @param taggedBy is the {@link GridPattern} that tagged the spot.
      */
     public void setTag(GridDirection direction, GridPattern taggedBy) {
         tagMap.put(direction, taggedBy);

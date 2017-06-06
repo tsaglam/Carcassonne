@@ -105,6 +105,10 @@ public abstract class AbstractControllerState {
      */
     protected abstract void exit();
 
+    /**
+     * Starts a new round for a specific number of players.
+     * @param playerCount is the specific number of players.
+     */
     protected void startNewRound(int playerCount) {
         Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
         Round newRound = new Round(playerCount, newGrid);

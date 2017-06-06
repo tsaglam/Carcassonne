@@ -27,9 +27,6 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     /**
      * Simple constructor.
      * @param terrain is the array containing the terrain information.
-     * @param type is the tile type enum value of the tile.
-     * @param tilePath is the path to the tiles.
-     * @param fileType is the file type of the tiles.
      */
     public Tile(TerrainType... terrain) {
         String path = FOLDER + getClass().getSimpleName();
@@ -176,8 +173,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
 
     /**
      * Gives the tile the position where it has been placed.
-     * @param x sets the x coordinate.
-     * @param y sets the y coordinate.
+     * @param spot is the {@link GridSpot} where the tile was placed.
      */
     public void setPosition(GridSpot spot) {
         if (spot == null) {

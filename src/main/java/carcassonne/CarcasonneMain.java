@@ -25,8 +25,8 @@ public final class CarcasonneMain {
                         break;
                     }
                 }
-            } catch (Exception e) {
-                GameMessage.showError("Could not use Nimbus LookAndFeel. Using default look and feel instead (" + e.getMessage() + ").");
+            } catch (Exception exception) {
+                GameMessage.showError("Could not use Nimbus LookAndFeel. Using default look and feel instead (" + exception.getMessage() + ").");
             }
         }
         new MainController();
