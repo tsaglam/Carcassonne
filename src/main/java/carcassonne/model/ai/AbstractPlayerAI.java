@@ -18,7 +18,7 @@ public abstract class AbstractPlayerAI {
     public abstract CarcassonneMove getBestMove();
 
     public List<CarcassonneMove> getPossibleMoves() {
-        // TODO (HIGHEST) implement method getPossibleMoves().
+        // TODO (HIGH) implement method getPossibleMoves().
         return null;
     }
 
