@@ -35,6 +35,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
         } else if (!new File(path + rotation + FILE_TYPE).exists()) {
             throw new IllegalArgumentException("Image path is not valid: " + path);
         }
+        this.terrain = terrain;
         meeple = null;
         loadImages(path, FILE_TYPE);
     }
