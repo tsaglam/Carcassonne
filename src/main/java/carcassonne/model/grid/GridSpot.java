@@ -98,7 +98,7 @@ public class GridSpot {
      */
     public Boolean hasTagConnectedTo(GridDirection tilePosition, GridPattern taggedBy) {
         for (GridDirection otherPosition : GridDirection.values()) {
-            if (tile.isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition) && tagMap.get(otherPosition) == taggedBy) {
+            if (tile.hasConnection(tilePosition, otherPosition) && tagMap.containsKey(otherPosition) && tagMap.get(otherPosition) == taggedBy) {
                 return true;
             }
         }
@@ -121,7 +121,7 @@ public class GridSpot {
      */
     public Boolean hasNoTagConnectionTo(GridDirection tilePosition) {
         for (GridDirection otherPosition : GridDirection.values()) {
-            if (tile.isConnected(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
+            if (tile.hasConnection(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
                 return false;
             }
         }
@@ -203,7 +203,7 @@ public class GridSpot {
                 }
             } else { // if there is a neighbor in the direction.
                 neighborCount++;
-                if (!tile.hasSameTerrain(direction, neighbor.getTile())) {
+                if (!tile.canConnectTo(direction, neighbor.getTile())) {
                     return false; // if it does not fit to terrain, it can't be placed.
                 }
             }

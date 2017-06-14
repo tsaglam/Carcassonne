@@ -65,7 +65,7 @@ public class Grid {
         List<GridSpot> list = new LinkedList<GridSpot>();
         GridSpot neighbor;
         for (GridDirection to : GridDirection.directNeighbors()) {
-            if (spot.getTile().isConnected(from, to) && from != to) { // if connected
+            if (spot.getTile().hasConnection(from, to) && from != to) { // if connected
                 neighbor = getNeighbor(spot, to);
                 if (neighbor != null) { // if is on grid
                     list.add(neighbor);
