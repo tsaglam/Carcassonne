@@ -15,6 +15,10 @@ public class Terrain {
     private List<GridDirection> meepleSpots;
     private Map<GridDirection, TerrainType> terrainMap;
 
+    /**
+     * Creates a terrain instance with nine terrain types.
+     * @param terrain is the array of nine terrain types.
+     */
     public Terrain(TerrainType... terrain) {
         if (terrain == null) {
             throw new IllegalArgumentException("Terrain can't be null");
