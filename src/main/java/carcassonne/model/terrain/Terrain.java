@@ -83,7 +83,7 @@ public class Terrain {
         rotate(GridDirection.indirectNeighbors());
     }
 
-    private List<GridDirection> createMeepleSpots() {
+    private void createMeepleSpots() {
         meepleSpots = new LinkedList<>();
         for (GridDirection direction : GridDirection.values()) {
             meepleSpots.add(direction); // add all possible placements
@@ -100,7 +100,6 @@ public class Terrain {
                 }
             }
         }
-        return meepleSpots;
     }
 
     // checks for direct connection through middle:
