@@ -17,7 +17,7 @@ import carcassonne.model.terrain.TerrainType;
  */
 public class Tile { // TODO (MEDIUM) build tile grid as graph.
     private Map<GridDirection, TerrainType> terrainMap;
-    private ImageIcon[] image; // tile image
+    private ImageIcon[] images; // tile image
     private int rotation;
     private final TileType type;
     private Meeple meeple;
@@ -60,7 +60,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * @return the image of the tile with the tile specific rotation.
      */
     public ImageIcon getImage() {
-        return image[rotation];
+        return images[rotation];
     }
 
     /**
@@ -222,9 +222,9 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
 
     // uses path to load images for all rotations.
     private void loadImages(String tilePath, String fileType) {
-        image = new ImageIcon[4]; // create image array.
+        images = new ImageIcon[4]; // create image array.
         for (int i = 0; i <= 3; i++) { // for every image:
-            image[i] = new ImageIcon(tilePath + i + fileType); // load from path.
+            images[i] = new ImageIcon(tilePath + i + fileType); // load from path.
         }
     }
 

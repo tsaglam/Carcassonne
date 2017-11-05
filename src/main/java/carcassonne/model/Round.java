@@ -15,7 +15,7 @@ import carcassonne.model.tile.TileStack;
  */
 public class Round {
 
-    private int activePlayer;
+    private int activePlayerIndex;
     private Tile currentTile;
     private final Grid grid;
     private Player[] player;
@@ -42,7 +42,7 @@ public class Round {
      * @return the player whose turn it is.
      */
     public Player getActivePlayer() {
-        return player[activePlayer];
+        return player[activePlayerIndex];
     }
 
     /**
@@ -119,9 +119,9 @@ public class Round {
      * Method the starts the turn of the next player a draws a tile from the stack.
      */
     public void nextTurn() {
-        activePlayer++;
-        if (activePlayer == player.length) {
-            activePlayer = 0;
+        activePlayerIndex++;
+        if (activePlayerIndex == player.length) {
+            activePlayerIndex = 0;
             turnCounter++;
         }
         currentTile = tileStack.drawTile();
@@ -151,7 +151,7 @@ public class Round {
         for (int i = 0; i < player.length; i++) {
             player[i] = new Player(i); // create the players.
         }
-        activePlayer = 0; // set first player as active.
+        activePlayerIndex = 0; // set first player as active.
 
     }
 
