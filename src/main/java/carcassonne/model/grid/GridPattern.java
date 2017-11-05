@@ -46,6 +46,7 @@ public class GridPattern {
      * @param tile is the tile to check.
      * @return true if the pattern already contains the tile.
      */
+    // TODO (HIGH) Fix: Unlikely argument type Tile for contains(Object) on a Collection<GridSpot>.
     public boolean contains(Tile tile) {
         return spotList.contains(tile);
     }
