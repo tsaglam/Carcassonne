@@ -19,7 +19,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     private static final String FILE_TYPE = ".jpg";
     private static final String FOLDER = "src/main/ressources/tiles/";
     private GridSpot gridSpot;
-    private ImageIcon[] image; // tile image
+    private ImageIcon[] images; // tile image
     private Meeple meeple;
     private int rotation;
     private Terrain terrain;
@@ -66,7 +66,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * @return the image of the tile with the tile specific rotation.
      */
     public ImageIcon getImage() {
-        return image[rotation];
+        return images[rotation];
     }
 
     /**
@@ -182,9 +182,9 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
 
     // uses path to load images for all rotations.
     private void loadImages(String tilePath, String fileType) {
-        image = new ImageIcon[4]; // create image array.
+        images = new ImageIcon[4]; // create image array.
         for (int i = 0; i <= 3; i++) { // for every image:
-            image[i] = new ImageIcon(tilePath + i + fileType); // load from path.
+            images[i] = new ImageIcon(tilePath + i + fileType); // load from path.
         }
     }
 
