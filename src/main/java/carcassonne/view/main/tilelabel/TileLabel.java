@@ -6,8 +6,8 @@ import javax.swing.JLabel;
 import carcassonne.control.MainController;
 
 /**
- * Is a simple class derived form JLabel, which stores (additionally to the JLabel functions) the coordinates of the
- * label on the label grid.
+ * Is a simple class derived form JLabel, which stores (additionally to the JLabel functions) the
+ * coordinates of the label on the label grid.
  * @author Timur Saglam
  */
 public class TileLabel extends JLabel {

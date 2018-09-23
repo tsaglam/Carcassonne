@@ -19,8 +19,9 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.terrain.TerrainType;
-import carcassonne.model.tile.NullTile;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileFactory;
+import carcassonne.model.tile.TileType;
 import carcassonne.view.main.menubar.MainMenuBar;
 import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.main.tilelabel.TileLabel;
@@ -187,7 +188,7 @@ public class MainGUI {
      * Creates the grid of labels.
      */
     private void buildTileGrid() {
-        defaultTile = new NullTile();
+        defaultTile = TileFactory.create(TileType.Null);
         constraints = new GridBagConstraints();
         gridWidth = options.gridWidth;
         gridHeight = options.gridHeight;

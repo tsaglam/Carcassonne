@@ -3,8 +3,9 @@ package carcassonne.model.grid;
 import java.util.LinkedList;
 import java.util.List;
 
-import carcassonne.model.tile.NullTile;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileFactory;
+import carcassonne.model.tile.TileType;
 
 /**
  * The playing grid class.
@@ -22,7 +23,7 @@ public class Grid {
      * @param height is the grid height.
      * @param foundationType is the tile type of the first tile in the middle of the grid.
      */
-    public Grid(int width, int height, Class<? extends Tile> foundationType) {
+    public Grid(int width, int height, TileType foundationType) {
         this.width = width;
         this.height = height;
         spots = new GridSpot[width][height];
@@ -54,8 +55,8 @@ public class Grid {
     }
 
     /**
-     * Creates a list of spots that are connected to a specific spot with the terrain in a specific direction on the
-     * spot.
+     * Creates a list of spots that are connected to a specific spot with the terrain in a specific
+     * direction on the spot.
      * @param spot is the spot on the grid where the tile is.
      * @param from is the direction the tile is connected from
      * @return the list of connected tiles.
@@ -110,7 +111,8 @@ public class Grid {
     }
 
     /**
-     * Method checks for modified patterns on the grid. As a basis it uses the coordinates of the last placed tile.
+     * Method checks for modified patterns on the grid. As a basis it uses the coordinates of the
+     * last placed tile.
      * @param spot is the spot of the last placed tile.
      * @return the list of the modified patterns.
      */
@@ -180,7 +182,8 @@ public class Grid {
     }
 
     /**
-     * Checks whether a spot on the grid would close free spots off in a direction if a tile would be placed there.
+     * Checks whether a spot on the grid would close free spots off in a direction if a tile would
+     * be placed there.
      * @param spot is the spot.
      * @param direction is the direction.
      * @return true if it does.
@@ -247,8 +250,8 @@ public class Grid {
     }
 
     /**
-     * Error checker method for other methods in this class. It just checks whether specific coordinates are on the grid
-     * and throws an error if not.
+     * Error checker method for other methods in this class. It just checks whether specific
+     * coordinates are on the grid and throws an error if not.
      * @param x is the x coordinate
      * @param y is the y coordinate
      */
@@ -259,13 +262,14 @@ public class Grid {
     }
 
     /**
-     * Error checker method for other methods in this class. It just checks whether specific tile is not null.
+     * Error checker method for other methods in this class. It just checks whether specific tile is
+     * not null.
      * @param tile the tile to check
      */
     private void checkParameters(Tile tile) {
         if (tile == null) {
             throw new IllegalArgumentException("Tile can't be null.");
-        } else if (tile instanceof NullTile) {
+        } else if (tile.getType() == TileType.Null) {
             throw new IllegalArgumentException("Tile from type TileType.Null can't be placed.");
         }
     }
@@ -295,17 +299,11 @@ public class Grid {
      * Places a specific tile in the middle of the grid.
      * @param tileType is the type of that specific tile.
      */
-    private void placeFoundation(Class<? extends Tile> tileType) {
+    private void placeFoundation(TileType tileType) {
         int centerX = Math.round((width - 1) / 2);
         int centerY = Math.round((height - 1) / 2);
         foundation = spots[centerX][centerY];
-        try {
-            foundation.forcePlacement(tileType.newInstance());
-        } catch (InstantiationException exception) {
-            exception.printStackTrace();
-        } catch (IllegalAccessException exception) {
-            exception.printStackTrace();
-        }
+        foundation.forcePlacement(TileFactory.create(tileType));
     }
 
 }

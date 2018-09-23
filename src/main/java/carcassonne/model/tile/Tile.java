@@ -15,29 +15,31 @@ import carcassonne.model.terrain.TerrainType;
  * The tile of a grid.
  * @author Timur Saglam
  */
-public class Tile { // TODO (MEDIUM) build tile grid as graph.
-    private static final String FILE_TYPE = ".jpg";
-    private static final String FOLDER = "src/main/ressources/tiles/";
+public class Tile {
     private GridSpot gridSpot;
     private ImageIcon[] images; // tile image
     private Meeple meeple;
     private int rotation;
     private Terrain terrain;
-
+    private final TileType type;
+    
     /**
      * Simple constructor.
      * @param terrain is the array containing the terrain information.
+     * @param type is the tile type enum value of the tile.
+     * @param tilePath is the path to the tiles.
+     * @param fileType is the file type of the tiles.
      */
-    public Tile(Terrain terrain) {
-        String path = FOLDER + getClass().getSimpleName();
-        if (terrain == null || path == null) {
+    public Tile(Terrain terrain, TileType type, String tilePath, String fileType) {
+        if (type == null || terrain == null || fileType == null || tilePath == null || terrain == null) {
             throw new IllegalArgumentException("Parameters can't be null");
-        } else if (!new File(path + rotation + FILE_TYPE).exists()) {
-            throw new IllegalArgumentException("Image path is not valid: " + path);
+        } else if (!new File(tilePath + rotation + fileType).exists()) {
+            throw new IllegalArgumentException("Image path is not valid: " + tilePath);
         }
+        this.type = type;
         this.terrain = terrain;
         meeple = null;
-        loadImages(path, FILE_TYPE);
+        loadImages(tilePath, fileType);
     }
 
     /**
@@ -84,6 +86,14 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      */
     public TerrainType getTerrain(GridDirection direction) {
         return terrain.getAt(direction);
+    }
+
+    /**
+     * Getter for the tile type.
+     * @return the type
+     */
+    public TileType getType() {
+        return type;
     }
 
     /**

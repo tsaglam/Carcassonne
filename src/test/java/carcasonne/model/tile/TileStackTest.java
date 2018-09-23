@@ -25,7 +25,7 @@ public class TileStackTest {
     public void test() {
         assertFalse(stack.isEmpty());
         while (!stack.isEmpty()) {
-            System.out.println("Took " + stack.drawTile().getClass().getSimpleName() + " from stack.");
+            System.out.println("Took " + stack.drawTile().getType() + " from stack.");
         }
         assertNull(stack.drawTile());
     }

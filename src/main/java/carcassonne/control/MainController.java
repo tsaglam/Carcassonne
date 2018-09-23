@@ -17,12 +17,14 @@ import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
 /**
- * The MainController is the central class of the game. The game is started with the instantiation of this class. The
- * class gets the user input from the <code>MouseAdapter</code> in the <code>view package</code>, and controls both the
- * <code>view</code> and the <code>model</code>. The <code>controller</code> package also contains the state machine,
- * which consists out of the <code>MainController</code> class and the state classes. This system implements the
- * model/view/controller architecture, which is not 100% formally implemented. The reason for this is that in the user
- * input is made in Swing through the <code>MouseAdapters</code>, which belong to the <code>view</code> package.
+ * The MainController is the central class of the game. The game is started with the instantiation
+ * of this class. The class gets the user input from the <code>MouseAdapter</code> in the
+ * <code>view package</code>, and controls both the <code>view</code> and the <code>model</code>.
+ * The <code>controller</code> package also contains the state machine, which consists out of the
+ * <code>MainController</code> class and the state classes. This system implements the
+ * model/view/controller architecture, which is not 100% formally implemented. The reason for this
+ * is that in the user input is made in Swing through the <code>MouseAdapters</code>, which belong
+ * to the <code>view</code> package.
  * @author Timur Saglam
  */
 public class MainController {

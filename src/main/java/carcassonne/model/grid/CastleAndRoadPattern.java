@@ -49,7 +49,7 @@ public class CastleAndRoadPattern extends GridPattern {
     private boolean checkNeighbor(GridSpot startingTile, GridSpot neighbor, GridDirection direction, Grid grid) {
         GridDirection oppositeDirection = GridDirection.opposite(direction);
         if (!neighbor.hasTagConnectedTo(oppositeDirection, this)) { // if neighbor not
-                                                                    // visited yet
+                                                                             // visited yet
             startingTile.setTag(direction, this);
             neighbor.setTag(oppositeDirection, this); // mark as visited
             add(neighbor); // add to pattern

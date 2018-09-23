@@ -66,8 +66,8 @@ public class PlacementGUI extends SecondaryGUI {
     }
 
     /**
-     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update the GUI content
-     * according to the tiles properties.
+     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update
+     * the GUI content according to the tiles properties.
      */
     @Override
     protected void update() {

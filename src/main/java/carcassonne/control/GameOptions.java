@@ -6,19 +6,19 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
 import carcassonne.model.terrain.TerrainType;
-import carcassonne.model.tile.CastleWallRoad;
-import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileType;
 
 /**
- * Singleton that stores the game options and other information. There is only one option instance at a time. The use of
- * singletons is heavily discussed.
+ * Singleton that stores the game options and other information. There is only one option instance
+ * at a time. The use of singletons is heavily discussed.
  * @author Timur Saglam
  */
 public final class GameOptions {
     private static GameOptions instance;
 
     /**
-     * Access method for the GameProperties instance. Secures that only one property object can exist at a time.
+     * Access method for the GameProperties instance. Secures that only one property object can
+     * exist at a time.
      * @return the instance.
      */
     public static synchronized GameOptions getInstance() {
@@ -46,7 +46,7 @@ public final class GameOptions {
     /**
      * The tile type of the foundation.
      */
-    public Class<? extends Tile> foundationType;
+    public TileType foundationType;
 
     /**
      * The x coordinates of the grid center.
@@ -115,8 +115,7 @@ public final class GameOptions {
 
     private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(255, 214, 0) };
 
-    private final Color[] playerColorLight = { new Color(143, 143, 214), new Color(220, 129, 134), new Color(98, 164, 105),
-            new Color(230, 213, 125) };
+    private final Color[] playerColorLight = { new Color(143, 143, 214), new Color(220, 129, 134), new Color(98, 164, 105), new Color(230, 213, 125) };
 
     private final int taskBarHeight;
 
@@ -151,7 +150,7 @@ public final class GameOptions {
         gridResolutionWidth = gridWidth * tileSize;
         gridCenterX = Math.round((gridWidth - 1) / 2);
         gridCenterY = Math.round((gridHeight - 1) / 2);
-        foundationType = CastleWallRoad.class;
+        foundationType = TileType.CastleWallRoad;
     }
 
     /**

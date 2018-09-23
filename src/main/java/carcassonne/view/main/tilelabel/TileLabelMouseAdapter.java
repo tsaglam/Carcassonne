@@ -6,8 +6,9 @@ import java.awt.event.MouseEvent;
 import carcassonne.control.MainController;
 
 /**
- * The class is a specific mouse adapter for a <code>TileLabel</code>. It connects the labels with the
- * <code>MainController</code>. The class is a subclass of <code>java.awt.event.MouseAdapter</code>.
+ * The class is a specific mouse adapter for a <code>TileLabel</code>. It connects the labels with
+ * the <code>MainController</code>. The class is a subclass of
+ * <code>java.awt.event.MouseAdapter</code>.
  * @author Timur Saglam
  */
 public class TileLabelMouseAdapter extends MouseAdapter {

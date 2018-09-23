@@ -1,21 +1,13 @@
 package carcassonne.model.grid;
 
 /**
- * Enumeration for grid directions and tile positions. It is used either to specify a direction on the grid from a
- * specific tile, or to specify a position on a tile.
+ * Enumeration for grid directions and tile positions. It is used either to specify a direction on
+ * the grid from a specific tile, or to specify a position on a tile.
  * @author Timur Saglam
  */
 public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Grid
 
-    TOP,
-    RIGHT,
-    BOTTOM,
-    LEFT,
-    TOP_RIGHT,
-    BOTTOM_RIGHT,
-    BOTTOM_LEFT,
-    TOP_LEFT,
-    MIDDLE;
+    TOP, RIGHT, BOTTOM, LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT, MIDDLE;
 
     /**
      * Adds a x coordinate and a <code> GridDirection</code>.
@@ -121,8 +113,8 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
 
     /**
      * Generates a two dimensional array of the GridDirections for their orientation on a tile.
-     * @return a 2D array of an array of TOP_LEFT, LEFT, BOTTOM_LEFT, TOP, MIDDLE, BOTTOM, TOP_RIGHT, RIGHT and
-     * BOTTOM_RIGHT.
+     * @return a 2D array of an array of TOP_LEFT, LEFT, BOTTOM_LEFT, TOP, MIDDLE, BOTTOM,
+     * TOP_RIGHT, RIGHT and BOTTOM_RIGHT.
      */
     public static GridDirection[][] values2D() {
         return new GridDirection[][] { { TOP_LEFT, LEFT, BOTTOM_LEFT }, { TOP, MIDDLE, BOTTOM }, { TOP_RIGHT, RIGHT, BOTTOM_RIGHT } };
@@ -137,7 +129,8 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
     }
 
     /**
-     * Checks whether the ordinal of a direction is smaller or equal than the ordinal of another direction.
+     * Checks whether the ordinal of a direction is smaller or equal than the ordinal of another
+     * direction.
      * @param other is the other direction.
      * @return true if smaller or equal.
      */
