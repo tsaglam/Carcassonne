@@ -9,11 +9,13 @@ import java.util.List;
  */
 public class TileStack {
     private final List<Tile> tileList;
+    private final int multiplicator;
 
     /**
      * Simple constructor.
      */
-    public TileStack() {
+    public TileStack(int players) {
+        multiplicator = players / 2;
         tileList = new ArrayList<Tile>();
         fillStack();
     }
@@ -38,9 +40,9 @@ public class TileStack {
     }
 
     private void fillStack() {
-        int[] tileAmount = { 1, 3, 4, 5, 5, 3, 2, 3, 5, 3, 3, 3, 4, 4, 2, 0, 8, 9, 2, 4, 1, 2, 2};
+        int[] tileAmount = { 1, 3, 4, 5, 5, 3, 2, 3, 5, 3, 3, 3, 4, 4, 2, 0, 7, 8, 2, 4, 1, 2, 2};
         for (TileType tileType : TileType.values()) {
-            for (int i = 0; i < tileAmount[tileType.ordinal()]; i++) {
+            for (int i = 0; i < tileAmount[tileType.ordinal()] * multiplicator; i++) {
                 tileList.add(TileFactory.create(tileType));
             }
         }
