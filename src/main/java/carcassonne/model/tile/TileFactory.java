@@ -68,6 +68,8 @@ public final class TileFactory {
             return produce(type, FIELDS, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, OTHER);
         case RoadCrossLarge:
             return produce(type, ROAD, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD);
+        case RoadCrossSmall:
+            return produce(type, FIELDS, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD);
         default:
             return produce(type, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER);
         }

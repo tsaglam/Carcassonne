@@ -7,5 +7,5 @@ package carcassonne.model.tile;
  * @author Timur
  */
 public enum TileType {
-    CastleCenter, CastleCenterEntry, CastleCenterSide, CastleEdge, CastleEdgeRoad, CastleSides, CastleSidesEdge, CastleTube, CastleWall, CastleWallCurveLeft, CastleWallCurveRight, CastleWallJunction, CastleWallRoad, Monastery, MonasteryRoad, Null, Road, RoadCurve, RoadJunctionLarge, RoadJunctionSmall, RoadCrossLarge
+    CastleCenter, CastleCenterEntry, CastleCenterSide, CastleEdge, CastleEdgeRoad, CastleSides, CastleSidesEdge, CastleTube, CastleWall, CastleWallCurveLeft, CastleWallCurveRight, CastleWallJunction, CastleWallRoad, Monastery, MonasteryRoad, Null, Road, RoadCurve, RoadJunctionLarge, RoadJunctionSmall, RoadCrossLarge, RoadCrossSmall
 }
