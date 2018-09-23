@@ -18,7 +18,7 @@ public class Round {
     private int activePlayerIndex;
     private Tile currentTile;
     private final Grid grid;
-    private Player[] player;
+    private Player[] players;
     private final int playerCount;
     private final TileStack tileStack;
     private int turnCounter;
@@ -38,11 +38,11 @@ public class Round {
     }
 
     /**
-     * Getter for the active player of the round.
-     * @return the player whose turn it is.
+     * Getter for the active players of the round.
+     * @return the players whose turn it is.
      */
     public Player getActivePlayer() {
-        return player[activePlayerIndex];
+        return players[activePlayerIndex];
     }
 
     /**
@@ -54,12 +54,12 @@ public class Round {
     }
 
     /**
-     * Getter for a specific player of the round.
-     * @param playerNumber is the number of the specific player.
-     * @return returns the player.
+     * Getter for a specific players of the round.
+     * @param playerNumber is the number of the specific players.
+     * @return returns the players.
      */
     public Player getPlayer(int playerNumber) {
-        return player[playerNumber];
+        return players[playerNumber];
     }
 
     /**
@@ -86,7 +86,7 @@ public class Round {
         String[] playerNames = GameOptions.getInstance().playerNames;
         List<String> winnerList = new LinkedList<String>();
         int maxScore = 0;
-        for (Player player : this.player) {
+        for (Player player : this.players) {
             if (player.getScore() >= maxScore) {
                 if (player.getScore() > maxScore) {
                     winnerList.clear();
@@ -117,11 +117,11 @@ public class Round {
     }
 
     /**
-     * Method the starts the turn of the next player a draws a tile from the stack.
+     * Method the starts the turn of the next players a draws a tile from the stack.
      */
     public void nextTurn() {
         activePlayerIndex++;
-        if (activePlayerIndex == player.length) {
+        if (activePlayerIndex == players.length) {
             activePlayerIndex = 0;
             turnCounter++;
         }
@@ -140,19 +140,17 @@ public class Round {
     }
 
     /**
-     * creates the player objects and sets the first player as active player.
+     * creates the players objects and sets the first players as active players.
      * @param playerCount is the number of players in the range of [1, <code>GameOptions.maximalPlayers]</code>.
      */
     private void createPlayers() {
         if (playerCount <= 1 || playerCount > GameOptions.getInstance().maximalPlayers) {
-            throw new IllegalArgumentException(playerCount + " is not a valid player count");
+            throw new IllegalArgumentException(playerCount + " is not a valid players count");
         }
-        player = new Player[playerCount]; // initialize the player array.
-        for (int i = 0; i < player.length; i++) {
-            player[i] = new Player(i); // create the players.
+        players = new Player[playerCount]; // initialize the players array.
+        for (int i = 0; i < players.length; i++) {
+            players[i] = new Player(i); // create the players.
         }
-        activePlayerIndex = 0; // set first player as active.
-
+        activePlayerIndex = 0; // set first players as active.
     }
-
 }
