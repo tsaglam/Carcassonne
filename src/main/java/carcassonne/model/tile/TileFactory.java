@@ -5,6 +5,8 @@ import static carcassonne.model.terrain.TerrainType.FIELDS;
 import static carcassonne.model.terrain.TerrainType.MONASTERY;
 import static carcassonne.model.terrain.TerrainType.OTHER;
 import static carcassonne.model.terrain.TerrainType.ROAD;
+
+import carcassonne.model.terrain.Terrain;
 import carcassonne.model.terrain.TerrainType;
 
 /**
@@ -72,7 +74,7 @@ public final class TileFactory {
     // fills array, actually creates tile object with type and path.
     private static Tile produce(TileType type, TerrainType... terrain) {
         String path = FOLDER + type.name(); // generate path.
-        return new Tile(terrain, type, path, FILE_TYPE);
+        return new Tile(new Terrain(terrain), type, path, FILE_TYPE);
     }
 
     private TileFactory() {

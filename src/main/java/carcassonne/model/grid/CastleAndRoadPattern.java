@@ -26,7 +26,7 @@ public class CastleAndRoadPattern extends GridPattern {
         boolean isClosed = true;
         GridSpot neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) { // for every side
-            if (spot.getTile().isConnected(startingPoint, direction)) { // if is connected side
+            if (spot.getTile().hasConnection(startingPoint, direction)) { // if is connected side
                 neighbor = grid.getNeighbor(spot, direction); // get the neighbor
                 if (neighbor == null) { // if it has no neighbor
                     isClosed = false; // open side, can't be finished pattern.

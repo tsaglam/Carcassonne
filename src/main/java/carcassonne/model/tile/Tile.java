@@ -1,28 +1,28 @@
 package carcassonne.model.tile;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
 import carcassonne.model.Meeple;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
+import carcassonne.model.terrain.Terrain;
 import carcassonne.model.terrain.TerrainType;
 
 /**
  * The tile of a grid.
  * @author Timur Saglam
  */
-public class Tile { // TODO (MEDIUM) build tile grid as graph.
-    private Map<GridDirection, TerrainType> terrainMap;
-    private ImageIcon[] images; // tile image
-    private int rotation;
-    private final TileType type;
-    private Meeple meeple;
+public class Tile {
     private GridSpot gridSpot;
-
+    private ImageIcon[] images; // tile image
+    private Meeple meeple;
+    private int rotation;
+    private Terrain terrain;
+    private final TileType type;
+    
     /**
      * Simple constructor.
      * @param terrain is the array containing the terrain information.
@@ -30,18 +30,26 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * @param tilePath is the path to the tiles.
      * @param fileType is the file type of the tiles.
      */
-    public Tile(TerrainType[] terrain, TileType type, String tilePath, String fileType) {
-        if (type == null || terrain == null || fileType == null || tilePath == null) {
+    public Tile(Terrain terrain, TileType type, String tilePath, String fileType) {
+        if (type == null || terrain == null || fileType == null || tilePath == null || terrain == null) {
             throw new IllegalArgumentException("Parameters can't be null");
-        } else if (terrain.length != GridDirection.values().length) {
-            throw new IllegalArgumentException("Terrain array is invalid: " + terrain.toString());
         } else if (!new File(tilePath + rotation + fileType).exists()) {
             throw new IllegalArgumentException("Image path is not valid: " + tilePath);
         }
         this.type = type;
+        this.terrain = terrain;
         meeple = null;
-        buildTerrainMap(terrain);
         loadImages(tilePath, fileType);
+    }
+
+    /**
+     * Checks whether the tile has same terrain on a specific side to another tile.
+     * @param direction is the specific direction.
+     * @param other is the other tile.
+     * @return true if it has same terrain.
+     */
+    public boolean canConnectTo(GridDirection direction, Tile other) {
+        return getTerrain(direction) == other.getTerrain(GridDirection.opposite(direction));
     }
 
     /**
@@ -77,7 +85,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * @return the terrain type, or null if the direction is not mapped.
      */
     public TerrainType getTerrain(GridDirection direction) {
-        return terrainMap.get(direction);
+        return terrain.getAt(direction);
     }
 
     /**
@@ -86,6 +94,17 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      */
     public TileType getType() {
         return type;
+    }
+
+    /**
+     * Checks whether the terrain of the tile connected from a specific grid direction to another specific grid
+     * direction.
+     * @param from is a specific grid direction.
+     * @param to is a specific grid direction.
+     * @return true if the terrain connected.
+     */
+    public boolean hasConnection(GridDirection from, GridDirection to) {
+        return terrain.isConnected(from, to);
     }
 
     /**
@@ -109,28 +128,11 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
     }
 
     /**
-     * Checks whether the tile has same terrain on a specific side to another tile.
-     * @param direction is the specific direction.
-     * @param other is the other tile.
-     * @return true if it has same terrain.
+     * Checks of tile is a monastery tile, which means it has monastery terrain in the middle of the tile.
+     * @return true if is a monastery.
      */
-    public boolean hasSameTerrain(GridDirection direction, Tile other) {
-        return getTerrain(direction) == other.getTerrain(GridDirection.opposite(direction));
-    }
-
-    /**
-     * Checks whether two parts of a tile are connected through same terrain.
-     * @param from is the part to check from.
-     * @param to is the terrain to check to.
-     * @return true if connected, false if not.
-     */
-    public boolean isConnected(GridDirection from, GridDirection to) {
-        if (isDirectConnected(from, to)) {
-            return true;
-        } else if (from != GridDirection.MIDDLE && to != GridDirection.MIDDLE) {
-            return isIndirectConnected(from, to, 1) || isIndirectConnected(from, to, -1);
-        }
-        return false;
+    public boolean isMonastery() {
+        return getTerrain(GridDirection.MIDDLE) == TerrainType.MONASTERY;
     }
 
     /**
@@ -148,18 +150,16 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
      * Turns a tile 90 degree to the left.
      */
     public void rotateLeft() {
-        rotateTerrain(GridDirection.TOP, GridDirection.LEFT, GridDirection.BOTTOM, GridDirection.RIGHT);
-        rotateTerrain(GridDirection.TOP_RIGHT, GridDirection.TOP_LEFT, GridDirection.BOTTOM_LEFT, GridDirection.BOTTOM_RIGHT);
-        rotation = rotation <= 0 ? 3 : rotation - 1; // rotation indicator
+        terrain.rotateLeft();
+        rotation = rotation <= 0 ? 3 : rotation - 1; // update rotation indicator
     }
 
     /**
      * Turns a tile 90 degree to the right.
      */
     public void rotateRight() {
-        rotateTerrain(GridDirection.directNeighbors());
-        rotateTerrain(GridDirection.indirectNeighbors());
-        rotation = rotation >= 3 ? 0 : rotation + 1; // rotation indicator
+        terrain.rotateRight();
+        rotation = rotation >= 3 ? 0 : rotation + 1; // update rotation indicator
     }
 
     /**
@@ -175,8 +175,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
 
     /**
      * Gives the tile the position where it has been placed.
-     * @param x sets the x coordinate.
-     * @param y sets the y coordinate.
+     * @param spot is the {@link GridSpot} where the tile was placed.
      */
     public void setPosition(GridSpot spot) {
         if (spot == null) {
@@ -187,37 +186,8 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
 
     @Override
     public String toString() {
-        return type + "Tile[coordinates: " + gridSpot + ", rotation: " + rotation + ", terrain" + terrainMap.toString() + ", Meeple: " + meeple + "]";
-    }
-
-    // maps TerrainType from terrain array to GridDirection with same index:
-    private void buildTerrainMap(TerrainType... terrain) {
-        terrainMap = new HashMap<GridDirection, TerrainType>(5); // create terrain map.
-        GridDirection[] tilePosition = GridDirection.values();
-        for (int i = 0; i < terrain.length; i++) {
-            terrainMap.put(tilePosition[i], terrain[i]);
-        }
-    }
-
-    // checks for direct connection through middle:
-    private boolean isDirectConnected(GridDirection from, GridDirection to) {
-        TerrainType middle = getTerrain(GridDirection.MIDDLE);
-        return getTerrain(from).equals(middle) && getTerrain(to).equals(middle);
-    }
-
-    // checks for indirect connection through the specified side from a specific start to a specific
-    // destination. Side is either 1 (right) or -1 (left.)
-    private boolean isIndirectConnected(GridDirection from, GridDirection to, int side) {
-        GridDirection current = from;
-        GridDirection next;
-        while (current != to) { // while not at destination:
-            next = GridDirection.next(current, side); // get the next direction
-            if (getTerrain(current) != getTerrain(next)) {
-                return false; // check if still connected
-            }
-            current = next; // set new current
-        }
-        return true; // found connection from start to destination.
+        return getClass().getSimpleName() + "Tile[coordinates: " + gridSpot + ", rotation: " + rotation + ", terrain" + terrain.toString()
+                + ", Meeple: " + meeple + "]";
     }
 
     // uses path to load images for all rotations.
@@ -228,10 +198,7 @@ public class Tile { // TODO (MEDIUM) build tile grid as graph.
         }
     }
 
-    private void rotateTerrain(GridDirection... directions) {
-        TerrainType temporary = terrainMap.get(directions[directions.length - 1]); // get last one
-        for (GridDirection direction : directions) { // rotate terrain through temporary:
-            temporary = terrainMap.put(direction, temporary);
-        }
+    protected List<GridDirection> getMeepleSpots() {
+        return terrain.getMeepleSpots();
     }
 }

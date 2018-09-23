@@ -9,7 +9,6 @@ import java.util.Map;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
-import carcassonne.model.tile.Tile;
 
 /**
  * A pattern of connected terrain on tiles of the grid. A grid pattern contains information about
@@ -42,12 +41,12 @@ public class GridPattern {
     }
 
     /**
-     * Checks whether the pattern already contains a tile.
-     * @param tile is the tile to check.
-     * @return true if the pattern already contains the tile.
+     * Checks whether the pattern already contains a grid spot.
+     * @param spot is the grid spot to check.
+     * @return true if the pattern already contains the grid spot.
      */
-    public boolean contains(Tile tile) {
-        return spotList.contains(tile);
+    public boolean contains(GridSpot spot) {
+        return spotList.contains(spot);
     }
 
     /**

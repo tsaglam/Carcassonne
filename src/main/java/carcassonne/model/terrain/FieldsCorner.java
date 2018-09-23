@@ -12,7 +12,7 @@ import carcassonne.model.tile.Tile;
  * <code>TerrainType.FIELDS</code> is connected to.
  * @author Timur Saglam
  */
-public class FieldsCorner {
+public class FieldsCorner { // TODO (HIGH) is this class still needed?
     private static final int LEFT = 4;
     private static final int RIGHT = 3;
     private final List<GridDirection> connectedDirections;
