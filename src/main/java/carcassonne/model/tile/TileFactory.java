@@ -72,6 +72,8 @@ public final class TileFactory {
             return produce(type, FIELDS, ROAD, ROAD, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD);
         case CastleTubeEntry:
             return produce(type, ROAD, CASTLE, ROAD, CASTLE, FIELDS, FIELDS, FIELDS, FIELDS, CASTLE);
+        case MonasteryCastle:
+            return produce(type, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, MONASTERY);
         default:
             return produce(type, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER);
         }

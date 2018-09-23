@@ -179,7 +179,7 @@ public class GridSpot {
 
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
         TileType type = spot.getTile().getType();
-        if (type == TileType.Monastery || type == TileType.MonasteryRoad) {
+        if (type == TileType.Monastery || type == TileType.MonasteryRoad || type == TileType.MonasteryCastle) {
             if (spot.hasNoTagConnectionTo(GridDirection.MIDDLE)) {
                 patternList.add(new MonasteryGridPattern(spot, grid));
             }

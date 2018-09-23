@@ -23,7 +23,7 @@ public class MonasteryGridPattern extends GridPattern {
     public MonasteryGridPattern(GridSpot spot, Grid grid) {
         super(TerrainType.MONASTERY);
         TileType tileType = spot.getTile().getType();
-        if (tileType != TileType.Monastery && tileType != TileType.MonasteryRoad) {
+        if (tileType != TileType.Monastery && tileType != TileType.MonasteryRoad && tileType != TileType.MonasteryCastle) {
             throw new IllegalArgumentException("Can't create monastery pattern from non monastery tile");
         }
         buildPattern(spot, grid);
