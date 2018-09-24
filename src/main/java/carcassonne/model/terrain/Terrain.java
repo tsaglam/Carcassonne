@@ -13,7 +13,7 @@ import carcassonne.model.grid.GridDirection;
  */
 public class Terrain {
     private List<GridDirection> meepleSpots;
-    private Map<GridDirection, TerrainType> terrainMap;
+    private final Map<GridDirection, TerrainType> terrainMap;
 
     /**
      * Creates a terrain instance with nine terrain types.
@@ -25,7 +25,7 @@ public class Terrain {
         } else if (terrain.length != GridDirection.values().length) {
             throw new IllegalArgumentException("Terrain array is invalid: " + terrain.toString());
         }
-        terrainMap = new HashMap<GridDirection, TerrainType>(5); // create terrain map.
+        terrainMap = new HashMap<>(5); // create terrain map.
         for (int i = 0; i < terrain.length; i++) {
             terrainMap.put(GridDirection.values()[i], terrain[i]);
         }
