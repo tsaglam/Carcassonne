@@ -30,14 +30,14 @@ public class Tile {
      * @param tilePath is the path to the tiles.
      * @param fileType is the file type of the tiles.
      */
-    public Tile(Terrain terrain, TileType type, String tilePath, String fileType) {
-        if (type == null || terrain == null || fileType == null || tilePath == null || terrain == null) {
+    public Tile(TileType type, String tilePath, String fileType) {
+        if (type == null || fileType == null || tilePath == null) {
             throw new IllegalArgumentException("Parameters can't be null");
         } else if (!new File(tilePath + rotation + fileType).exists()) {
             throw new IllegalArgumentException("Image path is not valid: " + tilePath);
         }
         this.type = type;
-        this.terrain = terrain;
+        terrain = new Terrain(type);
         meeple = null;
         loadImages(tilePath, fileType);
     }

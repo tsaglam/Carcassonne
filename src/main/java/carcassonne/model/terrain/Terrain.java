@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.tile.TileType;
 
 /**
  * Represents the terrain of a tile. It consists out of nine different terrain types, one for each grid direction.
@@ -19,15 +20,15 @@ public class Terrain {
      * Creates a terrain instance with nine terrain types.
      * @param terrain is the array of nine terrain types.
      */
-    public Terrain(TerrainType... terrain) {
-        if (terrain == null) {
-            throw new IllegalArgumentException("Terrain can't be null");
-        } else if (terrain.length != GridDirection.values().length) {
-            throw new IllegalArgumentException("Terrain array is invalid: " + terrain.toString());
+    public Terrain(TileType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Tile type can't be null");
+        } else if (type.getTerrain().length != GridDirection.values().length) {
+            throw new IllegalArgumentException("Terrain array is invalid: " + type);
         }
         terrainMap = new HashMap<>(5); // create terrain map.
-        for (int i = 0; i < terrain.length; i++) {
-            terrainMap.put(GridDirection.values()[i], terrain[i]);
+        for (int i = 0; i < GridDirection.values().length; i++) {
+            terrainMap.put(GridDirection.values()[i], type.getTerrain()[i]);
         }
         createMeepleSpots();
     }

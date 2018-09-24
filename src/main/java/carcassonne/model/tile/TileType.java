@@ -1,11 +1,12 @@
 package carcassonne.model.tile;
 
-import carcassonne.model.terrain.TerrainType;
 import static carcassonne.model.terrain.TerrainType.CASTLE;
 import static carcassonne.model.terrain.TerrainType.FIELDS;
 import static carcassonne.model.terrain.TerrainType.MONASTERY;
 import static carcassonne.model.terrain.TerrainType.OTHER;
 import static carcassonne.model.terrain.TerrainType.ROAD;
+
+import carcassonne.model.terrain.TerrainType;
 
 /**
  * Enum for the specific type of tiles. this is needed for the tile factory. It allows easy construction of tile
