@@ -83,6 +83,7 @@ public class StatePlacing extends AbstractControllerState {
             changeState(StateGameOver.class);
         } else {
             rotationGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
+            updateStackSize();
         }
     }
 
