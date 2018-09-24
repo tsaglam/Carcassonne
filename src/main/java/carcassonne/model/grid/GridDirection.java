@@ -7,7 +7,15 @@ package carcassonne.model.grid;
  */
 public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Grid
 
-    TOP, RIGHT, BOTTOM, LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT, MIDDLE;
+    TOP,
+    RIGHT,
+    BOTTOM,
+    LEFT,
+    TOP_RIGHT,
+    BOTTOM_RIGHT,
+    BOTTOM_LEFT,
+    TOP_LEFT,
+    MIDDLE;
 
     /**
      * Adds a x coordinate and a <code> GridDirection</code>.

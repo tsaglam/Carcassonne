@@ -5,7 +5,11 @@ package carcassonne.model.terrain;
  * @author Timur Saglam
  */
 public enum TerrainType {
-    CASTLE, ROAD, MONASTERY, FIELDS, OTHER;
+    CASTLE,
+    ROAD,
+    MONASTERY,
+    FIELDS,
+    OTHER;
 
     /**
      * Generates an array of the basic terrain types.
