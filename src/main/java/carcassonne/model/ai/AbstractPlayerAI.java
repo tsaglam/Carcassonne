@@ -3,8 +3,8 @@ package carcassonne.model.ai;
 import java.util.List;
 
 /**
- * This is the abstract super class for the artificial intelligence classes. The artificial
- * intelligence classes contain the algorithm that play the game independently.
+ * This is the abstract super class for the artificial intelligence classes. The artificial intelligence classes contain
+ * the algorithm that play the game independently.
  * @author Timur Saglam
  */
 public abstract class AbstractPlayerAI {

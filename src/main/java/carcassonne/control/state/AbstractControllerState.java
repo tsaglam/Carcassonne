@@ -27,8 +27,8 @@ public abstract class AbstractControllerState {
     protected GameOptions options;
 
     /**
-     * Constructor of the abstract state, sets the controller from the parameter, registers the
-     * state at the controller and calls the <code>entry()</code> method.
+     * Constructor of the abstract state, sets the controller from the parameter, registers the state at the controller and
+     * calls the <code>entry()</code> method.
      * @param controller sets the Controller
      * @param mainGUI sets the MainGUI
      * @param rotationGUI sets the RotationGUI
@@ -124,7 +124,7 @@ public abstract class AbstractControllerState {
      * Updates the label which displays the current stack size.
      */
     protected void updateStackSize() {
-      scoreboard.updateStackSize(round.getStackSize());
+        scoreboard.updateStackSize(round.getStackSize());
     }
 
     /**

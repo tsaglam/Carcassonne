@@ -10,8 +10,8 @@ import carcassonne.model.terrain.Terrain;
 import carcassonne.model.terrain.TerrainType;
 
 /**
- * Factory class for building tile objects. Because of the large amount of different tile objects
- * this factory class enables easy tile creation with the <code>TileType</code> enum.
+ * Factory class for building tile objects. Because of the large amount of different tile objects this factory class
+ * enables easy tile creation with the <code>TileType</code> enum.
  * @author Timur Saglam
  */
 public final class TileFactory {

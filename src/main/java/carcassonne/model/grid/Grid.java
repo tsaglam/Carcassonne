@@ -55,8 +55,7 @@ public class Grid {
     }
 
     /**
-     * Creates a list of spots that are connected to a specific spot with the terrain in a specific
-     * direction on the spot.
+     * Creates a list of spots that are connected to a specific spot with the terrain in a specific direction on the spot.
      * @param spot is the spot on the grid where the tile is.
      * @param from is the direction the tile is connected from
      * @return the list of connected tiles.
@@ -111,8 +110,7 @@ public class Grid {
     }
 
     /**
-     * Method checks for modified patterns on the grid. As a basis it uses the coordinates of the
-     * last placed tile.
+     * Method checks for modified patterns on the grid. As a basis it uses the coordinates of the last placed tile.
      * @param spot is the spot of the last placed tile.
      * @return the list of the modified patterns.
      */
@@ -182,8 +180,7 @@ public class Grid {
     }
 
     /**
-     * Checks whether a spot on the grid would close free spots off in a direction if a tile would
-     * be placed there.
+     * Checks whether a spot on the grid would close free spots off in a direction if a tile would be placed there.
      * @param spot is the spot.
      * @param direction is the direction.
      * @return true if it does.
@@ -250,8 +247,8 @@ public class Grid {
     }
 
     /**
-     * Error checker method for other methods in this class. It just checks whether specific
-     * coordinates are on the grid and throws an error if not.
+     * Error checker method for other methods in this class. It just checks whether specific coordinates are on the grid and
+     * throws an error if not.
      * @param x is the x coordinate
      * @param y is the y coordinate
      */
@@ -262,8 +259,7 @@ public class Grid {
     }
 
     /**
-     * Error checker method for other methods in this class. It just checks whether specific tile is
-     * not null.
+     * Error checker method for other methods in this class. It just checks whether specific tile is not null.
      * @param tile the tile to check
      */
     private void checkParameters(Tile tile) {

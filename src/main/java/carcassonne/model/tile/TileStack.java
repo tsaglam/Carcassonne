@@ -48,7 +48,7 @@ public class TileStack {
     }
 
     private void fillStack() {
-        int[] tileAmount = { 1, 3, 4, 5, 5, 3, 2, 3, 5, 3, 3, 3, 4, 4, 2, 0, 7, 8, 2, 4, 1, 2, 2, 1};
+        int[] tileAmount = { 1, 3, 4, 5, 5, 3, 2, 3, 5, 3, 3, 3, 4, 4, 2, 0, 7, 8, 2, 4, 1, 2, 2, 1 };
         for (TileType tileType : TileType.values()) {
             for (int i = 0; i < tileAmount[tileType.ordinal()] * multiplicator; i++) {
                 tiles.add(TileFactory.create(tileType));

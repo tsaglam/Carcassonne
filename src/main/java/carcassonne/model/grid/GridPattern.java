@@ -11,9 +11,9 @@ import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 
 /**
- * A pattern of connected terrain on tiles of the grid. A grid pattern contains information about
- * the tiles of the pattern and the players involved in the pattern. Also it counts the amount of
- * meeples per player on the tiles of the pattern.
+ * A pattern of connected terrain on tiles of the grid. A grid pattern contains information about the tiles of the
+ * pattern and the players involved in the pattern. Also it counts the amount of meeples per player on the tiles of the
+ * pattern.
  * @author Timur Saglam
  */
 public class GridPattern {
@@ -50,9 +50,9 @@ public class GridPattern {
     }
 
     /**
-     * Disburses complete patterns. Gives every involved player points if he is one of the players
-     * with the maximal amount of meeples on the pattern. Removes the meeple placement and returns
-     * them to the players. Can only be called once in the lifetime of a GridPttern object.
+     * Disburses complete patterns. Gives every involved player points if he is one of the players with the maximal amount
+     * of meeples on the pattern. Removes the meeple placement and returns them to the players. Can only be called once in
+     * the lifetime of a GridPttern object.
      */
     public void disburse() {
         if (!disbursed && complete && !involvedPlayers.isEmpty()) {
@@ -77,8 +77,8 @@ public class GridPattern {
     }
 
     /**
-     * Disburses pattern if it is incomplete. This should be used at the end of the round and does
-     * not disburse complete patterns.
+     * Disburses pattern if it is incomplete. This should be used at the end of the round and does not disburse complete
+     * patterns.
      */
     public void forceDisburse() {
         if (!complete) {
@@ -121,8 +121,8 @@ public class GridPattern {
     }
 
     /**
-     * Checks whether a specific player is involved in the occupation of the pattern. That means he
-     * has at least one meeple on the pattern.
+     * Checks whether a specific player is involved in the occupation of the pattern. That means he has at least one meeple
+     * on the pattern.
      * @param player is the specific player.
      * @return true if he is involved in the occupation of the pattern, false if not.
      */
@@ -131,8 +131,7 @@ public class GridPattern {
     }
 
     /**
-     * Removes all tags of all tiles of the pattern. Needs to be called after ALL patterns of a tile
-     * have been created.
+     * Removes all tags of all tiles of the pattern. Needs to be called after ALL patterns of a tile have been created.
      */
     public void removeTileTags() {
         for (GridSpot spot : spotList) {
@@ -166,8 +165,7 @@ public class GridPattern {
     }
 
     /**
-     * Adds a spot to the pattern, saving the tile on the spot, the owner of a potential Meeple on
-     * the tile.
+     * Adds a spot to the pattern, saving the tile on the spot, the owner of a potential Meeple on the tile.
      * @param spot is the spot to add.
      */
     protected void add(GridSpot spot) {

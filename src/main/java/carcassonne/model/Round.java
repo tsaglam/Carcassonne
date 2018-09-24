@@ -103,8 +103,8 @@ public class Round {
     }
 
     /**
-     * Checks whether the game round is NOT over. A game round is over if the grid is full or the stack of tiles is
-     * empty (no tiles left).
+     * Checks whether the game round is NOT over. A game round is over if the grid is full or the stack of tiles is empty
+     * (no tiles left).
      * @return true if the game is NOT over.
      */
     public boolean isNotOver() {
@@ -112,8 +112,8 @@ public class Round {
     }
 
     /**
-     * Checks whether the game round is over. A game round is over if the grid is full or the stack of tiles is empty
-     * (no tiles left).
+     * Checks whether the game round is over. A game round is over if the grid is full or the stack of tiles is empty (no
+     * tiles left).
      * @return true if the game is over.
      */
     public boolean isOver() {
