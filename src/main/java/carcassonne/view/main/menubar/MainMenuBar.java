@@ -7,6 +7,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
 
 /**
@@ -24,6 +25,7 @@ public class MainMenuBar extends JMenuBar {
     private JMenuItem itemNewGame;
     private JMenuItem itemAbortGame;
     private JRadioButtonMenuItem[] itemPlayerCount;
+    private GameOptions options;
 
     /**
      * Simple constructor creating the menu bar.
@@ -33,6 +35,7 @@ public class MainMenuBar extends JMenuBar {
     public MainMenuBar(Scoreboard scoreboard, MainController controller) {
         super();
         this.controller = controller;
+        options = GameOptions.getInstance();
         playerCount = 2;
         buildMenuGame();
         buildMenuOptions();
@@ -85,7 +88,7 @@ public class MainMenuBar extends JMenuBar {
     private void buildMenuOptions() {
         // build player menu
         menuPlayers = new JMenu("Players");
-        itemPlayerCount = new JRadioButtonMenuItem[3];
+        itemPlayerCount = new JRadioButtonMenuItem[options.maximalPlayers - 1];
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
             itemPlayerCount[i] = new JRadioButtonMenuItem((i + 2) + " Players");
