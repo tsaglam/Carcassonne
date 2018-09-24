@@ -22,7 +22,7 @@ public class Tile {
     private int rotation;
     private final Terrain terrain;
     private final TileType type;
-    
+
     /**
      * Simple constructor.
      * @param terrain is the array containing the terrain information.
@@ -97,8 +97,7 @@ public class Tile {
     }
 
     /**
-     * Checks whether the terrain of the tile connected from a specific grid direction to another specific grid
-     * direction.
+     * Checks whether the terrain of the tile connected from a specific grid direction to another specific grid direction.
      * @param from is a specific grid direction.
      * @param to is a specific grid direction.
      * @return true if the terrain connected.

@@ -89,8 +89,7 @@ public class Player {
     }
 
     /**
-     * Places, if possible, one of the players meeples on a specific tile on the grid. Tells the
-     * meeple it was placed.
+     * Places, if possible, one of the players meeples on a specific tile on the grid. Tells the meeple it was placed.
      * @param tile is the tile to place a meeple on.
      * @param position is the position the meeple gets placed on.
      * @param grid is the grid where the tile is placed.

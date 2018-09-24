@@ -92,6 +92,6 @@ public class Scoreboard {
      * @param stackSize is the updated size of the stack.
      */
     public void updateStackSize(int stackSize) {
-      stackSizeLabel.setText("   [Stack Size: " + stackSize + "]");
+        stackSizeLabel.setText("   [Stack Size: " + stackSize + "]");
     }
 }

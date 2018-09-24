@@ -46,9 +46,8 @@ public abstract class SecondaryGUI extends JPanel {
     }
 
     /**
-     * Sets the tile of the GUI, updates the GUI and then makes it visible. Should be called to show
-     * the GUI. The method implements the template method pattern using the method
-     * <code>update()</code>.
+     * Sets the tile of the GUI, updates the GUI and then makes it visible. Should be called to show the GUI. The method
+     * implements the template method pattern using the method <code>update()</code>.
      * @param tile sets the tile.
      * @param currentPlayer sets the color scheme according to the player.
      */
@@ -84,8 +83,8 @@ public abstract class SecondaryGUI extends JPanel {
     }
 
     /**
-     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update
-     * the GUI content according to the tiles properties.
+     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update the GUI content according
+     * to the tiles properties.
      */
     protected abstract void update();
 

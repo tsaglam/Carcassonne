@@ -91,8 +91,8 @@ public class GridSpot {
     }
 
     /**
-     * Method determines if tile recently was tagged by a specific grid pattern on a specific
-     * position or a position connected to the specific position.
+     * Method determines if tile recently was tagged by a specific grid pattern on a specific position or a position
+     * connected to the specific position.
      * @param tilePosition is the specific position.
      * @param taggedBy is the {@link GridPattern} that tagged this spot.
      * @return true if tagged.
@@ -115,8 +115,8 @@ public class GridSpot {
     }
 
     /**
-     * Method determines if tile recently was tagged by any grid pattern checks on a specific
-     * position or a position connected to the specific position.
+     * Method determines if tile recently was tagged by any grid pattern checks on a specific position or a position
+     * connected to the specific position.
      * @param tilePosition is the specific position.
      * @return true if not tagged.
      */
@@ -130,8 +130,7 @@ public class GridSpot {
     }
 
     /**
-     * Method determines if tile recently was tagged by grid pattern checks on a specific position
-     * or not.
+     * Method determines if tile recently was tagged by grid pattern checks on a specific position or not.
      * @param tilePosition is the specific position.
      * @return true if it was not tagged.
      */

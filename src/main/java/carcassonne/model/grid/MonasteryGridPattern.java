@@ -9,8 +9,7 @@ import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileType;
 
 /**
- * This class represents a specific kind of grid pattern, the grid patterns for the terrain type
- * MONASTERY.
+ * This class represents a specific kind of grid pattern, the grid patterns for the terrain type MONASTERY.
  * @author Timur Saglam
  */
 public class MonasteryGridPattern extends GridPattern {
