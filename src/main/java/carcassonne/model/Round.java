@@ -70,6 +70,10 @@ public class Round {
         return playerCount;
     }
 
+    public int getStackSize() {
+        return tileStack.getSize();
+    }
+
     /**
      * Getter for the turn counter.
      * @return the turn counter
@@ -84,9 +88,9 @@ public class Round {
      */
     public List<String> getWinningPlayers() {
         String[] playerNames = GameOptions.getInstance().playerNames;
-        List<String> winnerList = new LinkedList<String>();
+        List<String> winnerList = new LinkedList<>();
         int maxScore = 0;
-        for (Player player : this.players) {
+        for (Player player : players) {
             if (player.getScore() >= maxScore) {
                 if (player.getScore() > maxScore) {
                     winnerList.clear();
