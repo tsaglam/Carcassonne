@@ -26,7 +26,7 @@ public class FieldsCorner { // TODO (HIGH) is this class still needed?
     public FieldsCorner(GridDirection cornerDirection, Tile tile) {
         checkArguments(cornerDirection, tile);
         this.cornerDirection = cornerDirection;
-        connectedDirections = new LinkedList<GridDirection>();
+        connectedDirections = new LinkedList<>();
         addIfConnected(LEFT, tile);
         addIfConnected(RIGHT, tile);
     }

@@ -32,9 +32,9 @@ public class GridPattern {
      */
     protected GridPattern(TerrainType patternType) {
         this.patternType = patternType;
-        spotList = new LinkedList<GridSpot>();
-        meepleList = new LinkedList<Meeple>();
-        involvedPlayers = new HashMap<Player, Integer>();
+        spotList = new LinkedList<>();
+        meepleList = new LinkedList<>();
+        involvedPlayers = new HashMap<>();
         complete = false;
         disbursed = false;
         reducedPoints = false;
@@ -56,7 +56,7 @@ public class GridPattern {
      */
     public void disburse() {
         if (!disbursed && complete && !involvedPlayers.isEmpty()) {
-            List<Player> removalList = new LinkedList<Player>();
+            List<Player> removalList = new LinkedList<>();
             int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
             for (Player player : involvedPlayers.keySet()) { // for all involved players
                 if (involvedPlayers.get(player) != maximum) { // if has not enough meeples

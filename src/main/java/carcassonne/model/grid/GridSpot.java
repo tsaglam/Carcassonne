@@ -31,7 +31,7 @@ public class GridSpot {
         this.grid = grid;
         this.x = x;
         this.y = y;
-        tagMap = new HashMap<GridDirection, GridPattern>();
+        tagMap = new HashMap<>();
     }
 
     /**
@@ -40,7 +40,7 @@ public class GridSpot {
      */
     public List<GridPattern> createPatternList() {
         checkTile("createPatternList()");
-        List<GridPattern> results = new LinkedList<GridPattern>();
+        List<GridPattern> results = new LinkedList<>();
         TerrainType terrain;
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.directNeighbors()) {

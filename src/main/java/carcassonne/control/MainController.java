@@ -43,7 +43,7 @@ public class MainController {
         mainGUI = new MainGUI(scoreboard, this);
         rotationGUI = new RotationGUI(this);
         placementGUI = new PlacementGUI(this);
-        stateMap = new HashMap<Class<? extends AbstractControllerState>, AbstractControllerState>();
+        stateMap = new HashMap<>();
         currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, scoreboard);
         new StateManning(this, mainGUI, rotationGUI, placementGUI, scoreboard);
         new StatePlacing(this, mainGUI, rotationGUI, placementGUI, scoreboard);

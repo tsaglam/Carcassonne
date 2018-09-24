@@ -151,7 +151,7 @@ public class Player {
     }
 
     private void initializeMultiplierMap() {
-        multiplierMap = new HashMap<TerrainType, Integer>();
+        multiplierMap = new HashMap<>();
         multiplierMap.put(TerrainType.CASTLE, 2);
         multiplierMap.put(TerrainType.ROAD, 1);
         multiplierMap.put(TerrainType.MONASTERY, 1);
@@ -160,7 +160,7 @@ public class Player {
 
     private void initializeScores() {
         overallScore = 0;
-        scoreMap = new HashMap<TerrainType, Integer>();
+        scoreMap = new HashMap<>();
         for (int i = 0; i < TerrainType.values().length - 1; i++) {
             scoreMap.put(TerrainType.values()[i], 0); // initial scores are zero
         }

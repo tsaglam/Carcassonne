@@ -135,6 +135,6 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      * @return true if smaller or equal.
      */
     public boolean isSmallerOrEquals(GridDirection other) {
-        return this.ordinal() <= other.ordinal();
+        return ordinal() <= other.ordinal();
     }
 }

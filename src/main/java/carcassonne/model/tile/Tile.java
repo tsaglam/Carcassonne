@@ -20,7 +20,7 @@ public class Tile {
     private ImageIcon[] images; // tile image
     private Meeple meeple;
     private int rotation;
-    private Terrain terrain;
+    private final Terrain terrain;
     private final TileType type;
     
     /**

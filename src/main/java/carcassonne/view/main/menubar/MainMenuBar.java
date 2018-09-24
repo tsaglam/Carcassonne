@@ -25,7 +25,7 @@ public class MainMenuBar extends JMenuBar {
     private JMenuItem itemNewGame;
     private JMenuItem itemAbortGame;
     private JRadioButtonMenuItem[] itemPlayerCount;
-    private GameOptions options;
+    private final GameOptions options;
 
     /**
      * Simple constructor creating the menu bar.

@@ -40,7 +40,7 @@ public class Grid {
      * @return the list of patterns.
      */
     public List<GridPattern> getAllPatterns() {
-        List<GridPattern> patterns = new LinkedList<GridPattern>();
+        List<GridPattern> patterns = new LinkedList<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (spots[x][y].isOccupied()) {
@@ -63,7 +63,7 @@ public class Grid {
      */
     public List<GridSpot> getConnectedTiles(GridSpot spot, GridDirection from) {
         checkParameters(spot);
-        List<GridSpot> list = new LinkedList<GridSpot>();
+        List<GridSpot> list = new LinkedList<>();
         GridSpot neighbor;
         for (GridDirection to : GridDirection.directNeighbors()) {
             if (spot.getTile().hasConnection(from, to) && from != to) { // if connected
@@ -83,7 +83,7 @@ public class Grid {
      */
     public List<GridSpot> getDirectNeighbors(GridSpot spot) {
         checkParameters(spot);
-        List<GridSpot> list = new LinkedList<GridSpot>();
+        List<GridSpot> list = new LinkedList<>();
         GridSpot neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) {
             neighbor = getNeighbor(spot, direction);
@@ -150,7 +150,7 @@ public class Grid {
      */
     public List<GridSpot> getNeighbors(GridSpot spot) {
         checkParameters(spot);
-        List<GridSpot> list = new LinkedList<GridSpot>();
+        List<GridSpot> list = new LinkedList<>();
         GridSpot neighbor;
         for (GridDirection direction : GridDirection.neighbors()) {
             neighbor = getNeighbor(spot, direction);
