@@ -1,5 +1,7 @@
 package carcassonne.model.grid;
 
+import static carcassonne.model.grid.GridDirection.MIDDLE;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +9,6 @@ import java.util.Map;
 
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileType;
 
 /**
  * The class represents a spot on the grid.
@@ -91,6 +92,21 @@ public class GridSpot {
     }
 
     /**
+     * Method determines if tile recently was tagged by any grid pattern checks on a specific position or a position
+     * connected to the specific position.
+     * @param tilePosition is the specific position.
+     * @return true if not tagged.
+     */
+    public Boolean hasNoTagConnectionTo(GridDirection tilePosition) {
+        for (GridDirection otherPosition : GridDirection.values()) {
+            if (tile.hasConnection(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Method determines if tile recently was tagged by a specific grid pattern on a specific position or a position
      * connected to the specific position.
      * @param tilePosition is the specific position.
@@ -115,18 +131,11 @@ public class GridSpot {
     }
 
     /**
-     * Method determines if tile recently was tagged by any grid pattern checks on a specific position or a position
-     * connected to the specific position.
-     * @param tilePosition is the specific position.
-     * @return true if not tagged.
+     * Checks whether the grid spot is occupied.
+     * @return true if occupied
      */
-    public Boolean hasNoTagConnectionTo(GridDirection tilePosition) {
-        for (GridDirection otherPosition : GridDirection.values()) {
-            if (tile.hasConnection(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isOccupied() {
+        return tile != null;
     }
 
     /**
@@ -136,14 +145,6 @@ public class GridSpot {
      */
     public Boolean isUntagged(GridDirection tilePosition) {
         return !tagMap.containsKey(tilePosition);
-    }
-
-    /**
-     * Checks whether the grid spot is occupied.
-     * @return true if occupied
-     */
-    public boolean isOccupied() {
-        return tile != null;
     }
 
     /**
@@ -177,9 +178,8 @@ public class GridSpot {
     }
 
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
-        TileType type = spot.getTile().getType();
-        if (type == TileType.Monastery || type == TileType.MonasteryRoad || type == TileType.MonasteryCastle) {
-            if (spot.hasNoTagConnectionTo(GridDirection.MIDDLE)) {
+        if (spot.getTile().getTerrain(MIDDLE) == TerrainType.MONASTERY) {
+            if (spot.hasNoTagConnectionTo(MIDDLE)) {
                 patternList.add(new MonasteryGridPattern(spot, grid));
             }
         }

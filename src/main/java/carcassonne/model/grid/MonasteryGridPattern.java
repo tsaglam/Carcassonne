@@ -1,12 +1,12 @@
 /**
- * 
+ *
  */
 package carcassonne.model.grid;
 
-import java.util.List;
+import static carcassonne.model.grid.GridDirection.MIDDLE;
+import static carcassonne.model.terrain.TerrainType.MONASTERY;
 
-import carcassonne.model.terrain.TerrainType;
-import carcassonne.model.tile.TileType;
+import java.util.List;
 
 /**
  * This class represents a specific kind of grid pattern, the grid patterns for the terrain type MONASTERY.
@@ -20,9 +20,8 @@ public class MonasteryGridPattern extends GridPattern {
      * @param grid is the grid the pattern is created from.
      */
     public MonasteryGridPattern(GridSpot spot, Grid grid) {
-        super(TerrainType.MONASTERY);
-        TileType tileType = spot.getTile().getType();
-        if (tileType != TileType.Monastery && tileType != TileType.MonasteryRoad && tileType != TileType.MonasteryCastle) {
+        super(MONASTERY);
+        if (spot.getTile().getTerrain(MIDDLE) != MONASTERY) {
             throw new IllegalArgumentException("Can't create monastery pattern from non monastery tile");
         }
         buildPattern(spot, grid);
@@ -31,7 +30,7 @@ public class MonasteryGridPattern extends GridPattern {
     private void buildPattern(GridSpot monasterySpot, Grid grid) {
         List<GridSpot> neighbors = grid.getNeighbors(monasterySpot);
         add(monasterySpot); // add monastery
-        monasterySpot.setTag(GridDirection.MIDDLE, this);
+        monasterySpot.setTag(MIDDLE, this);
         for (GridSpot neighbor : neighbors) {
             spotList.add(neighbor);
         }
