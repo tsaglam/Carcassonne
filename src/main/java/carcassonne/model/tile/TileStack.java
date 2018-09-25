@@ -1,14 +1,14 @@
 package carcassonne.model.tile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Stack;
 
 /**
  * The stack of tiles for a game.
  * @author Timur Saglam
  */
 public class TileStack {
-    private final List<Tile> tiles;
+    private final Stack<Tile> tiles;
     private final double multiplicator;
 
     /**
@@ -16,7 +16,7 @@ public class TileStack {
      */
     public TileStack(int players) {
         multiplicator = players / 2.0 + 0.5;
-        tiles = new ArrayList<>();
+        tiles = new Stack<>();
         fillStack();
     }
 
@@ -28,7 +28,7 @@ public class TileStack {
         if (tiles.isEmpty()) {
             return null;
         }
-        return tiles.remove((int) Math.round(Math.random() * (tiles.size() - 1)));
+        return tiles.pop();
     }
 
     /**
@@ -53,5 +53,6 @@ public class TileStack {
                 tiles.add(TileFactory.create(tileType));
             }
         }
+        Collections.shuffle(tiles);
     }
 }
