@@ -15,7 +15,7 @@ public class TileStack {
      * Simple constructor.
      */
     public TileStack(int players) {
-        multiplicator = players / 2.0 + 0.5;
+        multiplicator = players / 2.0;
         tiles = new Stack<>();
         fillStack();
     }
