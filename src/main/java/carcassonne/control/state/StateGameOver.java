@@ -39,6 +39,14 @@ public class StateGameOver extends AbstractControllerState {
     }
 
     /**
+     * @see carcassonne.control.state.AbstractControllerState#isPlaceable()
+     */
+    @Override
+    public boolean isPlaceable(GridDirection position) {
+        return false; // can never place meeple in this state.
+    }
+
+    /**
      * @see carcassonne.control.state.AbstractControllerState#newGame()
      */
     @Override
@@ -97,5 +105,4 @@ public class StateGameOver extends AbstractControllerState {
     protected void exit() {
         gameStatistics.closeGUI();
     }
-
 }

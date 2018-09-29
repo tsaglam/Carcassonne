@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JLabel;
 
 import carcassonne.control.GameOptions;
+import carcassonne.model.Player;
 
 /**
  * Is the scoreboard class of the game. Manages a score label for each player.
@@ -78,13 +79,12 @@ public class Scoreboard {
 
     /**
      * Updates a specific player label of the scoreboard.
-     * @param playerNumber is the number of the player whose label should get updated.
-     * @param points is the amount of points the players has.
-     * @param unusedMeeples is the amount of unused meeples of the player.
+     * @param player is the player whose scoreboard should be updated.
      */
-    public void update(int playerNumber, int points, int unusedMeeples) {
-        String playerName = options.playerNames[playerNumber] + " ";
-        scoreLabels[playerNumber].setText("[" + playerName + ": " + points + " points, " + unusedMeeples + " meeples]    ");
+    public void update(Player player) {
+        String playerName = options.playerNames[player.getNumber()] + " ";
+        String text = "[" + playerName + ": " + player.getScore() + " points, " + player.getFreeMeeples() + " meeples]    ";
+        scoreLabels[player.getNumber()].setText(text);
     }
 
     /**

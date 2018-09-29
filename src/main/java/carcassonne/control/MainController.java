@@ -77,6 +77,15 @@ public class MainController {
     public void requestAbortGame() {
         currentState.abortGame();
     }
+    
+    /**
+     * Method for the view to see whether a meeple is placeable on a specific tile.
+     * @param position is the specific position on the tile.
+     * @return true if a meeple can be placed on the position on the current tile.
+     */
+    public boolean requestPlacementStatus(GridDirection position) {
+        return currentState.isPlaceable(position);
+    }
 
     /**
      * Method for the view to call if a user mans a tile with a meeple.

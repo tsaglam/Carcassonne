@@ -78,13 +78,12 @@ public class PlacementGUI extends SecondaryGUI {
             for (int x = 0; x < 3; x++) {
                 terrain = tile.getTerrain(directions[x][y]);
                 button[x][y].setIcon(new ImageIcon(options.buildImagePath(terrain, -1)));
-                if (terrain == TerrainType.OTHER || terrain == TerrainType.FIELDS) {
-                    button[x][y].setEnabled(false);
-                    button[x][y].setBackground(options.getPlayerColorLight(currentPlayer));
-                } else {
+                if (controller.requestPlacementStatus(GridDirection.values2D()[x][y])) {
                     button[x][y].setEnabled(true);
                     button[x][y].setBackground(defaultButtonColor);
-
+                } else {
+                    button[x][y].setEnabled(false);
+                    button[x][y].setBackground(options.getPlayerColorLight(currentPlayer));
                 }
             }
         }
