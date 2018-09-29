@@ -4,7 +4,6 @@ import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.CastleAndRoadPattern;
-import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.terrain.TerrainType;
@@ -42,6 +41,26 @@ public class StateManning extends AbstractControllerState {
     }
 
     /**
+     * @see carcassonne.control.state.AbstractControllerState#isPlaceable()
+     */
+    @Override
+    public boolean isPlaceable(GridDirection position) {
+        Tile tile = round.getCurrentTile();
+        TerrainType terrain = tile.getTerrain(position);
+        boolean placeable = false;
+        if (terrain == TerrainType.MONASTERY) {
+            placeable = true; // you can place on monastery
+        } else if (terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) { // castle or road
+            CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile.getGridSpot(), position, terrain, grid);
+            if (pattern.isNotOccupied() || pattern.isOccupiedBy(round.getActivePlayer())) {
+                placeable = true; // can place meeple
+            }
+            pattern.removeTileTags();
+        }
+        return placeable;
+    }
+
+    /**
      * @see carcassonne.control.state.AbstractControllerState#newGame()
      */
     @Override
@@ -54,9 +73,16 @@ public class StateManning extends AbstractControllerState {
      */
     @Override
     public void placeMeeple(GridDirection position) {
-        if (tryMeeplePlacement(position)) {
+        Tile tile = round.getCurrentTile();
+        Player player = round.getActivePlayer();
+        if (player.hasFreeMeeples() && isPlaceable(position)) {
+            tile.placeMeeple(player, position);
+            mainGUI.setMeeple(tile, position, player);
+            updateScores();
             processGridPatterns();
             startNextTurn();
+        } else {
+            GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!");
         }
     }
 
@@ -75,48 +101,6 @@ public class StateManning extends AbstractControllerState {
     public void skip() {
         processGridPatterns();
         startNextTurn();
-    }
-
-    // places meeple on grid an shows meeple on the GUI, if its possible.
-    private boolean tryMeeplePlacement(GridDirection position) {
-        Tile tile = round.getCurrentTile();
-        Player player = round.getActivePlayer();
-        Boolean couldPlaceMeeple = false;
-        if (placeMeeple(tile, position, player, grid)) {
-            mainGUI.setMeeple(tile, position, player);
-            couldPlaceMeeple = true;
-            updateScores();
-        } else {
-            GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!");
-        }
-        return couldPlaceMeeple;
-    }
-
-    // Places, if possible, one of the players meeples on a specific tile on the grid. Tells the meeple it was placed.
-    private boolean placeMeeple(Tile tile, GridDirection position, Player player, Grid grid) {
-        if (player.hasFreeMeeples()) {
-            if (canPlaceMeeple(tile, position, player, grid)) { // can place meeple:
-                tile.placeMeeple(player, position);
-                return true;
-            }
-            return false; // Can't place meeple.
-        }
-        throw new IllegalStateException("No unused meeples are left.");
-    }
-
-    private boolean canPlaceMeeple(Tile tile, GridDirection position, Player player, Grid grid) {
-        TerrainType terrain = tile.getTerrain(position);
-        boolean placeable = false;
-        if (terrain == TerrainType.MONASTERY) {
-            placeable = true; // you can place on monastery
-        } else { // castle or road
-            CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile.getGridSpot(), position, terrain, grid);
-            if (pattern.isNotOccupied() || pattern.isOccupiedBy(player)) {
-                placeable = true; // can place meeple
-            }
-            pattern.removeTileTags();
-        }
-        return placeable;
     }
 
     // gives the players the points they earned.

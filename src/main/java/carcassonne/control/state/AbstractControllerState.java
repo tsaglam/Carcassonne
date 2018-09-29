@@ -52,11 +52,18 @@ public abstract class AbstractControllerState {
     public abstract void abortGame();
 
     /**
+     * Method for the view to see whether a meeple is placeable on a specific tile.
+     * @param position is the specific position on the tile.
+     * @return true if a meeple can be placed on the position on the current tile.
+     */
+    public abstract boolean isPlaceable(GridDirection position);
+
+    /**
      * Starts new round with a specific amount of players.
      * @param playerCount sets the amount of players.
      */
     public abstract void newGame(int playerCount);
-
+    
     /**
      * Method for the view to call if a user mans a tile with a Meeple.
      * @param position is the placement position.
@@ -121,20 +128,20 @@ public abstract class AbstractControllerState {
     }
 
     /**
-     * Updates the label which displays the current stack size.
-     */
-    protected void updateStackSize() {
-        scoreboard.updateStackSize(round.getStackSize());
-    }
-
-    /**
      * Updates the round and the grid of every state after a new round has been started.
      */
     protected void updateScores() {
         Player player;
         for (int playerNumber = 0; playerNumber < round.getPlayerCount(); playerNumber++) {
             player = round.getPlayer(playerNumber);
-            scoreboard.update(playerNumber, player.getScore(), player.getFreeMeeples());
+            scoreboard.update(player);
         }
+    }
+
+    /**
+     * Updates the label which displays the current stack size.
+     */
+    protected void updateStackSize() {
+        scoreboard.updateStackSize(round.getStackSize());
     }
 }
