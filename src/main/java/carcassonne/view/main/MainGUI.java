@@ -85,7 +85,7 @@ public class MainGUI {
      * @param meeple is the meeple that should be removed.
      */
     public void removeMeeple(Meeple meeple) {
-        GridSpot spot = meeple.getPlacementLocation().getGridSpot();
+        GridSpot spot = meeple.getLocation().getGridSpot();
         if (spot == null) { // make sure meeple is placed
             throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI: " + meeple);
         }

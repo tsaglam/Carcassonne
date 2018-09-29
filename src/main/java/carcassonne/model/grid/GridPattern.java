@@ -147,7 +147,7 @@ public class GridPattern {
     // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
     private void addMeepleFrom(GridSpot spot) {
         Meeple meeple = spot.getTile().getMeeple(); // Meeple on the tile.
-        if (!meepleList.contains(meeple) && isPartOfPattern(spot, meeple.getPlacementPosition())) {
+        if (!meepleList.contains(meeple) && isPartOfPattern(spot, meeple.getPosition())) {
             Player player = meeple.getOwner(); // owner of the meeple.
             if (involvedPlayers.containsKey(player)) {
                 involvedPlayers.put(player, involvedPlayers.get(player) + 1);
@@ -172,6 +172,18 @@ public class GridPattern {
         spotList.add(spot);
         if (spot.getTile().hasMeeple()) {
             addMeepleFrom(spot);
+        }
+    }
+
+    /**
+     * Checks the usual inputs on being null.
+     * @param spot is any grid spot.
+     * @param direction is any grid direction.
+     * @param grid is any grid.
+     */
+    protected void checkArgs(GridSpot spot, GridDirection direction, Grid grid) {
+        if (spot == null || direction == null || grid == null) {
+            throw new IllegalArgumentException("Arguments can't be null");
         }
     }
 }
