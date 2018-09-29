@@ -6,6 +6,7 @@ import carcassonne.model.Player;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.grid.GridSpot;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
@@ -63,7 +64,7 @@ public abstract class AbstractControllerState {
      * @param playerCount sets the amount of players.
      */
     public abstract void newGame(int playerCount);
-    
+
     /**
      * Method for the view to call if a user mans a tile with a Meeple.
      * @param position is the placement position.
@@ -122,8 +123,8 @@ public abstract class AbstractControllerState {
         controller.updateStates(newRound, newGrid);
         updateScores();
         updateStackSize();
-        // TODO (HIGH) use spot instead of options:
-        mainGUI.set(round.getCurrentTile(), options.gridCenterX, options.gridCenterY);
+        GridSpot spot = round.getCurrentTile().getGridSpot(); // starting spot.
+        mainGUI.set(spot.getTile(), spot.getX(), spot.getY());
         changeState(StateManning.class);
     }
 
