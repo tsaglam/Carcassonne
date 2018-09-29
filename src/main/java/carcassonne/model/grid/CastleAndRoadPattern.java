@@ -41,15 +41,13 @@ public class CastleAndRoadPattern extends GridPattern {
     private void checkArgs(GridSpot spot, GridDirection direction, TerrainType terrain, Grid grid) {
         if (terrain != TerrainType.CASTLE && terrain != TerrainType.ROAD) {
             throw new IllegalArgumentException("Can only create CastleAndRoadPatterns from type castle or road");
-        } else if (spot == null || direction == null || grid == null) {
-            throw new IllegalArgumentException("Arguments can't be null");
-        }
+        } 
+        checkArgs(spot, direction, grid);
     }
 
     private boolean checkNeighbor(GridSpot startingTile, GridSpot neighbor, GridDirection direction, Grid grid) {
         GridDirection oppositeDirection = GridDirection.opposite(direction);
-        if (!neighbor.hasTagConnectedTo(oppositeDirection, this)) { // if neighbor not
-                                                                    // visited yet
+        if (!neighbor.hasTagConnectedTo(oppositeDirection, this)) { // if neighbor not visited yet
             startingTile.setTag(direction, this);
             neighbor.setTag(oppositeDirection, this); // mark as visited
             add(neighbor); // add to pattern

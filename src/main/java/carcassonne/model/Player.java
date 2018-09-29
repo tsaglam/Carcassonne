@@ -3,11 +3,7 @@ package carcassonne.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import carcassonne.model.grid.CastleAndRoadPattern;
-import carcassonne.model.grid.Grid;
-import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
-import carcassonne.model.tile.Tile;
 
 /**
  * The class for the player objects. It manages the meeples and the score.
@@ -51,6 +47,14 @@ public class Player {
     public int getFreeMeeples() {
         return freeMeeples;
     }
+    
+    public Meeple getMeeple() {
+        if (hasFreeMeeples()) {
+            freeMeeples--;
+            return new Meeple(this);
+        }
+        throw new IllegalStateException("No unused meeples are left.");
+    }
 
     /**
      * Getter for number of the player.
@@ -89,26 +93,6 @@ public class Player {
     }
 
     /**
-     * Places, if possible, one of the players meeples on a specific tile on the grid. Tells the meeple it was placed.
-     * @param tile is the tile to place a meeple on.
-     * @param position is the position the meeple gets placed on.
-     * @param grid is the grid where the tile is placed.
-     * @return true if the meeple was placed, false if not.
-     */
-    public boolean placeMeepleAt(Tile tile, GridDirection position, Grid grid) {
-        if (freeMeeples == 0) {
-            throw new IllegalStateException("No unused meeples are left.");
-        }
-        if (canPlaceMeepleAt(tile, position, grid)) { // can place meeple:
-            Meeple meeple = new Meeple(this); // create meeple
-            freeMeeples--;
-            meeple.placeOn(tile, position); // place it.
-            return true;
-        }
-        return false; // Can't place meeple.
-    }
-
-    /**
      * Returns a meeple after its job is down. Allows the player to place another meeple.
      */
     public void returnMeeple() {
@@ -132,21 +116,6 @@ public class Player {
             return amount;
         }
         return amount * multiplierMap.get(scoreType);
-    }
-
-    private boolean canPlaceMeepleAt(Tile tile, GridDirection position, Grid grid) {
-        TerrainType terrain = tile.getTerrain(position);
-        boolean placeable = false;
-        if (terrain == TerrainType.MONASTERY) {
-            placeable = true; // you can place on monastery
-        } else { // castle or road
-            CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile.getGridSpot(), position, terrain, grid);
-            if (pattern.isNotOccupied() || pattern.isOccupiedBy(this)) {
-                placeable = true; // can place meeple
-            }
-            pattern.removeTileTags();
-        }
-        return placeable;
     }
 
     private void initializeMultiplierMap() {

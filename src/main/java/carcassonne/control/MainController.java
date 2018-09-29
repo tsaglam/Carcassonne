@@ -53,9 +53,7 @@ public class MainController {
      * @param stateType specifies which state is the new state.
      * @return the new state.
      */
-    public AbstractControllerState changeState(Class<? extends AbstractControllerState> stateType) {
-        // TODO (LOW) Remove debug output for state changes.
-        System.out.println("change to " + stateType + " from " + currentState.getClass());                                          // (HIGH)
+    public AbstractControllerState changeState(Class<? extends AbstractControllerState> stateType) {                                        // (HIGH)
         currentState = stateMap.get(stateType);
         if (currentState == null) {
             throw new IllegalStateException("State is not registered: " + stateType);

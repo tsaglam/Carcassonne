@@ -8,9 +8,9 @@ import carcassonne.model.tile.Tile;
  * @author Timur Saglam
  */
 public class Meeple {
+    private Tile location;
     private final Player owner;
-    private Tile placementLocation;
-    private GridDirection placementPosition;
+    private GridDirection position;
 
     /**
      * Basic constructor.
@@ -18,6 +18,14 @@ public class Meeple {
      */
     public Meeple(Player owner) {
         this.owner = owner;
+    }
+
+    /**
+     * Getter for the placement location.
+     * @return the tile where the meeple is placed.
+     */
+    public Tile getLocation() {
+        return location;
     }
 
     /**
@@ -29,19 +37,11 @@ public class Meeple {
     }
 
     /**
-     * Getter for the placement location.
-     * @return the tile where the meeple is placed.
-     */
-    public Tile getPlacementLocation() {
-        return placementLocation;
-    }
-
-    /**
      * Getter for the placement position.
      * @return the position on the tile where the meeple is placed.
      */
-    public GridDirection getPlacementPosition() {
-        return placementPosition;
+    public GridDirection getPosition() {
+        return position;
     }
 
     /**
@@ -49,41 +49,41 @@ public class Meeple {
      * @return true if placed.
      */
     public boolean isPlaced() {
-        return placementLocation != null;
-    }
-
-    /**
-     * Places meeple on a specific tile. This method calls Tile.setMeeple().
-     * @param tile is the specific tile.
-     * @param position is the position of the meeple on the tile.
-     */
-    public void placeOn(Tile tile, GridDirection position) {
-        if (tile == null) {
-            throw new IllegalArgumentException("Job location cannot be null.");
-        } else if (isPlaced()) {
-            throw new IllegalStateException("Meeple (player " + owner + ") is already in use.");
-        }
-        placementLocation = tile;
-        placementPosition = position;
-        tile.setMeeple(this);
+        return location != null;
     }
 
     /**
      * Collects meeple from tile.
      */
     public void removePlacement() {
-        if (placementLocation != null) {
+        if (location != null) {
             owner.returnMeeple(); // return me.
-            placementLocation = null; // mark as unplaced.
+            location = null; // mark as unplaced.
         }
+    }
+
+    /**
+     * Sets the placement location, which is the tile where the meeple is placed.
+     * @param location is the placement location.
+     */
+    public void setLocation(Tile placementLocation) {
+        this.location = placementLocation;
+    }
+
+    /**
+     * Sets the placement position, which is the position on the tile where the meeple is placed.
+     * @param position is the placement position.
+     */
+    public void setPosition(GridDirection placementPosition) {
+        this.position = placementPosition;
     }
 
     @Override
     public String toString() {
-        String location = "null";
+        String locationString = "null";
         if (isPlaced()) {
-            location = placementLocation.getGridSpot().toString();
+            locationString = location.getGridSpot().toString();
         }
-        return "Meeple[placed: " + isPlaced() + ", location: " + location + ", position: " + placementPosition + ", owner: " + owner + "]";
+        return "Meeple[placed: " + isPlaced() + ", location: " + locationString + ", position: " + position + ", owner: " + owner + "]";
     }
 }

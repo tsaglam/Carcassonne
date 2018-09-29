@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import carcassonne.model.Meeple;
+import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.terrain.Terrain;
@@ -121,7 +122,7 @@ public class Tile {
      */
     public boolean hasMeepleAt(GridDirection position) {
         if (hasMeeple()) {
-            return meeple.getPlacementPosition() == position;
+            return meeple.getPosition() == position;
         }
         return false;
     }
@@ -132,6 +133,21 @@ public class Tile {
      */
     public boolean isMonastery() {
         return getTerrain(GridDirection.MIDDLE) == TerrainType.MONASTERY;
+    }
+
+    /**
+     * Places a meeple on the tile, if the tile has not already one placed.
+     * @param player is the player whose meeple is going to be set.
+     * @param position is the position of the meeple on the tile.
+     */
+    public void placeMeeple(Player player, GridDirection position) {
+        if (this.meeple == null) {
+            meeple = player.getMeeple();
+            meeple.setLocation(this);
+            meeple.setPosition(position);
+        } else {
+            throw new IllegalArgumentException("Tile can not have already a meeple placed on it: " + toString());
+        }
     }
 
     /**
@@ -159,17 +175,6 @@ public class Tile {
     public void rotateRight() {
         terrain.rotateRight();
         rotation = rotation >= 3 ? 0 : rotation + 1; // update rotation indicator
-    }
-
-    /**
-     * Places a meeple on the tile, if the tile has not already one placed.
-     * @param meeple the meeple to place on the tile.
-     */
-    public void setMeeple(Meeple meeple) {
-        if (this.meeple != null) {
-            throw new IllegalArgumentException("Tile can not have already a meeple placed on it.");
-        }
-        this.meeple = meeple;
     }
 
     /**
