@@ -110,13 +110,13 @@ public final class GameOptions {
     /**
      * Names of the players.
      */
-    public final String[] playerNames = { "BLUE", "RED", "GREEN", "YELLOW", "PURPLE" };
+    public final String[] playerNames = { "BLUE", "RED", "GREEN", "ORANGE", "PURPLE" };
 
-    private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(228, 159, 0),
+    private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(216, 124, 0),
             new Color(96, 0, 147) };
 
-    private final Color[] playerColorLight = { new Color(143, 143, 214), new Color(220, 129, 134), new Color(98, 164, 105), new Color(255, 209, 103),
-            new Color(185, 151, 255) };
+    private final Color[] playerColorLight = { new Color(143, 143, 214), new Color(220, 129, 134), new Color(98, 164, 105), new Color(235, 175, 96),
+            new Color(173, 134, 221) };
 
     private final int taskBarHeight;
 
