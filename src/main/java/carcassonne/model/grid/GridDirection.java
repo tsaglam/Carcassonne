@@ -18,16 +18,46 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
     MIDDLE;
 
     /**
+     * Checks whether the ordinal of a direction is smaller or equal than the ordinal of another direction.
+     * @param other is the other direction.
+     * @return true if smaller or equal.
+     */
+    public boolean isSmallerOrEquals(GridDirection other) {
+        return ordinal() <= other.ordinal();
+    }
+
+    /**
+     * Calculates the opposite <code>GridDirection</code> for a specific <code>GridDirection</code>.
+     * @param from is the <code>GridDirection</code> the opposite gets calculated from.
+     * @return the opposite <code>GridDirection</code>.
+     */
+    public GridDirection opposite() {
+        if (ordinal() <= 3) { // for TOP, RIGHT, BOTTOM and LEFT:
+            return values()[smallOpposite(ordinal())];
+        } else if (ordinal() <= 7) { // for TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT:
+            return values()[bigOpposite(ordinal())];
+        }
+        return MIDDLE; // middle is the opposite of itself.
+    }
+
+    private int bigOpposite(int ordinal) {
+        return 4 + smallOpposite(ordinal - 4);
+    }
+
+    private int smallOpposite(int ordinal) {
+        return (ordinal + 2) % 4;
+    }
+
+    /**
      * Adds a x coordinate and a <code> GridDirection</code>.
      * @param coordinate is the x coordinate.
-     * @param dir is the <code> GridDirection</code>.
      * @return the sum as an x coordinate.
      */
-    public static int addX(int coordinate, GridDirection dir) {
+    public int addX(int coordinate) {
         int result = coordinate;
-        if (dir == TOP_RIGHT || dir == RIGHT || dir == BOTTOM_RIGHT) {
+        if (this == TOP_RIGHT || this == RIGHT || this == BOTTOM_RIGHT) {
             result++;
-        } else if (dir == TOP_LEFT || dir == LEFT || dir == BOTTOM_LEFT) {
+        } else if (this == TOP_LEFT || this == LEFT || this == BOTTOM_LEFT) {
             result--;
         }
         return result;
@@ -36,14 +66,13 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
     /**
      * Adds a y coordinate and a <code> GridDirection</code>.
      * @param coordinate is the y coordinate.
-     * @param dir is the <code> GridDirection</code>.
      * @return the sum as an y coordinate.
      */
-    public static int addY(int coordinate, GridDirection dir) {
+    public int addY(int coordinate) {
         int result = coordinate;
-        if (dir == BOTTOM_LEFT || dir == BOTTOM || dir == BOTTOM_RIGHT) {
+        if (this == BOTTOM_LEFT || this == BOTTOM || this == BOTTOM_RIGHT) {
             result++;
-        } else if (dir == TOP_LEFT || dir == TOP || dir == TOP_RIGHT) {
+        } else if (this == TOP_LEFT || this == TOP || this == TOP_RIGHT) {
             result--;
         }
         return result;
@@ -75,40 +104,24 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
 
     /**
      * Gets the next direction on the specified side of the current direction.
-     * @param direction is the current direction.
      * @param side sets the side. -1 for left and 1 for right.
      * @return the next direction
      */
-    public static GridDirection next(GridDirection direction, int side) {
+    public GridDirection next(int side) {
         if (side != 1 && side != -1) {
             throw new IllegalArgumentException("Parameter side has to be -1 for left or 1 for right.");
         }
-        if (direction == MIDDLE) {
-            return direction;
+        if (this == MIDDLE) {
+            return this;
         }
         GridDirection[] cycle = { TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT };
         int position = -2; // error case, sum with parameter side is negative
         for (int i = 0; i < cycle.length; i++) {
-            if (cycle[i] == direction) { // find in cycle
+            if (cycle[i] == this) { // find in cycle
                 position = i; // save cycle position
             }
         }
         return cycle[(8 + position + side) % 8];
-    }
-
-    /**
-     * Calculates the opposite <code>GridDirection</code> for a specific <code>GridDirection</code>.
-     * @param from is the <code>GridDirection</code> the opposite gets calculated from.
-     * @return the opposite <code>GridDirection</code>.
-     */
-    public static GridDirection opposite(GridDirection from) {
-        int ordinal = from.ordinal(); // get number of enum value
-        if (ordinal <= 3) { // for TOP, RIGHT, BOTTOM and LEFT:
-            return values()[smallOpposite(ordinal)];
-        } else if (ordinal <= 7) { // for TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT:
-            return values()[bigOpposite(ordinal)];
-        }
-        return MIDDLE; // middle is the opposite of itself.
     }
 
     /**
@@ -126,22 +139,5 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      */
     public static GridDirection[][] values2D() {
         return new GridDirection[][] { { TOP_LEFT, LEFT, BOTTOM_LEFT }, { TOP, MIDDLE, BOTTOM }, { TOP_RIGHT, RIGHT, BOTTOM_RIGHT } };
-    }
-
-    private static int bigOpposite(int ordinal) {
-        return 4 + smallOpposite(ordinal - 4);
-    }
-
-    private static int smallOpposite(int ordinal) {
-        return (ordinal + 2) % 4;
-    }
-
-    /**
-     * Checks whether the ordinal of a direction is smaller or equal than the ordinal of another direction.
-     * @param other is the other direction.
-     * @return true if smaller or equal.
-     */
-    public boolean isSmallerOrEquals(GridDirection other) {
-        return ordinal() <= other.ordinal();
     }
 }
