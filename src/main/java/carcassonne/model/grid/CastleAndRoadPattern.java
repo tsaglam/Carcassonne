@@ -24,10 +24,9 @@ public class CastleAndRoadPattern extends GridPattern {
 
     private boolean buildPattern(GridSpot spot, GridDirection startingPoint, Grid grid) {
         boolean isClosed = true;
-        GridSpot neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) { // for every side
             if (spot.getTile().hasConnection(startingPoint, direction)) { // if is connected side
-                neighbor = grid.getNeighbor(spot, direction); // get the neighbor
+                GridSpot neighbor = grid.getNeighbor(spot, direction); // get the neighbor
                 if (neighbor == null) { // if it has no neighbor
                     isClosed = false; // open side, can't be finished pattern.
                 } else { // continue on neighbors
@@ -46,7 +45,7 @@ public class CastleAndRoadPattern extends GridPattern {
     }
 
     private boolean checkNeighbor(GridSpot startingTile, GridSpot neighbor, GridDirection direction, Grid grid) {
-        GridDirection oppositeDirection = GridDirection.opposite(direction);
+        GridDirection oppositeDirection = direction.opposite();
         if (!neighbor.hasTagConnectedTo(oppositeDirection, this)) { // if neighbor not visited yet
             startingTile.setTag(direction, this);
             neighbor.setTag(oppositeDirection, this); // mark as visited

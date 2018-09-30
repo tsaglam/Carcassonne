@@ -162,7 +162,7 @@ public final class GameOptions {
      */
     public String buildImagePath(TerrainType type, int playerNumber) {
         String pathBase = "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase();
-        if (playerNumber < 0 || type == TerrainType.OTHER || type == TerrainType.FIELDS) {
+        if (playerNumber < 0 || type == TerrainType.OTHER) {
             return pathBase + ".png";
         } else {
             return pathBase + "_" + playerNumber + ".png";

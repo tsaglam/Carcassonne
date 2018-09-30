@@ -16,7 +16,7 @@ import carcassonne.model.terrain.TerrainType;
  * pattern.
  * @author Timur Saglam
  */
-public class GridPattern {
+public abstract class GridPattern {
 
     protected final TerrainType patternType;
     protected List<GridSpot> spotList;
