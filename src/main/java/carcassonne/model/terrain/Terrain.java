@@ -93,8 +93,8 @@ public class Terrain {
             if (getAt(direction) == TerrainType.OTHER || isConnected(direction, GridDirection.MIDDLE)) {
                 meepleSpots.remove(direction); // is not a valid meeple spot.
             } else {
-                GridDirection left = GridDirection.next(direction, -1);
-                GridDirection right = GridDirection.next(direction, 1);
+                GridDirection left = direction.next(-1);
+                GridDirection right = direction.next(1);
                 if (getAt(direction) == getAt(left) && getAt(direction) == getAt(right)) {
                     meepleSpots.remove(left);
                     meepleSpots.remove(right);
@@ -115,7 +115,7 @@ public class Terrain {
         GridDirection current = from;
         GridDirection next;
         while (current != to) { // while not at destination:
-            next = GridDirection.next(current, side); // get the next direction
+            next = current.next(side); // get the next direction
             if (getAt(current) != getAt(next)) {
                 return false; // check if still connected
             }

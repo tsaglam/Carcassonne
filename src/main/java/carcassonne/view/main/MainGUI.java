@@ -124,8 +124,8 @@ public class MainGUI {
             throw new IllegalArgumentException("Arguments can't be null to set a meeple on the GUI");
         }
         GridSpot spot = tile.getGridSpot();
-        int xpos = GridDirection.addX(spot.getX() * 3 + 1, position);
-        int ypos = GridDirection.addY(spot.getY() * 3 + 1, position);
+        int xpos = position.addX(spot.getX() * 3 + 1);
+        int ypos = position.addY(spot.getY() * 3 + 1);
         ImageIcon icon = new ImageIcon(options.buildImagePath(tile.getTerrain(position), owner.getNumber()));
         meepleGrid[xpos][ypos].setIcon(icon);
         frame.repaint(); // This is required! Removing this will paint black background.

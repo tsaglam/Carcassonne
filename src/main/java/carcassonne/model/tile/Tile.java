@@ -50,7 +50,7 @@ public class Tile {
      * @return true if it has same terrain.
      */
     public boolean canConnectTo(GridDirection direction, Tile other) {
-        return getTerrain(direction) == other.getTerrain(GridDirection.opposite(direction));
+        return getTerrain(direction) == other.getTerrain(direction.opposite());
     }
 
     /**
