@@ -50,6 +50,13 @@ public class GridSpot {
                 results.add(new CastleAndRoadPattern(this, direction, terrain, grid));
             }
         }
+        // then, check fields:
+        for (GridDirection direction : GridDirection.values()) {
+            terrain = tile.getTerrain(direction); // get terrain type.
+            if (terrain == TerrainType.FIELDS && !tagMap.containsKey(direction)) {
+                results.add(new FieldsPattern(this, direction, grid));
+            }
+        }
         // then check for monastery patterns:
         addPatternIfMonastery(this, results); // the tile itself
         for (GridSpot neighbour : grid.getNeighbors(this)) {

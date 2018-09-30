@@ -18,37 +18,6 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
     MIDDLE;
 
     /**
-     * Checks whether the ordinal of a direction is smaller or equal than the ordinal of another direction.
-     * @param other is the other direction.
-     * @return true if smaller or equal.
-     */
-    public boolean isSmallerOrEquals(GridDirection other) {
-        return ordinal() <= other.ordinal();
-    }
-
-    /**
-     * Calculates the opposite <code>GridDirection</code> for a specific <code>GridDirection</code>.
-     * @param from is the <code>GridDirection</code> the opposite gets calculated from.
-     * @return the opposite <code>GridDirection</code>.
-     */
-    public GridDirection opposite() {
-        if (ordinal() <= 3) { // for TOP, RIGHT, BOTTOM and LEFT:
-            return values()[smallOpposite(ordinal())];
-        } else if (ordinal() <= 7) { // for TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT:
-            return values()[bigOpposite(ordinal())];
-        }
-        return MIDDLE; // middle is the opposite of itself.
-    }
-
-    private int bigOpposite(int ordinal) {
-        return 4 + smallOpposite(ordinal - 4);
-    }
-
-    private int smallOpposite(int ordinal) {
-        return (ordinal + 2) % 4;
-    }
-
-    /**
      * Adds a x coordinate and a <code> GridDirection</code>.
      * @param coordinate is the x coordinate.
      * @return the sum as an x coordinate.
@@ -79,27 +48,30 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
     }
 
     /**
-     * Generates an array of the GridDirections for a direct neighbor on the grid.
-     * @return an array of TOP, RIGHT, BOTTOM and LEFT.
+     * Checks whether the this grid direction is directly to the left of another grid direction.
+     * @param other is the other grid direction.
+     * @return true if it is.
      */
-    public static GridDirection[] directNeighbors() {
-        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT };
+    public boolean isLeftOf(GridDirection other) {
+        return next(1) == other;
     }
 
     /**
-     * Generates an array of the GridDirections for a indirect neighbor on the grid.
-     * @return an array of TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT.
+     * Checks whether the this grid direction is directly to the right of another grid direction.
+     * @param other is the other grid direction.
+     * @return true if it is.
      */
-    public static GridDirection[] indirectNeighbors() {
-        return new GridDirection[] { TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
+    public boolean isRightOf(GridDirection other) {
+        return next(-1) == other;
     }
 
     /**
-     * Generates an array of the GridDirections for a neighbor on the grid.
-     * @return an array of all directions except MIDDLE.
+     * Checks whether the ordinal of a direction is smaller or equal than the ordinal of another direction.
+     * @param other is the other direction.
+     * @return true if smaller or equal.
      */
-    public static GridDirection[] neighbors() {
-        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
+    public boolean isSmallerOrEquals(GridDirection other) {
+        return ordinal() <= other.ordinal();
     }
 
     /**
@@ -122,6 +94,52 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
             }
         }
         return cycle[(8 + position + side) % 8];
+    }
+
+    /**
+     * Calculates the opposite <code>GridDirection</code> for a specific <code>GridDirection</code>.
+     * @param from is the <code>GridDirection</code> the opposite gets calculated from.
+     * @return the opposite <code>GridDirection</code>.
+     */
+    public GridDirection opposite() {
+        if (ordinal() <= 3) { // for TOP, RIGHT, BOTTOM and LEFT:
+            return values()[smallOpposite(ordinal())];
+        } else if (ordinal() <= 7) { // for TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT:
+            return values()[bigOpposite(ordinal())];
+        }
+        return MIDDLE; // middle is the opposite of itself.
+    }
+
+    private int bigOpposite(int ordinal) {
+        return 4 + smallOpposite(ordinal - 4);
+    }
+
+    private int smallOpposite(int ordinal) {
+        return (ordinal + 2) % 4;
+    }
+
+    /**
+     * Generates an array of the GridDirections for a direct neighbor on the grid.
+     * @return an array of TOP, RIGHT, BOTTOM and LEFT.
+     */
+    public static GridDirection[] directNeighbors() {
+        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT };
+    }
+
+    /**
+     * Generates an array of the GridDirections for a indirect neighbor on the grid.
+     * @return an array of TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT.
+     */
+    public static GridDirection[] indirectNeighbors() {
+        return new GridDirection[] { TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
+    }
+
+    /**
+     * Generates an array of the GridDirections for a neighbor on the grid.
+     * @return an array of all directions except MIDDLE.
+     */
+    public static GridDirection[] neighbors() {
+        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
     }
 
     /**

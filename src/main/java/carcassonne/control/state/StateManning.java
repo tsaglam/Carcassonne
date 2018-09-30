@@ -4,6 +4,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.CastleAndRoadPattern;
+import carcassonne.model.grid.FieldsPattern;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.terrain.TerrainType;
@@ -48,10 +49,17 @@ public class StateManning extends AbstractControllerState {
         Tile tile = round.getCurrentTile();
         TerrainType terrain = tile.getTerrain(position);
         boolean placeable = false;
-        if (terrain == TerrainType.MONASTERY) {
-            placeable = true; // you can place on monastery
-        } else if (terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) { // castle or road
-            CastleAndRoadPattern pattern = new CastleAndRoadPattern(tile.getGridSpot(), position, terrain, grid);
+        if (terrain == TerrainType.OTHER) {
+            placeable = false; // you can never place on terrain other
+        } else if (terrain == TerrainType.MONASTERY) {
+            placeable = true; // you can always place on a monastery
+        } else {
+            GridPattern pattern;
+            if (terrain == TerrainType.FIELDS) { 
+                pattern = new FieldsPattern(tile.getGridSpot(), position, grid);
+            } else { // castle or road:
+                pattern = new CastleAndRoadPattern(tile.getGridSpot(), position, terrain, grid);
+            }
             if (pattern.isNotOccupied() || pattern.isOccupiedBy(round.getActivePlayer())) {
                 placeable = true; // can place meeple
             }
@@ -144,5 +152,4 @@ public class StateManning extends AbstractControllerState {
     protected void exit() {
         placementGUI.disableFrame();
     }
-
 }
