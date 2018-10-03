@@ -46,14 +46,14 @@ public class GridSpot {
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.directNeighbors()) {
             terrain = tile.getTerrain(direction); // get terrain type.
-            if (terrain != TerrainType.FIELDS && hasNoTagConnectionTo(direction)) {
+            if (terrain != TerrainType.FIELDS && hasNoTagConnectedTo(direction)) {
                 results.add(new CastleAndRoadPattern(this, direction, terrain, grid));
             }
         }
         // then, check fields:
         for (GridDirection direction : GridDirection.values()) {
             terrain = tile.getTerrain(direction); // get terrain type.
-            if (terrain == TerrainType.FIELDS && !tagMap.containsKey(direction)) {
+            if (terrain == TerrainType.FIELDS && hasNoTagConnectedTo(direction)) {
                 results.add(new FieldsPattern(this, direction, grid));
             }
         }
@@ -104,7 +104,7 @@ public class GridSpot {
      * @param tilePosition is the specific position.
      * @return true if not tagged.
      */
-    public Boolean hasNoTagConnectionTo(GridDirection tilePosition) {
+    public Boolean hasNoTagConnectedTo(GridDirection tilePosition) {
         for (GridDirection otherPosition : GridDirection.values()) {
             if (tile.hasConnection(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
                 return false;
@@ -162,6 +162,21 @@ public class GridSpot {
     }
 
     /**
+     * Removes all the tags of a specific pattern from the tile.
+     */
+    public void removeTagsFrom(GridPattern pattern) {
+        List<GridDirection> removalList = new LinkedList<>();
+        for (GridDirection key : tagMap.keySet()) {
+            if (tagMap.get(key).equals(pattern)) {
+                removalList.add(key);
+            }
+        }
+        for (GridDirection key : removalList) {
+            tagMap.remove(key);
+        }
+    }
+
+    /**
      * Set tile on grid spot if possible.
      * @param tile is the tile to set.
      * @return true if the tile could be placed.
@@ -184,9 +199,14 @@ public class GridSpot {
         tagMap.put(direction, taggedBy);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[on: (" + x + "|" + y + "), Occupied:" + isOccupied() + "]";
+    }
+
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
         if (spot.getTile().getTerrain(MIDDLE) == TerrainType.MONASTERY) {
-            if (spot.hasNoTagConnectionTo(MIDDLE)) {
+            if (spot.hasNoTagConnectedTo(MIDDLE)) {
                 patternList.add(new MonasteryGridPattern(spot, grid));
             }
         }

@@ -22,22 +22,17 @@ public class FieldsPattern extends GridPattern {
         this.grid = grid;
         adjacentCastles = new LinkedList<>();
         checkArgs(startingSpot, startingDirection, grid);
-        startingSpot.setTag(startingDirection, this); // initial tag
+        startingSpot.setTag(startingDirection, this); // initial tag, is needed for adding meeples!
         add(startingSpot); // initial tile
-        buildPattern(startingSpot.getTile(), startingDirection);
+        buildPattern(startingSpot, startingDirection);
+        for (CastleAndRoadPattern castle : adjacentCastles) {
+            castle.removeOwnTags(); // also remove the tile tags of the marked adjacentCastles
+        }
     }
 
     @Override
     public int getSize() {
         return adjacentCastles.size(); // the amount of adjacentCastles is the size of this pattern
-    }
-
-    @Override
-    public void removeTileTags() {
-        super.removeTileTags();
-        for (CastleAndRoadPattern castle : adjacentCastles) {
-            castle.removeTileTags(); // also remove the tile tags of the marked adjacentCastles
-        }
     }
 
     // adds a grid direction to a list if it has not castle terain at that diection on the tile.
@@ -47,69 +42,67 @@ public class FieldsPattern extends GridPattern {
         }
     }
 
-    private List<GridDirection> adjacentPositions(GridDirection position) {
-        List<GridDirection> neighbors = new LinkedList<>();
-        if (position.isSmallerOrEquals(LEFT)) {
-            neighbors.add(MIDDLE);
-        }
-        if (position.isSmallerOrEquals(TOP_LEFT)) {
-            neighbors.add(position.next(-1));
-            neighbors.add(position.next(1));
-        } else {
-            neighbors.addAll(Arrays.asList(GridDirection.directNeighbors()));
-        }
-        return neighbors;
-
-    }
-
-    private void buildPattern(Tile tile, GridDirection startingPoint) {
-        List<GridDirection> fieldPositions = getFieldPositions(tile, startingPoint);
-        for (GridDirection position : fieldPositions) {
-            countAdjacentCastles(tile, position);
-            tile.getGridSpot().setTag(position, this); // mark as visited
+    private void buildPattern(GridSpot spot, GridDirection startingPoint) {
+        List<GridDirection> fieldPositions = getFieldPositions(spot.getTile(), startingPoint);
+        for (GridDirection position : fieldPositions) { // for every positions of this field on this tile
+            countAdjacentCastles(spot, position); // count castles to determine pattern size
+            spot.setTag(position, this); // mark as visited
         }
         for (GridDirection position : fieldPositions) {
-            checkNeighbors(tile, position);
+            checkNeighbors(spot, position); // check every possible neighbor
         }
     }
 
-    /**
-     * @param tile
-     * @param position
-     */
-    private void checkNeighbors(Tile tile, GridDirection position) {
-        for (GridDirection connectionDirection : fieldConnections(position, tile)) {
-            GridSpot neighbor = grid.getNeighbor(tile.getGridSpot(), connectionDirection); // get the neighbor
-            GridDirection oppositeDirection = getFieldOpposite(position, connectionDirection);
-            if (neighbor != null && !neighbor.hasTagConnectedTo(oppositeDirection, this)) {
+    private void checkNeighbors(GridSpot spot, GridDirection position) {
+        for (GridDirection connectionDirection : getFieldConnections(position, spot.getTile())) { // ∀ connection points
+            GridSpot neighbor = grid.getNeighbor(spot, connectionDirection); // get the neighbor
+            GridDirection oppositeDirection = getFieldOpposite(position, connectionDirection); // get the connecting position on neighbor
+            if (neighbor != null && neighbor.hasNoTagConnectedTo(oppositeDirection)) { // if not visited
                 neighbor.setTag(oppositeDirection, this); // mark as visited
                 add(neighbor); // add to pattern
-                buildPattern(neighbor.getTile(), oppositeDirection);
+                buildPattern(neighbor, oppositeDirection); // continue building recursively
             }
         }
     }
 
     // Counts neighboring adjacent castles for a position on at tile. Finds all castle patterns on the tile that are
-    // directly
-    // adjacent to the field position and saves the complete ones.
-    private void countAdjacentCastles(Tile tile, GridDirection position) {
-        for (GridDirection neighbor : adjacentPositions(position)) {
-            if (tile.getTerrain(neighbor) == CASTLE) {
-                CastleAndRoadPattern castle = new CastleAndRoadPattern(tile.getGridSpot(), neighbor, CASTLE, grid);
-                if (castle.complete) {
-                    adjacentCastles.add(castle); // remember if complete
+    // directly adjacent to the field position and saves the complete ones.
+    private void countAdjacentCastles(GridSpot spot, GridDirection position) {
+        for (GridDirection neighbor : getAdjacentPositions(position)) {
+            if (spot.getTile().getTerrain(neighbor) == CASTLE && isUntagged(spot, neighbor)) { // if is unvisited castle
+                CastleAndRoadPattern castle = new CastleAndRoadPattern(spot, neighbor, CASTLE, grid);
+                if (castle.isComplete()) { // if castle is closed (pattern check)
+                    adjacentCastles.add(castle); // remember pattern to count points
                 } else {
-                    castle.removeTileTags(); // discard if not
+                    castle.removeOwnTags(); // IMPORTANT, remove tags if not used any further!
                 }
             }
         }
     }
 
     /**
+     * Returns every adjacent position on a tile for a specific initial position.
+     */
+    private List<GridDirection> getAdjacentPositions(GridDirection position) {
+        List<GridDirection> neighbors = new LinkedList<>();
+        if (position.isSmallerOrEquals(LEFT)) {
+            neighbors.add(MIDDLE); // the classic direction are adjacent to the middle
+        }
+        if (position.isSmallerOrEquals(TOP_LEFT)) { // everything except the middle has these two neighbors:
+            neighbors.add(position.next(-1)); // counterclockwise adjacent position
+            neighbors.add(position.next(1)); // clockwise adjacent position
+        } else {
+            neighbors.addAll(Arrays.asList(GridDirection.directNeighbors())); // the middle has the classic directions as neighbors
+        }
+        return neighbors;
+
+    }
+
+    /**
      * Gives for a specific tile and a specific position on that tile the directions in which the field connects to. If the
      * tile has not the terrain field on this position the result list is empty.
      */
-    private List<GridDirection> fieldConnections(GridDirection position, Tile tile) {
+    private List<GridDirection> getFieldConnections(GridDirection position, Tile tile) {
         List<GridDirection> results = new LinkedList<>();
         if (tile.getTerrain(position) == TerrainType.FIELDS) {
             if (position.isSmallerOrEquals(LEFT)) {
@@ -145,6 +138,14 @@ public class FieldsPattern extends GridPattern {
             }
         }
         return fieldPositions;
+    }
+
+    private boolean isUntagged(GridSpot spot, GridDirection position) {
+        boolean tagged = false;
+        for (CastleAndRoadPattern castle : adjacentCastles) {
+            tagged |= spot.hasTagConnectedTo(position, castle);
+        }
+        return !tagged;
     }
 
 }
