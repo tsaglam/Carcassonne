@@ -10,7 +10,7 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class Player {
-    private static final int MAX_MEEPLES = 5;
+    private static final int MAX_MEEPLES = 7;
     private int freeMeeples;
     private Map<TerrainType, Integer> multiplierMap;
     private final int number;
