@@ -79,7 +79,7 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      * @param side sets the side. -1 for left and 1 for right.
      * @return the next direction
      */
-    public GridDirection next(int side) {
+    public GridDirection next(int side) { // TODO (MEDIUM) use enum instead of int for L/R
         if (side != 1 && side != -1) {
             throw new IllegalArgumentException("Parameter side has to be -1 for left or 1 for right.");
         }

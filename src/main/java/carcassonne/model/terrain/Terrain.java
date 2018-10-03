@@ -1,5 +1,15 @@
 package carcassonne.model.terrain;
 
+import static carcassonne.model.grid.GridDirection.BOTTOM;
+import static carcassonne.model.grid.GridDirection.BOTTOM_LEFT;
+import static carcassonne.model.grid.GridDirection.BOTTOM_RIGHT;
+import static carcassonne.model.grid.GridDirection.LEFT;
+import static carcassonne.model.grid.GridDirection.MIDDLE;
+import static carcassonne.model.grid.GridDirection.RIGHT;
+import static carcassonne.model.grid.GridDirection.TOP;
+import static carcassonne.model.grid.GridDirection.TOP_LEFT;
+import static carcassonne.model.grid.GridDirection.TOP_RIGHT;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,19 +71,25 @@ public class Terrain {
      */
     public boolean isConnected(GridDirection from, GridDirection to) {
         if (isDirectConnected(from, to)) {
-            return true;
-        } else if (from != GridDirection.MIDDLE && to != GridDirection.MIDDLE) {
-            return isIndirectConnected(from, to, 1) || isIndirectConnected(from, to, -1);
+            return true; // directly connected through the middle of the tile
+        } else if (from != MIDDLE && to != MIDDLE && (isIndirectConnected(from, to, 1) || isIndirectConnected(from, to, -1))) {
+            return true; // is not from or to middle but indirectly connected (counter)clockwise
+        } else if (getAt(from) == TerrainType.FIELDS && getAt(to) == TerrainType.FIELDS && isEdge(from) && isEdge(to)) {
+            return isImplicitlyConnected(from, to, -1) || isImplicitlyConnected(from, to, 1);
         }
         return false;
+    }
+
+    public boolean isEdge(GridDirection direction) {
+        return TOP_RIGHT.isSmallerOrEquals(direction) && direction.isSmallerOrEquals(TOP_LEFT);
     }
 
     /**
      * Turns a tile 90 degree to the left.
      */
     public void rotateLeft() {
-        rotate(GridDirection.TOP, GridDirection.LEFT, GridDirection.BOTTOM, GridDirection.RIGHT);
-        rotate(GridDirection.TOP_RIGHT, GridDirection.TOP_LEFT, GridDirection.BOTTOM_LEFT, GridDirection.BOTTOM_RIGHT);
+        rotate(TOP, LEFT, BOTTOM, RIGHT);
+        rotate(TOP_RIGHT, TOP_LEFT, BOTTOM_LEFT, BOTTOM_RIGHT);
     }
 
     /**
@@ -105,8 +121,20 @@ public class Terrain {
 
     // checks for direct connection through middle:
     private boolean isDirectConnected(GridDirection from, GridDirection to) {
-        TerrainType middle = getAt(GridDirection.MIDDLE);
-        return getAt(from).equals(middle) && getAt(to).equals(middle);
+        TerrainType middle = getAt(MIDDLE);
+        return getAt(from) == middle && getAt(to) == middle;
+    }
+
+    private boolean isImplicitlyConnected(GridDirection from, GridDirection to, int side) { // TODO (MEDIUM) use enum instead of int for L/R
+        if (from == to) {
+            return true; // is connected
+        }
+        GridDirection between = from.next(side);
+        GridDirection next = between.next(side);
+        if (getAt(between) == TerrainType.CASTLE && getAt(MIDDLE) != TerrainType.CASTLE) {
+            return isImplicitlyConnected(next, to, side);
+        }
+        return false;
     }
 
     // checks for indirect connection through the specified side from a specific start to a specific
