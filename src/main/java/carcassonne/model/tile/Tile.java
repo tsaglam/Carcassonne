@@ -190,8 +190,8 @@ public class Tile {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "Tile[coordinates: " + gridSpot + ", rotation: " + rotation + ", terrain" + terrain.toString()
-                + ", Meeple: " + meeple + "]";
+        return type + getClass().getSimpleName() + "[coordinates: " + gridSpot + ", rotation: " + rotation + ", terrain" + terrain + ", Meeple: "
+                + meeple + "]";
     }
 
     // uses path to load images for all rotations.

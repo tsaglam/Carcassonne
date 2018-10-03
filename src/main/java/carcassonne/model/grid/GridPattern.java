@@ -139,6 +139,15 @@ public abstract class GridPattern {
         }
     }
 
+    /**
+     * Removes all OWN tags of all tiles of the pattern.
+     */
+    public void removeOwnTags() {
+        for (GridSpot spot : spotList) {
+            spot.removeTagsFrom(this);
+        }
+    }
+
     @Override
     public String toString() {
         return "GridPattern[type: " + patternType + ", size: " + getSize() + ", complete: " + complete + ", meeples: " + meepleList;

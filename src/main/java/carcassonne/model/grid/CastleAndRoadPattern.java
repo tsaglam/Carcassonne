@@ -5,7 +5,7 @@ import carcassonne.model.terrain.TerrainType;
 /**
  * @author Timur Saglam
  */
-public class CastleAndRoadPattern extends GridPattern {
+public class CastleAndRoadPattern extends GridPattern { // TODO (HIGH) use subclasses to make constructors generic (factory?)
 
     /**
      * Public constructor for creating road and monastery patterns.
