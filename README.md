@@ -10,7 +10,6 @@ Now, a few years later, I thought I could try it again to do it properly.
 </p>
 
 ### Upcoming features:
-* Meadow patterns and meadow meeples
 * Custom player names
 * More tiles
 * Playing in teams
