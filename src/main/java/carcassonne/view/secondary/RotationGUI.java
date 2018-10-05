@@ -42,7 +42,6 @@ public class RotationGUI extends SecondaryGUI {
         return tile;
     }
 
-    // simple mouser adapters TODO (LOW) make own classes
     private void addMouseAdapters() {
         buttonSkip.addMouseListener(new MouseAdapter() {
             @Override
