@@ -72,10 +72,10 @@ public class Terrain {
     public boolean isConnected(GridDirection from, GridDirection to) {
         if (isDirectConnected(from, to)) {
             return true; // directly connected through the middle of the tile
-        } else if (from != MIDDLE && to != MIDDLE && (isIndirectConnected(from, to, 1) || isIndirectConnected(from, to, -1))) {
+        } else if (from != MIDDLE && to != MIDDLE && (isIndirectConnected(from, to))) {
             return true; // is not from or to middle but indirectly connected (counter)clockwise
-        } else if (getAt(from) == TerrainType.FIELDS && getAt(to) == TerrainType.FIELDS && isEdge(from) && isEdge(to)) {
-            return isImplicitlyConnected(from, to, -1) || isImplicitlyConnected(from, to, 1);
+        } else if (getAt(from) == TerrainType.FIELDS && getAt(to) == TerrainType.FIELDS && isEdge(to)) {
+            return isImplicitlyConnected(from, to);
         }
         return false;
     }
@@ -125,6 +125,16 @@ public class Terrain {
         return getAt(from) == middle && getAt(to) == middle;
     }
 
+    private boolean isImplicitlyConnected(GridDirection from, GridDirection to) {
+        boolean connected = false;
+        for (GridDirection corner : GridDirection.indirectNeighbors()) {
+            if (isDirectConnected(from, corner) || isIndirectConnected(from, corner)) {
+                connected |= isImplicitlyConnected(corner, to, -1) || isImplicitlyConnected(corner, to, 1);
+            }
+        }
+        return connected;
+    }
+
     private boolean isImplicitlyConnected(GridDirection from, GridDirection to, int side) { // TODO (MEDIUM) use enum instead of int for L/R
         if (from == to) {
             return true; // is connected
@@ -135,6 +145,10 @@ public class Terrain {
             return isImplicitlyConnected(next, to, side);
         }
         return false;
+    }
+
+    private boolean isIndirectConnected(GridDirection from, GridDirection to) { // TODO (MEDIUM) use enum instead of int for L/R
+        return isIndirectConnected(from, to, 1) || isIndirectConnected(from, to, -1);
     }
 
     // checks for indirect connection through the specified side from a specific start to a specific
