@@ -1,12 +1,13 @@
 package carcassonne.model.grid;
 
+import carcassonne.model.terrain.RotationDirection;
+
 /**
  * Enumeration for grid directions and tile positions. It is used either to specify a direction on the grid from a
  * specific tile, or to specify a position on a tile.
  * @author Timur Saglam
  */
-public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Grid
-
+public enum GridDirection {
     TOP,
     RIGHT,
     BOTTOM,
@@ -53,7 +54,7 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      * @return true if it is.
      */
     public boolean isLeftOf(GridDirection other) {
-        return next(1) == other;
+        return next(RotationDirection.RIGHT) == other;
     }
 
     /**
@@ -62,7 +63,7 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
      * @return true if it is.
      */
     public boolean isRightOf(GridDirection other) {
-        return next(-1) == other;
+        return next(RotationDirection.LEFT) == other;
     }
 
     /**
@@ -76,13 +77,10 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
 
     /**
      * Gets the next direction on the specified side of the current direction.
-     * @param side sets the side. -1 for left and 1 for right.
+     * @param side sets the side.
      * @return the next direction
      */
-    public GridDirection next(int side) { // TODO (MEDIUM) use enum instead of int for L/R
-        if (side != 1 && side != -1) {
-            throw new IllegalArgumentException("Parameter side has to be -1 for left or 1 for right.");
-        }
+    public GridDirection next(RotationDirection side) {
         if (this == MIDDLE) {
             return this;
         }
@@ -93,7 +91,7 @@ public enum GridDirection { // TODO (MEDIUM) Naming: Direction/Position, Tile/Gr
                 position = i; // save cycle position
             }
         }
-        return cycle[(8 + position + side) % 8];
+        return cycle[(8 + position + side.toInt()) % 8];
     }
 
     /**

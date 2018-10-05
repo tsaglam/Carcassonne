@@ -100,7 +100,7 @@ public class Terrain {
         rotate(GridDirection.indirectNeighbors());
     }
 
-    private void createMeepleSpots() {
+    private void createMeepleSpots() { // TODO (HIGH) use meeple spots
         meepleSpots = new LinkedList<>();
         for (GridDirection direction : GridDirection.values()) {
             meepleSpots.add(direction); // add all possible placements
@@ -109,8 +109,8 @@ public class Terrain {
             if (getAt(direction) == TerrainType.OTHER || isConnected(direction, GridDirection.MIDDLE)) {
                 meepleSpots.remove(direction); // is not a valid meeple spot.
             } else {
-                GridDirection left = direction.next(-1);
-                GridDirection right = direction.next(1);
+                GridDirection left = direction.next(RotationDirection.LEFT);
+                GridDirection right = direction.next(RotationDirection.RIGHT);
                 if (getAt(direction) == getAt(left) && getAt(direction) == getAt(right)) {
                     meepleSpots.remove(left);
                     meepleSpots.remove(right);
@@ -129,13 +129,15 @@ public class Terrain {
         boolean connected = false;
         for (GridDirection corner : GridDirection.indirectNeighbors()) {
             if (isDirectConnected(from, corner) || isIndirectConnected(from, corner)) {
-                connected |= isImplicitlyConnected(corner, to, -1) || isImplicitlyConnected(corner, to, 1);
+                for (RotationDirection side : RotationDirection.values()) { // for left and right
+                    connected |= isImplicitlyConnected(corner, to, side);
+                }
             }
         }
         return connected;
     }
 
-    private boolean isImplicitlyConnected(GridDirection from, GridDirection to, int side) { // TODO (MEDIUM) use enum instead of int for L/R
+    private boolean isImplicitlyConnected(GridDirection from, GridDirection to, RotationDirection side) {
         if (from == to) {
             return true; // is connected
         }
@@ -147,13 +149,17 @@ public class Terrain {
         return false;
     }
 
-    private boolean isIndirectConnected(GridDirection from, GridDirection to) { // TODO (MEDIUM) use enum instead of int for L/R
-        return isIndirectConnected(from, to, 1) || isIndirectConnected(from, to, -1);
+    private boolean isIndirectConnected(GridDirection from, GridDirection to) {
+        boolean connected = false;
+        for (RotationDirection side : RotationDirection.values()) { // for left and right
+            connected |= isIndirectConnected(from, to, side);
+        }
+        return connected;
     }
 
     // checks for indirect connection through the specified side from a specific start to a specific
     // destination. Side is either 1 (right) or -1 (left.)
-    private boolean isIndirectConnected(GridDirection from, GridDirection to, int side) {
+    private boolean isIndirectConnected(GridDirection from, GridDirection to, RotationDirection side) {
         GridDirection current = from;
         GridDirection next;
         while (current != to) { // while not at destination:

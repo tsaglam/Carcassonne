@@ -3,13 +3,14 @@ package carcassonne.model.grid;
 import static carcassonne.model.grid.GridDirection.LEFT;
 import static carcassonne.model.grid.GridDirection.MIDDLE;
 import static carcassonne.model.grid.GridDirection.TOP_LEFT;
-import static carcassonne.model.terrain.TerrainType.FIELDS;
 import static carcassonne.model.terrain.TerrainType.CASTLE;
+import static carcassonne.model.terrain.TerrainType.FIELDS;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import carcassonne.model.terrain.RotationDirection;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 
@@ -89,8 +90,8 @@ public class FieldsPattern extends GridPattern {
             neighbors.add(MIDDLE); // the classic direction are adjacent to the middle
         }
         if (position.isSmallerOrEquals(TOP_LEFT)) { // everything except the middle has these two neighbors:
-            neighbors.add(position.next(-1)); // counterclockwise adjacent position
-            neighbors.add(position.next(1)); // clockwise adjacent position
+            neighbors.add(position.next(RotationDirection.LEFT)); // counterclockwise adjacent position
+            neighbors.add(position.next(RotationDirection.RIGHT)); // clockwise adjacent position
         } else {
             neighbors.addAll(Arrays.asList(GridDirection.directNeighbors())); // the middle has the classic directions as neighbors
         }
@@ -108,8 +109,8 @@ public class FieldsPattern extends GridPattern {
             if (position.isSmallerOrEquals(LEFT)) {
                 results.add(position); // for simple directions just return themselves.
             } else if (position.isSmallerOrEquals(TOP_LEFT)) {
-                addIfNotCastle(results, tile, position.next(-1)); // for edges it depends whether the neighboring
-                addIfNotCastle(results, tile, position.next(1)); // directions have castle terrain or not
+                addIfNotCastle(results, tile, position.next(RotationDirection.LEFT)); // for edges it depends whether the neighboring
+                addIfNotCastle(results, tile, position.next(RotationDirection.RIGHT)); // directions have castle terrain or not
             }
         }
         return results;
@@ -122,9 +123,9 @@ public class FieldsPattern extends GridPattern {
             return position.opposite(); // top, right, botton left are simply inverted
         } else if (position.isSmallerOrEquals(TOP_LEFT)) {
             if (neighborDirection.isLeftOf(position)) { // neighbor to the left of the corner
-                return position.opposite().next(-1).next(-1); // return opposite and two to the right
+                return position.opposite().next(RotationDirection.LEFT).next(RotationDirection.LEFT); // return opposite and two to the right
             } else { // neighbor to the right of the corner
-                return position.opposite().next(1).next(1); // return opposite and two to the left
+                return position.opposite().next(RotationDirection.RIGHT).next(RotationDirection.RIGHT); // return opposite and two to the left
             }
         }
         return position; // middle stays middle
