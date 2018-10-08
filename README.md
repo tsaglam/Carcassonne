@@ -12,4 +12,5 @@ Now, a few years later, I thought I could try it again to do it properly.
 ### Upcoming features:
 * Custom player names
 * More tiles
+* Timed rounds
 * Playing in teams
