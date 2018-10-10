@@ -15,7 +15,7 @@ public class TileStack {
      * Simple constructor.
      */
     public TileStack(int players) {
-        multiplicator = players / 2.0;
+        multiplicator = 0.4 + players * 0.3;
         tiles = new Stack<>();
         fillStack();
     }
@@ -49,7 +49,8 @@ public class TileStack {
 
     private void fillStack() {
         for (TileType tileType : TileType.values()) {
-            for (int i = 0; i < tileType.getAmount() * multiplicator; i++) {
+            double amount = Math.round(tileType.getAmount() * multiplicator);
+            for (int i = 0; i < amount; i++) {
                 tiles.add(TileFactory.create(tileType));
             }
         }
