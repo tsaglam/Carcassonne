@@ -81,6 +81,15 @@ public class Tile {
     }
 
     /**
+     * Checks whether a meeple can be potentially placed on a specific position by its terrain.
+     * @param direction is the specific position on the tile.
+     * @return if it can be potentially placed. Does not check whether enemy players sit on the pattern.
+     */
+    public boolean hasMeepleSpot(GridDirection direction) {
+        return terrain.getMeepleSpots().contains(direction);
+    }
+
+    /**
      * return the terrain type on the tile in the specific direction.
      * @param direction is the specific direction.
      * @return the terrain type, or null if the direction is not mapped.
