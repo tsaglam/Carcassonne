@@ -96,23 +96,18 @@ public class Terrain {
         rotate(GridDirection.indirectNeighbors());
     }
 
-    private void createMeepleSpots() { // TODO (HIGH) use meeple spots
+    private void createMeepleSpots() {
         meepleSpots = new LinkedList<>();
         for (GridDirection direction : GridDirection.values()) {
             meepleSpots.add(direction); // add all possible placements
         }
-        for (GridDirection direction : GridDirection.neighbors()) {
-            if (getAt(direction) == TerrainType.OTHER || isConnected(direction, GridDirection.MIDDLE)) {
+        for (GridDirection direction : GridDirection.neighbors()) { // first check every direction
+            if (getAt(direction) == TerrainType.OTHER || isConnected(direction, MIDDLE)) {
                 meepleSpots.remove(direction); // is not a valid meeple spot.
-            } else {
-                GridDirection left = direction.next(RotationDirection.LEFT);
-                GridDirection right = direction.next(RotationDirection.RIGHT);
-                if (getAt(direction) == getAt(left) && getAt(direction) == getAt(right)) {
-                    meepleSpots.remove(left);
-                    meepleSpots.remove(right);
-                }
             }
         }
+        removeRedundantSpots(GridDirection.directNeighbors(), false); // merge to top, right, bottom, and left
+        removeRedundantSpots(GridDirection.indirectNeighbors(), true); // merge to the corners and add already removed anchors
     }
 
     // checks for direct connection through middle:
@@ -123,10 +118,10 @@ public class Terrain {
 
     private boolean isImplicitlyConnected(GridDirection from, GridDirection to) {
         boolean connected = false;
-        for (GridDirection corner : GridDirection.indirectNeighbors()) {
+        for (GridDirection corner : GridDirection.indirectNeighbors()) { // for every connected corner:
             if (isDirectConnected(from, corner) || isIndirectConnected(from, corner)) {
-                for (RotationDirection side : RotationDirection.values()) { // for left and right
-                    connected |= isImplicitlyConnected(corner, to, side);
+                for (RotationDirection side : RotationDirection.values()) { // to the left and right
+                    connected |= isImplicitlyConnected(corner, to, side); // check corner to corner connection
                 }
             }
         } // TODO (HIGH) reduce code duplication.
@@ -144,8 +139,8 @@ public class Terrain {
         if (from == to) {
             return true; // is connected
         }
-        GridDirection between = from.next(side);
-        GridDirection next = between.next(side);
+        GridDirection between = from.next(side); // between this and next corner
+        GridDirection next = between.next(side); // next corner
         if (getAt(between) == TerrainType.CASTLE && getAt(MIDDLE) != TerrainType.CASTLE) {
             return isImplicitlyConnected(next, to, side);
         }
@@ -173,6 +168,23 @@ public class Terrain {
             current = next; // set new current
         }
         return true; // found connection from start to destination.
+    }
+
+    // removes redundant meeple spots and optionally adds anchor spots.
+    private void removeRedundantSpots(GridDirection[] anchorDirections, boolean addAnchor) {
+        List<GridDirection> removalList = new LinkedList<>();
+        for (GridDirection anchor : anchorDirections) {
+            GridDirection left = anchor.next(RotationDirection.LEFT);
+            GridDirection right = anchor.next(RotationDirection.RIGHT);
+            if (getAt(anchor) == getAt(left) && getAt(anchor) == getAt(right)) {
+                removalList.add(left);
+                removalList.add(right);
+                if (addAnchor && !isConnected(anchor, MIDDLE)) {
+                    meepleSpots.add(anchor);
+                }
+            }
+        }
+        meepleSpots.removeAll(removalList);
     }
 
     /**

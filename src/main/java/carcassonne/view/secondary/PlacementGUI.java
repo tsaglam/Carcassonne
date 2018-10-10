@@ -72,13 +72,15 @@ public class PlacementGUI extends SecondaryGUI {
     @Override
     protected void update() {
         GridDirection[][] directions = GridDirection.values2D();
-        TerrainType terrain;
-        // buttonSkip.setBackground(options.getPlayerColorLight(currentPlayer));
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                terrain = tile.getTerrain(directions[x][y]);
-                button[x][y].setIcon(new ImageIcon(options.buildImagePath(terrain, -1)));
-                if (controller.requestPlacementStatus(GridDirection.values2D()[x][y])) {
+                TerrainType terrain = tile.getTerrain(directions[x][y]);
+                if (tile.hasMeepleSpot(directions[x][y])) {
+                    button[x][y].setIcon(new ImageIcon(options.buildImagePath(terrain, -1)));
+                } else {
+                    button[x][y].setIcon(new ImageIcon(options.buildImagePath(TerrainType.OTHER, -1)));
+                }
+                if (controller.requestPlacementStatus(directions[x][y]) && tile.hasMeepleSpot(directions[x][y])) {
                     button[x][y].setEnabled(true);
                     button[x][y].setBackground(defaultButtonColor);
                 } else {
