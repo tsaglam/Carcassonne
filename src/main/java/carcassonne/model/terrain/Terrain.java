@@ -74,14 +74,10 @@ public class Terrain {
             return true; // directly connected through the middle of the tile
         } else if (from != MIDDLE && to != MIDDLE && (isIndirectConnected(from, to))) {
             return true; // is not from or to middle but indirectly connected (counter)clockwise
-        } else if (getAt(from) == TerrainType.FIELDS && getAt(to) == TerrainType.FIELDS && isEdge(to)) {
+        } else if (getAt(from) == TerrainType.FIELDS && getAt(to) == TerrainType.FIELDS) {
             return isImplicitlyConnected(from, to);
         }
         return false;
-    }
-
-    public boolean isEdge(GridDirection direction) {
-        return TOP_RIGHT.isSmallerOrEquals(direction) && direction.isSmallerOrEquals(TOP_LEFT);
     }
 
     /**
@@ -131,6 +127,13 @@ public class Terrain {
             if (isDirectConnected(from, corner) || isIndirectConnected(from, corner)) {
                 for (RotationDirection side : RotationDirection.values()) { // for left and right
                     connected |= isImplicitlyConnected(corner, to, side);
+                }
+            }
+        } // TODO (HIGH) reduce code duplication.
+        for (GridDirection corner : GridDirection.indirectNeighbors()) {
+            if (isDirectConnected(to, corner) || isIndirectConnected(to, corner)) {
+                for (RotationDirection side : RotationDirection.values()) { // for left and right
+                    connected |= isImplicitlyConnected(from, corner, side);
                 }
             }
         }
