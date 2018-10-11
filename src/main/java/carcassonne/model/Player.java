@@ -47,7 +47,7 @@ public class Player {
     public int getFreeMeeples() {
         return freeMeeples;
     }
-    
+
     public Meeple getMeeple() {
         if (hasFreeMeeples()) {
             freeMeeples--;
@@ -115,7 +115,7 @@ public class Player {
         if (scoreType == TerrainType.CASTLE && gameOver) {
             return amount;
         }
-        return amount * multiplierMap.get(scoreType);
+        return amount * multiplierMap.get(scoreType); // TODO (HIGH) divide after multiplier
     }
 
     private void initializeMultiplierMap() {
