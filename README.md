@@ -14,3 +14,4 @@ Now, a few years later, I thought I could try it again to do it properly.
 * More tiles
 * Timed rounds
 * Playing in teams
+* Tournament mode
