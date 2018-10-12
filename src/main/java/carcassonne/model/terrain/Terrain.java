@@ -10,6 +10,7 @@ import static carcassonne.model.grid.GridDirection.TOP;
 import static carcassonne.model.grid.GridDirection.TOP_LEFT;
 import static carcassonne.model.grid.GridDirection.TOP_RIGHT;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -96,18 +97,33 @@ public class Terrain {
         rotate(GridDirection.indirectNeighbors());
     }
 
-    private void createMeepleSpots() {
+    private void createMeepleSpots() { // TODO (MEDIUM) Improve code quality.
         meepleSpots = new LinkedList<>();
-        for (GridDirection direction : GridDirection.values()) {
-            meepleSpots.add(direction); // add all possible placements
-        }
-        for (GridDirection direction : GridDirection.neighbors()) { // first check every direction
-            if (getAt(direction) == TerrainType.OTHER || isConnected(direction, MIDDLE)) {
-                meepleSpots.remove(direction); // is not a valid meeple spot.
+        meepleSpots.addAll(Arrays.asList(GridDirection.values()));
+        for (GridDirection spot : GridDirection.values()) { // for every spot
+            if (getAt(spot) != TerrainType.OTHER && meepleSpots.contains(spot)) { // if not checked
+                LinkedList<GridDirection> removalList = new LinkedList<>();
+                int x = 0;
+                int y = 0;
+                for (GridDirection other : GridDirection.values()) {
+                    if (isConnected(spot, other)) { // for every connected spot
+                        removalList.add(other); // mark as part of pattern
+                        x = other.addX(x);
+                        y = other.addY(y);
+                    }
+                }
+                x = (int) Math.round(x / 3.0); // calculate center of pattern
+                y = (int) Math.round(y / 3.0);
+                GridDirection center = GridDirection.values2D()[x + 1][y + 1];
+                if (isConnected(center, spot)) {
+                    removalList.remove(center); // keep result spot
+                    meepleSpots.removeAll(removalList); // remove the rest
+                }
             }
         }
         removeRedundantSpots(GridDirection.directNeighbors(), false); // merge to top, right, bottom, and left
         removeRedundantSpots(GridDirection.indirectNeighbors(), true); // merge to the corners and add already removed anchors
+        removeRedundantSpots(GridDirection.directNeighbors(), true); // merge one more time
     }
 
     // checks for direct connection through middle:
@@ -176,7 +192,7 @@ public class Terrain {
         for (GridDirection anchor : anchorDirections) {
             GridDirection left = anchor.next(RotationDirection.LEFT);
             GridDirection right = anchor.next(RotationDirection.RIGHT);
-            if (getAt(anchor) == getAt(left) && getAt(anchor) == getAt(right)) {
+            if (getAt(anchor) == getAt(left) && getAt(anchor) == getAt(right) && meepleSpots.contains(left) && meepleSpots.contains(right)) {
                 removalList.add(left);
                 removalList.add(right);
                 if (addAnchor && !isConnected(anchor, MIDDLE)) {
