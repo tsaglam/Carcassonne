@@ -44,7 +44,6 @@ public abstract class AbstractControllerState {
         this.placementGUI = placementGUI;
         this.scoreboard = scoreboard;
         options = GameOptions.getInstance();
-        controller.registerState(this);
     }
 
     /**
