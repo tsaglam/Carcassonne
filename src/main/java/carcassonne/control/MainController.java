@@ -43,9 +43,10 @@ public class MainController {
         placementGUI = new PlacementGUI(this);
         stateMap = new HashMap<>();
         currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, scoreboard);
-        new StateManning(this, mainGUI, rotationGUI, placementGUI, scoreboard);
-        new StatePlacing(this, mainGUI, rotationGUI, placementGUI, scoreboard);
-        new StateGameOver(this, mainGUI, rotationGUI, placementGUI, scoreboard);
+        registerState(currentState);
+        registerState(new StateManning(this, mainGUI, rotationGUI, placementGUI, scoreboard));
+        registerState(new StatePlacing(this, mainGUI, rotationGUI, placementGUI, scoreboard));
+        registerState(new StateGameOver(this, mainGUI, rotationGUI, placementGUI, scoreboard));
     }
 
     /**
@@ -62,22 +63,12 @@ public class MainController {
     }
 
     /**
-     * Registers a specific state at the controller.
-     * @param state is the specific state.
-     */
-    public void registerState(AbstractControllerState state) {
-        if (stateMap.put(state.getClass(), state) != null) {
-            throw new IllegalArgumentException("Can't register two states of a kind.");
-        }
-    }
-
-    /**
      * Requests to abort the round.
      */
     public void requestAbortGame() {
         currentState.abortGame();
     }
-    
+
     /**
      * Method for the view to see whether a meeple is placeable on a specific tile.
      * @param position is the specific position on the tile.
@@ -128,6 +119,16 @@ public class MainController {
         scoreboard.rebuild(newRound.getPlayerCount());
         for (AbstractControllerState state : stateMap.values()) {
             state.updateState(newRound, newGrid);
+        }
+    }
+
+    /**
+     * Registers a specific state at the controller.
+     * @param state is the specific state.
+     */
+    private void registerState(AbstractControllerState state) {
+        if (stateMap.put(state.getClass(), state) != null) {
+            throw new IllegalArgumentException("Can't register two states of a kind.");
         }
     }
 }
