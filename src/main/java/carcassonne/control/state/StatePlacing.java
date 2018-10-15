@@ -65,9 +65,8 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     public void placeTile(int x, int y) {
-        Tile tile = rotationGUI.getTile();
+      Tile tile = round.getCurrentTile();
         if (grid.place(x, y, tile)) {
-            round.updateCurrentTile(tile);
             mainGUI.set(tile, x, y);
             changeState(StateManning.class);
         }
@@ -94,7 +93,7 @@ public class StatePlacing extends AbstractControllerState {
             updateStackSize();
         }
     }
-    
+
     /**
      * @see carcassonne.control.state.AbstractControllerState#exit()
      */

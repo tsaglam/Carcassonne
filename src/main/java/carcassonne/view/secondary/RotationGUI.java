@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import carcassonne.control.MainController;
-import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 
@@ -32,14 +31,6 @@ public class RotationGUI extends SecondaryGUI {
         super(controller, "");
         buildContent();
         finishFrame();
-    }
-
-    /**
-     * Getter for the tile.
-     * @return the tile.
-     */
-    public Tile getTile() {
-        return tile;
     }
 
     private void addMouseAdapters() {
