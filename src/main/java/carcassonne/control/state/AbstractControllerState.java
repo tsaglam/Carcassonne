@@ -125,7 +125,8 @@ public abstract class AbstractControllerState {
         updateStackSize();
         GridSpot spot = round.getCurrentTile().getGridSpot(); // starting spot.
         mainGUI.set(spot.getTile(), spot.getX(), spot.getY());
-        changeState(StateManning.class);
+        round.nextTurn(); // first tile is drawn, player one is active.
+        changeState(StatePlacing.class);
     }
 
     /**

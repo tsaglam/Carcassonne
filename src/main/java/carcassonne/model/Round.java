@@ -123,7 +123,7 @@ public class Round {
     /**
      * Method the starts the turn of the next players a draws a tile from the stack.
      */
-    public void nextTurn() {
+    public void nextTurn() { // TODO (MEDIUM) Make shorter
         activePlayerIndex++;
         if (activePlayerIndex == players.length) {
             activePlayerIndex = 0;
@@ -136,8 +136,8 @@ public class Round {
      * Setter for the current tile.
      * @param newTile is the new Tile to set.
      */
-    public void updateCurrentTile(Tile newTile) {
-        if (currentTile.getClass() != newTile.getClass()) {
+    public void updateCurrentTile2(Tile newTile) {
+        if (currentTile.getType() != newTile.getType()) {
             throw new IllegalArgumentException("type of new tile does not match old tile");
         }
         currentTile = newTile;
@@ -155,6 +155,6 @@ public class Round {
         for (int i = 0; i < players.length; i++) {
             players[i] = new Player(i); // create the players.
         }
-        activePlayerIndex = 0; // set first players as active.
+        activePlayerIndex = -1; // first player can only start after first tile is drawn via nextTurn()
     }
 }
