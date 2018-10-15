@@ -21,7 +21,6 @@ public class Round {
     private Player[] players;
     private final int playerCount;
     private final TileStack tileStack;
-    private int turnCounter;
 
     /**
      * Simple constructor that creates the grid, the tile stack and the players.
@@ -34,7 +33,6 @@ public class Round {
         tileStack = new TileStack(playerCount);
         createPlayers();
         currentTile = grid.getFoundation().getTile();
-        turnCounter = 1;
     }
 
     /**
@@ -75,14 +73,6 @@ public class Round {
     }
 
     /**
-     * Getter for the turn counter.
-     * @return the turn counter
-     */
-    public int getTurnCounter() {
-        return turnCounter;
-    }
-
-    /**
      * Method determines the winning players by the highest score.
      * @return a list of names of the winning players.
      */
@@ -103,15 +93,6 @@ public class Round {
     }
 
     /**
-     * Checks whether the game round is NOT over. A game round is over if the grid is full or the stack of tiles is empty
-     * (no tiles left).
-     * @return true if the game is NOT over.
-     */
-    public boolean isNotOver() {
-        return !isOver();
-    }
-
-    /**
      * Checks whether the game round is over. A game round is over if the grid is full or the stack of tiles is empty (no
      * tiles left).
      * @return true if the game is over.
@@ -123,24 +104,9 @@ public class Round {
     /**
      * Method the starts the turn of the next players a draws a tile from the stack.
      */
-    public void nextTurn() { // TODO (MEDIUM) Make shorter
-        activePlayerIndex++;
-        if (activePlayerIndex == players.length) {
-            activePlayerIndex = 0;
-            turnCounter++;
-        }
+    public void nextTurn() {
+        activePlayerIndex = ++activePlayerIndex % players.length;
         currentTile = tileStack.drawTile();
-    }
-
-    /**
-     * Setter for the current tile.
-     * @param newTile is the new Tile to set.
-     */
-    public void updateCurrentTile2(Tile newTile) {
-        if (currentTile.getType() != newTile.getType()) {
-            throw new IllegalArgumentException("type of new tile does not match old tile");
-        }
-        currentTile = newTile;
     }
 
     /**
