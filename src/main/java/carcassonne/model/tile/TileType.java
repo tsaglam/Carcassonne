@@ -43,7 +43,8 @@ public enum TileType {
     CastleSidesRoad(2, CASTLE, ROAD, CASTLE, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, ROAD),
     CastleSidesEdgeRoad(1, CASTLE, ROAD, ROAD, CASTLE, FIELDS, FIELDS, FIELDS, OTHER, ROAD),
     CastleSidesQuad(1, CASTLE, CASTLE, CASTLE, CASTLE, OTHER, OTHER, OTHER, OTHER, FIELDS),
-    RoadEnd(2, FIELDS, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, OTHER);
+    RoadEnd(2, FIELDS, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, OTHER),
+    CastleCenterSides(1, FIELDS, FIELDS, CASTLE, FIELDS, OTHER, OTHER, OTHER, OTHER, CASTLE);
 
     private final TerrainType[] terrain;
     private final int amount;
