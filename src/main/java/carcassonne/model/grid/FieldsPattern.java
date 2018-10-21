@@ -134,7 +134,7 @@ public class FieldsPattern extends GridPattern {
     private List<GridDirection> getFieldPositions(Tile tile, GridDirection startingPoint) {
         List<GridDirection> fieldPositions = new LinkedList<>();
         for (GridDirection position : GridDirection.values()) { // for every position on tile
-            if (tile.hasConnection(startingPoint, position)) { // TODO (HIGH) Add exceptions!
+            if (tile.hasConnection(startingPoint, position)) {
                 fieldPositions.add(position);
             }
         }

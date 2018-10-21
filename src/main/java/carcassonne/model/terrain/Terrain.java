@@ -97,7 +97,7 @@ public class Terrain {
         rotate(GridDirection.indirectNeighbors());
     }
 
-    private void createMeepleSpots() { // TODO (MEDIUM) Improve code quality.
+    private void createMeepleSpots() { // TODO (HIGH) Improve code quality.
         meepleSpots = new LinkedList<>();
         meepleSpots.addAll(Arrays.asList(GridDirection.values()));
         for (GridDirection spot : GridDirection.values()) { // for every spot
