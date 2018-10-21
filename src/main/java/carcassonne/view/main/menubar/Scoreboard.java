@@ -33,7 +33,7 @@ public class Scoreboard {
         stackSizeLabel = new JLabel();
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
         allLabels.add(stackSizeLabel);
-        Font font = new Font("Helvetica", Font.BOLD, 12);
+        Font font = options.buttonFont;
         for (JLabel label : allLabels) {
             label.setFont(font);
         }

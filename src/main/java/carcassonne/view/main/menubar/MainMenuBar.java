@@ -22,9 +22,9 @@ public class MainMenuBar extends JMenuBar {
     private JMenu menuGame;
     private JMenu menuOptions;
     private JMenu menuPlayers;
+    private JMenu menuNames;
     private JMenuItem itemNewGame;
     private JMenuItem itemAbortGame;
-    private JRadioButtonMenuItem[] itemPlayerCount;
     private final GameOptions options;
 
     /**
@@ -87,8 +87,18 @@ public class MainMenuBar extends JMenuBar {
 
     private void buildMenuOptions() {
         // build player menu
+        buildMenuPlayers();
+        buildMenuNames();
+        // build options menu:
+        menuOptions = new JMenu("Options");
+        menuOptions.add(menuPlayers);
+        menuOptions.add(menuNames);
+        add(menuOptions);
+    }
+
+    private void buildMenuPlayers() {
         menuPlayers = new JMenu("Players");
-        itemPlayerCount = new JRadioButtonMenuItem[options.maximalPlayers - 1];
+        JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[options.maximalPlayers - 1];
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
             itemPlayerCount[i] = new JRadioButtonMenuItem((i + 2) + " Players");
@@ -97,9 +107,16 @@ public class MainMenuBar extends JMenuBar {
             menuPlayers.add(itemPlayerCount[i]);
         }
         itemPlayerCount[0].setSelected(true);
-        // build options menu:
-        menuOptions = new JMenu("Options");
-        menuOptions.add(menuPlayers);
-        add(menuOptions);
+    }
+
+    private void buildMenuNames() {
+        JMenuItem[] itemNames = new JMenuItem[options.maximalPlayers];
+        menuNames = new JMenu("Set Names");
+        for (int i = 0; i < itemNames.length; i++) {
+            itemNames[i] = new JMenuItem(options.playerNames[i]);
+            itemNames[i].setForeground(options.getPlayerColor(i));
+            itemNames[i].addMouseListener(new MenuNamesMouseAdapter(i, itemNames[i]));
+            menuNames.add(itemNames[i]);
+        }
     }
 }
