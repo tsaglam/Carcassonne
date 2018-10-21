@@ -24,20 +24,18 @@ public abstract class GridPattern {
     protected List<Meeple> meepleList;
     protected boolean complete;
     private boolean disbursed;
-    private boolean reducedPoints;
+    protected int scoreMultiplier;
 
     /**
      * Basic constructor taking only a tile type.
      * @param patternType is the type of the pattern.
      */
-    protected GridPattern(TerrainType patternType) {
+    protected GridPattern(TerrainType patternType, int scoreMultiplier) {
         this.patternType = patternType;
+        this.scoreMultiplier = scoreMultiplier;
         spotList = new LinkedList<>();
         meepleList = new LinkedList<>();
         involvedPlayers = new HashMap<>();
-        complete = false;
-        disbursed = false;
-        reducedPoints = false;
     }
 
     /**
@@ -67,7 +65,7 @@ public abstract class GridPattern {
                 involvedPlayers.remove(player); // remove players who don't get points
             }
             for (Player player : involvedPlayers.keySet()) { // other players split the pot
-                player.addScore((int) Math.ceil(getSize() / involvedPlayers.size()), patternType, reducedPoints);
+                player.addScore((int) Math.ceil(getSize() * scoreMultiplier / involvedPlayers.size()), patternType);
             }
             for (Meeple meeple : meepleList) {
                 meeple.removePlacement(); // remove meeples from tiles.
@@ -83,7 +81,6 @@ public abstract class GridPattern {
     public void forceDisburse() {
         if (!complete) {
             complete = true;
-            reducedPoints = true;
             disburse();
         }
     }

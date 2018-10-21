@@ -19,7 +19,7 @@ public class FieldsPattern extends GridPattern {
     private final Grid grid;
 
     public FieldsPattern(GridSpot startingSpot, GridDirection startingDirection, Grid grid) {
-        super(FIELDS);
+        super(FIELDS, 3);
         this.grid = grid;
         adjacentCastles = new LinkedList<>();
         checkArgs(startingSpot, startingDirection, grid);

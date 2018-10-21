@@ -15,11 +15,19 @@ public class CastleAndRoadPattern extends GridPattern { // TODO (HIGH) use subcl
      * @param grid is the grid the pattern is created on.
      */
     public CastleAndRoadPattern(GridSpot startingSpot, GridDirection startingDirection, TerrainType patternType, Grid grid) {
-        super(patternType);
+        super(patternType, (patternType == TerrainType.CASTLE) ? 2 : 1);
         checkArgs(startingSpot, startingDirection, patternType, grid);
         startingSpot.setTag(startingDirection, this); // initial tag
         add(startingSpot); // initial tile
         complete = buildPattern(startingSpot, startingDirection, grid); // recursive algorithm.
+    }
+
+    @Override
+    public void forceDisburse() {
+        if (!complete) { // if castle is not complete
+            scoreMultiplier = 1; // reduce score multiplier
+        }
+        super.forceDisburse();
     }
 
     private boolean buildPattern(GridSpot spot, GridDirection startingPoint, Grid grid) {
@@ -40,7 +48,7 @@ public class CastleAndRoadPattern extends GridPattern { // TODO (HIGH) use subcl
     private void checkArgs(GridSpot spot, GridDirection direction, TerrainType terrain, Grid grid) {
         if (terrain != TerrainType.CASTLE && terrain != TerrainType.ROAD) {
             throw new IllegalArgumentException("Can only create CastleAndRoadPatterns from type castle or road");
-        } 
+        }
         checkArgs(spot, direction, grid);
     }
 
