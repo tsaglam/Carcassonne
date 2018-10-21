@@ -7,6 +7,25 @@ import javax.swing.JOptionPane;
  * @author Timur Saglam
  */
 public final class GameMessage {
+    private static final String TITLE = "Carcassonne";
+
+    private GameMessage() {
+        // Private constructor for helper class.
+    }
+
+    /**
+     * Asks the user for text input.
+     * @param messageText is the custom message.
+     * @return the user input string.
+     */
+    public static String getUserInput(String messageText) {
+        String input = JOptionPane.showInputDialog(null, messageText, TITLE, JOptionPane.QUESTION_MESSAGE);
+        if (input != null && input.length() > 0) {
+            return input;
+        }
+        showWarning("You need to enter something!");
+        return getUserInput(messageText);
+    }
 
     /**
      * Shows a custom error message.
@@ -33,10 +52,6 @@ public final class GameMessage {
     }
 
     private static void show(String messageText, int type) {
-        JOptionPane.showMessageDialog(null, messageText, "Carcassonne", type);
-    }
-
-    private GameMessage() {
-        // Private constructor for helper class.
+        JOptionPane.showMessageDialog(null, messageText, TITLE, type);
     }
 }
