@@ -12,7 +12,6 @@ import carcassonne.model.terrain.TerrainType;
 public class Player {
     private static final int MAX_MEEPLES = 7;
     private int freeMeeples;
-    private Map<TerrainType, Integer> multiplierMap;
     private final int number;
     private int overallScore;
     private Map<TerrainType, Integer> scoreMap;
@@ -24,7 +23,6 @@ public class Player {
     public Player(int number) {
         this.number = number;
         freeMeeples = MAX_MEEPLES;
-        initializeMultiplierMap();
         initializeScores();
     }
 
@@ -34,10 +32,9 @@ public class Player {
      * @param scoreType determines the score multiplier.
      * @param gameOver determines if the game is running or not. Changes score multipliers.
      */
-    public void addScore(int amount, TerrainType scoreType, boolean gameOver) {
-        int scoreToAdd = calculateScore(amount, scoreType, gameOver);
-        scoreMap.put(scoreType, scoreMap.get(scoreType) + scoreToAdd);
-        overallScore += scoreToAdd;
+    public void addScore(int amount, TerrainType scoreType) {
+        scoreMap.put(scoreType, scoreMap.get(scoreType) + amount);
+        overallScore += amount;
     }
 
     /**
@@ -104,28 +101,6 @@ public class Player {
         return "Player[number: " + number + ", score: " + overallScore + ", free meeples: " + freeMeeples + "]";
     }
 
-    /**
-     * Multiplies the amount of score by the multiplier of the type of the score.
-     * @param amount sets the amount of score.
-     * @param scoreType is the type of score, which influences the multiplier.
-     * @param gameOver determines if the game is running or not. Changes score multipliers.
-     * @return the multiplied score.
-     */
-    private int calculateScore(int amount, TerrainType scoreType, boolean gameOver) {
-        if (scoreType == TerrainType.CASTLE && gameOver) {
-            return amount;
-        }
-        return amount * multiplierMap.get(scoreType); // TODO (HIGH) divide after multiplier
-    }
-
-    private void initializeMultiplierMap() {
-        multiplierMap = new HashMap<>();
-        multiplierMap.put(TerrainType.CASTLE, 2);
-        multiplierMap.put(TerrainType.ROAD, 1);
-        multiplierMap.put(TerrainType.MONASTERY, 1);
-        multiplierMap.put(TerrainType.FIELDS, 3);
-    }
-
     private void initializeScores() {
         overallScore = 0;
         scoreMap = new HashMap<>();
@@ -133,5 +108,4 @@ public class Player {
             scoreMap.put(TerrainType.values()[i], 0); // initial scores are zero
         }
     }
-
 }

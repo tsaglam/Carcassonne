@@ -20,7 +20,7 @@ public class MonasteryGridPattern extends GridPattern {
      * @param grid is the grid the pattern is created from.
      */
     public MonasteryGridPattern(GridSpot spot, Grid grid) {
-        super(MONASTERY);
+        super(MONASTERY, 1);
         if (spot.getTile().getTerrain(MIDDLE) != MONASTERY) {
             throw new IllegalArgumentException("Can't create monastery pattern from non monastery tile");
         }
