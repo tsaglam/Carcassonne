@@ -19,12 +19,7 @@ public final class GameMessage {
      * @return the user input string.
      */
     public static String getUserInput(String messageText) {
-        String input = JOptionPane.showInputDialog(null, messageText, TITLE, JOptionPane.QUESTION_MESSAGE);
-        if (input != null && input.length() > 0) {
-            return input;
-        }
-        showWarning("You need to enter something!");
-        return getUserInput(messageText);
+        return JOptionPane.showInputDialog(null, messageText, TITLE, JOptionPane.QUESTION_MESSAGE);
     }
 
     /**

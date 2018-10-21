@@ -10,12 +10,12 @@ public class CarcassonneMove implements Comparable<CarcassonneMove> {
      * Basic constructor, creates the move object.
      */
     public CarcassonneMove() {
-        // TODO (HIGH) Implement CarcassonneMove class. Maybe build two subclasses.
+        // TODO (MEDIUM) Implement CarcassonneMove class. Maybe build two subclasses.
     }
 
     @Override
     public int compareTo(CarcassonneMove otherMove) {
-        // TODO (HIGH) Implement compareTo() method.
+        // TODO (MEDIUM) Implement compareTo() method.
         return 0;
     }
 }

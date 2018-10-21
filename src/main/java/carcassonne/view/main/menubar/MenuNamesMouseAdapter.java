@@ -32,9 +32,16 @@ public class MenuNamesMouseAdapter extends MouseAdapter {
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        String newName = GameMessage.getUserInput("Please enter a new name for player " + item.getText() + "!");
-        GameOptions.getInstance().playerNames[player] = newName;
-        item.setText(newName);
+        String name = GameMessage.getUserInput("Please enter a new name for player " + item.getText() + "!");
+        if (name != null) { // if not canceled.
+            if (name.isEmpty()) {
+                GameMessage.showMessage("Invalid name, please try again!");
+                mousePressed(e); // try again
+            } else {
+                GameOptions.getInstance().playerNames[player] = name;
+                item.setText(name);
+            }
+        }
     }
 
 }
