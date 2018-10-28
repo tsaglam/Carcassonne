@@ -29,6 +29,7 @@ public abstract class GridPattern {
     /**
      * Basic constructor taking only a tile type.
      * @param patternType is the type of the pattern.
+     * @param scoreMultiplier is the score multiplier of the pattern.
      */
     protected GridPattern(TerrainType patternType, int scoreMultiplier) {
         this.patternType = patternType;

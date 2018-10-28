@@ -45,6 +45,10 @@ public class Player {
         return freeMeeples;
     }
 
+    /**
+     * Grants access to a meeple.
+     * @return the meeple.
+     */
     public Meeple getMeeple() {
         if (hasFreeMeeples()) {
             freeMeeples--;

@@ -29,7 +29,7 @@ public class Terrain {
 
     /**
      * Creates a terrain instance with nine terrain types.
-     * @param terrain is the array of nine terrain types.
+     * @param type is the tile type of the terrain.
      */
     public Terrain(TileType type) {
         if (type == null) {

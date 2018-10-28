@@ -64,7 +64,7 @@ public class Meeple {
 
     /**
      * Sets the placement location, which is the tile where the meeple is placed.
-     * @param location is the placement location.
+     * @param placementLocation is the placement location.
      */
     public void setLocation(Tile placementLocation) {
         this.location = placementLocation;
@@ -72,7 +72,7 @@ public class Meeple {
 
     /**
      * Sets the placement position, which is the position on the tile where the meeple is placed.
-     * @param position is the placement position.
+     * @param placementPosition is the placement position.
      */
     public void setPosition(GridDirection placementPosition) {
         this.position = placementPosition;

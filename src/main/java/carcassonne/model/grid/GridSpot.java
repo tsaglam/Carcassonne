@@ -163,6 +163,7 @@ public class GridSpot {
 
     /**
      * Removes all the tags of a specific pattern from the tile.
+     * @param pattern is the specific grid pattern.
      */
     public void removeTagsFrom(GridPattern pattern) {
         List<GridDirection> removalList = new LinkedList<>();
