@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 
 import carcassonne.control.GameOptions;
-import carcassonne.view.secondary.GameMessage;
+import carcassonne.view.GameMessage;
 
 /**
  * A simple mouse adapter for the menu selection menu items.

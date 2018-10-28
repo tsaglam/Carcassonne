@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.util.LinkedList;
+import java.util.List;
 
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileType;
+import carcassonne.view.Notifiable;
 
 /**
  * Singleton that stores the game options and other information. There is only one option instance at a time. The use of
@@ -15,6 +18,7 @@ import carcassonne.model.tile.TileType;
  */
 public final class GameOptions {
     private static GameOptions instance; // singleton instance
+    private List<Notifiable> changeListeners;
 
     /**
      * Font type of the button.
@@ -79,7 +83,7 @@ public final class GameOptions {
     /**
      * Names of the players.
      */
-    public String[] playerNames = { "BLUE", "RED", "GREEN", "ORANGE", "PURPLE" };
+    public String[] playerNames = { "BLUE", "RED", "GREEN", "ORANGE", "PURPLE" }; // TODO (HIGH) use getter/setter with notify
 
     /**
      * is the height value of the resolution without the taskbar height.
@@ -109,6 +113,7 @@ public final class GameOptions {
      */
     private GameOptions() {
         initSystemProperties();
+        changeListeners = new LinkedList<>();
         buttonFont = new Font("Helvetica", Font.BOLD, 12);
         colorGUImain = new Color(190, 190, 190); // grey
         colorGUIsmall = new Color(217, 217, 217); // light grey
@@ -124,18 +129,13 @@ public final class GameOptions {
     }
 
     /**
-     * Builds the path to the image of a specific meeple of a player.
+     * Builds the path to the image of a specific meeple type.
      * @param type is the type of terrain the meeple occupies.
-     * @param playerNumber is the number of the meeple owner. use -1 for a generic meeple.
+     * @param isTemplate specifies whether the template image should be loaded.
      * @return the path as a String.
      */
-    public String buildImagePath(TerrainType type, int playerNumber) {
-        String pathBase = "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase();
-        if (playerNumber < 0 || type == TerrainType.OTHER) {
-            return pathBase + ".png";
-        } else {
-            return pathBase + "_" + playerNumber + ".png";
-        }
+    public String getMeeplePath(TerrainType type, boolean isTemplate) {
+        return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + (isTemplate ? "_template" : "") + ".png";
     }
 
     /**
@@ -156,6 +156,25 @@ public final class GameOptions {
     public Color getPlayerColorLight(int playerNumber) {
         check(playerNumber);
         return playerColorLight[playerNumber];
+    }
+
+    /**
+     * Registers a UI element that wants to listen to changes.
+     * @param notifiable is the UI element.
+     */
+    public void register(Notifiable notifiable) {
+        changeListeners.add(notifiable);
+    }
+
+    /**
+     * Setter for the player colors.
+     * @param color is the new color.
+     * @param playerNumber is the number of the player whose color is requested.
+     */
+    public void setPlayerColor(Color color, int playerNumber) {
+        check(playerNumber);
+        playerColor[playerNumber] = color;
+        notifyListeners();
     }
 
     private void check(int playerNumber) {
@@ -181,6 +200,12 @@ public final class GameOptions {
             taskBarHeight = 50;
         }
         resolutionHeight -= taskBarHeight;
+    }
+
+    private void notifyListeners() {
+        for (Notifiable notifiable : changeListeners) {
+            notifiable.notifyChange();
+        }
     }
 
     /**

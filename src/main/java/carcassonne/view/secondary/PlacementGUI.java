@@ -76,9 +76,9 @@ public class PlacementGUI extends SecondaryGUI {
             for (int x = 0; x < 3; x++) {
                 TerrainType terrain = tile.getTerrain(directions[x][y]);
                 if (tile.hasMeepleSpot(directions[x][y])) {
-                    button[x][y].setIcon(new ImageIcon(options.buildImagePath(terrain, -1)));
+                    button[x][y].setIcon(new ImageIcon(options.getMeeplePath(terrain, false)));
                 } else {
-                    button[x][y].setIcon(new ImageIcon(options.buildImagePath(TerrainType.OTHER, -1)));
+                    button[x][y].setIcon(new ImageIcon(options.getMeeplePath(TerrainType.OTHER, false)));
                 }
                 if (controller.requestPlacementStatus(directions[x][y]) && tile.hasMeepleSpot(directions[x][y])) {
                     button[x][y].setEnabled(true);

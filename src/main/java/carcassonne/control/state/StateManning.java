@@ -9,9 +9,9 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
+import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
-import carcassonne.view.secondary.GameMessage;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -55,7 +55,7 @@ public class StateManning extends AbstractControllerState {
             placeable = true; // you can always place on a monastery
         } else {
             GridPattern pattern;
-            if (terrain == TerrainType.FIELDS) { 
+            if (terrain == TerrainType.FIELDS) {
                 pattern = new FieldsPattern(tile.getGridSpot(), position, grid);
             } else { // castle or road:
                 pattern = new CastleAndRoadPattern(tile.getGridSpot(), position, terrain, grid);
