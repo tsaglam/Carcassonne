@@ -77,7 +77,7 @@ public class Round {
      * @return a list of names of the winning players.
      */
     public List<String> getWinningPlayers() {
-        String[] playerNames = GameOptions.getInstance().playerNames;
+        GameOptions options = GameOptions.getInstance();
         List<String> winnerList = new LinkedList<>();
         int maxScore = 0;
         for (Player player : players) {
@@ -85,7 +85,7 @@ public class Round {
                 if (player.getScore() > maxScore) {
                     winnerList.clear();
                 }
-                winnerList.add(playerNames[player.getNumber()]);
+                winnerList.add(options.getPlayerName(player.getNumber()));
                 maxScore = player.getScore();
             }
         }
