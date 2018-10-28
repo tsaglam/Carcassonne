@@ -131,9 +131,9 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private void buildMenuColors() { // TODO (medium) reduce duplication
         itemColors = new JMenuItem[options.maximalPlayers];
-        menuColors = new JMenu("Set Player Colors");
+        menuColors = new JMenu("Set Colors");
         for (int i = 0; i < itemColors.length; i++) {
-            itemColors[i] = new JMenuItem(options.playerNames[i]);
+            itemColors[i] = new JMenuItem("Color of " + options.playerNames[i]);
             itemColors[i].addMouseListener(new MenuColorsMouseAdapter(i));
             menuColors.add(itemColors[i]);
         }
