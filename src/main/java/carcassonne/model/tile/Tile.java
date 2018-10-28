@@ -211,6 +211,10 @@ public class Tile {
         }
     }
 
+    /**
+     * Getter for the meeple spots.
+     * @return the positions on the grid where placing a meeple is possible.
+     */
     protected List<GridDirection> getMeepleSpots() {
         return terrain.getMeepleSpots();
     }

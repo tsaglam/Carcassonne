@@ -13,6 +13,7 @@ public class TileStack {
 
     /**
      * Simple constructor.
+     * @param players is the amount of player for which this tile stack is intended.
      */
     public TileStack(int players) {
         multiplicator = 0.4 + players * 0.3;

@@ -18,8 +18,8 @@ public class MenuNamesMouseAdapter extends MouseAdapter {
 
     /**
      * Simple constructor.
-     * @param menuBar sets the menu bar.
-     * @param playerCount sets the amount of players.s
+     * @param player sets player whose name gets changed.
+     * @param item is the correlating menu item.
      */
     public MenuNamesMouseAdapter(int player, JMenuItem item) {
         super();
