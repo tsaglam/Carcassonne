@@ -33,30 +33,21 @@ public class PaintShop {
     /**
      * Returns a custom colored meeple.
      * @param meepleType is the type of the meeple.
-     * @param playerNumber is the number of the player whose color is used.
+     * @param color is the custom color.
      * @return the colored meeple.
      */
-    public ImageIcon getColoredMeeple(TerrainType meepleType, int playerNumber) {
-        return paintMeeple(meepleType, options.getPlayerColor(playerNumber).getRGB());
+    public ImageIcon getColoredMeeple(TerrainType meepleType, Color color) {
+        return paintMeeple(meepleType, color.getRGB());
     }
 
     /**
      * Returns a custom colored meeple.
      * @param meepleType is the type of the meeple.
-     * @param color is the custom color.
+     * @param playerNumber is the number of the player whose color is used.
      * @return the colored meeple.
      */
-    private ImageIcon paintMeeple(TerrainType meepleType, int color) {
-        BufferedImage image = imageMap.get(meepleType);
-        BufferedImage template = templateMap.get(meepleType);
-        for (int x = 0; x < template.getWidth(); x++) {
-            for (int y = 0; y < template.getHeight(); y++) {
-                if (template.getRGB(x, y) == Color.BLACK.getRGB()) {
-                    image.setRGB(x, y, color);
-                }
-            }
-        }
-        return new ImageIcon(image);
+    public ImageIcon getColoredMeeple(TerrainType meepleType, int playerNumber) {
+        return getColoredMeeple(meepleType, options.getPlayerColor(playerNumber));
     }
 
     // prepares the base images and templates
@@ -71,5 +62,19 @@ public class PaintShop {
             }
         }
         return map;
+    }
+
+    // Colors a meeple with RGB color.
+    private ImageIcon paintMeeple(TerrainType meepleType, int color) {
+        BufferedImage image = imageMap.get(meepleType);
+        BufferedImage template = templateMap.get(meepleType);
+        for (int x = 0; x < template.getWidth(); x++) {
+            for (int y = 0; y < template.getHeight(); y++) {
+                if (template.getRGB(x, y) == Color.BLACK.getRGB()) {
+                    image.setRGB(x, y, color);
+                }
+            }
+        }
+        return new ImageIcon(image);
     }
 }
