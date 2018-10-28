@@ -83,7 +83,7 @@ public final class GameOptions {
     /**
      * Names of the players.
      */
-    public String[] playerNames = { "BLUE", "RED", "GREEN", "ORANGE", "PURPLE" }; // TODO (HIGH) use getter/setter with notify
+    private String[] playerNames = { "BLUE", "RED", "GREEN", "ORANGE", "PURPLE" };
 
     /**
      * is the height value of the resolution without the taskbar height.
@@ -217,5 +217,24 @@ public final class GameOptions {
             instance = new GameOptions();
         }
         return instance;
+    }
+
+    /**
+     * Getter for the player name.
+     * @param player is the number of the player.
+     * @return the player names.
+     */
+    public String getPlayerName(int player) {
+        return playerNames[player];
+    }
+
+    /**
+     * Setter for the player name.
+     * @param name is the player names to set.
+     * @param player is the number of the player.
+     */
+    public void setPlayeName(String name, int player) {
+        playerNames[player] = name;
+        notifyListeners();
     }
 }

@@ -84,7 +84,7 @@ public class Scoreboard implements Notifiable {
      * @param player is the player whose scoreboard should be updated.
      */
     public void update(Player player) {
-        String playerName = options.playerNames[player.getNumber()] + " ";
+        String playerName = options.getPlayerName(player.getNumber()) + " ";
         String text = "[" + playerName + ": " + player.getScore() + " points, " + player.getFreeMeeples() + " meeples]    ";
         scoreLabels[player.getNumber()].setText(text);
     }
@@ -100,7 +100,8 @@ public class Scoreboard implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < scoreLabels.length; i++) {
-            scoreLabels[i].setForeground(options.getPlayerColor(i));
+            scoreLabels[i].setForeground(options.getPlayerColor(i)); // replace only color and player name:
+            scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + options.getPlayerName(i) + ":"));
         }
     }
 }

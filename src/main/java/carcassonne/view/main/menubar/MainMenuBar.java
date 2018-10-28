@@ -123,8 +123,8 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemNames = new JMenuItem[options.maximalPlayers];
         menuNames = new JMenu("Set Names");
         for (int i = 0; i < itemNames.length; i++) {
-            itemNames[i] = new JMenuItem(options.playerNames[i]);
-            itemNames[i].addMouseListener(new MenuNamesMouseAdapter(i, itemNames[i]));
+            itemNames[i] = new JMenuItem();
+            itemNames[i].addMouseListener(new MenuNamesMouseAdapter(i));
             menuNames.add(itemNames[i]);
         }
     }
@@ -133,7 +133,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemColors = new JMenuItem[options.maximalPlayers];
         menuColors = new JMenu("Set Colors");
         for (int i = 0; i < itemColors.length; i++) {
-            itemColors[i] = new JMenuItem("Color of " + options.playerNames[i]);
+            itemColors[i] = new JMenuItem();
             itemColors[i].addMouseListener(new MenuColorsMouseAdapter(i));
             menuColors.add(itemColors[i]);
         }
@@ -144,7 +144,9 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         for (int i = 0; i < itemColors.length; i++) {
             Color color = options.getPlayerColor(i);
             itemColors[i].setForeground(color);
+            itemColors[i].setText("Color of " + options.getPlayerName(i));
             itemNames[i].setForeground(color);
+            itemNames[i].setText(options.getPlayerName(i));
         }
     }
 
