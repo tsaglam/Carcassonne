@@ -14,6 +14,7 @@ import javax.swing.OverlayLayout;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
+import carcassonne.control.PaintShop;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
@@ -48,6 +49,7 @@ public class MainGUI {
     private JPanel panelBottom;
     private JPanel panelTop;
     private final Scoreboard scoreboard;
+    private final PaintShop paintShop;
 
     /**
      * Constructor of the main GUI. creates the GUI with a scoreboard.
@@ -58,7 +60,8 @@ public class MainGUI {
         this.scoreboard = scoreboard;
         this.controller = controller;
         options = GameOptions.getInstance();
-        imageEmpty = new ImageIcon(options.buildImagePath(TerrainType.OTHER, -1));
+        imageEmpty = new ImageIcon(options.getMeeplePath(TerrainType.OTHER, false));
+        paintShop = new PaintShop();
         buildPanelBack();
         buildPanelFront();
         buildLayeredPane();
@@ -119,14 +122,14 @@ public class MainGUI {
      * @param position is the position on the tile where the meeple gets drawn.
      * @param owner is the player that owns the meeple.
      */
-    public void setMeeple(Tile tile, GridDirection position, Player owner) {
+    public void setMeeple(Tile tile, GridDirection position, Player owner) { // TODO (HIGH) make this notifiable
         if (tile == null || position == null || owner == null) {
             throw new IllegalArgumentException("Arguments can't be null to set a meeple on the GUI");
         }
         GridSpot spot = tile.getGridSpot();
         int xpos = position.addX(spot.getX() * 3 + 1);
         int ypos = position.addY(spot.getY() * 3 + 1);
-        ImageIcon icon = new ImageIcon(options.buildImagePath(tile.getTerrain(position), owner.getNumber()));
+        ImageIcon icon = paintShop.getColoredMeeple(tile.getTerrain(position), owner.getNumber());
         meepleGrid[xpos][ypos].setIcon(icon);
         frame.repaint(); // This is required! Removing this will paint black background.
     }

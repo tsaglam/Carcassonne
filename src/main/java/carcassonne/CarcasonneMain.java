@@ -5,7 +5,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
-import carcassonne.view.secondary.GameMessage;
+import carcassonne.view.GameMessage;
 
 /**
  * Carcassonne main class for starting the game itself.

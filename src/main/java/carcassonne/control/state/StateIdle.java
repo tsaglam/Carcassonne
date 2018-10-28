@@ -2,9 +2,9 @@ package carcassonne.control.state;
 
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
-import carcassonne.view.secondary.GameMessage;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -81,7 +81,7 @@ public class StateIdle extends AbstractControllerState {
     protected void entry() {
         mainGUI.rebuildGrids();
     }
-    
+
     /**
      * @see carcassonne.control.state.AbstractControllerState#exit()
      */

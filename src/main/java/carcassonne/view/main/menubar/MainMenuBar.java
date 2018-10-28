@@ -1,5 +1,7 @@
 package carcassonne.view.main.menubar;
 
+import java.awt.Color;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -9,12 +11,13 @@ import javax.swing.JRadioButtonMenuItem;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
+import carcassonne.view.Notifiable;
 
 /**
  * The menu bar for the main GUI.
  * @author Timur Saglam
  */
-public class MainMenuBar extends JMenuBar {
+public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private static final long serialVersionUID = -599734693130415390L;
     private final MainController controller;
@@ -23,9 +26,12 @@ public class MainMenuBar extends JMenuBar {
     private JMenu menuOptions;
     private JMenu menuPlayers;
     private JMenu menuNames;
+    private JMenu menuColors;
     private JMenuItem itemNewGame;
     private JMenuItem itemAbortGame;
     private final GameOptions options;
+    private JMenuItem[] itemColors;
+    private JMenuItem[] itemNames;
 
     /**
      * Simple constructor creating the menu bar.
@@ -36,6 +42,7 @@ public class MainMenuBar extends JMenuBar {
         super();
         this.controller = controller;
         options = GameOptions.getInstance();
+        options.register(this);
         playerCount = 2;
         buildMenuGame();
         buildMenuOptions();
@@ -89,10 +96,13 @@ public class MainMenuBar extends JMenuBar {
         // build player menu
         buildMenuPlayers();
         buildMenuNames();
+        buildMenuColors();
+        notifyChange(); // set colors
         // build options menu:
         menuOptions = new JMenu("Options");
         menuOptions.add(menuPlayers);
         menuOptions.add(menuNames);
+        menuOptions.add(menuColors);
         add(menuOptions);
     }
 
@@ -110,13 +120,32 @@ public class MainMenuBar extends JMenuBar {
     }
 
     private void buildMenuNames() {
-        JMenuItem[] itemNames = new JMenuItem[options.maximalPlayers];
+        itemNames = new JMenuItem[options.maximalPlayers];
         menuNames = new JMenu("Set Names");
         for (int i = 0; i < itemNames.length; i++) {
             itemNames[i] = new JMenuItem(options.playerNames[i]);
-            itemNames[i].setForeground(options.getPlayerColor(i));
             itemNames[i].addMouseListener(new MenuNamesMouseAdapter(i, itemNames[i]));
             menuNames.add(itemNames[i]);
         }
     }
+
+    private void buildMenuColors() { // TODO (medium) reduce duplication
+        itemColors = new JMenuItem[options.maximalPlayers];
+        menuColors = new JMenu("Set Player Colors");
+        for (int i = 0; i < itemColors.length; i++) {
+            itemColors[i] = new JMenuItem(options.playerNames[i]);
+            itemColors[i].addMouseListener(new MenuColorsMouseAdapter(i));
+            menuColors.add(itemColors[i]);
+        }
+    }
+
+    @Override
+    public void notifyChange() {
+        for (int i = 0; i < itemColors.length; i++) {
+            Color color = options.getPlayerColor(i);
+            itemColors[i].setForeground(color);
+            itemNames[i].setForeground(color);
+        }
+    }
+
 }

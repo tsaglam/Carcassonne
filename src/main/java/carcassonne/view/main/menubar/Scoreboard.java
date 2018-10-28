@@ -9,12 +9,13 @@ import javax.swing.JLabel;
 
 import carcassonne.control.GameOptions;
 import carcassonne.model.Player;
+import carcassonne.view.Notifiable;
 
 /**
  * Is the scoreboard class of the game. Manages a score label for each player.
  * @author Timur Saglam
  */
-public class Scoreboard {
+public class Scoreboard implements Notifiable {
     private final JLabel[] scoreLabels;
     private final JLabel stackSizeLabel;
     private final ArrayList<JLabel> allLabels;
@@ -25,6 +26,7 @@ public class Scoreboard {
      */
     public Scoreboard() {
         options = GameOptions.getInstance();
+        options.register(this);
         scoreLabels = new JLabel[options.maximalPlayers];
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
@@ -93,5 +95,12 @@ public class Scoreboard {
      */
     public void updateStackSize(int stackSize) {
         stackSizeLabel.setText("   [Stack Size: " + stackSize + "]");
+    }
+
+    @Override
+    public void notifyChange() {
+        for (int i = 0; i < scoreLabels.length; i++) {
+            scoreLabels[i].setForeground(options.getPlayerColor(i));
+        }
     }
 }

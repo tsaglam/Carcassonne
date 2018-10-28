@@ -1,4 +1,4 @@
-package carcassonne.view.secondary;
+package carcassonne.view;
 
 import javax.swing.JOptionPane;
 
