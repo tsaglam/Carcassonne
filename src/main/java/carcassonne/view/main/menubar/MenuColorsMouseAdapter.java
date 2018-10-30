@@ -57,7 +57,7 @@ public class MenuColorsMouseAdapter extends MouseAdapter implements ChangeListen
     @Override
     public void mousePressed(MouseEvent e) {
         colorChooser.setColor(options.getPlayerColor(player));
-        JColorChooser.createDialog(null, "TITLE", true, colorChooser, this, null).setVisible(true);
+        JColorChooser.createDialog(null, "Carcassonne", true, colorChooser, this, null).setVisible(true);
     }
 
     // gets called when the color is changed.
