@@ -5,9 +5,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
@@ -19,10 +17,10 @@ import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
-import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
+import carcassonne.view.Notifiable;
 import carcassonne.view.main.menubar.MainMenuBar;
 import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.main.tilelabel.TileLabel;
@@ -31,7 +29,7 @@ import carcassonne.view.main.tilelabel.TileLabel;
  * The main GUI class.
  * @author Timur Saglam
  */
-public class MainGUI {
+public class MainGUI implements Notifiable {
 
     private GridBagConstraints constraints;
     private final MainController controller;
@@ -39,10 +37,9 @@ public class MainGUI {
     private JFrame frame;
     private int gridHeight;
     private int gridWidth;
-    private final ImageIcon imageEmpty;
     private TileLabel[][] labelGrid;
     private JLayeredPane layeredPane;
-    private JLabel[][] meepleGrid;
+    private MeepleLabel[][] meepleGrid;
     private int meepleGridHeight;
     private int meepleGridWidth;
     private final GameOptions options;
@@ -60,12 +57,26 @@ public class MainGUI {
         this.scoreboard = scoreboard;
         this.controller = controller;
         options = GameOptions.getInstance();
-        imageEmpty = new ImageIcon(options.getMeeplePath(TerrainType.OTHER, false));
+        options.register(this);
         paintShop = new PaintShop();
         buildPanelBack();
         buildPanelFront();
         buildLayeredPane();
         buildFrame();
+    }
+
+    
+    /**
+     * Refreshes the meeple labels to get the new colors.
+     */
+    @Override
+    public void notifyChange() {
+        for (int y = 0; y < meepleGridHeight; y++) {
+            for (int x = 0; x < meepleGridWidth; x++) {
+                meepleGrid[x][y].refresh();
+            }
+        }
+        frame.repaint();
     }
 
     /**
@@ -77,7 +88,7 @@ public class MainGUI {
                 if (x < gridWidth && y < gridHeight) {
                     labelGrid[x][y].setIcon(defaultTile.getImage());
                 }
-                meepleGrid[x][y].setIcon(imageEmpty);
+                meepleGrid[x][y].reset();
                 frame.repaint();
             }
         }
@@ -94,7 +105,7 @@ public class MainGUI {
         }
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                meepleGrid[spot.getX() * 3 + x][spot.getY() * 3 + y].setIcon(imageEmpty);
+                meepleGrid[spot.getX() * 3 + x][spot.getY() * 3 + y].reset();
             }
         }
         frame.repaint();
@@ -122,15 +133,14 @@ public class MainGUI {
      * @param position is the position on the tile where the meeple gets drawn.
      * @param owner is the player that owns the meeple.
      */
-    public void setMeeple(Tile tile, GridDirection position, Player owner) { // TODO (HIGH) make this notifiable
+    public void setMeeple(Tile tile, GridDirection position, Player owner) {
         if (tile == null || position == null || owner == null) {
             throw new IllegalArgumentException("Arguments can't be null to set a meeple on the GUI");
         }
         GridSpot spot = tile.getGridSpot();
         int xpos = position.addX(spot.getX() * 3 + 1);
         int ypos = position.addY(spot.getY() * 3 + 1);
-        ImageIcon icon = paintShop.getColoredMeeple(tile.getTerrain(position), owner.getNumber());
-        meepleGrid[xpos][ypos].setIcon(icon);
+        meepleGrid[xpos][ypos].setIcon(tile.getTerrain(position), owner.getNumber());
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 
@@ -160,10 +170,10 @@ public class MainGUI {
         meepleGridHeight = options.gridHeight * 3;
         constraints.weightx = 1;
         constraints.weighty = 1;
-        meepleGrid = new JLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
+        meepleGrid = new MeepleLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
         for (int x = 0; x < meepleGridWidth; x++) {
             for (int y = 0; y < meepleGridHeight; y++) {
-                meepleGrid[x][y] = new JLabel(imageEmpty);
+                meepleGrid[x][y] = new MeepleLabel(paintShop);
                 constraints.gridx = x;
                 constraints.gridy = y;
                 panelTop.add(meepleGrid[x][y], constraints); // add label with constraints
