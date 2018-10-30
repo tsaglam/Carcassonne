@@ -10,12 +10,13 @@ import javax.swing.WindowConstants;
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
 import carcassonne.model.tile.Tile;
+import carcassonne.view.Notifiable;
 
 /**
  * Super class for all other smaller GUI beneath the main GUI.
  * @author Timur Saglam
  */
-public abstract class SecondaryGUI extends JPanel {
+public abstract class SecondaryGUI extends JPanel implements Notifiable {
     private static final long serialVersionUID = 4056347951568551115L;
     protected GridBagConstraints constraints;
     protected MainController controller;
@@ -33,6 +34,7 @@ public abstract class SecondaryGUI extends JPanel {
         super(new GridBagLayout());
         this.controller = controller;
         options = GameOptions.getInstance();
+        options.register(this);
         constraints = new GridBagConstraints();
         currentPlayer = -1;
         buildFrame(title);
@@ -80,6 +82,13 @@ public abstract class SecondaryGUI extends JPanel {
      */
     protected void finishFrame() {
         frame.pack();
+    }
+
+    @Override
+    public void notifyChange() {
+        if (currentPlayer >= 0) { // only if UI is in use
+            setBackground(options.getPlayerColorLight(currentPlayer));
+        }
     }
 
     /**

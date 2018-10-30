@@ -100,7 +100,7 @@ public class Scoreboard implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < scoreLabels.length; i++) {
-            scoreLabels[i].setForeground(options.getPlayerColor(i)); // replace only color and player name:
+            scoreLabels[i].setForeground(options.getPlayerColorText(i)); // replace only color and player name:
             scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + options.getPlayerName(i) + ":"));
         }
     }
