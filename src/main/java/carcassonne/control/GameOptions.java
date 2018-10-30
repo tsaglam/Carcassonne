@@ -12,14 +12,11 @@ import carcassonne.model.tile.TileType;
 import carcassonne.view.Notifiable;
 
 /**
- * Singleton that stores the game options and other information. There is only one option instance at a time. The use of
- * singletons is heavily discussed.
+ * Class that stores the game options and other information.
  * @author Timur Saglam
  */
 public final class GameOptions {
-    private static GameOptions instance; // singleton instance
-    private List<Notifiable> changeListeners;
-
+    private static GameOptions instance;
     /**
      * Font type of the button.
      */
@@ -81,11 +78,6 @@ public final class GameOptions {
     public String operatingSystemName;
 
     /**
-     * Names of the players.
-     */
-    private String[] playerNames = { "BLUE", "RED", "GREEN", "ORANGE", "PURPLE" };
-
-    /**
      * is the height value of the resolution without the taskbar height.
      */
     public int resolutionHeight;
@@ -100,11 +92,15 @@ public final class GameOptions {
      */
     public final int tileSize;
 
+    private List<Notifiable> changeListeners;
+
     private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(216, 124, 0),
             new Color(96, 0, 147) };
 
-    private final Color[] playerColorLight = { new Color(143, 143, 214), new Color(220, 129, 134), new Color(98, 164, 105), new Color(235, 175, 96),
-            new Color(173, 134, 221) };
+    /**
+     * Names of the players.
+     */
+    private String[] playerNames = { "BLUE", "RED", "GREEN", "ORANGE", "PURPLE" };
 
     private int taskBarHeight;
 
@@ -154,8 +150,30 @@ public final class GameOptions {
      * @return the light color of the player.
      */
     public Color getPlayerColorLight(int playerNumber) {
-        check(playerNumber);
-        return playerColorLight[playerNumber];
+        Color color = getPlayerColor(playerNumber);
+        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+        hsb[1] *= 0.5; // reduce saturation
+        hsb[2] = 1 - ((1 - hsb[2]) * 0.5f); // increase brightness
+        return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2])); // convert to rgb color
+    }
+
+    /**
+     * Getter for the text player colors.
+     * @param playerNumber is the number of the player whose color is requested.
+     * @return the text color of the player.
+     */
+    public Color getPlayerColorText(int playerNumber) {
+        Color color = getPlayerColor(playerNumber); // get normal color
+        return new Color(color.getRGB(), false); // remove transparency
+    }
+
+    /**
+     * Getter for the player name.
+     * @param player is the number of the player.
+     * @return the player names.
+     */
+    public String getPlayerName(int player) {
+        return playerNames[player];
     }
 
     /**
@@ -164,6 +182,16 @@ public final class GameOptions {
      */
     public void register(Notifiable notifiable) {
         changeListeners.add(notifiable);
+    }
+
+    /**
+     * Setter for the player name.
+     * @param name is the player names to set.
+     * @param player is the number of the player.
+     */
+    public void setPlayeName(String name, int player) {
+        playerNames[player] = name;
+        notifyListeners();
     }
 
     /**
@@ -178,7 +206,7 @@ public final class GameOptions {
     }
 
     private void check(int playerNumber) {
-        if (playerNumber < 0 || playerNumber >= playerColorLight.length) {
+        if (playerNumber < 0 || playerNumber >= playerColor.length) {
             throw new IllegalArgumentException(playerNumber + " is a illegal player number for a player color.");
         }
     }
@@ -217,24 +245,5 @@ public final class GameOptions {
             instance = new GameOptions();
         }
         return instance;
-    }
-
-    /**
-     * Getter for the player name.
-     * @param player is the number of the player.
-     * @return the player names.
-     */
-    public String getPlayerName(int player) {
-        return playerNames[player];
-    }
-
-    /**
-     * Setter for the player name.
-     * @param name is the player names to set.
-     * @param player is the number of the player.
-     */
-    public void setPlayeName(String name, int player) {
-        playerNames[player] = name;
-        notifyListeners();
     }
 }
