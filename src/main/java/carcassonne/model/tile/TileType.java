@@ -5,6 +5,10 @@ import static carcassonne.model.terrain.TerrainType.FIELDS;
 import static carcassonne.model.terrain.TerrainType.MONASTERY;
 import static carcassonne.model.terrain.TerrainType.OTHER;
 import static carcassonne.model.terrain.TerrainType.ROAD;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
 
 import carcassonne.model.terrain.TerrainType;
 
@@ -59,14 +63,6 @@ public enum TileType {
         this.terrain = terrain;
     }
 
-    /**
-     * Getter for the terrain types on the tiles of this tile type.
-     * @return the terrain types of the tile.
-     */
-    public TerrainType[] getTerrain() {
-        return terrain;
-    }
-
     public boolean contains(TerrainType terrainType) {
         for (TerrainType tileTerrain : terrain) {
             if (tileTerrain.equals(terrainType)) {
@@ -82,6 +78,22 @@ public enum TileType {
      */
     public int getAmount() {
         return amount;
+    }
+
+    /**
+     * Getter for the terrain types on the tiles of this tile type.
+     * @return the terrain types of the tile.
+     */
+    public TerrainType[] getTerrain() {
+        return terrain;
+    }
+
+    /**
+     * Returns a list of all valid tile types.
+     * @return all tile types except {@link TileType#Null}.
+     */
+    public static List<TileType> validTiles() {
+        return stream(values()).filter(it -> it != Null).collect(toList());
     }
 
 }

@@ -1,8 +1,11 @@
 package carcassonne.view.main.menubar;
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -103,6 +106,14 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         menuOptions.add(menuPlayers);
         menuOptions.add(menuNames);
         menuOptions.add(menuColors);
+        JCheckBoxMenuItem itemChaosMode = new JCheckBoxMenuItem("Enable Chaos Mode");
+        itemChaosMode.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                options.setChaosMode(itemChaosMode.isSelected());
+            }
+        });
+        menuOptions.add(itemChaosMode);
         add(menuOptions);
     }
 

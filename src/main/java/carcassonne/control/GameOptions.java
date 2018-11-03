@@ -92,14 +92,13 @@ public final class GameOptions {
      */
     public final int tileSize;
 
-    private List<Notifiable> changeListeners;
+    private final List<Notifiable> changeListeners;
+
+    private boolean chaosMode;
 
     private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(216, 124, 0),
             new Color(96, 0, 147) };
 
-    /**
-     * Names of the players.
-     */
     private String[] playerNames = { "BLUE", "RED", "GREEN", "ORANGE", "PURPLE" };
 
     private int taskBarHeight;
@@ -177,11 +176,27 @@ public final class GameOptions {
     }
 
     /**
+     * Checks whether chaos mode is enabled.
+     * @return true if it is enabled.
+     */
+    public boolean isChaosMode() {
+        return chaosMode;
+    }
+
+    /**
      * Registers a UI element that wants to listen to changes.
      * @param notifiable is the UI element.
      */
     public void register(Notifiable notifiable) {
         changeListeners.add(notifiable);
+    }
+
+    /**
+     * Sets the chaos mode setting.
+     * @param chaosMode specifies whether chaos mode is active or not.
+     */
+    public void setChaosMode(boolean chaosMode) {
+        this.chaosMode = chaosMode;
     }
 
     /**
