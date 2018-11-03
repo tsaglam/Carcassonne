@@ -35,9 +35,8 @@ public class Scoreboard implements Notifiable {
         stackSizeLabel = new JLabel();
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
         allLabels.add(stackSizeLabel);
-        Font font = options.buttonFont;
         for (JLabel label : allLabels) {
-            label.setFont(font);
+            label.setFont(new Font("Helvetica", Font.BOLD, 12));
         }
     }
 
