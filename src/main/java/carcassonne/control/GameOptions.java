@@ -2,7 +2,6 @@ package carcassonne.control;
 
 import java.awt.Color;
 import java.awt.DisplayMode;
-import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,10 +16,6 @@ import carcassonne.view.Notifiable;
  */
 public final class GameOptions {
     private static GameOptions instance;
-    /**
-     * Font type of the button.
-     */
-    public final Font buttonFont;
 
     /**
      * Background color of the main GUI.
@@ -36,16 +31,6 @@ public final class GameOptions {
      * The tile type of the foundation.
      */
     public TileType foundationType;
-
-    /**
-     * The x coordinates of the grid center.
-     */
-    public int gridCenterX;
-
-    /**
-     * The y coordinates of the grid center.
-     */
-    public int gridCenterY;
 
     /**
      * The height of the grid in tiles.
@@ -109,7 +94,6 @@ public final class GameOptions {
     private GameOptions() {
         initSystemProperties();
         changeListeners = new LinkedList<>();
-        buttonFont = new Font("Helvetica", Font.BOLD, 12);
         colorGUImain = new Color(190, 190, 190); // grey
         colorGUIsmall = new Color(217, 217, 217); // light grey
         maximalPlayers = 5;
@@ -118,8 +102,6 @@ public final class GameOptions {
         gridWidth = resolutionWidth / tileSize;
         gridResolutionHeight = gridHeight * tileSize;
         gridResolutionWidth = gridWidth * tileSize;
-        gridCenterX = Math.round((gridWidth - 1) / 2);
-        gridCenterY = Math.round((gridHeight - 1) / 2);
         foundationType = TileType.CastleWallRoad;
     }
 
