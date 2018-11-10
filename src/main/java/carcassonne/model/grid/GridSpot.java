@@ -17,7 +17,7 @@ import carcassonne.model.tile.Tile;
 public class GridSpot {
 
     private final Grid grid;
-    private final Map<GridDirection, GridPattern> tagMap; // maps tagged location to the patterns.
+    private final Map<GridDirection, List<GridPattern>> tagMap; // maps tagged location to the patterns.
     private Tile tile;
     private final int x;
     private final int y;
@@ -33,6 +33,9 @@ public class GridSpot {
         this.x = x;
         this.y = y;
         tagMap = new HashMap<>();
+        for (GridDirection direction : GridDirection.values()) {
+            tagMap.put(direction, new LinkedList<>());
+        }
     }
 
     /**
@@ -106,7 +109,7 @@ public class GridSpot {
      */
     public Boolean hasNoTagConnectedTo(GridDirection tilePosition) {
         for (GridDirection otherPosition : GridDirection.values()) {
-            if (tile.hasConnection(tilePosition, otherPosition) && tagMap.containsKey(otherPosition)) {
+            if (tile.hasConnection(tilePosition, otherPosition) && containsKey(otherPosition)) {
                 return false;
             }
         }
@@ -122,7 +125,7 @@ public class GridSpot {
      */
     public Boolean hasTagConnectedTo(GridDirection tilePosition, GridPattern taggedBy) {
         for (GridDirection otherPosition : GridDirection.values()) {
-            if (tile.hasConnection(tilePosition, otherPosition) && tagMap.containsKey(otherPosition) && tagMap.get(otherPosition) == taggedBy) {
+            if (tile.hasConnection(tilePosition, otherPosition) && tagMap.get(otherPosition).contains(taggedBy)) {
                 return true;
             }
         }
@@ -151,14 +154,17 @@ public class GridSpot {
      * @return true if it was not tagged.
      */
     public Boolean isUntagged(GridDirection tilePosition) {
-        return !tagMap.containsKey(tilePosition);
+        return !containsKey(tilePosition);
     }
 
     /**
      * Removes all the tags from the tile.
      */
     public void removeTags() {
-        tagMap.clear();
+        for (GridDirection key : tagMap.keySet()) {
+            tagMap.get(key).clear();
+        }
+
     }
 
     /**
@@ -166,14 +172,8 @@ public class GridSpot {
      * @param pattern is the specific grid pattern.
      */
     public void removeTagsFrom(GridPattern pattern) {
-        List<GridDirection> removalList = new LinkedList<>();
         for (GridDirection key : tagMap.keySet()) {
-            if (tagMap.get(key).equals(pattern)) {
-                removalList.add(key);
-            }
-        }
-        for (GridDirection key : removalList) {
-            tagMap.remove(key);
+            tagMap.get(key).remove(pattern);
         }
     }
 
@@ -197,7 +197,7 @@ public class GridSpot {
      * @param taggedBy is the {@link GridPattern} that tagged the spot.
      */
     public void setTag(GridDirection direction, GridPattern taggedBy) {
-        tagMap.put(direction, taggedBy);
+        tagMap.get(direction).add(taggedBy);
     }
 
     @Override
@@ -217,6 +217,10 @@ public class GridSpot {
         if (isFree()) {
             throw new IllegalStateException("GridSpot is free, can't call " + methodName);
         }
+    }
+
+    private boolean containsKey(GridDirection direction) {
+        return !tagMap.get(direction).isEmpty();
     }
 
     private boolean isPlaceable(Tile tile, boolean freePlacement) {

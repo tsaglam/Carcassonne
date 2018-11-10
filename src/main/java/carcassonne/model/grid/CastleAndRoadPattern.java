@@ -24,9 +24,7 @@ public class CastleAndRoadPattern extends GridPattern { // TODO (HIGH) use subcl
 
     @Override
     public void forceDisburse() {
-        if (!complete) { // if castle is not complete
-            scoreMultiplier = 1; // reduce score multiplier
-        }
+        scoreMultiplier = 1; // reduce score multiplier
         super.forceDisburse();
     }
 
