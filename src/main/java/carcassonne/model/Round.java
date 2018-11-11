@@ -30,11 +30,7 @@ public class Round {
     public Round(int playerCount, Grid grid) {
         this.grid = grid;
         this.playerCount = playerCount;
-        if (GameOptions.getInstance().isChaosMode()) {
-            tileStack = new TileStack(playerCount, false);
-        } else {
-            tileStack = new TileStack(playerCount);
-        }
+        tileStack = new TileStack(playerCount, !GameOptions.getInstance().isChaosMode());
         createPlayers();
         currentTile = grid.getFoundation().getTile();
     }

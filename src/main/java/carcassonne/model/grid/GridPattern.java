@@ -18,13 +18,13 @@ import carcassonne.model.terrain.TerrainType;
  */
 public abstract class GridPattern {
 
-    protected final TerrainType patternType;
-    protected List<GridSpot> spotList;
+    private boolean disbursed;
+    protected boolean complete;
     protected Map<Player, Integer> involvedPlayers;
     protected List<Meeple> meepleList;
-    protected boolean complete;
-    private boolean disbursed;
+    protected final TerrainType patternType;
     protected int scoreMultiplier;
+    protected List<GridSpot> spotList;
 
     /**
      * Basic constructor taking only a tile type.
@@ -55,17 +55,8 @@ public abstract class GridPattern {
      */
     public void disburse() {
         if (!disbursed && complete && !involvedPlayers.isEmpty()) {
-            List<Player> removalList = new LinkedList<>();
-            int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
-            for (Player player : involvedPlayers.keySet()) { // for all involved players
-                if (involvedPlayers.get(player) != maximum) { // if has not enough meeples
-                    removalList.add(player); // add to removal list (remove later)
-                }
-            }
-            for (Player player : removalList) {
-                involvedPlayers.remove(player); // remove players who don't get points
-            }
-            for (Player player : involvedPlayers.keySet()) { // other players split the pot
+            determineDominantPlayers();
+            for (Player player : involvedPlayers.keySet()) { // dominant players split the pot
                 player.addScore((int) Math.ceil(getSize() * scoreMultiplier / involvedPlayers.size()), patternType);
             }
             for (Meeple meeple : meepleList) {
@@ -129,20 +120,20 @@ public abstract class GridPattern {
     }
 
     /**
-     * Removes all tags of all tiles of the pattern. Needs to be called after ALL patterns of a tile have been created.
-     */
-    public void removeTileTags() {
-        for (GridSpot spot : spotList) {
-            spot.removeTags();
-        }
-    }
-
-    /**
      * Removes all OWN tags of all tiles of the pattern.
      */
     public void removeOwnTags() {
         for (GridSpot spot : spotList) {
             spot.removeTagsFrom(this);
+        }
+    }
+
+    /**
+     * Removes all tags of all tiles of the pattern. Needs to be called after ALL patterns of a tile have been created.
+     */
+    public void removeTileTags() {
+        for (GridSpot spot : spotList) {
+            spot.removeTags();
         }
     }
 
@@ -162,6 +153,22 @@ public abstract class GridPattern {
                 involvedPlayers.put(player, 1);
             }
             meepleList.add(meeple);
+        }
+    }
+
+    /**
+     * Removes all players from the list of involved players which have not the maximum amount of meeples on this pattern.
+     */
+    private void determineDominantPlayers() {
+        List<Player> removalList = new LinkedList<>();
+        int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
+        for (Player player : involvedPlayers.keySet()) { // for all involved players
+            if (involvedPlayers.get(player) != maximum) { // if has not enough meeples
+                removalList.add(player); // add to removal list (remove later)
+            }
+        }
+        for (Player player : removalList) {
+            involvedPlayers.remove(player); // remove players who don't get points
         }
     }
 
