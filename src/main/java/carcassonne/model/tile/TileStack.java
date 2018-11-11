@@ -67,7 +67,7 @@ public class TileStack {
         for (TileType tileType : TileType.validTiles()) {
             int amount = getAmount(tileType); // call once per tile type
             for (int i = 0; i < amount; i++) {
-                tiles.add(TileFactory.create(tileType));
+                tiles.add(new Tile(tileType));
             }
         }
         Collections.shuffle(tiles);

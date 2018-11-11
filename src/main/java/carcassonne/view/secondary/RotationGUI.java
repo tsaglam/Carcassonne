@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import carcassonne.control.MainController;
-import carcassonne.model.tile.TileFactory;
+import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 
 /**
@@ -58,7 +58,7 @@ public class RotationGUI extends SecondaryGUI {
 
     // build the GUI content
     private void buildContent() {
-        tileLabel = new JLabel(TileFactory.create(TileType.Null).getImage());
+        tileLabel = new JLabel(new Tile(TileType.Null).getImage());
         // create buttons:
         buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
         buttonRotateLeft = new JButton(new ImageIcon("src/main/ressources/icons/left.png"));
