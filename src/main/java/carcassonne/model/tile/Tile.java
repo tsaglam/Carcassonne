@@ -1,6 +1,5 @@
 package carcassonne.model.tile;
 
-import java.io.File;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -17,6 +16,8 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class Tile {
+    private static final String FOLDER = "src/main/ressources/tiles/";
+    private static final String FILE_TYPE = ".jpg"; // TODO (HIGH) move to options.
     private GridSpot gridSpot;
     private ImageIcon[] images; // tile image
     private Meeple meeple;
@@ -31,16 +32,14 @@ public class Tile {
      * @param tilePath is the path to the tiles.
      * @param fileType is the file type of the tiles.
      */
-    public Tile(TileType type, String tilePath, String fileType) {
-        if (type == null || fileType == null || tilePath == null) {
-            throw new IllegalArgumentException("Parameters can't be null");
-        } else if (!new File(tilePath + rotation + fileType).exists()) {
-            throw new IllegalArgumentException("Image path is not valid: " + tilePath);
+    public Tile(TileType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Tile type cannot be null");
         }
         this.type = type;
         terrain = new Terrain(type);
         meeple = null;
-        loadImages(tilePath, fileType);
+        loadImages(FOLDER + type.name(), FILE_TYPE);
     }
 
     /**

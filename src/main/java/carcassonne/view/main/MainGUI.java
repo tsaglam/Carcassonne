@@ -18,7 +18,6 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 import carcassonne.view.Notifiable;
 import carcassonne.view.main.menubar.MainMenuBar;
@@ -201,7 +200,7 @@ public class MainGUI implements Notifiable {
      * Creates the grid of labels.
      */
     private void buildTileGrid() {
-        defaultTile = TileFactory.create(TileType.Null);
+        defaultTile = new Tile(TileType.Null);
         constraints = new GridBagConstraints();
         gridWidth = options.gridWidth;
         gridHeight = options.gridHeight;

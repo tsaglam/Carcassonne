@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileFactory;
 import carcassonne.model.tile.TileType;
 
 /**
@@ -299,7 +298,7 @@ public class Grid {
         int centerX = Math.round((width - 1) / 2);
         int centerY = Math.round((height - 1) / 2);
         foundation = spots[centerX][centerY];
-        foundation.forcePlacement(TileFactory.create(tileType));
+        foundation.forcePlacement(new Tile(tileType));
     }
 
 }
