@@ -109,8 +109,8 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         JCheckBoxMenuItem itemChaosMode = new JCheckBoxMenuItem("Enable Chaos Mode");
         itemChaosMode.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                options.setChaosMode(itemChaosMode.isSelected());
+            public void mousePressed(MouseEvent e) {
+                options.setChaosMode(!itemChaosMode.isSelected());
             }
         });
         menuOptions.add(itemChaosMode);
