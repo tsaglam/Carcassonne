@@ -78,17 +78,38 @@ public class TileStack {
         if (useFixedAmounts) {
             amount = Math.round(tileType.getAmount());
         } else {
-            amount = getRandomAmount(tileType);
+            amount = getRandomAmount(tileType, 5);
         }
         return (int) (amount * multiplicator); // scale stack to player size
     }
 
-    private double getRandomAmount(TileType tileType) {
-        if (randomAmounts == null) { // if random amounts where not generated
-            randomAmounts = new Stack<>(); // get all standard amounts in a stack
-            randomAmounts.addAll(TileType.validTiles().stream().map(it -> it.getAmount()).collect(toList()));
-            Collections.shuffle(randomAmounts);
+    // assigns a somewhat random amount of tiles
+    private double getRandomAmount(TileType tileType, int shuffles) {
+        ensureInitialization();
+        int amount = randomAmounts.pop();
+        if(amount == tileType.getAmount()) { // if amount is the normal one
+          randomAmounts.push(amount); // put amount back
+          return getPseudoRandomAmount(tileType, shuffles - 1); // get pseudo random amount
         }
-        return randomAmounts.pop(); // return random amount
+        return amount; // return random amount
+    }
+
+    // re-shuffles the stack and tries again. Use random number between 1 and 8 after a certain amount of tries.
+    private double getPseudoRandomAmount(TileType tileType, int shuffles) {
+      if (shuffles > 0) {
+        Collections.shuffle(randomAmounts);
+        return getRandomAmount(tileType, shuffles - 1);
+      } else {
+        return (int) (1 + Math.random() * 7);
+      }
+    }
+
+    // makes sure the random amounts are initialized.
+    private void ensureInitialization() {
+      if (randomAmounts == null) { // if random amounts where not generated
+          randomAmounts = new Stack<>(); // get all standard amounts in a stack
+          randomAmounts.addAll(TileType.validTiles().stream().map(it -> it.getAmount()).collect(toList()));
+          Collections.shuffle(randomAmounts);
+      }
     }
 }
