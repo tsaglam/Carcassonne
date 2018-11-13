@@ -41,10 +41,8 @@ public class MenuColorsMouseAdapter extends MouseAdapter implements ChangeListen
         options = GameOptions.getInstance();
         colorChooser = new JColorChooser();
         colorChooser.getSelectionModel().addChangeListener(this);
-        colorChooser.setBorder(BorderFactory.createTitledBorder("Choose Meeple Color"));
         paintShop = new PaintShop();
         createPreview();
-
     }
 
     // gets called when the ok button is pressed
@@ -57,6 +55,7 @@ public class MenuColorsMouseAdapter extends MouseAdapter implements ChangeListen
     @Override
     public void mousePressed(MouseEvent e) {
         colorChooser.setColor(options.getPlayerColor(player));
+        colorChooser.setBorder(BorderFactory.createTitledBorder("Choose Meeple Color for player " + options.getPlayerName(player)));
         JColorChooser.createDialog(null, "Carcassonne", true, colorChooser, this, null).setVisible(true);
     }
 
