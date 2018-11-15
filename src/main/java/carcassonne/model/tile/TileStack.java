@@ -3,6 +3,8 @@ package carcassonne.model.tile;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -11,6 +13,7 @@ import java.util.Stack;
  */
 public class TileStack {
     private final Stack<Tile> tiles;
+    private final Queue<Tile> returnedTiles;
     private Stack<Integer> randomAmounts;
     private final double multiplicator;
     private final boolean useFixedAmounts;
@@ -32,8 +35,8 @@ public class TileStack {
         this.useFixedAmounts = useFixedAmounts;
         multiplicator = 0.4 + players * 0.3;
         tiles = new Stack<>();
+        returnedTiles = new LinkedList<>();
         fillStack();
-
     }
 
     /**
@@ -42,9 +45,26 @@ public class TileStack {
      */
     public Tile drawTile() {
         if (tiles.isEmpty()) {
-            return null;
+            if (returnedTiles.isEmpty()) {
+                return null;
+            } else {
+                return returnedTiles.poll();
+            }
         }
         return tiles.pop();
+    }
+
+    /**
+     * Returns a tile that is not placed under the stack.
+     * @param is the tile to put back under the stack.
+     */
+    public void putBack(Tile tile) {
+        if (tile.isPlaced()) {
+            throw new IllegalArgumentException("Cannot return a placed tile!");
+        }
+        if (!tiles.isEmpty()) {
+            returnedTiles.add(tile); // tiles can only be returned once!
+        }
     }
 
     /**
@@ -52,7 +72,7 @@ public class TileStack {
      * @return the amount of tiled on the stack.
      */
     public int getSize() {
-        return tiles.size();
+        return tiles.size() + returnedTiles.size();
     }
 
     /**
@@ -60,7 +80,7 @@ public class TileStack {
      * @return true if empty.
      */
     public boolean isEmpty() {
-        return tiles.isEmpty();
+        return tiles.isEmpty() && returnedTiles.isEmpty();
     }
 
     private void fillStack() {
@@ -88,28 +108,28 @@ public class TileStack {
         ensureInitialization();
         int amount = randomAmounts.pop();
         if(amount == tileType.getAmount()) { // if amount is the normal one
-          randomAmounts.push(amount); // put amount back
-          return getPseudoRandomAmount(tileType, shuffles - 1); // get pseudo random amount
+            randomAmounts.push(amount); // put amount back
+            return getPseudoRandomAmount(tileType, shuffles - 1); // get pseudo random amount
         }
         return amount; // return random amount
     }
 
     // re-shuffles the stack and tries again. Use random number between 1 and 8 after a certain amount of tries.
     private double getPseudoRandomAmount(TileType tileType, int shuffles) {
-      if (shuffles > 0) {
-        Collections.shuffle(randomAmounts);
-        return getRandomAmount(tileType, shuffles - 1);
-      } else {
-        return (int) (1 + Math.random() * 7);
-      }
+        if (shuffles > 0) {
+            Collections.shuffle(randomAmounts);
+            return getRandomAmount(tileType, shuffles - 1);
+        } else {
+            return (int) (1 + Math.random() * 7);
+        }
     }
 
     // makes sure the random amounts are initialized.
     private void ensureInitialization() {
-      if (randomAmounts == null) { // if random amounts where not generated
-          randomAmounts = new Stack<>(); // get all standard amounts in a stack
-          randomAmounts.addAll(TileType.validTiles().stream().map(it -> it.getAmount()).collect(toList()));
-          Collections.shuffle(randomAmounts);
-      }
+        if (randomAmounts == null) { // if random amounts where not generated
+            randomAmounts = new Stack<>(); // get all standard amounts in a stack
+            randomAmounts.addAll(TileType.validTiles().stream().map(it -> it.getAmount()).collect(toList()));
+            Collections.shuffle(randomAmounts);
+        }
     }
 }
