@@ -54,12 +54,10 @@ public class Tile {
 
     /**
      * Getter for spot where the tile is placed
-     * @return the grid spot.
+     * @return the grid spot, or null if it not placed yet.
+     * @see isPlaced
      */
     public GridSpot getGridSpot() {
-        if (gridSpot == null) {
-            throw new IllegalStateException("The position of the tile has not been set yet");
-        }
         return gridSpot;
     }
 
@@ -77,15 +75,6 @@ public class Tile {
      */
     public Meeple getMeeple() {
         return meeple;
-    }
-
-    /**
-     * Checks whether a meeple can be potentially placed on a specific position by its terrain.
-     * @param direction is the specific position on the tile.
-     * @return if it can be potentially placed. Does not check whether enemy players sit on the pattern.
-     */
-    public boolean hasMeepleSpot(GridDirection direction) {
-        return terrain.getMeepleSpots().contains(direction);
     }
 
     /**
@@ -136,6 +125,15 @@ public class Tile {
     }
 
     /**
+     * Checks whether a meeple can be potentially placed on a specific position by its terrain.
+     * @param direction is the specific position on the tile.
+     * @return if it can be potentially placed. Does not check whether enemy players sit on the pattern.
+     */
+    public boolean hasMeepleSpot(GridDirection direction) {
+        return terrain.getMeepleSpots().contains(direction);
+    }
+
+    /**
      * Checks of tile is a monastery tile, which means it has monastery terrain in the middle of the tile.
      * @return true if is a monastery.
      */
@@ -144,12 +142,20 @@ public class Tile {
     }
 
     /**
+     * Checks if the tile is already placed.
+     * @return true if it is placed.
+     */
+    public boolean isPlaced() {
+        return gridSpot != null;
+    }
+
+    /**
      * Places a meeple on the tile, if the tile has not already one placed.
      * @param player is the player whose meeple is going to be set.
      * @param position is the position of the meeple on the tile.
      */
     public void placeMeeple(Player player, GridDirection position) {
-        if (this.meeple == null) {
+        if (meeple == null) {
             meeple = player.getMeeple();
             meeple.setLocation(this);
             meeple.setPosition(position);
