@@ -77,8 +77,13 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     public void skip() {
-        round.nextTurn();
-        entry();
+        if (round.isOver()) {
+            changeState(StateGameOver.class);
+        } else {
+            round.skipCurrentTile();
+            round.nextTurn();
+            entry();
+        }
     }
 
     /**
@@ -86,12 +91,8 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     protected void entry() {
-        if (round.isOver()) {
-            changeState(StateGameOver.class);
-        } else {
-            rotationGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
-            updateStackSize();
-        }
+        rotationGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
+        updateStackSize();
     }
 
     /**
