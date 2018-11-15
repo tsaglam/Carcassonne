@@ -30,7 +30,7 @@ public class Round {
     public Round(int playerCount, Grid grid) {
         this.grid = grid;
         this.playerCount = playerCount;
-        tileStack = new TileStack(playerCount, !GameOptions.getInstance().isChaosMode());
+        tileStack = new TileStack(playerCount, !GameOptions.getInstance().isChaosMode()); // TODO (HIGH) remove from round?
         createPlayers();
         currentTile = grid.getFoundation().getTile();
     }
@@ -49,6 +49,13 @@ public class Round {
      */
     public Tile getCurrentTile() {
         return currentTile;
+    }
+
+    /**
+     * Returns the current tile to the stack.
+     */
+    public void skipCurrentTile() {
+        tileStack.putBack(currentTile);
     }
 
     /**
