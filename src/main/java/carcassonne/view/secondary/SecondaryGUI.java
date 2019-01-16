@@ -3,7 +3,7 @@ package carcassonne.view.secondary;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -11,6 +11,7 @@ import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.Notifiable;
+import carcassonne.view.main.MainGUI;
 
 /**
  * Super class for all other smaller GUI beneath the main GUI.
@@ -21,30 +22,31 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
     protected GridBagConstraints constraints;
     protected MainController controller;
     protected int currentPlayer;
-    protected JFrame frame;
+    protected JDialog dialog;
     protected GameOptions options;
     protected Tile tile;
 
     /**
      * Constructor for the class. Sets the controller of the GUI and the window title.
      * @param controller sets the controller.
+     * @param ui is the main GUI.
      * @param title sets the window title.
      */
-    public SecondaryGUI(MainController controller, String title) {
+    public SecondaryGUI(MainController controller, MainGUI ui, String title) {
         super(new GridBagLayout());
         this.controller = controller;
         options = GameOptions.getInstance();
         options.register(this);
         constraints = new GridBagConstraints();
         currentPlayer = -1;
-        buildFrame(title);
+        buildFrame(title, ui);
     }
 
     /**
      * Hides the GUI.
      */
     public void disableFrame() {
-        frame.setVisible(false);
+        dialog.setVisible(false);
     }
 
     /**
@@ -61,27 +63,27 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
         this.currentPlayer = currentPlayer;
         setBackground(options.getPlayerColorLight(currentPlayer));
         update();
-        frame.setVisible(true);
-        frame.toFront(); // sets the focus on the secondary GUI, removes need for double clicks
+        dialog.setVisible(true);
+        dialog.toFront(); // sets the focus on the secondary GUI, removes need for double clicks
     }
 
     /*
      * Builds the frame and sets its properties.
      */
-    private void buildFrame(String title) {
-        frame = new JFrame(title);
-        frame.getContentPane().add(this);
-        frame.setResizable(false);
-        frame.setAlwaysOnTop(true);
-        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        frame.setLocation(options.resolutionWidth / 20, options.resolutionHeight / 5);
+    private void buildFrame(String title, MainGUI ui) {
+        dialog = new JDialog(ui.getFrame(), title);
+        dialog.getContentPane().add(this);
+        dialog.setResizable(false);
+        dialog.setAlwaysOnTop(true);
+        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        dialog.setLocation(options.resolutionWidth / 20, options.resolutionHeight / 5);
     }
 
     /**
      * Should be called at the end of a constructor of a subclass.
      */
     protected void finishFrame() {
-        frame.pack();
+        dialog.pack();
     }
 
     @Override
