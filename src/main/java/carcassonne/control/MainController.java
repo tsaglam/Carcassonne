@@ -39,8 +39,8 @@ public class MainController {
     public MainController() {
         scoreboard = new Scoreboard();
         mainGUI = new MainGUI(scoreboard, this);
-        rotationGUI = new RotationGUI(this);
-        placementGUI = new PlacementGUI(this);
+        rotationGUI = new RotationGUI(this, mainGUI);
+        placementGUI = new PlacementGUI(this, mainGUI);
         stateMap = new HashMap<>();
         currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, scoreboard);
         registerState(currentState);

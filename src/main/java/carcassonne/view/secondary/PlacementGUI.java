@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.placementbutton.PlacementButton;
 
 /**
@@ -26,9 +27,10 @@ public class PlacementGUI extends SecondaryGUI {
     /**
      * Simple constructor which uses the constructor of the <code>SmallGUI</code>.
      * @param controller is the game controller.
+     * @param ui is the main GUI.
      */
-    public PlacementGUI(MainController controller) {
-        super(controller, "");
+    public PlacementGUI(MainController controller, MainGUI ui) {
+        super(controller, ui, "Place Meeple on Tile:");
         constraints.fill = GridBagConstraints.BOTH;
         buildButtonSkip();
         buildButtonGrid();

@@ -64,7 +64,7 @@ public class MainGUI implements Notifiable {
         buildFrame();
     }
 
-    
+
     /**
      * Refreshes the meeple labels to get the new colors.
      */
@@ -109,6 +109,15 @@ public class MainGUI implements Notifiable {
         }
         frame.repaint();
     }
+
+    /**
+     * Grants access to the JFrame of the main GUI.
+     * @return the {@link Jframe}.
+     */
+    public JFrame getFrame() {
+        return frame;
+    }
+
 
     /**
      * Draws the tile on a specific position on the GUI.
