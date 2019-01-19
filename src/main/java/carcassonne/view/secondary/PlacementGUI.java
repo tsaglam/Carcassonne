@@ -30,7 +30,7 @@ public class PlacementGUI extends SecondaryGUI {
      * @param ui is the main GUI.
      */
     public PlacementGUI(MainController controller, MainGUI ui) {
-        super(controller, ui, "Place Meeple on Tile:");
+        super(controller, ui);
         constraints.fill = GridBagConstraints.BOTH;
         buildButtonSkip();
         buildButtonGrid();

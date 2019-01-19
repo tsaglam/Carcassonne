@@ -30,7 +30,7 @@ public class RotationGUI extends SecondaryGUI {
      * @param ui is the main GUI.
      */
     public RotationGUI(MainController controller, MainGUI ui) {
-        super(controller, ui, "Rotate & Place Tile:");
+        super(controller, ui);
         buildContent();
         finishFrame();
     }
