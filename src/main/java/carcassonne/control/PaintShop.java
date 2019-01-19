@@ -68,7 +68,7 @@ public class PaintShop {
 
     // Colors a meeple with RGB color.
     private ImageIcon paintMeeple(TerrainType meepleType, int color) {
-        BufferedImage image =deepCopy(imageMap.get(meepleType));
+        BufferedImage image = deepCopy(imageMap.get(meepleType));
         BufferedImage template = templateMap.get(meepleType);
         for (int x = 0; x < template.getWidth(); x++) {
             for (int y = 0; y < template.getHeight(); y++) {
@@ -82,9 +82,9 @@ public class PaintShop {
 
     // copies a image to avoid side effects.
     private BufferedImage deepCopy(BufferedImage image) {
-      ColorModel model = image.getColorModel();
-      boolean isAlphaPremultiplied = model.isAlphaPremultiplied();
-      WritableRaster raster = image.copyData(null);
-      return new BufferedImage(model, raster, isAlphaPremultiplied, null);
-     }
+        ColorModel model = image.getColorModel();
+        boolean isAlphaPremultiplied = model.isAlphaPremultiplied();
+        WritableRaster raster = image.copyData(null);
+        return new BufferedImage(model, raster, isAlphaPremultiplied, null);
+    }
 }

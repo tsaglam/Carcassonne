@@ -107,7 +107,7 @@ public class TileStack {
     private double getRandomAmount(TileType tileType, int shuffles) {
         ensureInitialization();
         int amount = randomAmounts.pop();
-        if(amount == tileType.getAmount()) { // if amount is the normal one
+        if (amount == tileType.getAmount()) { // if amount is the normal one
             randomAmounts.push(amount); // put amount back
             return getPseudoRandomAmount(tileType, shuffles - 1); // get pseudo random amount
         }
