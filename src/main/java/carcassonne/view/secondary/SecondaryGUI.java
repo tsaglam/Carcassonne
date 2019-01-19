@@ -32,14 +32,14 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
      * @param ui is the main GUI.
      * @param title sets the window title.
      */
-    public SecondaryGUI(MainController controller, MainGUI ui, String title) {
+    public SecondaryGUI(MainController controller, MainGUI ui) {
         super(new GridBagLayout());
         this.controller = controller;
         options = GameOptions.getInstance();
         options.register(this);
         constraints = new GridBagConstraints();
         currentPlayer = -1;
-        buildFrame(title, ui);
+        buildFrame(ui);
     }
 
     /**
@@ -70,8 +70,8 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
     /*
      * Builds the frame and sets its properties.
      */
-    private void buildFrame(String title, MainGUI ui) {
-        dialog = new JDialog(ui.getFrame(), title);
+    private void buildFrame(MainGUI ui) {
+        dialog = new JDialog(ui.getFrame());
         dialog.getContentPane().add(this);
         dialog.setResizable(false);
         dialog.setAlwaysOnTop(true);
