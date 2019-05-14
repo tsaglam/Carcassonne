@@ -108,6 +108,13 @@ public enum GridDirection {
         return MIDDLE; // middle is the opposite of itself.
     }
 
+    /**
+     * Returns a lower case version of the grid direction with spaces instead of underscores.
+     */
+    public String toReadableString() {
+        return toString().toLowerCase().replace('_', ' ');
+    }
+
     private int bigOpposite(int ordinal) {
         return 4 + smallOpposite(ordinal - 4);
     }
