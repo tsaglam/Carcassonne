@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -17,6 +18,7 @@ import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.view.Notifiable;
@@ -31,20 +33,35 @@ import carcassonne.view.main.tilelabel.TileLabel;
 public class MainGUI implements Notifiable {
 
     private GridBagConstraints constraints;
+
     private final MainController controller;
+
     private Tile defaultTile;
+
     private JFrame frame;
+
     private int gridHeight;
+
     private int gridWidth;
+
     private TileLabel[][] labelGrid;
+
     private JLayeredPane layeredPane;
+
     private MeepleLabel[][] meepleGrid;
+
     private int meepleGridHeight;
+
     private int meepleGridWidth;
+
     private final GameOptions options;
+
     private JPanel panelBottom;
+
     private JPanel panelTop;
+
     private final Scoreboard scoreboard;
+
     private final PaintShop paintShop;
 
     /**
@@ -147,6 +164,41 @@ public class MainGUI implements Notifiable {
         int xpos = position.addX(spot.getX() * 3 + 1);
         int ypos = position.addY(spot.getY() * 3 + 1);
         meepleGrid[xpos][ypos].setIcon(tile.getTerrain(position), owner.getNumber());
+        frame.repaint(); // This is required! Removing this will paint black background.
+    }
+
+    public void resetMeepleHighlight(Tile tile) {
+        if (tile == null) {
+            throw new IllegalArgumentException("Tile cannot be null to set a meeple on the GUI");
+        }
+        int xBase = tile.getGridSpot().getX() * 3;
+        int yBase = tile.getGridSpot().getY() * 3;
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                meepleGrid[xBase + x][yBase + y].reset();
+            }
+        }
+        frame.repaint(); // This is required! Removing this will paint black background.
+    }
+
+    public void setMeepleHighlight(Tile tile) {
+        if (tile == null) {
+            throw new IllegalArgumentException("Tile cannot be null to set a meeple on the GUI");
+        }
+        int xBase = tile.getGridSpot().getX() * 3;
+        int yBase = tile.getGridSpot().getY() * 3;
+        GridDirection[][] directions = GridDirection.values2D();
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                if (tile.hasMeepleSpot(directions[x][y]) && controller.requestPlacementStatus(directions[x][y])) {
+                    meepleGrid[xBase + x][yBase + y]
+                            .setIcon(new ImageIcon(options.getMeeplePath(tile.getTerrain(directions[x][y]), false)));
+                } else {
+                    meepleGrid[xBase + x][yBase + y]
+                            .setIcon(new ImageIcon(options.getMeeplePath(TerrainType.OTHER, false)));
+                }
+            }
+        }
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 
