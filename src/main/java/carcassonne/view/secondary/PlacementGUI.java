@@ -40,12 +40,11 @@ public class PlacementGUI extends SecondaryGUI {
     // build button grid
     private void buildButtonGrid() {
         constraints.gridwidth = 1;
-        String[][] toolTipText = { { "top left", "top", "top right" }, { "left", "middle", "right" }, { "bottom left", "bottom", "bottom right" } };
         button = new PlacementButton[3][3];
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 button[x][y] = new PlacementButton(controller, x, y);
-                button[x][y].setToolTipText("Place Meeple on the " + toolTipText[x][y] + " of the tile.");
+                button[x][y].setToolTipText("Place Meeple on the " +  GridDirection.values2D()[x][y].toReadableString() + " of the tile.");
                 constraints.gridx = x;
                 constraints.gridy = y + 1;
                 add(button[x][y], constraints);
