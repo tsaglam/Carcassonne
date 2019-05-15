@@ -59,9 +59,7 @@ public class MainGUI implements Notifiable {
         this.controller = controller;
         options = GameOptions.getInstance();
         options.register(this);
-        paintShop = new PaintShop();
-        highlightTile = new Tile(TileType.Null);
-        highlightTile.rotateRight(); // highlight the null tile.
+        paintShop = new PaintShop(); 
         buildPanelBack();
         buildPanelFront();
         buildLayeredPane();
@@ -144,7 +142,6 @@ public class MainGUI implements Notifiable {
      */
     public void setHighlight(int x, int y) {
         labelGrid[x][y].setIcon(highlightTile.getImage());
-        System.err.println("set highlight " + x + " " + y); // TODO
     }
 
     /**
@@ -254,6 +251,8 @@ public class MainGUI implements Notifiable {
      */
     private void buildTileGrid() {
         defaultTile = new Tile(TileType.Null);
+        highlightTile = new Tile(TileType.Null);
+        highlightTile.rotateRight(); // highlight the null tile.
         constraints = new GridBagConstraints();
         gridWidth = options.gridWidth;
         gridHeight = options.gridHeight;

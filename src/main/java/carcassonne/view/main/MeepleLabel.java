@@ -19,17 +19,11 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class MeepleLabel extends JLabel {
-
     private static final long serialVersionUID = 3333971053086379413L;
-
     private final ImageIcon imageEmpty;
-
     private final PaintShop paintShop;
-
     private int playerNumber;
-
     private final MouseAdapter mouseAdapter;
-
     private TerrainType terrain;
 
     /**
@@ -50,7 +44,6 @@ public class MeepleLabel extends JLabel {
             }
         };
     }
-
 
     /**
      * Refreshes its icon by getting the newest image from the {@link PaintShop}.

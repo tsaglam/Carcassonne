@@ -124,6 +124,25 @@ public class Grid {
     }
 
     /**
+     * Returns a specific neighbor of a grid spot if the neighbor exists and has a tile.
+     * @param spot is the spot of the tile.
+     * @param direction is the direction where the neighbor should be
+     * @return the neighbor, or null if it does not exist.
+     */
+    public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection... directions) {
+        checkParameters(spot);
+        ArrayList<GridSpot> neighbors = new ArrayList<>(directions.length);
+        for (GridDirection direction : directions) {
+            int newX = direction.addX(spot.getX());
+            int newY = direction.addY(spot.getY());
+            if (isOnGrid(newX, newY) && (allowEmptySpots || spots[newX][newY].isOccupied())) {
+                neighbors.add(spots[newX][newY]); // return calculated neighbor if valid:
+            }
+        }
+        return neighbors;
+    }
+
+    /**
      * Safe getter for tiles.
      * @param x is the x coordinate
      * @param y is the y coordinate
@@ -200,25 +219,6 @@ public class Grid {
         checkParameters(x, y);
         checkParameters(tile);
         return spots[x][y].set(tile);
-    }
-
-    /**
-     * Returns a specific neighbor of a grid spot if the neighbor exists and has a tile.
-     * @param spot is the spot of the tile.
-     * @param direction is the direction where the neighbor should be
-     * @return the neighbor, or null if it does not exist.
-     */
-    private List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection... directions) {
-        checkParameters(spot);
-        ArrayList<GridSpot> neighbors = new ArrayList<>(directions.length);
-        for (GridDirection direction : directions) {
-            int newX = direction.addX(spot.getX());
-            int newY = direction.addY(spot.getY());
-            if (isOnGrid(newX, newY) && (allowEmptySpots || spots[newX][newY].isOccupied())) {
-                neighbors.add(spots[newX][newY]); // return calculated neighbor if valid:
-            }
-        }
-        return neighbors;
     }
 
     private void checkParameters(GridSpot spot) {

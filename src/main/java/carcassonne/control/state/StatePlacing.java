@@ -1,7 +1,5 @@
 package carcassonne.control.state;
 
-import java.util.List;
-
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
@@ -72,13 +70,7 @@ public class StatePlacing extends AbstractControllerState {
         if (grid.place(x, y, tile)) {
             mainGUI.setTile(tile, x, y);
             GridSpot spot = grid.getSpot(x, y);
-            for (GridDirection direction : GridDirection.directNeighbors()) {
-                GridSpot neighbor = grid.getNeighbor(spot, direction); // TODO FIX
-                if (neighbor != null && neighbor.isFree()) { // TODO (HIGH) avoid using logic that should be in Grid
-                    System.err.println(neighbor + " free: " + neighbor.isFree()); // TODO
-                    mainGUI.setHighlight(neighbor.getX(), neighbor.getY());
-                }
-            }
+            highlightSurroundings(spot);
             changeState(StateManning.class);
         }
     }
