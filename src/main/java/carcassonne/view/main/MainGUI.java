@@ -18,7 +18,6 @@ import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
-import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.view.Notifiable;
@@ -193,9 +192,6 @@ public class MainGUI implements Notifiable {
                 if (tile.hasMeepleSpot(directions[x][y]) && controller.requestPlacementStatus(directions[x][y])) {
                     meepleGrid[xBase + x][yBase + y]
                             .setIcon(new ImageIcon(options.getMeeplePath(tile.getTerrain(directions[x][y]), false)));
-                } else {
-                    meepleGrid[xBase + x][yBase + y]
-                            .setIcon(new ImageIcon(options.getMeeplePath(TerrainType.OTHER, false)));
                 }
             }
         }
@@ -231,7 +227,7 @@ public class MainGUI implements Notifiable {
         meepleGrid = new MeepleLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
         for (int x = 0; x < meepleGridWidth; x++) {
             for (int y = 0; y < meepleGridHeight; y++) {
-                meepleGrid[x][y] = new MeepleLabel(paintShop);
+                meepleGrid[x][y] = new MeepleLabel(paintShop, controller, GridDirection.values2D()[x % 3][y % 3]);
                 constraints.gridx = x;
                 constraints.gridy = y;
                 panelTop.add(meepleGrid[x][y], constraints); // add label with constraints
