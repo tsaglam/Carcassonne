@@ -1,5 +1,6 @@
 package carcassonne.model.grid;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,7 +55,8 @@ public class Grid {
     }
 
     /**
-     * Creates a list of spots that are connected to a specific spot with the terrain in a specific direction on the spot.
+     * Creates a list of spots that are connected to a specific spot with the terrain in a specific direction on the
+     * spot.
      * @param spot is the spot on the grid where the tile is.
      * @param from is the direction the tile is connected from
      * @return the list of connected tiles.
@@ -62,31 +64,9 @@ public class Grid {
     public List<GridSpot> getConnectedTiles(GridSpot spot, GridDirection from) {
         checkParameters(spot);
         List<GridSpot> list = new LinkedList<>();
-        GridSpot neighbor;
         for (GridDirection to : GridDirection.directNeighbors()) {
             if (spot.getTile().hasConnection(from, to) && from != to) { // if connected
-                neighbor = getNeighbor(spot, to);
-                if (neighbor != null) { // if is on grid
-                    list.add(neighbor);
-                }
-            }
-        }
-        return list;
-    }
-
-    /**
-     * Creates a list of direct neighbors.
-     * @param spot is the spot for which the neighbors are requested.
-     * @return the list of neighbors
-     */
-    public List<GridSpot> getDirectNeighbors(GridSpot spot) {
-        checkParameters(spot);
-        List<GridSpot> list = new LinkedList<>();
-        GridSpot neighbor;
-        for (GridDirection direction : GridDirection.directNeighbors()) {
-            neighbor = getNeighbor(spot, direction);
-            if (neighbor != null) {
-                list.add(neighbor);
+                list.addAll(getNeighbors(spot, false, to));
             }
         }
         return list;
@@ -125,19 +105,13 @@ public class Grid {
         return modifiedPatterns; // get patterns.
     }
 
-    /**
-     * Returns a specific neighbor of a grid spot if the neighbor exists and has a tile.
-     * @param spot is the spot of the tile.
-     * @param direction is the direction where the neighbor should be
-     * @return the neighbor, or null if it does not exist.
-     */
     public GridSpot getNeighbor(GridSpot spot, GridDirection direction) {
-        int newX = direction.addX(spot.getX());
-        int newY = direction.addY(spot.getY());
-        if (isOnGrid(newX, newY) && spots[newX][newY].isOccupied()) {
-            return spots[newX][newY]; // return calculated neighbor if valid:
+        List<GridSpot> neighbors = getNeighbors(spot, false, direction);
+        if (neighbors.isEmpty()) {
+            return null; // return null if tile not placed or not on grid.
+        } else {
+            return neighbors.get(0);
         }
-        return null;  // return null if tile not placed or not on grid.
     }
 
     /**
@@ -145,17 +119,8 @@ public class Grid {
      * @param spot is the spot.
      * @return the list of neighbors
      */
-    public List<GridSpot> getNeighbors(GridSpot spot) {
-        checkParameters(spot);
-        List<GridSpot> list = new LinkedList<>();
-        GridSpot neighbor;
-        for (GridDirection direction : GridDirection.neighbors()) {
-            neighbor = getNeighbor(spot, direction);
-            if (neighbor != null) {
-                list.add(neighbor);
-            }
-        }
-        return list;
+    public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots) {
+        return getNeighbors(spot, allowEmptySpots, GridDirection.neighbors());
     }
 
     /**
@@ -237,6 +202,25 @@ public class Grid {
         return spots[x][y].set(tile);
     }
 
+    /**
+     * Returns a specific neighbor of a grid spot if the neighbor exists and has a tile.
+     * @param spot is the spot of the tile.
+     * @param direction is the direction where the neighbor should be
+     * @return the neighbor, or null if it does not exist.
+     */
+    private List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection... directions) {
+        checkParameters(spot);
+        ArrayList<GridSpot> neighbors = new ArrayList<>(directions.length);
+        for (GridDirection direction : directions) {
+            int newX = direction.addX(spot.getX());
+            int newY = direction.addY(spot.getY());
+            if (isOnGrid(newX, newY) && (allowEmptySpots || spots[newX][newY].isOccupied())) {
+                neighbors.add(spots[newX][newY]); // return calculated neighbor if valid:
+            }
+        }
+        return neighbors;
+    }
+
     private void checkParameters(GridSpot spot) {
         if (spot == null) {
             throw new IllegalArgumentException("Spot can't be null!");
@@ -246,8 +230,8 @@ public class Grid {
     }
 
     /**
-     * Error checker method for other methods in this class. It just checks whether specific coordinates are on the grid and
-     * throws an error if not.
+     * Error checker method for other methods in this class. It just checks whether specific coordinates are on the grid
+     * and throws an error if not.
      * @param x is the x coordinate
      * @param y is the y coordinate
      */
