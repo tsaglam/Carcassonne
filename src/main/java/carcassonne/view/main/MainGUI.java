@@ -32,35 +32,21 @@ import carcassonne.view.main.tilelabel.TileLabel;
 public class MainGUI implements Notifiable {
 
     private GridBagConstraints constraints;
-
     private final MainController controller;
-
     private Tile defaultTile;
-
+    private Tile highlightTile;
     private JFrame frame;
-
     private int gridHeight;
-
     private int gridWidth;
-
     private TileLabel[][] labelGrid;
-
     private JLayeredPane layeredPane;
-
     private MeepleLabel[][] meepleGrid;
-
     private int meepleGridHeight;
-
     private int meepleGridWidth;
-
     private final GameOptions options;
-
     private JPanel panelBottom;
-
     private JPanel panelTop;
-
     private final Scoreboard scoreboard;
-
     private final PaintShop paintShop;
 
     /**
@@ -74,6 +60,8 @@ public class MainGUI implements Notifiable {
         options = GameOptions.getInstance();
         options.register(this);
         paintShop = new PaintShop();
+        highlightTile = new Tile(TileType.Null);
+        highlightTile.rotateRight(); // highlight the null tile.
         buildPanelBack();
         buildPanelFront();
         buildLayeredPane();
@@ -139,7 +127,7 @@ public class MainGUI implements Notifiable {
      * @param x is the x coordinate.
      * @param y is the y coordinate.
      */
-    public void set(Tile tile, int x, int y) {
+    public void setTile(Tile tile, int x, int y) {
         if (tile == null) {
             throw new IllegalArgumentException("Tile can't be null to be set on the GUI");
         } else if (x < 0 && x >= gridWidth || y < 0 && y >= gridHeight) {
@@ -147,6 +135,16 @@ public class MainGUI implements Notifiable {
         } else {
             labelGrid[x][y].setIcon(tile.getImage());
         }
+    }
+
+    /**
+     * Highlights a position on the grid to indicate that the tile is a possible placement spot.
+     * @param x is the x coordinate.
+     * @param y is the y coordinate.
+     */
+    public void setHighlight(int x, int y) {
+        labelGrid[x][y].setIcon(highlightTile.getImage());
+        System.err.println("set highlight " + x + " " + y); // TODO
     }
 
     /**
