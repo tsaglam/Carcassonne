@@ -1,10 +1,16 @@
 package carcassonne.view.main;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import carcassonne.control.GameOptions;
+import carcassonne.control.MainController;
 import carcassonne.control.PaintShop;
+import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
 
 /**
@@ -14,20 +20,32 @@ import carcassonne.model.terrain.TerrainType;
 public class MeepleLabel extends JLabel {
 
     private static final long serialVersionUID = 3333971053086379413L;
+
     private final ImageIcon imageEmpty;
+
     private final PaintShop paintShop;
+
     private int playerNumber;
+
+    private final MouseAdapter mouseAdapter;
+
     private TerrainType terrain;
 
     /**
      * Creates a blank meeple label.
      * @param paintShop is the paint shop for the meeple generation.
      */
-    public MeepleLabel(PaintShop paintShop) {
+    public MeepleLabel(PaintShop paintShop, MainController controller, GridDirection direction) {
         super();
         imageEmpty = new ImageIcon(GameOptions.getInstance().getMeeplePath(TerrainType.OTHER, false));
         reset();
         this.paintShop = paintShop;
+        mouseAdapter = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controller.requestMeeplePlacement(direction);
+            }
+        };
     }
 
     /**
@@ -36,7 +54,7 @@ public class MeepleLabel extends JLabel {
     public void refresh() {
         if (terrain != TerrainType.OTHER) {
             ImageIcon icon = paintShop.getColoredMeeple(terrain, playerNumber);
-            setIcon(icon);
+            super.setIcon(icon);
         }
     }
 
@@ -46,7 +64,8 @@ public class MeepleLabel extends JLabel {
     public void reset() {
         terrain = TerrainType.OTHER;
         playerNumber = -1;
-        setIcon(imageEmpty);
+        super.setIcon(imageEmpty);
+        removeMouseListener(mouseAdapter);
     }
 
     /**
@@ -58,6 +77,12 @@ public class MeepleLabel extends JLabel {
         this.terrain = terrain;
         this.playerNumber = playerNumber;
         refresh();
+    }
+
+    @Override
+    public void setIcon(Icon icon) {
+        addMouseListener(mouseAdapter);
+        super.setIcon(icon);
     }
 
 }
