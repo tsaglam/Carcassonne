@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
@@ -42,11 +43,14 @@ public class MeepleLabel extends JLabel {
         this.paintShop = paintShop;
         mouseAdapter = new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                controller.requestMeeplePlacement(direction);
+            public void mouseClicked(MouseEvent event) {
+                if (SwingUtilities.isLeftMouseButton(event)) {
+                    controller.requestMeeplePlacement(direction);
+                }
             }
         };
     }
+
 
     /**
      * Refreshes its icon by getting the newest image from the {@link PaintShop}.

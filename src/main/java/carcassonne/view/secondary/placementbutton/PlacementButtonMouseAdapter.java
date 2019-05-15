@@ -3,6 +3,8 @@ package carcassonne.view.secondary.placementbutton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.SwingUtilities;
+
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 
@@ -36,8 +38,8 @@ public class PlacementButtonMouseAdapter extends MouseAdapter {
      * @param e is the <code>MouseEvent</code> of the click.
      */
     @Override
-    public void mouseClicked(MouseEvent e) {
-        if (button.isHackyEnabled()) {
+    public void mouseClicked(MouseEvent event) {
+        if (button.isHackyEnabled() && SwingUtilities.isLeftMouseButton(event)) {
             controller.requestMeeplePlacement(direction);
         }
     }
