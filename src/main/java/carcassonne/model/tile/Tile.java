@@ -16,8 +16,8 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class Tile {
-    private static final String FOLDER = "src/main/ressources/tiles/";
-    private static final String FILE_TYPE = ".jpg"; // TODO (HIGH) move to options.
+    private static final String FOLDER = "src/main/ressources/tiles/"; // TODO (HIGH) move to options.
+    private static final String FILE_TYPE = ".png"; // TODO (HIGH) move to options.
     private GridSpot gridSpot;
     private ImageIcon[] images; // tile image
     private Meeple meeple;
