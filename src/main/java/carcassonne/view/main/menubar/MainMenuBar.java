@@ -41,7 +41,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
      * @param scoreboard sets the scoreboard of the menu bar.
      * @param controller sets the connection to game the controller.
      */
-    public MainMenuBar(Scoreboard scoreboard, MainController controller) {
+    public MainMenuBar(Scoreboard scoreboard, MainController controller) { // TODO (HIGH) make menu bar gray
         super();
         this.controller = controller;
         options = GameOptions.getInstance();
