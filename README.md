@@ -6,7 +6,7 @@ When I started to learn Java, my first larger project was to write a computer ga
 
 Now, a few years later, I thought I could try it again to do it properly.
 <p align="center"> 
-<img alt="a screenshot of the game" src="/preview.png?raw=true" width="700">
+<img alt="a screenshot of the game" src="/preview.png?raw=true" width="600">
 </p>
 
 ### Upcoming features:
