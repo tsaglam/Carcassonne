@@ -45,17 +45,16 @@ public class GridSpot {
     public List<GridPattern> createPatternList() {
         checkTile("createPatternList()");
         List<GridPattern> results = new LinkedList<>();
-        TerrainType terrain;
         // first, check for castle and road patterns:
-        for (GridDirection direction : GridDirection.directNeighbors()) {
-            terrain = tile.getTerrain(direction); // get terrain type.
-            if (terrain != TerrainType.FIELDS && hasNoTagConnectedTo(direction)) {
+        for (GridDirection direction : GridDirection.tilePositions()) {
+            TerrainType terrain = tile.getTerrain(direction); // get terrain type.
+            if ((terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) && hasNoTagConnectedTo(direction)) {
                 results.add(new CastleAndRoadPattern(this, direction, terrain, grid));
             }
         }
         // then, check fields:
         for (GridDirection direction : GridDirection.values()) {
-            terrain = tile.getTerrain(direction); // get terrain type.
+            TerrainType terrain = tile.getTerrain(direction); // get terrain type.
             if (terrain == TerrainType.FIELDS && hasNoTagConnectedTo(direction)) {
                 results.add(new FieldsPattern(this, direction, grid));
             }
