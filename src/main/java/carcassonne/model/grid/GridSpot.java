@@ -182,7 +182,7 @@ public class GridSpot {
      * @return true if the tile could be placed.
      */
     public boolean set(Tile tile) {
-        if (isPlaceable(tile, false)) {
+        if (isPlaceable(tile)) {
             tile.setPosition(this);
             this.tile = tile;
             return true; // tile was successfully placed.
@@ -222,17 +222,16 @@ public class GridSpot {
         return !tagMap.get(direction).isEmpty();
     }
 
-    private boolean isPlaceable(Tile tile, boolean freePlacement) {
+    private boolean isPlaceable(Tile tile) {
         if (isOccupied()) {
             return false; // can't be placed if spot is occupied.
         }
         int neighborCount = 0;
-        GridSpot neighbor;
         for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
-            neighbor = grid.getNeighbor(this, direction);
+            GridSpot neighbor = grid.getNeighbor(this, direction);
             if (neighbor == null) { // free space
                 if (grid.isClosingFreeSpotsOff(this, direction)) {
-                    return false; // you can't close of free spaces
+                    return false; // you can't close off free spaces
                 }
             } else { // if there is a neighbor in the direction.
                 neighborCount++;
@@ -241,6 +240,6 @@ public class GridSpot {
                 }
             }
         }
-        return neighborCount > 0 || freePlacement; // can be placed beneath another tile.
+        return neighborCount > 0; // can be placed beneath another tile.
     }
 }
