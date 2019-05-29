@@ -11,6 +11,8 @@ Now, a few years later, I thought I could try it again to do it properly.
 
 ### Upcoming features:
 * More tiles
+* Further UI improvements
+* Emblems for castle tiles
 * Timed rounds
 * Playing in teams
 * Tournament mode
