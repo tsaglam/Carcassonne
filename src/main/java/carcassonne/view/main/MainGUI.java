@@ -1,11 +1,9 @@
 package carcassonne.view.main;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -35,7 +33,7 @@ public class MainGUI implements Notifiable {
     private final MainController controller;
     private Tile defaultTile;
     private Tile highlightTile;
-    private JFrame frame;
+    private final JFrame frame;
     private int gridHeight;
     private int gridWidth;
     private TileLabel[][] labelGrid;
@@ -59,9 +57,10 @@ public class MainGUI implements Notifiable {
         this.controller = controller;
         options = GameOptions.getInstance();
         options.register(this);
-        paintShop = new PaintShop(); 
-        buildPanelBack();
-        buildPanelFront();
+        paintShop = new PaintShop();
+        frame = new JFrame();
+        buildTileGrid();
+        buildMeepleGrid();
         buildLayeredPane();
         buildFrame();
     }
@@ -175,7 +174,7 @@ public class MainGUI implements Notifiable {
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 
-    public void setMeepleHighlight(Tile tile) {
+    public void setMeepleHighlight(Tile tile, Player currentPlayer) {
         if (tile == null) {
             throw new IllegalArgumentException("Tile cannot be null to set a meeple on the GUI");
         }
@@ -185,8 +184,7 @@ public class MainGUI implements Notifiable {
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 if (tile.hasMeepleSpot(directions[x][y]) && controller.requestPlacementStatus(directions[x][y])) {
-                    meepleGrid[xBase + x][yBase + y]
-                            .setIcon(new ImageIcon(options.getMeeplePath(tile.getTerrain(directions[x][y]), false)));
+                    meepleGrid[xBase + x][yBase + y].setHighlight(tile.getTerrain(directions[x][y]), currentPlayer.getNumber());
                 }
             }
         }
@@ -194,7 +192,6 @@ public class MainGUI implements Notifiable {
     }
 
     private void buildFrame() {
-        frame = new JFrame();
         MainMenuBar menuBar = new MainMenuBar(scoreboard, controller);
         frame.setJMenuBar(menuBar);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -214,6 +211,10 @@ public class MainGUI implements Notifiable {
     }
 
     private void buildMeepleGrid() {
+        panelTop = new JPanel();
+        panelTop.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
+        panelTop.setOpaque(false);
+        panelTop.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         meepleGridWidth = options.gridWidth * 3;
         meepleGridHeight = options.gridHeight * 3;
@@ -222,7 +223,7 @@ public class MainGUI implements Notifiable {
         meepleGrid = new MeepleLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
         for (int x = 0; x < meepleGridWidth; x++) {
             for (int y = 0; y < meepleGridHeight; y++) {
-                meepleGrid[x][y] = new MeepleLabel(paintShop, controller, GridDirection.values2D()[x % 3][y % 3]);
+                meepleGrid[x][y] = new MeepleLabel(paintShop, controller, GridDirection.values2D()[x % 3][y % 3], frame);
                 constraints.gridx = x;
                 constraints.gridy = y;
                 panelTop.add(meepleGrid[x][y], constraints); // add label with constraints
@@ -230,26 +231,14 @@ public class MainGUI implements Notifiable {
         }
     }
 
-    private void buildPanelBack() {
-        panelBottom = new JPanel();
-        panelBottom.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
-        panelBottom.setBackground(options.colorGUImain);
-        panelBottom.setLayout(new GridBagLayout());
-        buildTileGrid();
-    }
-
-    private void buildPanelFront() {
-        panelTop = new JPanel();
-        panelTop.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
-        panelTop.setBackground(new Color(0, 0, 0, 0));
-        panelTop.setLayout(new GridBagLayout());
-        buildMeepleGrid();
-    }
-
     /*
      * Creates the grid of labels.
      */
     private void buildTileGrid() {
+        panelBottom = new JPanel();
+        panelBottom.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
+        panelBottom.setBackground(options.colorGUImain);
+        panelBottom.setLayout(new GridBagLayout());
         defaultTile = new Tile(TileType.Null);
         highlightTile = new Tile(TileType.Null);
         highlightTile.rotateRight(); // highlight the null tile.

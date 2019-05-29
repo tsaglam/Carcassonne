@@ -1,10 +1,11 @@
 package carcassonne.view.main;
 
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
@@ -18,20 +19,23 @@ import carcassonne.model.terrain.TerrainType;
  * Special {@link JLabel} for showing meeples.
  * @author Timur Saglam
  */
-public class MeepleLabel extends JLabel {
+public class MeepleLabel extends JLabel { // TODO (HIGH) delegate instead of inherit.
+    private static final int HIGHLIGHT_TRANSPARANCY = 100;
     private static final long serialVersionUID = 3333971053086379413L;
     private final ImageIcon imageEmpty;
     private final PaintShop paintShop;
     private int playerNumber;
     private final MouseAdapter mouseAdapter;
     private TerrainType terrain;
+    private final GameOptions options;
 
     /**
      * Creates a blank meeple label.
      * @param paintShop is the paint shop for the meeple generation.
      */
-    public MeepleLabel(PaintShop paintShop, MainController controller, GridDirection direction) {
+    public MeepleLabel(PaintShop paintShop, MainController controller, GridDirection direction, JFrame frame) {
         super();
+        options = GameOptions.getInstance();
         imageEmpty = new ImageIcon(GameOptions.getInstance().getMeeplePath(TerrainType.OTHER, false));
         reset();
         this.paintShop = paintShop;
@@ -40,7 +44,23 @@ public class MeepleLabel extends JLabel {
             public void mouseClicked(MouseEvent event) {
                 if (SwingUtilities.isLeftMouseButton(event)) {
                     controller.requestMeeplePlacement(direction);
+                    setOpaque(false);
                 }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent event) {
+                setOpaque(true);
+                Color color = options.getPlayerColor(playerNumber); // TODO (HIGH) move colors to player class
+                Color highlightColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), HIGHLIGHT_TRANSPARANCY);
+                setBackground(highlightColor);
+                frame.repaint();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent event) {
+                setOpaque(false);
+                frame.repaint();
             }
         };
     }
@@ -76,10 +96,15 @@ public class MeepleLabel extends JLabel {
         refresh();
     }
 
-    @Override
-    public void setIcon(Icon icon) {
+    /**
+     * Sets the specific {@link TerrainType} as meeple placement highlight, which means a transparent image of the
+     * correlating meeple.
+     * @param terrain is the specific {@link TerrainType}.
+     */
+    public void setHighlight(TerrainType terrain, int playerNumber) {
+        this.playerNumber = playerNumber;
         addMouseListener(mouseAdapter);
-        super.setIcon(icon);
+        super.setIcon(new ImageIcon(options.getMeeplePath(terrain, false)));
     }
 
 }
