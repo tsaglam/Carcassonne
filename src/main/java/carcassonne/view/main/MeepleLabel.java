@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
@@ -19,24 +21,27 @@ import carcassonne.model.terrain.TerrainType;
  * Special {@link JLabel} for showing meeples.
  * @author Timur Saglam
  */
-public class MeepleLabel extends JLabel { // TODO (HIGH) delegate instead of inherit.
-    private static final int HIGHLIGHT_TRANSPARANCY = 100;
-    private static final long serialVersionUID = 3333971053086379413L;
+public class MeepleLabel {
+    private static final int BORDER_THICKNESS = 2;
+    private static final int TRANSPARANT = 100;
     private final ImageIcon imageEmpty;
     private final PaintShop paintShop;
     private int playerNumber;
     private final MouseAdapter mouseAdapter;
     private TerrainType terrain;
     private final GameOptions options;
+    private final Border transparentBorder;
+    private final JLabel label;
 
     /**
      * Creates a blank meeple label.
      * @param paintShop is the paint shop for the meeple generation.
      */
     public MeepleLabel(PaintShop paintShop, MainController controller, GridDirection direction, JFrame frame) {
-        super();
         options = GameOptions.getInstance();
+        label = new JLabel();
         imageEmpty = new ImageIcon(GameOptions.getInstance().getMeeplePath(TerrainType.OTHER, false));
+        transparentBorder = BorderFactory.createLineBorder(new Color(TRANSPARANT, true), BORDER_THICKNESS);
         reset();
         this.paintShop = paintShop;
         mouseAdapter = new MouseAdapter() {
@@ -44,22 +49,24 @@ public class MeepleLabel extends JLabel { // TODO (HIGH) delegate instead of inh
             public void mouseClicked(MouseEvent event) {
                 if (SwingUtilities.isLeftMouseButton(event)) {
                     controller.requestMeeplePlacement(direction);
-                    setOpaque(false);
+                    label.setOpaque(false);
                 }
             }
 
             @Override
             public void mouseEntered(MouseEvent event) {
-                setOpaque(true);
+                label.setOpaque(true);
                 Color color = options.getPlayerColor(playerNumber); // TODO (HIGH) move colors to player class
-                Color highlightColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), HIGHLIGHT_TRANSPARANCY);
-                setBackground(highlightColor);
+                Color highlightColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), TRANSPARANT);
+                label.setBackground(highlightColor);
+                label.setBorder(BorderFactory.createLineBorder(color, BORDER_THICKNESS, true));
                 frame.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent event) {
-                setOpaque(false);
+                label.setOpaque(false);
+                label.setBorder(transparentBorder);
                 frame.repaint();
             }
         };
@@ -71,7 +78,7 @@ public class MeepleLabel extends JLabel { // TODO (HIGH) delegate instead of inh
     public void refresh() {
         if (terrain != TerrainType.OTHER) {
             ImageIcon icon = paintShop.getColoredMeeple(terrain, playerNumber);
-            super.setIcon(icon);
+            label.setIcon(icon);
         }
     }
 
@@ -81,8 +88,9 @@ public class MeepleLabel extends JLabel { // TODO (HIGH) delegate instead of inh
     public void reset() {
         terrain = TerrainType.OTHER;
         playerNumber = -1;
-        super.setIcon(imageEmpty);
-        removeMouseListener(mouseAdapter);
+        label.setIcon(imageEmpty);
+        label.setBorder(transparentBorder);
+        label.removeMouseListener(mouseAdapter);
     }
 
     /**
@@ -103,8 +111,16 @@ public class MeepleLabel extends JLabel { // TODO (HIGH) delegate instead of inh
      */
     public void setHighlight(TerrainType terrain, int playerNumber) {
         this.playerNumber = playerNumber;
-        addMouseListener(mouseAdapter);
-        super.setIcon(new ImageIcon(options.getMeeplePath(terrain, false)));
+        label.addMouseListener(mouseAdapter);
+        label.setIcon(new ImageIcon(options.getMeeplePath(terrain, false)));
+    }
+
+    /**
+     * Grants access to the {@link JLabel} itself.
+     * @return the {@link JLabel}
+     */
+    public JLabel getLabel() {
+        return label;
     }
 
 }

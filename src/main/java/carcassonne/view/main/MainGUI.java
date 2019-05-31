@@ -17,11 +17,9 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileType;
 import carcassonne.view.Notifiable;
 import carcassonne.view.main.menubar.MainMenuBar;
 import carcassonne.view.main.menubar.Scoreboard;
-import carcassonne.view.main.tilelabel.TileLabel;
 
 /**
  * The main GUI class.
@@ -31,8 +29,6 @@ public class MainGUI implements Notifiable {
 
     private GridBagConstraints constraints;
     private final MainController controller;
-    private Tile defaultTile;
-    private Tile highlightTile;
     private final JFrame frame;
     private int gridHeight;
     private int gridWidth;
@@ -85,7 +81,7 @@ public class MainGUI implements Notifiable {
         for (int y = 0; y < meepleGridHeight; y++) {
             for (int x = 0; x < meepleGridWidth; x++) {
                 if (x < gridWidth && y < gridHeight) {
-                    labelGrid[x][y].setIcon(defaultTile.getImage());
+                    labelGrid[x][y].reset();
                 }
                 meepleGrid[x][y].reset();
                 frame.repaint();
@@ -98,6 +94,7 @@ public class MainGUI implements Notifiable {
      * @param meeple is the meeple that should be removed.
      */
     public void removeMeeple(Meeple meeple) {
+        checkParameters(meeple);
         GridSpot spot = meeple.getLocation().getGridSpot();
         if (spot == null) { // make sure meeple is placed
             throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI: " + meeple);
@@ -125,13 +122,9 @@ public class MainGUI implements Notifiable {
      * @param y is the y coordinate.
      */
     public void setTile(Tile tile, int x, int y) {
-        if (tile == null) {
-            throw new IllegalArgumentException("Tile can't be null to be set on the GUI");
-        } else if (x < 0 && x >= gridWidth || y < 0 && y >= gridHeight) {
-            throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
-        } else {
-            labelGrid[x][y].setIcon(tile.getImage());
-        }
+        checkParameters(tile);
+        checkCoordinates(x, y);
+        labelGrid[x][y].setTile(tile);
     }
 
     /**
@@ -140,7 +133,8 @@ public class MainGUI implements Notifiable {
      * @param y is the y coordinate.
      */
     public void setHighlight(int x, int y) {
-        labelGrid[x][y].setIcon(highlightTile.getImage());
+        checkCoordinates(x, y);
+        labelGrid[x][y].highlight();
     }
 
     /**
@@ -150,9 +144,7 @@ public class MainGUI implements Notifiable {
      * @param owner is the player that owns the meeple.
      */
     public void setMeeple(Tile tile, GridDirection position, Player owner) {
-        if (tile == null || position == null || owner == null) {
-            throw new IllegalArgumentException("Arguments can't be null to set a meeple on the GUI");
-        }
+        checkParameters(tile, position, owner);
         GridSpot spot = tile.getGridSpot();
         int xpos = position.addX(spot.getX() * 3 + 1);
         int ypos = position.addY(spot.getY() * 3 + 1);
@@ -161,9 +153,7 @@ public class MainGUI implements Notifiable {
     }
 
     public void resetMeepleHighlight(Tile tile) {
-        if (tile == null) {
-            throw new IllegalArgumentException("Tile cannot be null to set a meeple on the GUI");
-        }
+        checkParameters(tile);
         int xBase = tile.getGridSpot().getX() * 3;
         int yBase = tile.getGridSpot().getY() * 3;
         for (int y = 0; y < 3; y++) {
@@ -175,9 +165,7 @@ public class MainGUI implements Notifiable {
     }
 
     public void setMeepleHighlight(Tile tile, Player currentPlayer) {
-        if (tile == null) {
-            throw new IllegalArgumentException("Tile cannot be null to set a meeple on the GUI");
-        }
+        checkParameters(tile, currentPlayer);
         int xBase = tile.getGridSpot().getX() * 3;
         int yBase = tile.getGridSpot().getY() * 3;
         GridDirection[][] directions = GridDirection.values2D();
@@ -191,13 +179,26 @@ public class MainGUI implements Notifiable {
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 
+    private void checkParameters(Object... parameters) {
+        for (Object parameter : parameters) {
+            if (parameter == null) {
+                throw new IllegalArgumentException("Parameters such as Tile, Meeple, and Player cannot be null!");
+            }
+        }
+    }
+
+    private void checkCoordinates(int x, int y) {
+        if (x < 0 && x >= gridWidth || y < 0 && y >= gridHeight) {
+            throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
+        }
+    }
+
     private void buildFrame() {
         MainMenuBar menuBar = new MainMenuBar(scoreboard, controller);
         frame.setJMenuBar(menuBar);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(layeredPane, BorderLayout.CENTER);
-        // frame.setResizable(false);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -226,7 +227,7 @@ public class MainGUI implements Notifiable {
                 meepleGrid[x][y] = new MeepleLabel(paintShop, controller, GridDirection.values2D()[x % 3][y % 3], frame);
                 constraints.gridx = x;
                 constraints.gridy = y;
-                panelTop.add(meepleGrid[x][y], constraints); // add label with constraints
+                panelTop.add(meepleGrid[x][y].getLabel(), constraints); // add label with constraints
             }
         }
     }
@@ -239,19 +240,16 @@ public class MainGUI implements Notifiable {
         panelBottom.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
         panelBottom.setBackground(options.colorGUImain);
         panelBottom.setLayout(new GridBagLayout());
-        defaultTile = new Tile(TileType.Null);
-        highlightTile = new Tile(TileType.Null);
-        highlightTile.rotateRight(); // highlight the null tile.
         constraints = new GridBagConstraints();
         gridWidth = options.gridWidth;
         gridHeight = options.gridHeight;
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                labelGrid[x][y] = new TileLabel(defaultTile.getImage(), controller, x, y);
+                labelGrid[x][y] = new TileLabel(controller, x, y);
                 constraints.gridx = x;
                 constraints.gridy = y;
-                panelBottom.add(labelGrid[x][y], constraints); // add label with constraints
+                panelBottom.add(labelGrid[x][y].getLabel(), constraints); // add label with constraints
             }
         }
     }
