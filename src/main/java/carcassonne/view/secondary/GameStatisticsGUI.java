@@ -13,7 +13,6 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
 import carcassonne.model.Round;
 
@@ -27,7 +26,6 @@ public class GameStatisticsGUI {
     private JFrame frame;
     private JButton buttonClose;
     private JTable table;
-    private final GameOptions options;
 
     /**
      * Creates the GUI and extracts the data from the current round.
@@ -36,7 +34,6 @@ public class GameStatisticsGUI {
      */
     public GameStatisticsGUI(MainController controller, Round round) {
         this.controller = controller;
-        options = GameOptions.getInstance();
         buildTable(round);
 
         buildButtonClose();
@@ -51,7 +48,7 @@ public class GameStatisticsGUI {
         table.getTableHeader().setDefaultRenderer(defaultRenderer);
         // Columns:
         TableColumnModel model = table.getColumnModel();
-        CustomCellRenderer renderer = new CustomCellRenderer();
+        CustomCellRenderer renderer = new CustomCellRenderer(round);
         for (int i = 0; i < model.getColumnCount(); i++) {
             model.getColumn(i).setCellRenderer(renderer);
         }
@@ -95,7 +92,10 @@ public class GameStatisticsGUI {
     private class CustomCellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = 1280736206678504709L;
 
-        public CustomCellRenderer() {
+        private final Round round;
+
+        public CustomCellRenderer(Round round) {
+            this.round = round;
             setHorizontalAlignment(JLabel.CENTER); // Centers the text in cells.
         }
 
@@ -106,7 +106,7 @@ public class GameStatisticsGUI {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             if (!isSelected) { // if selected the color white is more readable
-                component.setForeground(options.getPlayerColor(row));
+                component.setForeground(round.getPlayer(row).getTextColor());
             }
             return component;
         }

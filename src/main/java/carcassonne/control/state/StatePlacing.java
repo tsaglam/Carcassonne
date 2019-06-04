@@ -98,7 +98,7 @@ public class StatePlacing extends AbstractControllerState {
         for (int i = 0; i < Math.round(Math.random() * 4 - 0.5); i++) {
             currentTile.rotateRight(); // Random rotation with equal chance for each rotation.
         }
-        rotationGUI.setTile(currentTile, round.getActivePlayer().getNumber());
+        rotationGUI.setTile(currentTile, round.getActivePlayer());
         updateStackSize();
     }
 

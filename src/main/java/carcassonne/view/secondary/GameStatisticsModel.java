@@ -2,7 +2,6 @@ package carcassonne.view.secondary;
 
 import javax.swing.table.AbstractTableModel;
 
-import carcassonne.control.GameOptions;
 import carcassonne.model.Round;
 import carcassonne.model.terrain.TerrainType;
 
@@ -15,7 +14,6 @@ public class GameStatisticsModel extends AbstractTableModel {
     private static final long serialVersionUID = -7138458001360243937L;
     private final Round round;
     private final String[] header = { "player", "castle", "road", "monastery", "field", "overall score" };
-    private final GameOptions options;
 
     /**
      * Creates the game statistics model with the current round.
@@ -24,7 +22,6 @@ public class GameStatisticsModel extends AbstractTableModel {
     public GameStatisticsModel(Round round) {
         super();
         this.round = round;
-        options = GameOptions.getInstance();
     }
 
     @Override
@@ -45,7 +42,7 @@ public class GameStatisticsModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
-            return options.getPlayerName(rowIndex);
+            return round.getPlayer(rowIndex).getName();
         } else if (columnIndex == 5) {
             return round.getPlayer(rowIndex).getScore();
         } else {

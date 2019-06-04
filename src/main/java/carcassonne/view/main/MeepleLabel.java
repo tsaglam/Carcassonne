@@ -14,6 +14,7 @@ import javax.swing.border.Border;
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
 import carcassonne.control.PaintShop;
+import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
 
@@ -26,7 +27,7 @@ public class MeepleLabel {
     private static final int TRANSPARANT = 100;
     private final ImageIcon imageEmpty;
     private final PaintShop paintShop;
-    private int playerNumber;
+    private Player player;
     private final MouseAdapter mouseAdapter;
     private TerrainType terrain;
     private final GameOptions options;
@@ -56,7 +57,7 @@ public class MeepleLabel {
             @Override
             public void mouseEntered(MouseEvent event) {
                 label.setOpaque(true);
-                Color color = options.getPlayerColor(playerNumber); // TODO (HIGH) move colors to player class
+                Color color = player.getColor(); // TODO (HIGH) move colors to player class
                 Color highlightColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), TRANSPARANT);
                 label.setBackground(highlightColor);
                 label.setBorder(BorderFactory.createLineBorder(color, BORDER_THICKNESS, true));
@@ -77,7 +78,7 @@ public class MeepleLabel {
      */
     public void refresh() {
         if (terrain != TerrainType.OTHER) {
-            ImageIcon icon = paintShop.getColoredMeeple(terrain, playerNumber);
+            ImageIcon icon = paintShop.getColoredMeeple(terrain, player);
             label.setIcon(icon);
         }
     }
@@ -87,7 +88,6 @@ public class MeepleLabel {
      */
     public void reset() {
         terrain = TerrainType.OTHER;
-        playerNumber = -1;
         label.setIcon(imageEmpty);
         label.setBorder(transparentBorder);
         label.removeMouseListener(mouseAdapter);
@@ -98,9 +98,9 @@ public class MeepleLabel {
      * @param terrain is the terrain type and affects the meeple type.
      * @param playerNumber is the player number and affects the color.
      */
-    public void setIcon(TerrainType terrain, int playerNumber) {
+    public void setIcon(TerrainType terrain, Player player) {
         this.terrain = terrain;
-        this.playerNumber = playerNumber;
+        this.player = player;
         refresh();
     }
 
@@ -109,8 +109,8 @@ public class MeepleLabel {
      * correlating meeple.
      * @param terrain is the specific {@link TerrainType}.
      */
-    public void setHighlight(TerrainType terrain, int playerNumber) {
-        this.playerNumber = playerNumber;
+    public void setHighlight(TerrainType terrain, Player player) {
+        this.player = player;
         label.addMouseListener(mouseAdapter);
         label.setIcon(new ImageIcon(options.getMeeplePath(terrain, false)));
     }

@@ -44,7 +44,7 @@ public class PlacementGUI extends SecondaryGUI {
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 button[x][y] = new PlacementButton(controller, x, y);
-                button[x][y].setToolTipText("Place Meeple on the " +  GridDirection.values2D()[x][y].toReadableString() + " of the tile.");
+                button[x][y].setToolTipText("Place Meeple on the " + GridDirection.values2D()[x][y].toReadableString() + " of the tile.");
                 constraints.gridx = x;
                 constraints.gridy = y + 1;
                 add(button[x][y], constraints);
@@ -86,7 +86,7 @@ public class PlacementGUI extends SecondaryGUI {
                     button[x][y].setBackground(defaultButtonColor);
                 } else {
                     button[x][y].setEnabled(false);
-                    button[x][y].setBackground(options.getPlayerColorLight(currentPlayer));
+                    button[x][y].setBackground(currentPlayer.getLightColor());
                 }
             }
         }

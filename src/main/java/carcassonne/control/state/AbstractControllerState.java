@@ -118,7 +118,7 @@ public abstract class AbstractControllerState {
      */
     protected void startNewRound(int playerCount) {
         Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
-        Round newRound = new Round(playerCount, newGrid);
+        Round newRound = new Round(playerCount, newGrid, controller);
         controller.updateStates(newRound, newGrid);
         updateScores();
         updateStackSize();

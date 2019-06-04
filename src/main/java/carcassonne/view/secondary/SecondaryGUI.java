@@ -9,6 +9,7 @@ import javax.swing.WindowConstants;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
+import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.Notifiable;
 import carcassonne.view.main.MainGUI;
@@ -21,7 +22,7 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
     private static final long serialVersionUID = 4056347951568551115L;
     protected GridBagConstraints constraints;
     protected MainController controller;
-    protected int currentPlayer;
+    protected Player currentPlayer;
     protected JDialog dialog;
     protected GameOptions options;
     protected Tile tile;
@@ -36,9 +37,7 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
         super(new GridBagLayout());
         this.controller = controller;
         options = GameOptions.getInstance();
-        options.register(this);
         constraints = new GridBagConstraints();
-        currentPlayer = -1;
         buildFrame(ui);
     }
 
@@ -55,14 +54,14 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
      * @param tile sets the tile.
      * @param currentPlayer sets the color scheme according to the player.
      */
-    public void setTile(Tile tile, int currentPlayer) {
+    public void setTile(Tile tile, Player currentPlayer) {
         if (tile == null) {
             throw new IllegalArgumentException("Tried to set the tile of the " + getClass().getSimpleName() + " to null.");
         }
         this.tile = tile;
         this.currentPlayer = currentPlayer;
-        setBackground(options.getPlayerColorLight(currentPlayer));
-        update();
+        setBackground(currentPlayer.getLightColor());
+        update(); // TODO (MEDIUM) rename method, be more specific
         dialog.setVisible(true);
         dialog.toFront(); // sets the focus on the secondary GUI, removes need for double clicks
     }
@@ -88,8 +87,8 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
 
     @Override
     public void notifyChange() {
-        if (currentPlayer >= 0) { // only if UI is in use
-            setBackground(options.getPlayerColorLight(currentPlayer));
+        if (currentPlayer != null) { // only if UI is in use.
+            setBackground(currentPlayer.getLightColor());
         }
     }
 

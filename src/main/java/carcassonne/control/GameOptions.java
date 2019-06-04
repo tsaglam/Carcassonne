@@ -3,88 +3,82 @@ package carcassonne.control;
 import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.GraphicsEnvironment;
-import java.util.LinkedList;
-import java.util.List;
 
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileType;
-import carcassonne.view.Notifiable;
 
 /**
  * Class that stores the game options and other information.
  * @author Timur Saglam
  */
+@Deprecated
 public final class GameOptions {
     private static GameOptions instance;
 
     /**
      * Background color of the main GUI.
      */
+    @Deprecated
     public final Color colorGUImain;
-
-    /**
-     * Background color of the small GUIs.
-     */
-    public final Color colorGUIsmall;
 
     /**
      * The tile type of the foundation.
      */
+    @Deprecated
     public TileType foundationType;
 
     /**
      * The height of the grid in tiles.
      */
+    @Deprecated
     public int gridHeight;
 
     /**
      * The height of the grid in pixel.
      */
+    @Deprecated
     public int gridResolutionHeight;
 
     /**
      * The width of the grid in pixel.
      */
+    @Deprecated
     public int gridResolutionWidth;
 
     /**
      * The width of the grid in tiles.
      */
+    @Deprecated
     public int gridWidth;
 
     /**
      * maximal amount of players.
      */
-    public final int maximalPlayers;
+    @Deprecated
+    public final static int MAXIMAL_PLAYERS = 5;
+
+    @Deprecated
+    public final static int TILE_SIZE = 100;
 
     /**
      * is the name of the operating system.
      */
+    @Deprecated
     public String operatingSystemName;
 
     /**
      * is the height value of the resolution without the taskbar height.
      */
+    @Deprecated
     public int resolutionHeight;
 
     /**
      * is the width value of the resolution.
      */
+    @Deprecated
     public int resolutionWidth;
 
-    /**
-     * width and height of a tile in pixels.
-     */
-    public final int tileSize;
-
-    private final List<Notifiable> changeListeners;
-
     private boolean chaosMode;
-
-    private final Color[] playerColor = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(216, 124, 0),
-            new Color(96, 0, 147) };
-
-    private String[] playerNames = { "BLUE", "RED", "GREEN", "ORANGE", "PURPLE" };
 
     private int taskBarHeight;
 
@@ -93,15 +87,11 @@ public final class GameOptions {
      */
     private GameOptions() {
         initSystemProperties();
-        changeListeners = new LinkedList<>();
         colorGUImain = new Color(190, 190, 190); // grey
-        colorGUIsmall = new Color(217, 217, 217); // light grey
-        maximalPlayers = 5;
-        tileSize = 100;
-        gridHeight = resolutionHeight / tileSize;
-        gridWidth = resolutionWidth / tileSize;
-        gridResolutionHeight = gridHeight * tileSize;
-        gridResolutionWidth = gridWidth * tileSize;
+        gridHeight = resolutionHeight / TILE_SIZE;
+        gridWidth = resolutionWidth / TILE_SIZE;
+        gridResolutionHeight = gridHeight * TILE_SIZE;
+        gridResolutionWidth = gridWidth * TILE_SIZE;
         foundationType = TileType.CastleWallRoad;
     }
 
@@ -111,101 +101,27 @@ public final class GameOptions {
      * @param isTemplate specifies whether the template image should be loaded.
      * @return the path as a String.
      */
+    @Deprecated
     public String getMeeplePath(TerrainType type, boolean isTemplate) {
         return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + (isTemplate ? "_template" : "") + ".png";
-    }
-
-    /**
-     * Getter for the player colors.
-     * @param playerNumber is the number of the player whose color is requested.
-     * @return the color of the player.
-     */
-    public Color getPlayerColor(int playerNumber) {
-        check(playerNumber);
-        return playerColor[playerNumber];
-    }
-
-    /**
-     * Getter for the light player colors.
-     * @param playerNumber is the number of the player whose color is requested.
-     * @return the light color of the player.
-     */
-    public Color getPlayerColorLight(int playerNumber) {
-        Color color = getPlayerColor(playerNumber);
-        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-        hsb[1] *= 0.5; // reduce saturation
-        hsb[2] = 1 - ((1 - hsb[2]) * 0.5f); // increase brightness
-        return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2])); // convert to rgb color
-    }
-
-    /**
-     * Getter for the text player colors.
-     * @param playerNumber is the number of the player whose color is requested.
-     * @return the text color of the player.
-     */
-    public Color getPlayerColorText(int playerNumber) {
-        Color color = getPlayerColor(playerNumber); // get normal color
-        return new Color(color.getRGB(), false); // remove transparency
-    }
-
-    /**
-     * Getter for the player name.
-     * @param player is the number of the player.
-     * @return the player names.
-     */
-    public String getPlayerName(int player) {
-        return playerNames[player];
     }
 
     /**
      * Checks whether chaos mode is enabled.
      * @return true if it is enabled.
      */
+    @Deprecated
     public boolean isChaosMode() {
         return chaosMode;
-    }
-
-    /**
-     * Registers a UI element that wants to listen to changes.
-     * @param notifiable is the UI element.
-     */
-    public void register(Notifiable notifiable) {
-        changeListeners.add(notifiable);
     }
 
     /**
      * Sets the chaos mode setting.
      * @param chaosMode specifies whether chaos mode is active or not.
      */
+    @Deprecated
     public void setChaosMode(boolean chaosMode) {
         this.chaosMode = chaosMode;
-    }
-
-    /**
-     * Setter for the player name.
-     * @param name is the player names to set.
-     * @param player is the number of the player.
-     */
-    public void setPlayeName(String name, int player) {
-        playerNames[player] = name;
-        notifyListeners();
-    }
-
-    /**
-     * Setter for the player colors.
-     * @param color is the new color.
-     * @param playerNumber is the number of the player whose color is requested.
-     */
-    public void setPlayerColor(Color color, int playerNumber) {
-        check(playerNumber);
-        playerColor[playerNumber] = color;
-        notifyListeners();
-    }
-
-    private void check(int playerNumber) {
-        if (playerNumber < 0 || playerNumber >= playerColor.length) {
-            throw new IllegalArgumentException(playerNumber + " is a illegal player number for a player color.");
-        }
     }
 
     private void initSystemProperties() {
@@ -227,16 +143,11 @@ public final class GameOptions {
         resolutionHeight -= taskBarHeight;
     }
 
-    private void notifyListeners() {
-        for (Notifiable notifiable : changeListeners) {
-            notifiable.notifyChange();
-        }
-    }
-
     /**
      * Access method for the GameProperties instance. Secures that only one property object can exist at a time.
      * @return the instance.
      */
+    @Deprecated
     public static synchronized GameOptions getInstance() {
         if (instance == null) {
             instance = new GameOptions();

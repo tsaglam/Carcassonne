@@ -1,8 +1,10 @@
 package carcassonne.model;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
+import carcassonne.control.GameProperties;
 import carcassonne.model.terrain.TerrainType;
 
 /**
@@ -14,14 +16,16 @@ public class Player {
     private int freeMeeples;
     private final int number;
     private int overallScore;
-    private Map<TerrainType, Integer> scoreMap;
+    private Map<TerrainType, Integer> terrainSpecificScores;
+    private final GameProperties properties;
 
     /**
      * Simple constructor.
      * @param number is the number of the player.
      */
-    public Player(int number) {
+    public Player(int number, GameProperties properties) {
         this.number = number;
+        this.properties = properties;
         freeMeeples = MAX_MEEPLES;
         initializeScores();
     }
@@ -33,7 +37,7 @@ public class Player {
      * @param gameOver determines if the game is running or not. Changes score multipliers.
      */
     public void addScore(int amount, TerrainType scoreType) {
-        scoreMap.put(scoreType, scoreMap.get(scoreType) + amount);
+        terrainSpecificScores.put(scoreType, terrainSpecificScores.get(scoreType) + amount);
         overallScore += amount;
     }
 
@@ -79,8 +83,8 @@ public class Player {
      * @return the specific score.
      */
     public int getTerrainScore(TerrainType scoreType) {
-        if (scoreMap.containsKey(scoreType)) {
-            return scoreMap.get(scoreType);
+        if (terrainSpecificScores.containsKey(scoreType)) {
+            return terrainSpecificScores.get(scoreType);
         }
         return -1; // error
     }
@@ -100,6 +104,23 @@ public class Player {
         freeMeeples++;
     }
 
+    // TODO (HIGH) Comment, mention that these methods are convienience methods
+    public String getName() {
+        return properties.getName(number);
+    }
+
+    public Color getColor() {
+        return properties.getColor(number);
+    }
+
+    public Color getLightColor() {
+        return properties.getLightColor(number);
+    }
+
+    public Color getTextColor() {
+        return properties.getTextColor(number);
+    }
+
     @Override
     public String toString() {
         return "Player[number: " + number + ", score: " + overallScore + ", free meeples: " + freeMeeples + "]";
@@ -107,9 +128,9 @@ public class Player {
 
     private void initializeScores() {
         overallScore = 0;
-        scoreMap = new HashMap<>();
+        terrainSpecificScores = new HashMap<>();
         for (int i = 0; i < TerrainType.values().length - 1; i++) {
-            scoreMap.put(TerrainType.values()[i], 0); // initial scores are zero
+            terrainSpecificScores.put(TerrainType.values()[i], 0); // initial scores are zero
         }
     }
 }

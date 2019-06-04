@@ -35,7 +35,7 @@ public class PlacementButton extends JButton {
      * systems it checks a custom variable set by the custom setEnabled method.
      * @return true if the button is enabled.
      */
-    public boolean isHackyEnabled() {
+    public boolean isHackyEnabled() { // TODO (HIGH) is this hack still necesary?
         if (options.operatingSystemName.startsWith("Mac") || options.operatingSystemName.equals("Windows 10")) {
             return isEnabled(); // normal function on mac os x
         } else {
