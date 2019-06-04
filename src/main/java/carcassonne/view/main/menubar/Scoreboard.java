@@ -9,8 +9,8 @@ import javax.swing.JLabel;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.GameProperties;
+import carcassonne.control.Notifiable;
 import carcassonne.model.Player;
-import carcassonne.view.Notifiable;
 
 /**
  * Is the scoreboard class of the game. Manages a score label for each player.

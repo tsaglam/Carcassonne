@@ -11,13 +11,13 @@ import javax.swing.OverlayLayout;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
+import carcassonne.control.Notifiable;
 import carcassonne.control.PaintShop;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
-import carcassonne.view.Notifiable;
 import carcassonne.view.main.menubar.MainMenuBar;
 import carcassonne.view.main.menubar.Scoreboard;
 
