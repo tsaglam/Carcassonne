@@ -32,16 +32,22 @@ public class MainController {
     private final Scoreboard scoreboard;
     private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
     private AbstractControllerState currentState;
+    private final GameProperties properties;
 
     /**
      * Basic constructor. Creates the view and the model of the game.
      */
     public MainController() {
-        scoreboard = new Scoreboard();
+        properties = new GameProperties();
+        scoreboard = new Scoreboard(properties);
         mainGUI = new MainGUI(scoreboard, this);
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
         stateMap = new HashMap<>();
+        properties.registerNotifiable(scoreboard);
+        properties.registerNotifiable(mainGUI);
+        properties.registerNotifiable(placementGUI);
+        properties.registerNotifiable(rotationGUI);
         currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, scoreboard);
         registerState(currentState);
         registerState(new StateManning(this, mainGUI, rotationGUI, placementGUI, scoreboard));
@@ -120,6 +126,13 @@ public class MainController {
         for (AbstractControllerState state : stateMap.values()) {
             state.updateState(newRound, newGrid);
         }
+    }
+
+    /**
+     * Getter for the {@link GameProperties}, which grants access to the games settings.
+     */
+    public GameProperties getProperties() {
+        return properties;
     }
 
     /**

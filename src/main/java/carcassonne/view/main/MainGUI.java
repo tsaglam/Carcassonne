@@ -52,7 +52,6 @@ public class MainGUI implements Notifiable {
         this.scoreboard = scoreboard;
         this.controller = controller;
         options = GameOptions.getInstance();
-        options.register(this);
         paintShop = new PaintShop();
         frame = new JFrame();
         buildTileGrid();
@@ -148,7 +147,7 @@ public class MainGUI implements Notifiable {
         GridSpot spot = tile.getGridSpot();
         int xpos = position.addX(spot.getX() * 3 + 1);
         int ypos = position.addY(spot.getY() * 3 + 1);
-        meepleGrid[xpos][ypos].setIcon(tile.getTerrain(position), owner.getNumber());
+        meepleGrid[xpos][ypos].setIcon(tile.getTerrain(position), owner);
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 
@@ -172,7 +171,7 @@ public class MainGUI implements Notifiable {
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 if (tile.hasMeepleSpot(directions[x][y]) && controller.requestPlacementStatus(directions[x][y])) {
-                    meepleGrid[xBase + x][yBase + y].setHighlight(tile.getTerrain(directions[x][y]), currentPlayer.getNumber());
+                    meepleGrid[xBase + x][yBase + y].setHighlight(tile.getTerrain(directions[x][y]), currentPlayer);
                 }
             }
         }

@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import carcassonne.control.GameOptions;
+import carcassonne.control.GameProperties;
 import carcassonne.control.PaintShop;
 import carcassonne.model.terrain.TerrainType;
 
@@ -26,7 +26,7 @@ import carcassonne.model.terrain.TerrainType;
  */
 public class MenuColorsMouseAdapter extends MouseAdapter implements ChangeListener, ActionListener {
     private Map<TerrainType, JLabel> labelMap;
-    private final GameOptions options;
+    private final GameProperties properties;
     private final PaintShop paintShop;
     private final int player;
     private final JColorChooser colorChooser;
@@ -35,10 +35,10 @@ public class MenuColorsMouseAdapter extends MouseAdapter implements ChangeListen
      * Simple constructor.
      * @param player is the player whose color gets chosen.
      */
-    public MenuColorsMouseAdapter(int player) {
+    public MenuColorsMouseAdapter(int player, GameProperties properties) {
         super();
         this.player = player;
-        options = GameOptions.getInstance();
+        this.properties = properties;
         colorChooser = new JColorChooser();
         colorChooser.getSelectionModel().addChangeListener(this);
         paintShop = new PaintShop();
@@ -48,14 +48,14 @@ public class MenuColorsMouseAdapter extends MouseAdapter implements ChangeListen
     // gets called when the ok button is pressed
     @Override
     public void actionPerformed(ActionEvent e) {
-        options.setPlayerColor(colorChooser.getColor(), player);
+        properties.setColor(colorChooser.getColor(), player);
     }
 
     // gets called when the menu entry is clicked.
     @Override
     public void mousePressed(MouseEvent e) {
-        colorChooser.setColor(options.getPlayerColor(player));
-        colorChooser.setBorder(BorderFactory.createTitledBorder("Choose Meeple Color for player " + options.getPlayerName(player)));
+        colorChooser.setColor(properties.getColor(player));
+        colorChooser.setBorder(BorderFactory.createTitledBorder("Choose Meeple Color for player " + properties.getName(player)));
         JColorChooser.createDialog(null, "Carcassonne", true, colorChooser, this, null).setVisible(true);
     }
 

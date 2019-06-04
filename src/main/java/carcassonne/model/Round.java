@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import carcassonne.control.GameOptions;
+import carcassonne.control.MainController;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
@@ -27,11 +28,11 @@ public class Round {
      * @param playerCount is the amount of players of the round.
      * @param grid is the grid of the round.
      */
-    public Round(int playerCount, Grid grid) {
+    public Round(int playerCount, Grid grid, MainController controller) {
         this.grid = grid;
         this.playerCount = playerCount;
         tileStack = new TileStack(playerCount, !GameOptions.getInstance().isChaosMode()); // TODO (HIGH) remove from round?
-        createPlayers();
+        createPlayers(controller);
         currentTile = grid.getFoundation().getTile();
     }
 
@@ -84,7 +85,6 @@ public class Round {
      * @return a list of names of the winning players.
      */
     public List<String> getWinningPlayers() {
-        GameOptions options = GameOptions.getInstance();
         List<String> winnerList = new LinkedList<>();
         int maxScore = 0;
         for (Player player : players) {
@@ -92,7 +92,7 @@ public class Round {
                 if (player.getScore() > maxScore) {
                     winnerList.clear();
                 }
-                winnerList.add(options.getPlayerName(player.getNumber()));
+                winnerList.add(player.getName());
                 maxScore = player.getScore();
             }
         }
@@ -118,15 +118,15 @@ public class Round {
 
     /**
      * creates the players objects and sets the first players as active players.
-     * @param playerCount is the number of players in the range of [1, <code>GameOptions.maximalPlayers]</code>.
+     * @param playerCount is the number of players in the range of [1, <code>GameOptions.MAXIMAL_PLAYERS]</code>.
      */
-    private void createPlayers() {
-        if (playerCount <= 1 || playerCount > GameOptions.getInstance().maximalPlayers) {
+    private void createPlayers(MainController controller) {
+        if (playerCount <= 1 || playerCount > GameOptions.MAXIMAL_PLAYERS) {
             throw new IllegalArgumentException(playerCount + " is not a valid players count");
         }
         players = new Player[playerCount]; // initialize the players array.
         for (int i = 0; i < players.length; i++) {
-            players[i] = new Player(i); // create the players.
+            players[i] = new Player(i, controller.getProperties()); // create the players.
         }
         activePlayerIndex = -1; // first player can only start after first tile is drawn via nextTurn()
     }

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JLabel;
 
 import carcassonne.control.GameOptions;
+import carcassonne.control.GameProperties;
 import carcassonne.model.Player;
 import carcassonne.view.Notifiable;
 
@@ -19,18 +20,17 @@ public class Scoreboard implements Notifiable {
     private final JLabel[] scoreLabels;
     private final JLabel stackSizeLabel;
     private final ArrayList<JLabel> allLabels;
-    private final GameOptions options;
+    private final GameProperties properties;
 
     /**
      * Standard constructor. Creates score board.
      */
-    public Scoreboard() {
-        options = GameOptions.getInstance();
-        options.register(this);
-        scoreLabels = new JLabel[options.maximalPlayers];
+    public Scoreboard(GameProperties properties) { // TODO (HIGH) link with players?
+        this.properties = properties;
+        scoreLabels = new JLabel[GameOptions.MAXIMAL_PLAYERS];
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
-            scoreLabels[i].setForeground(options.getPlayerColor(i));
+            scoreLabels[i].setForeground(properties.getColor(i));
         }
         stackSizeLabel = new JLabel();
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
@@ -83,7 +83,7 @@ public class Scoreboard implements Notifiable {
      * @param player is the player whose scoreboard should be updated.
      */
     public void update(Player player) {
-        String playerName = options.getPlayerName(player.getNumber()) + " ";
+        String playerName = player.getName() + " ";
         String text = "[" + playerName + ": " + player.getScore() + " points, " + player.getFreeMeeples() + " meeples]    ";
         scoreLabels[player.getNumber()].setText(text);
     }
@@ -99,8 +99,9 @@ public class Scoreboard implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < scoreLabels.length; i++) {
-            scoreLabels[i].setForeground(options.getPlayerColorText(i)); // replace only color and player name:
-            scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + options.getPlayerName(i) + ":"));
+            scoreLabels[i].setForeground(properties.getColor(i)); // replace only color and player name:
+            scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + properties.getName(i) + ":"));
         }
     }
+
 }

@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 
 /**
@@ -48,8 +49,8 @@ public class PaintShop {
      * @param playerNumber is the number of the player whose color is used.
      * @return the colored meeple.
      */
-    public ImageIcon getColoredMeeple(TerrainType meepleType, int playerNumber) {
-        return getColoredMeeple(meepleType, options.getPlayerColor(playerNumber));
+    public ImageIcon getColoredMeeple(TerrainType meepleType, Player player) {
+        return getColoredMeeple(meepleType, player.getColor());
     }
 
     // prepares the base images and templates

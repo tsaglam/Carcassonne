@@ -144,7 +144,7 @@ public class StateManning extends AbstractControllerState {
     protected void entry() {
         if (round.getActivePlayer().hasFreeMeeples()) {
             mainGUI.setMeepleHighlight(round.getCurrentTile(), round.getActivePlayer());
-            placementGUI.setTile(round.getCurrentTile(), round.getActivePlayer().getNumber());
+            placementGUI.setTile(round.getCurrentTile(), round.getActivePlayer());
         } else {
             GameMessage.showMessage("You have no Meeples left. Regain meeples by Completion to place Meepels again. ");
             processGridPatterns();

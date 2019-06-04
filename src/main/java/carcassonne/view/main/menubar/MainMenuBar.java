@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
 import carcassonne.control.GameOptions;
+import carcassonne.control.GameProperties;
 import carcassonne.control.MainController;
 import carcassonne.view.Notifiable;
 
@@ -23,6 +24,7 @@ import carcassonne.view.Notifiable;
 public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private static final long serialVersionUID = -599734693130415390L;
+    private final GameProperties properties;
     private final MainController controller;
     private int playerCount;
     private JMenu menuGame;
@@ -44,8 +46,9 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     public MainMenuBar(Scoreboard scoreboard, MainController controller) { // TODO (HIGH) make menu bar gray
         super();
         this.controller = controller;
+        properties = controller.getProperties();
         options = GameOptions.getInstance();
-        options.register(this);
+        properties.registerNotifiable(this);
         playerCount = 2;
         buildMenuGame();
         buildMenuOptions();
@@ -119,7 +122,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private void buildMenuPlayers() {
         menuPlayers = new JMenu("Players");
-        JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[options.maximalPlayers - 1];
+        JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameOptions.MAXIMAL_PLAYERS - 1];
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
             itemPlayerCount[i] = new JRadioButtonMenuItem((i + 2) + " Players");
@@ -131,21 +134,21 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildMenuNames() {
-        itemNames = new JMenuItem[options.maximalPlayers];
+        itemNames = new JMenuItem[GameOptions.MAXIMAL_PLAYERS];
         menuNames = new JMenu("Set Names");
         for (int i = 0; i < itemNames.length; i++) {
             itemNames[i] = new JMenuItem();
-            itemNames[i].addMouseListener(new MenuNamesMouseAdapter(i));
+            itemNames[i].addMouseListener(new MenuNamesMouseAdapter(i, properties));
             menuNames.add(itemNames[i]);
         }
     }
 
     private void buildMenuColors() { // TODO (MEDIUM) reduce duplication
-        itemColors = new JMenuItem[options.maximalPlayers];
+        itemColors = new JMenuItem[GameOptions.MAXIMAL_PLAYERS];
         menuColors = new JMenu("Set Colors");
         for (int i = 0; i < itemColors.length; i++) {
             itemColors[i] = new JMenuItem();
-            itemColors[i].addMouseListener(new MenuColorsMouseAdapter(i));
+            itemColors[i].addMouseListener(new MenuColorsMouseAdapter(i, properties));
             menuColors.add(itemColors[i]);
         }
     }
@@ -153,11 +156,12 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < itemColors.length; i++) {
-            Color color = options.getPlayerColorText(i);
+            Color color = properties.getColor(i); // TODO (HIGH) should be text color
+            String name = properties.getName(i);
             itemColors[i].setForeground(color);
-            itemColors[i].setText("Color of " + options.getPlayerName(i));
+            itemColors[i].setText("Color of " + name);
             itemNames[i].setForeground(color);
-            itemNames[i].setText(options.getPlayerName(i));
+            itemNames[i].setText(name);
         }
     }
 
