@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import carcassonne.view.Notifiable;
-
 /**
  * Class for the management of the Carcassonne game properties.
  * @author Timur Saglam

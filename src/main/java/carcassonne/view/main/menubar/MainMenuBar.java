@@ -15,7 +15,7 @@ import javax.swing.JRadioButtonMenuItem;
 import carcassonne.control.GameOptions;
 import carcassonne.control.GameProperties;
 import carcassonne.control.MainController;
-import carcassonne.view.Notifiable;
+import carcassonne.control.Notifiable;
 
 /**
  * The menu bar for the main GUI.

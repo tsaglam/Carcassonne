@@ -9,9 +9,9 @@ import javax.swing.WindowConstants;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
+import carcassonne.control.Notifiable;
 import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
-import carcassonne.view.Notifiable;
 import carcassonne.view.main.MainGUI;
 
 /**
