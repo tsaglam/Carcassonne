@@ -122,7 +122,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private void buildMenuPlayers() {
         menuPlayers = new JMenu("Players");
-        JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameOptions.MAXIMAL_PLAYERS - 1];
+        JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameProperties.MAXIMAL_PLAYERS - 1];
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
             itemPlayerCount[i] = new JRadioButtonMenuItem((i + 2) + " Players");
@@ -134,7 +134,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildMenuNames() {
-        itemNames = new JMenuItem[GameOptions.MAXIMAL_PLAYERS];
+        itemNames = new JMenuItem[GameProperties.MAXIMAL_PLAYERS];
         menuNames = new JMenu("Set Names");
         for (int i = 0; i < itemNames.length; i++) {
             itemNames[i] = new JMenuItem();
@@ -144,7 +144,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildMenuColors() { // TODO (MEDIUM) reduce duplication
-        itemColors = new JMenuItem[GameOptions.MAXIMAL_PLAYERS];
+        itemColors = new JMenuItem[GameProperties.MAXIMAL_PLAYERS];
         menuColors = new JMenu("Set Colors");
         for (int i = 0; i < itemColors.length; i++) {
             itemColors[i] = new JMenuItem();

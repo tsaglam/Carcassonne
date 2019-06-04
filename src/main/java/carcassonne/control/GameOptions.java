@@ -52,15 +52,6 @@ public final class GameOptions {
     public int gridWidth;
 
     /**
-     * maximal amount of players.
-     */
-    @Deprecated
-    public final static int MAXIMAL_PLAYERS = 5;
-
-    @Deprecated
-    public final static int TILE_SIZE = 100;
-
-    /**
      * is the name of the operating system.
      */
     @Deprecated
@@ -88,10 +79,10 @@ public final class GameOptions {
     private GameOptions() {
         initSystemProperties();
         colorGUImain = new Color(190, 190, 190); // grey
-        gridHeight = resolutionHeight / TILE_SIZE;
-        gridWidth = resolutionWidth / TILE_SIZE;
-        gridResolutionHeight = gridHeight * TILE_SIZE;
-        gridResolutionWidth = gridWidth * TILE_SIZE;
+        gridHeight = resolutionHeight / GameProperties.TILE_SIZE;
+        gridWidth = resolutionWidth / GameProperties.TILE_SIZE;
+        gridResolutionHeight = gridHeight * GameProperties.TILE_SIZE;
+        gridResolutionWidth = gridWidth * GameProperties.TILE_SIZE;
         foundationType = TileType.CastleWallRoad;
     }
 
