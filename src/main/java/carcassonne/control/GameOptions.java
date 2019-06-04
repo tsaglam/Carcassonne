@@ -69,8 +69,6 @@ public final class GameOptions {
     @Deprecated
     public int resolutionWidth;
 
-    private boolean chaosMode;
-
     private int taskBarHeight;
 
     /**
@@ -95,24 +93,6 @@ public final class GameOptions {
     @Deprecated
     public String getMeeplePath(TerrainType type, boolean isTemplate) {
         return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + (isTemplate ? "_template" : "") + ".png";
-    }
-
-    /**
-     * Checks whether chaos mode is enabled.
-     * @return true if it is enabled.
-     */
-    @Deprecated
-    public boolean isChaosMode() {
-        return chaosMode;
-    }
-
-    /**
-     * Sets the chaos mode setting.
-     * @param chaosMode specifies whether chaos mode is active or not.
-     */
-    @Deprecated
-    public void setChaosMode(boolean chaosMode) {
-        this.chaosMode = chaosMode;
     }
 
     private void initSystemProperties() {
