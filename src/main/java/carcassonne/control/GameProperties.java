@@ -18,6 +18,7 @@ public class GameProperties {
     private final List<Notifiable> changeListeners;
     private final ArrayList<String> names;
     private final ArrayList<Color> colors;
+    private boolean chaosMode;
 
     /**
      * Basic constructor. Loads the properties file, creates a new one if the file does not exist.
@@ -74,5 +75,20 @@ public class GameProperties {
     public Color getTextColor(int playerNumber) {
         return new Color(getColor(playerNumber).getRGB(), false); // remove transparency
     }
+    
+    /**
+     * Checks whether chaos mode is enabled.
+     * @return true if it is enabled.
+     */
+    public boolean isChaosMode() {
+        return chaosMode;
+    }
 
+    /**
+     * Sets the chaos mode setting.
+     * @param chaosMode specifies whether chaos mode is active or not.
+     */
+    public void setChaosMode(boolean chaosMode) {
+        this.chaosMode = chaosMode;
+    }
 }

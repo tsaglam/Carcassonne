@@ -12,7 +12,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
-import carcassonne.control.GameOptions;
 import carcassonne.control.GameProperties;
 import carcassonne.control.MainController;
 import carcassonne.control.Notifiable;
@@ -24,8 +23,8 @@ import carcassonne.control.Notifiable;
 public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private static final long serialVersionUID = -599734693130415390L;
-    private final GameProperties properties;
     private final MainController controller;
+    private final GameProperties properties;
     private int playerCount;
     private JMenu menuGame;
     private JMenu menuOptions;
@@ -34,7 +33,6 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private JMenu menuColors;
     private JMenuItem itemNewGame;
     private JMenuItem itemAbortGame;
-    private final GameOptions options;
     private JMenuItem[] itemColors;
     private JMenuItem[] itemNames;
 
@@ -47,7 +45,6 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         super();
         this.controller = controller;
         properties = controller.getProperties();
-        options = GameOptions.getInstance();
         properties.registerNotifiable(this);
         playerCount = 2;
         buildMenuGame();
@@ -113,7 +110,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemChaosMode.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                options.setChaosMode(!itemChaosMode.isSelected());
+                properties.setChaosMode(!itemChaosMode.isSelected());
             }
         });
         menuOptions.add(itemChaosMode);
