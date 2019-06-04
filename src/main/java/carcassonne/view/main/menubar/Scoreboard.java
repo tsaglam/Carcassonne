@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
-import carcassonne.control.GameOptions;
 import carcassonne.control.GameProperties;
 import carcassonne.control.Notifiable;
 import carcassonne.model.Player;
@@ -27,7 +26,7 @@ public class Scoreboard implements Notifiable {
      */
     public Scoreboard(GameProperties properties) { // TODO (HIGH) link with players?
         this.properties = properties;
-        scoreLabels = new JLabel[GameOptions.MAXIMAL_PLAYERS];
+        scoreLabels = new JLabel[GameProperties.MAXIMAL_PLAYERS];
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
             scoreLabels[i].setForeground(properties.getColor(i));

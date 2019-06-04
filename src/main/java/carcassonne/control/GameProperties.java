@@ -10,11 +10,12 @@ import java.util.List;
  * @author Timur Saglam
  */
 public class GameProperties {
-    private final List<Notifiable> changeListeners;
+    public final static int TILE_SIZE = 100;
+    public final static int MAXIMAL_PLAYERS = 5;
     private static final Color[] DEFAULT_COLORS = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(216, 124, 0),
             new Color(96, 0, 147) };
     private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };
-
+    private final List<Notifiable> changeListeners;
     private final ArrayList<String> names;
     private final ArrayList<Color> colors;
 

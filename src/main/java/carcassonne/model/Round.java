@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import carcassonne.control.GameOptions;
+import carcassonne.control.GameProperties;
 import carcassonne.control.MainController;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.tile.Tile;
@@ -121,7 +122,7 @@ public class Round {
      * @param playerCount is the number of players in the range of [1, <code>GameOptions.MAXIMAL_PLAYERS]</code>.
      */
     private void createPlayers(MainController controller) {
-        if (playerCount <= 1 || playerCount > GameOptions.MAXIMAL_PLAYERS) {
+        if (playerCount <= 1 || playerCount > GameProperties.MAXIMAL_PLAYERS) {
             throw new IllegalArgumentException(playerCount + " is not a valid players count");
         }
         players = new Player[playerCount]; // initialize the players array.

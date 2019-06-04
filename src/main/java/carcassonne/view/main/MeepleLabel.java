@@ -55,9 +55,9 @@ public class MeepleLabel {
             }
 
             @Override
-            public void mouseEntered(MouseEvent event) {
+            public void mouseEntered(MouseEvent event) { // TODO only color the meeple? Slight shadow?
                 label.setOpaque(true);
-                Color color = player.getColor(); // TODO (HIGH) move colors to player class
+                Color color = player.getColor();
                 Color highlightColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), TRANSPARANT);
                 label.setBackground(highlightColor);
                 label.setBorder(BorderFactory.createLineBorder(color, BORDER_THICKNESS, true));
