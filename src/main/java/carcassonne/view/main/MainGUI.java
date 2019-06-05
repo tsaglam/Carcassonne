@@ -171,7 +171,7 @@ public class MainGUI implements Notifiable {
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 if (tile.hasMeepleSpot(directions[x][y]) && controller.requestPlacementStatus(directions[x][y])) {
-                    meepleGrid[xBase + x][yBase + y].setHighlight(tile.getTerrain(directions[x][y]), currentPlayer);
+                    meepleGrid[xBase + x][yBase + y].setPreview(tile.getTerrain(directions[x][y]), currentPlayer);
                 }
             }
         }

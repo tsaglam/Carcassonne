@@ -1,15 +1,12 @@
 package carcassonne.view.main;
 
-import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
@@ -23,16 +20,14 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class MeepleLabel {
-    private static final int BORDER_THICKNESS = 2;
-    private static final int TRANSPARANT = 100;
     private final ImageIcon imageEmpty;
     private final PaintShop paintShop;
     private Player player;
     private final MouseAdapter mouseAdapter;
     private TerrainType terrain;
     private final GameOptions options;
-    private final Border transparentBorder;
     private final JLabel label;
+    private boolean preview;
 
     /**
      * Creates a blank meeple label.
@@ -42,7 +37,7 @@ public class MeepleLabel {
         options = GameOptions.getInstance();
         label = new JLabel();
         imageEmpty = new ImageIcon(GameOptions.getInstance().getMeeplePath(TerrainType.OTHER, false));
-        transparentBorder = BorderFactory.createLineBorder(new Color(TRANSPARANT, true), BORDER_THICKNESS);
+        preview = false;
         reset();
         this.paintShop = paintShop;
         mouseAdapter = new MouseAdapter() {
@@ -50,24 +45,18 @@ public class MeepleLabel {
             public void mouseClicked(MouseEvent event) {
                 if (SwingUtilities.isLeftMouseButton(event)) {
                     controller.requestMeeplePlacement(direction);
-                    label.setOpaque(false);
                 }
             }
 
             @Override
-            public void mouseEntered(MouseEvent event) { // TODO only color the meeple? Slight shadow?
-                label.setOpaque(true);
-                Color color = player.getColor();
-                Color highlightColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), TRANSPARANT);
-                label.setBackground(highlightColor);
-                label.setBorder(BorderFactory.createLineBorder(color, BORDER_THICKNESS, true));
+            public void mouseEntered(MouseEvent event) {
+                setMeepleIcon();
                 frame.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent event) {
-                label.setOpaque(false);
-                label.setBorder(transparentBorder);
+                setPreviewIcon();
                 frame.repaint();
             }
         };
@@ -77,10 +66,13 @@ public class MeepleLabel {
      * Refreshes its icon by getting the newest image from the {@link PaintShop}.
      */
     public void refresh() {
-        if (terrain != TerrainType.OTHER) {
-            ImageIcon icon = paintShop.getColoredMeeple(terrain, player);
-            label.setIcon(icon);
+        if (terrain != TerrainType.OTHER && !preview) {
+            setMeepleIcon();
         }
+    }
+
+    private void setMeepleIcon() {
+        label.setIcon(paintShop.getColoredMeeple(terrain, player));
     }
 
     /**
@@ -89,7 +81,6 @@ public class MeepleLabel {
     public void reset() {
         terrain = TerrainType.OTHER;
         label.setIcon(imageEmpty);
-        label.setBorder(transparentBorder);
         label.removeMouseListener(mouseAdapter);
     }
 
@@ -101,17 +92,24 @@ public class MeepleLabel {
     public void setIcon(TerrainType terrain, Player player) {
         this.terrain = terrain;
         this.player = player;
+        preview = false;
         refresh();
     }
 
     /**
-     * Sets the specific {@link TerrainType} as meeple placement highlight, which means a transparent image of the
-     * correlating meeple.
+     * Sets the specific {@link TerrainType} as meeple placement preview, which means a transparent image of the correlating
+     * meeple.
      * @param terrain is the specific {@link TerrainType}.
      */
-    public void setHighlight(TerrainType terrain, Player player) {
+    public void setPreview(TerrainType terrain, Player player) {
+        this.terrain = terrain;
         this.player = player;
+        preview = true;
         label.addMouseListener(mouseAdapter);
+        setPreviewIcon();
+    }
+
+    private void setPreviewIcon() {
         label.setIcon(new ImageIcon(options.getMeeplePath(terrain, false)));
     }
 
