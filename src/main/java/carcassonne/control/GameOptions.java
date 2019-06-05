@@ -84,17 +84,6 @@ public final class GameOptions {
         foundationType = TileType.CastleWallRoad;
     }
 
-    /**
-     * Builds the path to the image of a specific meeple type.
-     * @param type is the type of terrain the meeple occupies.
-     * @param isTemplate specifies whether the template image should be loaded.
-     * @return the path as a String.
-     */
-    @Deprecated
-    public String getMeeplePath(TerrainType type, boolean isTemplate) {
-        return "src/main/ressources/meeple/meeple_" + type.toString().toLowerCase() + (isTemplate ? "_template" : "") + ".png";
-    }
-
     private void initSystemProperties() {
         GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         DisplayMode displayMode = environment.getDefaultScreenDevice().getDisplayMode();

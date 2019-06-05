@@ -5,11 +5,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import carcassonne.model.terrain.TerrainType;
+
 /**
  * Class for the management of the Carcassonne game properties.
  * @author Timur Saglam
  */
 public class GameProperties {
+    private static final String EMPTY = "";
+    private static final String TEMPLATE = "_template";
+    private static final String PNG = ".png";
+    private static final String MEEPLE_PATH = "src/main/ressources/meeple/meeple_"; // TODO (HIGH) maybe move to paint shop?
     public final static int TILE_SIZE = 100;
     public final static int MAXIMAL_PLAYERS = 5;
     private static final Color[] DEFAULT_COLORS = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(216, 124, 0),
@@ -75,7 +81,7 @@ public class GameProperties {
     public Color getTextColor(int playerNumber) {
         return new Color(getColor(playerNumber).getRGB(), false); // remove transparency
     }
-    
+
     /**
      * Checks whether chaos mode is enabled.
      * @return true if it is enabled.
@@ -90,5 +96,15 @@ public class GameProperties {
      */
     public void setChaosMode(boolean chaosMode) {
         this.chaosMode = chaosMode;
+    }
+
+    /**
+     * Builds the path to the image of a specific meeple type.
+     * @param type is the type of terrain the meeple occupies.
+     * @param isTemplate specifies whether the template image should be loaded.
+     * @return the path as a String.
+     */
+    public static String getMeeplePath(TerrainType type, boolean isTemplate) {
+        return MEEPLE_PATH + type.toString().toLowerCase() + (isTemplate ? TEMPLATE : EMPTY) + PNG;
     }
 }
