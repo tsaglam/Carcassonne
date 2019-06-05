@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-import carcassonne.control.GameOptions;
+import carcassonne.control.GameProperties;
 import carcassonne.control.MainController;
 import carcassonne.control.PaintShop;
 import carcassonne.model.Player;
@@ -25,7 +25,6 @@ public class MeepleLabel {
     private Player player;
     private final MouseAdapter mouseAdapter;
     private TerrainType terrain;
-    private final GameOptions options;
     private final JLabel label;
     private boolean preview;
 
@@ -34,9 +33,8 @@ public class MeepleLabel {
      * @param paintShop is the paint shop for the meeple generation.
      */
     public MeepleLabel(PaintShop paintShop, MainController controller, GridDirection direction, JFrame frame) {
-        options = GameOptions.getInstance();
         label = new JLabel();
-        imageEmpty = new ImageIcon(GameOptions.getInstance().getMeeplePath(TerrainType.OTHER, false));
+        imageEmpty = new ImageIcon(GameProperties.getMeeplePath(TerrainType.OTHER, false));
         preview = false;
         reset();
         this.paintShop = paintShop;
@@ -69,10 +67,6 @@ public class MeepleLabel {
         if (terrain != TerrainType.OTHER && !preview) {
             setMeepleIcon();
         }
-    }
-
-    private void setMeepleIcon() {
-        label.setIcon(paintShop.getColoredMeeple(terrain, player));
     }
 
     /**
@@ -109,10 +103,6 @@ public class MeepleLabel {
         setPreviewIcon();
     }
 
-    private void setPreviewIcon() {
-        label.setIcon(new ImageIcon(options.getMeeplePath(terrain, false)));
-    }
-
     /**
      * Grants access to the {@link JLabel} itself.
      * @return the {@link JLabel}
@@ -121,4 +111,11 @@ public class MeepleLabel {
         return label;
     }
 
+    private void setMeepleIcon() {
+        label.setIcon(paintShop.getColoredMeeple(terrain, player));
+    }
+
+    private void setPreviewIcon() {
+        label.setIcon(new ImageIcon(GameProperties.getMeeplePath(terrain, false)));
+    }
 }

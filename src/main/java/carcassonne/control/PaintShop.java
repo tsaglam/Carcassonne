@@ -21,14 +21,12 @@ import carcassonne.model.terrain.TerrainType;
  */
 public class PaintShop {
     private final Map<TerrainType, BufferedImage> imageMap;
-    private final GameOptions options;
     private final Map<TerrainType, BufferedImage> templateMap;
 
     /**
      * Basic constructor, creates base images and templates.
      */
     public PaintShop() {
-        options = GameOptions.getInstance();
         imageMap = buildImageMap(false);
         templateMap = buildImageMap(true);
     }
@@ -57,7 +55,7 @@ public class PaintShop {
     private Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
         Map<TerrainType, BufferedImage> map = new HashMap<>();
         for (TerrainType terrainType : TerrainType.basicTerrain()) {
-            File file = new File(options.getMeeplePath(terrainType, isTemplate));
+            File file = new File(GameProperties.getMeeplePath(terrainType, isTemplate));
             try {
                 map.put(terrainType, ImageIO.read(file));
             } catch (IOException exception) {

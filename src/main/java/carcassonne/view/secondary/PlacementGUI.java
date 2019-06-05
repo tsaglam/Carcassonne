@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import carcassonne.control.GameProperties;
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
@@ -77,9 +78,9 @@ public class PlacementGUI extends SecondaryGUI {
             for (int x = 0; x < 3; x++) {
                 TerrainType terrain = tile.getTerrain(directions[x][y]);
                 if (tile.hasMeepleSpot(directions[x][y])) {
-                    button[x][y].setIcon(new ImageIcon(options.getMeeplePath(terrain, false)));
+                    button[x][y].setIcon(new ImageIcon(GameProperties.getMeeplePath(terrain, false)));
                 } else {
-                    button[x][y].setIcon(new ImageIcon(options.getMeeplePath(TerrainType.OTHER, false)));
+                    button[x][y].setIcon(new ImageIcon(GameProperties.getMeeplePath(TerrainType.OTHER, false)));
                 }
                 if (controller.requestPlacementStatus(directions[x][y]) && tile.hasMeepleSpot(directions[x][y])) {
                     button[x][y].setEnabled(true);
