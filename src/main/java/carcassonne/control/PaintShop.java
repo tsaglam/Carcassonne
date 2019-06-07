@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.view.GameMessage;
 
 /**
  * This is the Carcassonne paint shop! It paints the meeple images!
@@ -66,13 +67,7 @@ public class PaintShop {
      * @return the highlighted tile.
      */
     public ImageIcon getColoredHighlight(Player player) {
-        File file = new File("src/main/ressources/tiles/Null0.png");
-        BufferedImage tileImage = null;
-        try { // TODO (HIGH) put into own method
-            tileImage = ImageIO.read(file);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
+        BufferedImage tileImage = loadImage("src/main/ressources/tiles/Null0.png"); // TODO (HIGH) move to properties
         return colorMaskBased(tileImage, highlightImage, player.getColor());
     }
 
@@ -80,12 +75,8 @@ public class PaintShop {
     private Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
         Map<TerrainType, BufferedImage> map = new HashMap<>();
         for (TerrainType terrainType : TerrainType.basicTerrain()) {
-            File file = new File(GameProperties.getMeeplePath(terrainType, isTemplate));
-            try {
-                map.put(terrainType, ImageIO.read(file));
-            } catch (IOException exception) {
-                System.err.println(exception.getMessage());
-            }
+            BufferedImage meepleImage = loadImage(GameProperties.getMeeplePath(terrainType, isTemplate));
+            map.put(terrainType, meepleImage);
         }
         return map;
     }
@@ -136,5 +127,16 @@ public class PaintShop {
         boolean isAlphaPremultiplied = model.isAlphaPremultiplied();
         WritableRaster raster = image.copyData(null);
         return new BufferedImage(model, raster, isAlphaPremultiplied, null);
+    }
+
+    private BufferedImage loadImage(String path) {
+        File file = new File(path);
+        try {
+            return ImageIO.read(file);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            GameMessage.showError("ERROR: Could not load image loacted at " + path);
+            return null;
+        }
     }
 }
