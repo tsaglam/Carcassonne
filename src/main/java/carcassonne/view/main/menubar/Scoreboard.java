@@ -29,7 +29,7 @@ public class Scoreboard implements Notifiable {
         scoreLabels = new JLabel[GameProperties.MAXIMAL_PLAYERS];
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
-            scoreLabels[i].setForeground(properties.getColor(i));
+            scoreLabels[i].setForeground(properties.getTextColor(i));
         }
         stackSizeLabel = new JLabel();
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
@@ -82,7 +82,7 @@ public class Scoreboard implements Notifiable {
      * @param player is the player whose scoreboard should be updated.
      */
     public void update(Player player) {
-        String playerName = player.getName() + " ";
+        String playerName = player.getName();
         String text = "[" + playerName + ": " + player.getScore() + " points, " + player.getFreeMeeples() + " meeples]    ";
         scoreLabels[player.getNumber()].setText(text);
     }
@@ -98,7 +98,7 @@ public class Scoreboard implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < scoreLabels.length; i++) {
-            scoreLabels[i].setForeground(properties.getColor(i)); // replace only color and player name:
+            scoreLabels[i].setForeground(properties.getTextColor(i)); // replace only color and player name:
             scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + properties.getName(i) + ":"));
         }
     }
