@@ -16,6 +16,7 @@ import carcassonne.model.Player;
  * @author Timur Saglam
  */
 public class Scoreboard implements Notifiable {
+    private static final String FONT_TYPE = "Helvetica";
     private static final String TOOL_TIP = "Settings for player ";
     private final JLabel[] scoreLabels;
     private final JLabel stackSizeLabel;
@@ -37,7 +38,7 @@ public class Scoreboard implements Notifiable {
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
         allLabels.add(stackSizeLabel);
         for (JLabel label : allLabels) {
-            label.setFont(new Font("Helvetica", Font.BOLD, 12));
+            label.setFont(new Font(FONT_TYPE, Font.BOLD, 12));
         }
     }
 

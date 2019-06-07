@@ -35,7 +35,7 @@ public class MenuColorsMouseAdapter extends MouseAdapter implements ChangeListen
      * Simple constructor.
      * @param player is the player whose color gets chosen.
      */
-    public MenuColorsMouseAdapter(int player, GameProperties properties) {
+    public MenuColorsMouseAdapter(int player, GameProperties properties) { // TODO (MEDIUM) merge with name dialog
         super();
         this.player = player;
         this.properties = properties;

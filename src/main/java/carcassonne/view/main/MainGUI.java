@@ -72,7 +72,9 @@ public class MainGUI implements Notifiable {
     public void notifyChange() {
         meepleLabels.forEach(it -> it.refresh());
         frame.repaint();
-        setCurrentPlayer(currentPlayer);
+        if (currentPlayer != null) {
+            setCurrentPlayer(currentPlayer);
+        }
     }
 
     /**
