@@ -44,6 +44,7 @@ public class MainGUI implements Notifiable {
     private List<TileLabel> tileLabels;
     private MeepleLabel[][] meepleGrid;
     private List<MeepleLabel> meepleLabels;
+    private Player currentPlayer;
 
     /**
      * Constructor of the main GUI. creates the GUI with a scoreboard.
@@ -71,6 +72,7 @@ public class MainGUI implements Notifiable {
     public void notifyChange() {
         meepleLabels.forEach(it -> it.refresh());
         frame.repaint();
+        setCurrentPlayer(currentPlayer);
     }
 
     /**
@@ -177,6 +179,7 @@ public class MainGUI implements Notifiable {
      * @param currentPlayer is the current {@link Player}.
      */
     public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
         ImageIcon newHighlight = paintShop.getColoredHighlight(currentPlayer);
         tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
     }
