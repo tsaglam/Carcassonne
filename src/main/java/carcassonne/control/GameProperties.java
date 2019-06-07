@@ -73,8 +73,8 @@ public class GameProperties {
     public Color getLightColor(int playerNumber) {
         Color color = getColor(playerNumber);
         float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-        hsb[1] *= 0.5; // reduce saturation
-        hsb[2] = 1 - ((1 - hsb[2]) * 0.5f); // increase brightness // TODO (HIGH) reduce brightness a little
+        hsb[1] *= 0.6; // reduce saturation
+        hsb[2] = 1 - ((1 - hsb[2]) * 0.75f); // increase brightness
         return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2])); // convert to rgb color
     }
 
