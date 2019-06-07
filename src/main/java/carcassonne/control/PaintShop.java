@@ -20,8 +20,10 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class PaintShop {
+    private static final String HIGHLIGHT = "src/main/ressources/highlight.png"; // TODO (HIGH) move to options.
     private final Map<TerrainType, BufferedImage> imageMap;
     private final Map<TerrainType, BufferedImage> templateMap;
+    private BufferedImage highlightImage;
 
     /**
      * Basic constructor, creates base images and templates.
@@ -29,6 +31,12 @@ public class PaintShop {
     public PaintShop() {
         imageMap = buildImageMap(false);
         templateMap = buildImageMap(true);
+        File file = new File(HIGHLIGHT);
+        try {
+            highlightImage = ImageIO.read(file);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**
@@ -49,6 +57,23 @@ public class PaintShop {
      */
     public ImageIcon getColoredMeeple(TerrainType meepleType, Player player) {
         return getColoredMeeple(meepleType, player.getColor());
+    }
+
+    /**
+     * Returns a custom colored highlight image.
+     * @param player determines the color of the highlight.
+     * @param tileIcon is the tile to highlight.
+     * @return the highlighted tile.
+     */
+    public ImageIcon getColoredHighlight(Player player) {
+        File file = new File("src/main/ressources/tiles/Null0.png");
+        BufferedImage tileImage = null;
+        try { // TODO (HIGH) put into own method
+            tileImage = ImageIO.read(file);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return colorMaskBased(tileImage, highlightImage, player.getColor());
     }
 
     // prepares the base images and templates
@@ -77,6 +102,32 @@ public class PaintShop {
             }
         }
         return new ImageIcon(image);
+    }
+
+    private ImageIcon colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
+        BufferedImage image = deepCopy(imageToColor);
+        for (int x = 0; x < maskImage.getWidth(); x++) {
+            for (int y = 0; y < maskImage.getHeight(); y++) {
+                Color maskPixel = new Color(maskImage.getRGB(x, y), true);
+                Color targetPixel = new Color(targetColor.getRed(), targetColor.getGreen(), targetColor.getBlue(), maskPixel.getAlpha());
+                Color imagePixel = new Color(image.getRGB(x, y), true);
+                Color blendedColor = blend(imagePixel, targetPixel);
+                image.setRGB(x, y, blendedColor.getRGB());
+            }
+        }
+        return new ImageIcon(image);
+    }
+
+    // Blends to colors correctly based on alpha composition.
+    private Color blend(Color first, Color second) {
+        double totalAlpha = first.getAlpha() + second.getAlpha();
+        double firstWeight = first.getAlpha() / totalAlpha;
+        double secondWeight = second.getAlpha() / totalAlpha;
+        double red = firstWeight * first.getRed() + secondWeight * second.getRed();
+        double green = firstWeight * first.getGreen() + secondWeight * second.getGreen();
+        double blue = firstWeight * first.getBlue() + secondWeight * second.getBlue();
+        int alpha = Math.max(first.getAlpha(), second.getAlpha());
+        return new Color((int) red, (int) green, (int) blue, alpha);
     }
 
     // copies a image to avoid side effects.

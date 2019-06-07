@@ -84,7 +84,7 @@ public class StateManning extends AbstractControllerState {
         Tile tile = round.getCurrentTile();
         Player player = round.getActivePlayer();
         if (player.hasFreeMeeples() && isPlaceable(position)) {
-            mainGUI.resetMeepleHighlight(tile);
+            mainGUI.resetMeeplePreview(tile);
             tile.placeMeeple(player, position);
             mainGUI.setMeeple(tile, position, player);
             updateScores();
@@ -108,7 +108,7 @@ public class StateManning extends AbstractControllerState {
      */
     @Override
     public void skip() {
-        mainGUI.resetMeepleHighlight(round.getCurrentTile());
+        mainGUI.resetMeeplePreview(round.getCurrentTile());
         processGridPatterns();
         startNextTurn();
     }
@@ -133,6 +133,7 @@ public class StateManning extends AbstractControllerState {
             changeState(StateGameOver.class);
         } else {
             round.nextTurn();
+            mainGUI.setCurrentPlayer(round.getActivePlayer());
             changeState(StatePlacing.class);
         }
     }
@@ -143,7 +144,7 @@ public class StateManning extends AbstractControllerState {
     @Override
     protected void entry() {
         if (round.getActivePlayer().hasFreeMeeples()) {
-            mainGUI.setMeepleHighlight(round.getCurrentTile(), round.getActivePlayer());
+            mainGUI.setMeeplePreview(round.getCurrentTile(), round.getActivePlayer());
             placementGUI.setTile(round.getCurrentTile(), round.getActivePlayer());
         } else {
             GameMessage.showMessage("You have no Meeples left. Regain meeples by Completion to place Meepels again. ");

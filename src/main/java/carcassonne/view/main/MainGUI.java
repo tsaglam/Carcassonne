@@ -3,7 +3,10 @@ package carcassonne.view.main;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -26,15 +29,17 @@ import carcassonne.view.main.menubar.Scoreboard;
  * @author Timur Saglam
  */
 public class MainGUI implements Notifiable {
-
+    private static final int MEEPLE_FACTOR = 3; // Meeples per tile length.
     private GridBagConstraints constraints;
     private final MainController controller;
     private final JFrame frame;
-    private int gridHeight;
-    private int gridWidth;
+    private final int gridHeight;
+    private final int gridWidth;
     private TileLabel[][] labelGrid;
     private JLayeredPane layeredPane;
+    private List<TileLabel> tileLabels;
     private MeepleLabel[][] meepleGrid;
+    private List<MeepleLabel> meepleLabels;
     private int meepleGridHeight;
     private int meepleGridWidth;
     private final GameOptions options;
@@ -42,6 +47,7 @@ public class MainGUI implements Notifiable {
     private JPanel panelTop;
     private final Scoreboard scoreboard;
     private final PaintShop paintShop;
+    private Player currentPlayer;
 
     /**
      * Constructor of the main GUI. creates the GUI with a scoreboard.
@@ -54,6 +60,8 @@ public class MainGUI implements Notifiable {
         options = GameOptions.getInstance();
         paintShop = new PaintShop();
         frame = new JFrame();
+        gridWidth = options.gridWidth;
+        gridHeight = options.gridHeight;
         buildTileGrid();
         buildMeepleGrid();
         buildLayeredPane();
@@ -65,11 +73,7 @@ public class MainGUI implements Notifiable {
      */
     @Override
     public void notifyChange() {
-        for (int y = 0; y < meepleGridHeight; y++) {
-            for (int x = 0; x < meepleGridWidth; x++) {
-                meepleGrid[x][y].refresh();
-            }
-        }
+        meepleLabels.forEach(it -> it.refresh());
         frame.repaint();
     }
 
@@ -77,15 +81,9 @@ public class MainGUI implements Notifiable {
      * Rebuilds the label grid and the meeple grid if the game should be restarted.
      */
     public void rebuildGrids() {
-        for (int y = 0; y < meepleGridHeight; y++) {
-            for (int x = 0; x < meepleGridWidth; x++) {
-                if (x < gridWidth && y < gridHeight) {
-                    labelGrid[x][y].reset();
-                }
-                meepleGrid[x][y].reset();
-                frame.repaint();
-            }
-        }
+        meepleLabels.forEach(it -> it.reset());
+        tileLabels.forEach(it -> it.reset());
+        frame.repaint();
     }
 
     /**
@@ -98,9 +96,9 @@ public class MainGUI implements Notifiable {
         if (spot == null) { // make sure meeple is placed
             throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI: " + meeple);
         }
-        for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 3; x++) {
-                meepleGrid[spot.getX() * 3 + x][spot.getY() * 3 + y].reset();
+        for (int y = 0; y < MEEPLE_FACTOR; y++) {
+            for (int x = 0; x < MEEPLE_FACTOR; x++) {
+                meepleGrid[spot.getX() * MEEPLE_FACTOR + x][spot.getY() * MEEPLE_FACTOR + y].reset();
             }
         }
         frame.repaint();
@@ -145,37 +143,47 @@ public class MainGUI implements Notifiable {
     public void setMeeple(Tile tile, GridDirection position, Player owner) {
         checkParameters(tile, position, owner);
         GridSpot spot = tile.getGridSpot();
-        int xpos = position.addX(spot.getX() * 3 + 1);
-        int ypos = position.addY(spot.getY() * 3 + 1);
+        int xpos = position.addX(spot.getX() * MEEPLE_FACTOR + 1);
+        int ypos = position.addY(spot.getY() * MEEPLE_FACTOR + 1);
         meepleGrid[xpos][ypos].setIcon(tile.getTerrain(position), owner);
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 
-    public void resetMeepleHighlight(Tile tile) {
+    public void resetMeeplePreview(Tile tile) {
         checkParameters(tile);
-        int xBase = tile.getGridSpot().getX() * 3;
-        int yBase = tile.getGridSpot().getY() * 3;
-        for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 3; x++) {
+        int xBase = tile.getGridSpot().getX() * MEEPLE_FACTOR;
+        int yBase = tile.getGridSpot().getY() * MEEPLE_FACTOR;
+        for (int y = 0; y < MEEPLE_FACTOR; y++) {
+            for (int x = 0; x < MEEPLE_FACTOR; x++) {
                 meepleGrid[xBase + x][yBase + y].reset();
             }
         }
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 
-    public void setMeepleHighlight(Tile tile, Player currentPlayer) {
+    public void setMeeplePreview(Tile tile, Player currentPlayer) {
         checkParameters(tile, currentPlayer);
-        int xBase = tile.getGridSpot().getX() * 3;
-        int yBase = tile.getGridSpot().getY() * 3;
+        int xBase = tile.getGridSpot().getX() * MEEPLE_FACTOR;
+        int yBase = tile.getGridSpot().getY() * MEEPLE_FACTOR;
         GridDirection[][] directions = GridDirection.values2D();
-        for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 3; x++) {
+        for (int y = 0; y < MEEPLE_FACTOR; y++) {
+            for (int x = 0; x < MEEPLE_FACTOR; x++) {
                 if (tile.hasMeepleSpot(directions[x][y]) && controller.requestPlacementStatus(directions[x][y])) {
                     meepleGrid[xBase + x][yBase + y].setPreview(tile.getTerrain(directions[x][y]), currentPlayer);
                 }
             }
         }
         frame.repaint(); // This is required! Removing this will paint black background.
+    }
+
+    /**
+     * Notifies the the main GUI about a (new) current player. This allows the UI to adapt color schemes to the player.
+     * @param currentPlayer is the current {@link Player}.
+     */
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+        ImageIcon newHighlight = paintShop.getColoredHighlight(currentPlayer);
+        tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
     }
 
     private void checkParameters(Object... parameters) {
@@ -216,14 +224,16 @@ public class MainGUI implements Notifiable {
         panelTop.setOpaque(false);
         panelTop.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
-        meepleGridWidth = options.gridWidth * 3;
-        meepleGridHeight = options.gridHeight * 3;
+        meepleGridWidth = options.gridWidth * MEEPLE_FACTOR;
+        meepleGridHeight = options.gridHeight * MEEPLE_FACTOR;
         constraints.weightx = 1;
         constraints.weighty = 1;
+        meepleLabels = new ArrayList<>();
         meepleGrid = new MeepleLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
         for (int x = 0; x < meepleGridWidth; x++) {
             for (int y = 0; y < meepleGridHeight; y++) {
-                meepleGrid[x][y] = new MeepleLabel(paintShop, controller, GridDirection.values2D()[x % 3][y % 3], frame);
+                meepleGrid[x][y] = new MeepleLabel(paintShop, controller, GridDirection.values2D()[x % MEEPLE_FACTOR][y % MEEPLE_FACTOR], frame);
+                meepleLabels.add(meepleGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;
                 panelTop.add(meepleGrid[x][y].getLabel(), constraints); // add label with constraints
@@ -240,12 +250,12 @@ public class MainGUI implements Notifiable {
         panelBottom.setBackground(options.colorGUImain);
         panelBottom.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
-        gridWidth = options.gridWidth;
-        gridHeight = options.gridHeight;
+        tileLabels = new ArrayList<>();
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 labelGrid[x][y] = new TileLabel(controller, x, y);
+                tileLabels.add(labelGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;
                 panelBottom.add(labelGrid[x][y].getLabel(), constraints); // add label with constraints

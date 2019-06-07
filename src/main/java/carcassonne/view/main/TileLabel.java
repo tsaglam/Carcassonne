@@ -3,6 +3,7 @@ package carcassonne.view.main;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import carcassonne.control.MainController;
@@ -19,6 +20,7 @@ public class TileLabel {
     private final Tile defaultTile;
     private final Tile highlightTile;
     private final JLabel label;
+    private ImageIcon coloredHighlight;
 
     /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
@@ -46,18 +48,14 @@ public class TileLabel {
 
             @Override
             public void mouseEntered(MouseEvent event) {
-                toggleSelection();
+                if (highlightTile.equals(tile)) {
+                    label.setIcon(coloredHighlight);
+                }
             }
 
             @Override
             public void mouseExited(MouseEvent event) {
-                toggleSelection();
-            }
-
-            private void toggleSelection() {
                 if (highlightTile.equals(tile)) {
-                    highlightTile.rotateRight();
-                    highlightTile.rotateRight();
                     setTile(highlightTile);
                 }
             }
@@ -67,6 +65,10 @@ public class TileLabel {
     public void setTile(Tile tile) {
         this.tile = tile;
         label.setIcon(tile.getImage());
+    }
+
+    public void setColoredHighlight(ImageIcon coloredHighlight) {
+        this.coloredHighlight = coloredHighlight;
     }
 
     public void highlight() {
