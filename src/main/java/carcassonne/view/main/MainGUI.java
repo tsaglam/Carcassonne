@@ -30,24 +30,20 @@ import carcassonne.view.main.menubar.Scoreboard;
  */
 public class MainGUI implements Notifiable {
     private static final int MEEPLE_FACTOR = 3; // Meeples per tile length.
+    private final GameOptions options;
     private GridBagConstraints constraints;
     private final MainController controller;
+    private final Scoreboard scoreboard;
+    private final PaintShop paintShop;
     private final JFrame frame;
     private final int gridHeight;
     private final int gridWidth;
+    private int meepleGridHeight;
+    private int meepleGridWidth;
     private TileLabel[][] labelGrid;
-    private JLayeredPane layeredPane;
     private List<TileLabel> tileLabels;
     private MeepleLabel[][] meepleGrid;
     private List<MeepleLabel> meepleLabels;
-    private int meepleGridHeight;
-    private int meepleGridWidth;
-    private final GameOptions options;
-    private JPanel panelBottom;
-    private JPanel panelTop;
-    private final Scoreboard scoreboard;
-    private final PaintShop paintShop;
-    private Player currentPlayer;
 
     /**
      * Constructor of the main GUI. creates the GUI with a scoreboard.
@@ -62,10 +58,10 @@ public class MainGUI implements Notifiable {
         frame = new JFrame();
         gridWidth = options.gridWidth;
         gridHeight = options.gridHeight;
-        buildTileGrid();
-        buildMeepleGrid();
-        buildLayeredPane();
-        buildFrame();
+        JPanel tilePanel = buildTilePanel();
+        JPanel meeplePanel = buildMeeplePanel();
+        JLayeredPane layeredPane = buildLayeredPane(meeplePanel, tilePanel);
+        buildFrame(layeredPane);
     }
 
     /**
@@ -181,7 +177,6 @@ public class MainGUI implements Notifiable {
      * @param currentPlayer is the current {@link Player}.
      */
     public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
         ImageIcon newHighlight = paintShop.getColoredHighlight(currentPlayer);
         tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
     }
@@ -200,7 +195,7 @@ public class MainGUI implements Notifiable {
         }
     }
 
-    private void buildFrame() {
+    private void buildFrame(JLayeredPane layeredPane) {
         MainMenuBar menuBar = new MainMenuBar(scoreboard, controller);
         frame.setJMenuBar(menuBar);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -211,18 +206,19 @@ public class MainGUI implements Notifiable {
         frame.setVisible(true);
     }
 
-    private void buildLayeredPane() {
-        layeredPane = new JLayeredPane();
+    private JLayeredPane buildLayeredPane(JPanel meeplePanel, JPanel tilePanel) {
+        JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setLayout(new OverlayLayout(layeredPane));
-        layeredPane.add(panelBottom, Integer.valueOf(0), 1);
-        layeredPane.add(panelTop, Integer.valueOf(0), 0);
+        layeredPane.add(tilePanel, Integer.valueOf(0), 1);
+        layeredPane.add(meeplePanel, Integer.valueOf(0), 0);
+        return layeredPane;
     }
 
-    private void buildMeepleGrid() {
-        panelTop = new JPanel();
-        panelTop.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
-        panelTop.setOpaque(false);
-        panelTop.setLayout(new GridBagLayout());
+    private JPanel buildMeeplePanel() {
+        JPanel meeplePanel = new JPanel();
+        meeplePanel.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
+        meeplePanel.setOpaque(false);
+        meeplePanel.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         meepleGridWidth = options.gridWidth * MEEPLE_FACTOR;
         meepleGridHeight = options.gridHeight * MEEPLE_FACTOR;
@@ -236,19 +232,20 @@ public class MainGUI implements Notifiable {
                 meepleLabels.add(meepleGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;
-                panelTop.add(meepleGrid[x][y].getLabel(), constraints); // add label with constraints
+                meeplePanel.add(meepleGrid[x][y].getLabel(), constraints); // add label with constraints
             }
         }
+        return meeplePanel;
     }
 
     /*
      * Creates the grid of labels.
      */
-    private void buildTileGrid() {
-        panelBottom = new JPanel();
-        panelBottom.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
-        panelBottom.setBackground(options.colorGUImain);
-        panelBottom.setLayout(new GridBagLayout());
+    private JPanel buildTilePanel() {
+        JPanel tilePanel = new JPanel();
+        tilePanel.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
+        tilePanel.setBackground(options.colorGUImain);
+        tilePanel.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         tileLabels = new ArrayList<>();
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
@@ -258,9 +255,9 @@ public class MainGUI implements Notifiable {
                 tileLabels.add(labelGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;
-                panelBottom.add(labelGrid[x][y].getLabel(), constraints); // add label with constraints
+                tilePanel.add(labelGrid[x][y].getLabel(), constraints); // add label with constraints
             }
         }
+        return tilePanel;
     }
-
 }
