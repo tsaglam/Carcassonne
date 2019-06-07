@@ -16,6 +16,7 @@ import carcassonne.model.Player;
  * @author Timur Saglam
  */
 public class Scoreboard implements Notifiable {
+    private static final String TOOL_TIP = "Settings for player ";
     private final JLabel[] scoreLabels;
     private final JLabel stackSizeLabel;
     private final ArrayList<JLabel> allLabels;
@@ -30,6 +31,7 @@ public class Scoreboard implements Notifiable {
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
             scoreLabels[i].setForeground(properties.getTextColor(i));
+            scoreLabels[i].addMouseListener(new MenuColorsMouseAdapter(i, properties));
         }
         stackSizeLabel = new JLabel();
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
@@ -85,6 +87,7 @@ public class Scoreboard implements Notifiable {
         String playerName = player.getName();
         String text = "[" + playerName + ": " + player.getScore() + " points, " + player.getFreeMeeples() + " meeples]    ";
         scoreLabels[player.getNumber()].setText(text);
+        scoreLabels[player.getNumber()].setToolTipText(TOOL_TIP + player.getName());
     }
 
     /**
@@ -100,6 +103,7 @@ public class Scoreboard implements Notifiable {
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i].setForeground(properties.getTextColor(i)); // replace only color and player name:
             scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + properties.getName(i) + ":"));
+            scoreLabels[i].setToolTipText(TOOL_TIP + properties.getName(i));
         }
     }
 
