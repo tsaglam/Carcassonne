@@ -85,6 +85,7 @@ public class StatePlacing extends AbstractControllerState {
         } else {
             round.skipCurrentTile();
             round.nextTurn();
+            mainGUI.setCurrentPlayer(round.getActivePlayer());
             entry();
         }
     }
