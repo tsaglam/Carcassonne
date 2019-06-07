@@ -126,6 +126,7 @@ public abstract class AbstractControllerState {
         mainGUI.setTile(spot.getTile(), spot.getX(), spot.getY());
         highlightSurroundings(spot);
         round.nextTurn(); // first tile is drawn, player one is active.
+        mainGUI.setCurrentPlayer(round.getActivePlayer());
         changeState(StatePlacing.class);
     }
 
@@ -146,7 +147,7 @@ public abstract class AbstractControllerState {
     protected void updateStackSize() {
         scoreboard.updateStackSize(round.getStackSize());
     }
-    
+
     protected void highlightSurroundings(GridSpot spot) {
         for (GridSpot neighbor : grid.getNeighbors(spot, true, GridDirection.directNeighbors())) {
             if (neighbor != null && neighbor.isFree()) {
