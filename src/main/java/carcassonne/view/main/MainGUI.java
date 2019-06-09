@@ -1,6 +1,7 @@
 package carcassonne.view.main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import carcassonne.view.main.menubar.Scoreboard;
  */
 public class MainGUI implements Notifiable {
     private static final int MEEPLE_FACTOR = 3; // Meeples per tile length.
+    private static final Color GUI_COLOR = new Color(190, 190, 190);
     private final GameOptions options;
     private GridBagConstraints constraints;
     private final MainController controller;
@@ -249,7 +251,7 @@ public class MainGUI implements Notifiable {
     private JPanel buildTilePanel() {
         JPanel tilePanel = new JPanel();
         tilePanel.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
-        tilePanel.setBackground(options.colorGUImain);
+        tilePanel.setBackground(GUI_COLOR);
         tilePanel.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         tileLabels = new ArrayList<>();
