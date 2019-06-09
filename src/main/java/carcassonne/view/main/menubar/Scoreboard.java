@@ -31,7 +31,7 @@ public class Scoreboard implements Notifiable {
         scoreLabels = new JLabel[GameProperties.MAXIMAL_PLAYERS];
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
-            scoreLabels[i].setForeground(properties.getTextColor(i));
+            scoreLabels[i].setForeground(properties.getColor(i).textColor());
             scoreLabels[i].addMouseListener(new MenuColorsMouseAdapter(i, properties));
         }
         stackSizeLabel = new JLabel();
@@ -102,7 +102,7 @@ public class Scoreboard implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < scoreLabels.length; i++) {
-            scoreLabels[i].setForeground(properties.getTextColor(i)); // replace only color and player name:
+            scoreLabels[i].setForeground(properties.getColor(i).textColor()); // replace only color and player name:
             scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + properties.getName(i) + ":"));
             scoreLabels[i].setToolTipText(TOOL_TIP + properties.getName(i));
         }

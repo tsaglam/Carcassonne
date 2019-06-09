@@ -87,7 +87,7 @@ public class PlacementGUI extends SecondaryGUI {
                     button[x][y].setBackground(defaultButtonColor);
                 } else {
                     button[x][y].setEnabled(false);
-                    button[x][y].setBackground(currentPlayer.getLightColor());
+                    button[x][y].setBackground(currentPlayer.getColor().lightColor());
                 }
             }
         }

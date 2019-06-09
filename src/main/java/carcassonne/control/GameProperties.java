@@ -18,12 +18,12 @@ public class GameProperties {
     private static final String MEEPLE_PATH = "src/main/ressources/meeple/meeple_"; // TODO (HIGH) maybe move to paint shop?
     public final static int TILE_SIZE = 100;
     public final static int MAXIMAL_PLAYERS = 5;
-    private static final Color[] DEFAULT_COLORS = { new Color(30, 26, 197), new Color(151, 4, 12), new Color(14, 119, 25), new Color(216, 124, 0),
-            new Color(96, 0, 147) };
+    private static final PlayerColor[] DEFAULT_COLORS = { new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
+            new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147) };
     private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };
     private final List<Notifiable> changeListeners;
     private final ArrayList<String> names;
-    private final ArrayList<Color> colors;
+    private final ArrayList<PlayerColor> colors;
     private boolean chaosMode;
 
     /**
@@ -62,24 +62,12 @@ public class GameProperties {
     }
 
     public void setColor(Color color, int playerNumber) {
-        colors.set(playerNumber, color);
+        colors.set(playerNumber, new PlayerColor(color));
         notifyListeners();
     }
 
-    public Color getColor(int playerNumber) {
+    public PlayerColor getColor(int playerNumber) {
         return colors.get(playerNumber);
-    }
-
-    public Color getLightColor(int playerNumber) {
-        Color color = getColor(playerNumber);
-        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-        hsb[1] *= 0.6; // reduce saturation
-        hsb[2] = 1 - ((1 - hsb[2]) * 0.75f); // increase brightness
-        return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2])); // convert to rgb color
-    }
-
-    public Color getTextColor(int playerNumber) {
-        return new Color(getColor(playerNumber).getRGB(), false); // remove transparency
     }
 
     /**

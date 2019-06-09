@@ -153,7 +153,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < itemColors.length; i++) {
-            Color color = properties.getTextColor(i);
+            Color color = properties.getColor(i).textColor();
             String name = properties.getName(i);
             itemColors[i].setForeground(color);
             itemColors[i].setText("Color of " + name);
