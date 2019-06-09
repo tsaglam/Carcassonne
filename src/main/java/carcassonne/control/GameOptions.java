@@ -1,31 +1,14 @@
 package carcassonne.control;
 
-import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.GraphicsEnvironment;
-
-import carcassonne.model.terrain.TerrainType;
-import carcassonne.model.tile.TileType;
 
 /**
  * Class that stores the game options and other information.
  * @author Timur Saglam
  */
-@Deprecated
 public final class GameOptions {
     private static GameOptions instance;
-
-    /**
-     * Background color of the main GUI.
-     */
-    @Deprecated
-    public final Color colorGUImain;
-
-    /**
-     * The tile type of the foundation.
-     */
-    @Deprecated
-    public TileType foundationType;
 
     /**
      * The height of the grid in tiles.
@@ -76,12 +59,10 @@ public final class GameOptions {
      */
     private GameOptions() {
         initSystemProperties();
-        colorGUImain = new Color(190, 190, 190); // grey
         gridHeight = resolutionHeight / GameProperties.TILE_SIZE;
         gridWidth = resolutionWidth / GameProperties.TILE_SIZE;
         gridResolutionHeight = gridHeight * GameProperties.TILE_SIZE;
         gridResolutionWidth = gridWidth * GameProperties.TILE_SIZE;
-        foundationType = TileType.CastleWallRoad;
     }
 
     private void initSystemProperties() {

@@ -12,6 +12,7 @@ import carcassonne.model.tile.TileType;
  * @author Timur Saglam
  */
 public class Grid {
+    private final static TileType FOUNDATION_TYPE = TileType.CastleWallRoad;
     private final int width;
     private final int height;
     private final GridSpot[][] spots;
@@ -23,7 +24,7 @@ public class Grid {
      * @param height is the grid height.
      * @param foundationType is the tile type of the first tile in the middle of the grid.
      */
-    public Grid(int width, int height, TileType foundationType) {
+    public Grid(int width, int height) {
         this.width = width;
         this.height = height;
         spots = new GridSpot[width][height];
@@ -32,7 +33,7 @@ public class Grid {
                 spots[x][y] = new GridSpot(this, x, y);
             }
         }
-        placeFoundation(foundationType);
+        placeFoundation(FOUNDATION_TYPE);
     }
 
     /**
@@ -55,8 +56,7 @@ public class Grid {
     }
 
     /**
-     * Creates a list of spots that are connected to a specific spot with the terrain in a specific direction on the
-     * spot.
+     * Creates a list of spots that are connected to a specific spot with the terrain in a specific direction on the spot.
      * @param spot is the spot on the grid where the tile is.
      * @param from is the direction the tile is connected from
      * @return the list of connected tiles.
@@ -230,8 +230,8 @@ public class Grid {
     }
 
     /**
-     * Error checker method for other methods in this class. It just checks whether specific coordinates are on the grid
-     * and throws an error if not.
+     * Error checker method for other methods in this class. It just checks whether specific coordinates are on the grid and
+     * throws an error if not.
      * @param x is the x coordinate
      * @param y is the y coordinate
      */

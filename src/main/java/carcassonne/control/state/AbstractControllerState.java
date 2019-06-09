@@ -117,7 +117,7 @@ public abstract class AbstractControllerState {
      * @param playerCount is the specific number of players.
      */
     protected void startNewRound(int playerCount) {
-        Grid newGrid = new Grid(options.gridWidth, options.gridHeight, options.foundationType);
+        Grid newGrid = new Grid(options.gridWidth, options.gridHeight);
         Round newRound = new Round(playerCount, newGrid, controller.getProperties());
         controller.updateStates(newRound, newGrid);
         updateScores();
