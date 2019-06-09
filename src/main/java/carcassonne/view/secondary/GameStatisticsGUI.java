@@ -106,7 +106,7 @@ public class GameStatisticsGUI {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             if (!isSelected) { // if selected the color white is more readable
-                component.setForeground(round.getPlayer(row).getTextColor());
+                component.setForeground(round.getPlayer(row).getColor().textColor());
             }
             return component;
         }

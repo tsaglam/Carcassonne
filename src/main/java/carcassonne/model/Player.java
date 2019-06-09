@@ -1,10 +1,10 @@
 package carcassonne.model;
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
 import carcassonne.control.GameProperties;
+import carcassonne.control.PlayerColor;
 import carcassonne.model.terrain.TerrainType;
 
 /**
@@ -109,16 +109,8 @@ public class Player {
         return properties.getName(number);
     }
 
-    public Color getColor() {
+    public PlayerColor getColor() {
         return properties.getColor(number);
-    }
-
-    public Color getLightColor() {
-        return properties.getLightColor(number);
-    }
-
-    public Color getTextColor() {
-        return properties.getTextColor(number);
     }
 
     @Override

@@ -60,7 +60,7 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
         }
         this.tile = tile;
         this.currentPlayer = currentPlayer;
-        setBackground(currentPlayer.getLightColor());
+        setBackground(currentPlayer.getColor().lightColor());
         update(); // TODO (MEDIUM) rename method, be more specific
         dialog.setVisible(true);
         dialog.toFront(); // sets the focus on the secondary GUI, removes need for double clicks
@@ -88,7 +88,7 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
     @Override
     public void notifyChange() {
         if (currentPlayer != null) { // only if UI is in use.
-            setBackground(currentPlayer.getLightColor());
+            setBackground(currentPlayer.getColor().lightColor());
         }
     }
 
