@@ -32,13 +32,13 @@ public class MainController {
     private final Scoreboard scoreboard;
     private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
     private AbstractControllerState currentState;
-    private final GameProperties properties;
+    private final GameSettings properties;
 
     /**
      * Basic constructor. Creates the view and the model of the game.
      */
     public MainController() {
-        properties = new GameProperties();
+        properties = new GameSettings();
         scoreboard = new Scoreboard(properties);
         mainGUI = new MainGUI(scoreboard, this);
         rotationGUI = new RotationGUI(this, mainGUI);
@@ -129,9 +129,9 @@ public class MainController {
     }
 
     /**
-     * Getter for the {@link GameProperties}, which grants access to the games settings.
+     * Getter for the {@link GameSettings}, which grants access to the games settings.
      */
-    public GameProperties getProperties() {
+    public GameSettings getProperties() {
         return properties;
     }
 

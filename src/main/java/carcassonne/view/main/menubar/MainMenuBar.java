@@ -12,7 +12,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
-import carcassonne.control.GameProperties;
+import carcassonne.control.GameSettings;
 import carcassonne.control.MainController;
 import carcassonne.control.Notifiable;
 
@@ -24,7 +24,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private static final long serialVersionUID = -599734693130415390L;
     private final MainController controller;
-    private final GameProperties properties;
+    private final GameSettings properties;
     private int playerCount;
     private JMenu menuGame;
     private JMenu menuOptions;
@@ -119,7 +119,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private void buildMenuPlayers() {
         menuPlayers = new JMenu("Players");
-        JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameProperties.MAXIMAL_PLAYERS - 1];
+        JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameSettings.MAXIMAL_PLAYERS - 1];
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
             itemPlayerCount[i] = new JRadioButtonMenuItem((i + 2) + " Players");
@@ -131,7 +131,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildMenuNames() {
-        itemNames = new JMenuItem[GameProperties.MAXIMAL_PLAYERS];
+        itemNames = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
         menuNames = new JMenu("Set Names");
         for (int i = 0; i < itemNames.length; i++) {
             itemNames[i] = new JMenuItem();
@@ -141,7 +141,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildMenuColors() { // TODO (MEDIUM) reduce duplication
-        itemColors = new JMenuItem[GameProperties.MAXIMAL_PLAYERS];
+        itemColors = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
         menuColors = new JMenu("Set Colors");
         for (int i = 0; i < itemColors.length; i++) {
             itemColors[i] = new JMenuItem();
@@ -153,8 +153,8 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < itemColors.length; i++) {
-            Color color = properties.getColor(i).textColor();
-            String name = properties.getName(i);
+            Color color = properties.getPlayerColor(i).textColor();
+            String name = properties.getPlayerName(i);
             itemColors[i].setForeground(color);
             itemColors[i].setText("Color of " + name);
             itemNames[i].setForeground(color);

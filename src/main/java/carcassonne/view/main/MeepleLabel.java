@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-import carcassonne.control.GameProperties;
+import carcassonne.control.GameSettings;
 import carcassonne.control.MainController;
 import carcassonne.control.PaintShop;
 import carcassonne.model.Player;
@@ -34,7 +34,7 @@ public class MeepleLabel {
      */
     public MeepleLabel(PaintShop paintShop, MainController controller, GridDirection direction, JFrame frame) {
         label = new JLabel();
-        imageEmpty = new ImageIcon(GameProperties.getMeeplePath(TerrainType.OTHER, false));
+        imageEmpty = new ImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false));
         preview = false;
         reset();
         this.paintShop = paintShop;
@@ -116,6 +116,6 @@ public class MeepleLabel {
     }
 
     private void setPreviewIcon() {
-        label.setIcon(new ImageIcon(GameProperties.getMeeplePath(terrain, false)));
+        label.setIcon(new ImageIcon(GameSettings.getMeeplePath(terrain, false)));
     }
 }

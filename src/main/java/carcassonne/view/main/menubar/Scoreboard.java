@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
-import carcassonne.control.GameProperties;
+import carcassonne.control.GameSettings;
 import carcassonne.control.Notifiable;
 import carcassonne.model.Player;
 
@@ -21,17 +21,17 @@ public class Scoreboard implements Notifiable {
     private final JLabel[] scoreLabels;
     private final JLabel stackSizeLabel;
     private final ArrayList<JLabel> allLabels;
-    private final GameProperties properties;
+    private final GameSettings properties;
 
     /**
      * Standard constructor. Creates score board.
      */
-    public Scoreboard(GameProperties properties) { // TODO (HIGH) link with players?
+    public Scoreboard(GameSettings properties) { // TODO (HIGH) link with players?
         this.properties = properties;
-        scoreLabels = new JLabel[GameProperties.MAXIMAL_PLAYERS];
+        scoreLabels = new JLabel[GameSettings.MAXIMAL_PLAYERS];
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
-            scoreLabels[i].setForeground(properties.getColor(i).textColor());
+            scoreLabels[i].setForeground(properties.getPlayerColor(i).textColor());
             scoreLabels[i].addMouseListener(new MenuColorsMouseAdapter(i, properties));
         }
         stackSizeLabel = new JLabel();
@@ -102,9 +102,9 @@ public class Scoreboard implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < scoreLabels.length; i++) {
-            scoreLabels[i].setForeground(properties.getColor(i).textColor()); // replace only color and player name:
-            scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + properties.getName(i) + ":"));
-            scoreLabels[i].setToolTipText(TOOL_TIP + properties.getName(i));
+            scoreLabels[i].setForeground(properties.getPlayerColor(i).textColor()); // replace only color and player name:
+            scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + properties.getPlayerName(i) + ":"));
+            scoreLabels[i].setToolTipText(TOOL_TIP + properties.getPlayerName(i));
         }
     }
 

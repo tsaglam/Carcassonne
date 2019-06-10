@@ -3,7 +3,7 @@ package carcassonne.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import carcassonne.control.GameProperties;
+import carcassonne.control.GameSettings;
 import carcassonne.control.PlayerColor;
 import carcassonne.model.terrain.TerrainType;
 
@@ -17,13 +17,13 @@ public class Player {
     private final int number;
     private int overallScore;
     private Map<TerrainType, Integer> terrainSpecificScores;
-    private final GameProperties properties;
+    private final GameSettings properties;
 
     /**
      * Simple constructor.
      * @param number is the number of the player.
      */
-    public Player(int number, GameProperties properties) {
+    public Player(int number, GameSettings properties) {
         this.number = number;
         this.properties = properties;
         freeMeeples = MAX_MEEPLES;
@@ -106,11 +106,11 @@ public class Player {
 
     // TODO (HIGH) Comment, mention that these methods are convienience methods
     public String getName() {
-        return properties.getName(number);
+        return properties.getPlayerName(number);
     }
 
     public PlayerColor getColor() {
-        return properties.getColor(number);
+        return properties.getPlayerColor(number);
     }
 
     @Override

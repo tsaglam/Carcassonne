@@ -3,7 +3,7 @@ package carcassonne.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import carcassonne.control.GameProperties;
+import carcassonne.control.GameSettings;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
@@ -27,7 +27,7 @@ public class Round {
      * @param playerCount is the amount of players of the round.
      * @param grid is the grid of the round.
      */
-    public Round(int playerCount, Grid grid, GameProperties properties) {
+    public Round(int playerCount, Grid grid, GameSettings properties) {
         this.grid = grid;
         this.playerCount = playerCount;
         tileStack = new TileStack(playerCount, !properties.isChaosMode()); // TODO (HIGH) remove from round?
@@ -119,8 +119,8 @@ public class Round {
      * creates the players objects and sets the first players as active players.
      * @param playerCount is the number of players in the range of [1, <code>GameOptions.MAXIMAL_PLAYERS]</code>.
      */
-    private void createPlayers(GameProperties properties) {
-        if (playerCount <= 1 || playerCount > GameProperties.MAXIMAL_PLAYERS) {
+    private void createPlayers(GameSettings properties) {
+        if (playerCount <= 1 || playerCount > GameSettings.MAXIMAL_PLAYERS) {
             throw new IllegalArgumentException(playerCount + " is not a valid players count");
         }
         players = new Player[playerCount]; // initialize the players array.
