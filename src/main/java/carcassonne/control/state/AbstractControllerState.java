@@ -1,6 +1,6 @@
 package carcassonne.control.state;
 
-import carcassonne.control.GameProperties;
+import carcassonne.control.GameSettings;
 import carcassonne.control.MainController;
 import carcassonne.control.SystemProperties;
 import carcassonne.model.Player;
@@ -117,8 +117,8 @@ public abstract class AbstractControllerState {
      */
     protected void startNewRound(int playerCount) {
         SystemProperties systemProperties = new SystemProperties();
-        int gridWidth = systemProperties.getResolutionWidth() / GameProperties.TILE_SIZE;
-        int gridHeight = systemProperties.getResolutionHeight() / GameProperties.TILE_SIZE;
+        int gridWidth = systemProperties.getResolutionWidth() / GameSettings.TILE_SIZE;
+        int gridHeight = systemProperties.getResolutionHeight() / GameSettings.TILE_SIZE;
         Grid newGrid = new Grid(gridWidth, gridHeight);
         Round newRound = new Round(playerCount, newGrid, controller.getProperties());
         controller.updateStates(newRound, newGrid);

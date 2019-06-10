@@ -13,7 +13,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 
-import carcassonne.control.GameProperties;
+import carcassonne.control.GameSettings;
 import carcassonne.control.MainController;
 import carcassonne.control.Notifiable;
 import carcassonne.control.PaintShop;
@@ -60,7 +60,7 @@ public class MainGUI implements Notifiable {
         SystemProperties systemProperties = new SystemProperties();
         paintShop = new PaintShop();
         frame = new JFrame();
-        tileSize = GameProperties.TILE_SIZE;
+        tileSize = GameSettings.TILE_SIZE;
         gridWidth = systemProperties.getResolutionWidth() / tileSize;
         gridHeight = systemProperties.getResolutionHeight() / tileSize;
         JPanel tilePanel = buildTilePanel();

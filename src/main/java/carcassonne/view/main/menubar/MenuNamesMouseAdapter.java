@@ -3,7 +3,7 @@ package carcassonne.view.main.menubar;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import carcassonne.control.GameProperties;
+import carcassonne.control.GameSettings;
 import carcassonne.view.GameMessage;
 
 /**
@@ -12,13 +12,13 @@ import carcassonne.view.GameMessage;
  */
 public class MenuNamesMouseAdapter extends MouseAdapter {
     private final int player;
-    private final GameProperties properties;
+    private final GameSettings properties;
 
     /**
      * Simple constructor.
      * @param item is the correlating menu item.
      */
-    public MenuNamesMouseAdapter(int player, GameProperties properties) {
+    public MenuNamesMouseAdapter(int player, GameSettings properties) {
         super();
         this.player = player;
         this.properties = properties;
@@ -29,13 +29,13 @@ public class MenuNamesMouseAdapter extends MouseAdapter {
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        String name = GameMessage.getUserInput("Please enter a new name for player " + properties.getName(player) + "!");
+        String name = GameMessage.getUserInput("Please enter a new name for player " + properties.getPlayerName(player) + "!");
         if (name != null) { // if not canceled.
             if (name.isEmpty()) {
                 GameMessage.showMessage("Invalid name, please try again!");
                 mousePressed(e); // try again
             } else {
-                properties.setName(name, player);
+                properties.setPlayerName(name, player);
             }
         }
     }

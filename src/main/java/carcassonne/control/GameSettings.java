@@ -11,7 +11,7 @@ import carcassonne.model.terrain.TerrainType;
  * Class for the management of the Carcassonne game properties.
  * @author Timur Saglam
  */
-public class GameProperties {
+public class GameSettings {
     private static final String EMPTY = "";
     private static final String TEMPLATE = "_template";
     private static final String PNG = ".png";
@@ -32,10 +32,16 @@ public class GameProperties {
      * @param fileComment is the description in the property file.
      * @param bundleName is the symbolic name of the {@link Bundle}.
      */
-    public GameProperties() {
+    public GameSettings() {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
         changeListeners = new ArrayList<Notifiable>();
+    }
+
+    public void notifyListeners() {
+        for (Notifiable notifiable : changeListeners) {
+            notifiable.notifyChange();
+        }
     }
 
     /**
@@ -46,28 +52,12 @@ public class GameProperties {
         changeListeners.add(notifiable);
     }
 
-    public void notifyListeners() {
-        for (Notifiable notifiable : changeListeners) {
-            notifiable.notifyChange();
-        }
-    }
-
-    public String getName(int playerNumber) { // TODO (HIGH) rename methods, e.g. getPlayerName
-        return names.get(playerNumber);
-    }
-
-    public void setName(String name, int playerNumber) {
-        names.set(playerNumber, name);
-        notifyListeners();
-    }
-
-    public void setColor(Color color, int playerNumber) {
-        colors.set(playerNumber, new PlayerColor(color));
-        notifyListeners();
-    }
-
-    public PlayerColor getColor(int playerNumber) {
+    public PlayerColor getPlayerColor(int playerNumber) {
         return colors.get(playerNumber);
+    }
+
+    public String getPlayerName(int playerNumber) {
+        return names.get(playerNumber);
     }
 
     /**
@@ -84,6 +74,16 @@ public class GameProperties {
      */
     public void setChaosMode(boolean chaosMode) {
         this.chaosMode = chaosMode;
+    }
+
+    public void setPlayerColor(Color color, int playerNumber) {
+        colors.set(playerNumber, new PlayerColor(color));
+        notifyListeners();
+    }
+
+    public void setPlayerName(String name, int playerNumber) {
+        names.set(playerNumber, name);
+        notifyListeners();
     }
 
     /**

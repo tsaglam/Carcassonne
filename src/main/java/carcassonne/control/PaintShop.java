@@ -75,7 +75,7 @@ public class PaintShop {
     private Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
         Map<TerrainType, BufferedImage> map = new HashMap<>();
         for (TerrainType terrainType : TerrainType.basicTerrain()) {
-            BufferedImage meepleImage = loadImage(GameProperties.getMeeplePath(terrainType, isTemplate));
+            BufferedImage meepleImage = loadImage(GameSettings.getMeeplePath(terrainType, isTemplate));
             map.put(terrainType, meepleImage);
         }
         return map;
