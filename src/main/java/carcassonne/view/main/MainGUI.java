@@ -13,10 +13,11 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 
-import carcassonne.control.GameOptions;
+import carcassonne.control.GameProperties;
 import carcassonne.control.MainController;
 import carcassonne.control.Notifiable;
 import carcassonne.control.PaintShop;
+import carcassonne.control.SystemProperties;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
@@ -32,12 +33,12 @@ import carcassonne.view.main.menubar.Scoreboard;
 public class MainGUI implements Notifiable {
     private static final int MEEPLE_FACTOR = 3; // Meeples per tile length.
     private static final Color GUI_COLOR = new Color(190, 190, 190);
-    private final GameOptions options;
     private GridBagConstraints constraints;
     private final MainController controller;
     private final Scoreboard scoreboard;
     private final PaintShop paintShop;
     private final JFrame frame;
+    private final int tileSize;
     private final int gridHeight;
     private final int gridWidth;
     private int meepleGridHeight;
@@ -56,11 +57,12 @@ public class MainGUI implements Notifiable {
     public MainGUI(Scoreboard scoreboard, MainController controller) {
         this.scoreboard = scoreboard;
         this.controller = controller;
-        options = GameOptions.getInstance();
+        SystemProperties systemProperties = new SystemProperties();
         paintShop = new PaintShop();
         frame = new JFrame();
-        gridWidth = options.gridWidth;
-        gridHeight = options.gridHeight;
+        tileSize = GameProperties.TILE_SIZE;
+        gridWidth = systemProperties.getResolutionWidth() / tileSize;
+        gridHeight = systemProperties.getResolutionHeight() / tileSize;
         JPanel tilePanel = buildTilePanel();
         JPanel meeplePanel = buildMeeplePanel();
         JLayeredPane layeredPane = buildLayeredPane(meeplePanel, tilePanel);
@@ -223,12 +225,12 @@ public class MainGUI implements Notifiable {
 
     private JPanel buildMeeplePanel() {
         JPanel meeplePanel = new JPanel();
-        meeplePanel.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
+        meeplePanel.setSize(gridWidth * tileSize, gridHeight * tileSize);
         meeplePanel.setOpaque(false);
         meeplePanel.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
-        meepleGridWidth = options.gridWidth * MEEPLE_FACTOR;
-        meepleGridHeight = options.gridHeight * MEEPLE_FACTOR;
+        meepleGridWidth = gridWidth * MEEPLE_FACTOR;
+        meepleGridHeight = gridHeight * MEEPLE_FACTOR;
         constraints.weightx = 1;
         constraints.weighty = 1;
         meepleLabels = new ArrayList<>();
@@ -250,7 +252,7 @@ public class MainGUI implements Notifiable {
      */
     private JPanel buildTilePanel() {
         JPanel tilePanel = new JPanel();
-        tilePanel.setSize(options.gridResolutionWidth, options.gridResolutionHeight);
+        tilePanel.setSize(gridWidth * tileSize, gridHeight * tileSize);
         tilePanel.setBackground(GUI_COLOR);
         tilePanel.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();

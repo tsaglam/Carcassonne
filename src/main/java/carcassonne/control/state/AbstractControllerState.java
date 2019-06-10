@@ -1,7 +1,8 @@
 package carcassonne.control.state;
 
-import carcassonne.control.GameOptions;
+import carcassonne.control.GameProperties;
 import carcassonne.control.MainController;
+import carcassonne.control.SystemProperties;
 import carcassonne.model.Player;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
@@ -25,7 +26,6 @@ public abstract class AbstractControllerState {
     protected Round round;
     protected Grid grid;
     protected Scoreboard scoreboard;
-    protected GameOptions options;
 
     /**
      * Constructor of the abstract state, sets the controller from the parameter, registers the state at the controller and
@@ -43,7 +43,6 @@ public abstract class AbstractControllerState {
         this.rotationGUI = rotationGUI;
         this.placementGUI = placementGUI;
         this.scoreboard = scoreboard;
-        options = GameOptions.getInstance();
     }
 
     /**
@@ -117,7 +116,10 @@ public abstract class AbstractControllerState {
      * @param playerCount is the specific number of players.
      */
     protected void startNewRound(int playerCount) {
-        Grid newGrid = new Grid(options.gridWidth, options.gridHeight);
+        SystemProperties systemProperties = new SystemProperties();
+        int gridWidth = systemProperties.getResolutionWidth() / GameProperties.TILE_SIZE;
+        int gridHeight = systemProperties.getResolutionHeight() / GameProperties.TILE_SIZE;
+        Grid newGrid = new Grid(gridWidth, gridHeight);
         Round newRound = new Round(playerCount, newGrid, controller.getProperties());
         controller.updateStates(newRound, newGrid);
         updateScores();

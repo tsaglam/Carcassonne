@@ -7,9 +7,9 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
 import carcassonne.control.Notifiable;
+import carcassonne.control.SystemProperties;
 import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.main.MainGUI;
@@ -19,12 +19,14 @@ import carcassonne.view.main.MainGUI;
  * @author Timur Saglam
  */
 public abstract class SecondaryGUI extends JPanel implements Notifiable {
+    private static final int INITIAL_X = 100;
+    private static final int INITIAL_Y = 150;
     private static final long serialVersionUID = 4056347951568551115L;
     protected GridBagConstraints constraints;
     protected MainController controller;
     protected Player currentPlayer;
     protected JDialog dialog;
-    protected GameOptions options;
+    protected SystemProperties systemProperties;
     protected Tile tile;
 
     /**
@@ -36,7 +38,7 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
     public SecondaryGUI(MainController controller, MainGUI ui) {
         super(new GridBagLayout());
         this.controller = controller;
-        options = GameOptions.getInstance();
+        systemProperties = new SystemProperties();
         constraints = new GridBagConstraints();
         buildFrame(ui);
     }
@@ -75,7 +77,7 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
         dialog.setResizable(false);
         dialog.setAlwaysOnTop(true);
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        dialog.setLocation(options.resolutionWidth / 20, options.resolutionHeight / 5);
+        dialog.setLocation(INITIAL_X, INITIAL_Y);
     }
 
     /**
