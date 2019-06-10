@@ -8,12 +8,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-import carcassonne.control.GameSettings;
 import carcassonne.control.MainController;
 import carcassonne.control.PaintShop;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.settings.GameSettings;
 
 /**
  * Special {@link JLabel} for showing meeples.

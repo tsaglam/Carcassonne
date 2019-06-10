@@ -8,10 +8,10 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import carcassonne.control.MainController;
-import carcassonne.control.Notifiable;
-import carcassonne.control.SystemProperties;
 import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
+import carcassonne.settings.Notifiable;
+import carcassonne.settings.SystemProperties;
 import carcassonne.view.main.MainGUI;
 
 /**

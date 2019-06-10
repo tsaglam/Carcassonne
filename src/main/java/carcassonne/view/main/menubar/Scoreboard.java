@@ -7,9 +7,9 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
-import carcassonne.control.GameSettings;
-import carcassonne.control.Notifiable;
 import carcassonne.model.Player;
+import carcassonne.settings.GameSettings;
+import carcassonne.settings.Notifiable;
 
 /**
  * Is the scoreboard class of the game. Manages a score label for each player.
@@ -21,18 +21,18 @@ public class Scoreboard implements Notifiable {
     private final JLabel[] scoreLabels;
     private final JLabel stackSizeLabel;
     private final ArrayList<JLabel> allLabels;
-    private final GameSettings properties;
+    private final GameSettings settings;
 
     /**
      * Standard constructor. Creates score board.
      */
-    public Scoreboard(GameSettings properties) { // TODO (HIGH) link with players?
-        this.properties = properties;
+    public Scoreboard(GameSettings settings) { // TODO (HIGH) link with players?
+        this.settings = settings;
         scoreLabels = new JLabel[GameSettings.MAXIMAL_PLAYERS];
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
-            scoreLabels[i].setForeground(properties.getPlayerColor(i).textColor());
-            scoreLabels[i].addMouseListener(new MenuColorsMouseAdapter(i, properties));
+            scoreLabels[i].setForeground(settings.getPlayerColor(i).textColor());
+            scoreLabels[i].addMouseListener(new MenuColorsMouseAdapter(i, settings));
         }
         stackSizeLabel = new JLabel();
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
@@ -102,9 +102,9 @@ public class Scoreboard implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < scoreLabels.length; i++) {
-            scoreLabels[i].setForeground(properties.getPlayerColor(i).textColor()); // replace only color and player name:
-            scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + properties.getPlayerName(i) + ":"));
-            scoreLabels[i].setToolTipText(TOOL_TIP + properties.getPlayerName(i));
+            scoreLabels[i].setForeground(settings.getPlayerColor(i).textColor()); // replace only color and player name:
+            scoreLabels[i].setText(scoreLabels[i].getText().replaceFirst("\\[.*?:", "[" + settings.getPlayerName(i) + ":"));
+            scoreLabels[i].setToolTipText(TOOL_TIP + settings.getPlayerName(i));
         }
     }
 

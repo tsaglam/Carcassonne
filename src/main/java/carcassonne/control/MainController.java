@@ -11,6 +11,7 @@ import carcassonne.control.state.StatePlacing;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.settings.GameSettings;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
@@ -32,22 +33,22 @@ public class MainController {
     private final Scoreboard scoreboard;
     private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
     private AbstractControllerState currentState;
-    private final GameSettings properties;
+    private final GameSettings settings;
 
     /**
      * Basic constructor. Creates the view and the model of the game.
      */
     public MainController() {
-        properties = new GameSettings();
-        scoreboard = new Scoreboard(properties);
+        settings = new GameSettings();
+        scoreboard = new Scoreboard(settings);
         mainGUI = new MainGUI(scoreboard, this);
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
         stateMap = new HashMap<>();
-        properties.registerNotifiable(scoreboard);
-        properties.registerNotifiable(mainGUI);
-        properties.registerNotifiable(placementGUI);
-        properties.registerNotifiable(rotationGUI);
+        settings.registerNotifiable(scoreboard);
+        settings.registerNotifiable(mainGUI);
+        settings.registerNotifiable(placementGUI);
+        settings.registerNotifiable(rotationGUI);
         currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, scoreboard);
         registerState(currentState);
         registerState(new StateManning(this, mainGUI, rotationGUI, placementGUI, scoreboard));
@@ -132,7 +133,7 @@ public class MainController {
      * Getter for the {@link GameSettings}, which grants access to the games settings.
      */
     public GameSettings getProperties() {
-        return properties;
+        return settings;
     }
 
     /**

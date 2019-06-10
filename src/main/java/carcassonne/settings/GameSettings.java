@@ -1,4 +1,4 @@
-package carcassonne.control;
+package carcassonne.settings;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 import carcassonne.model.terrain.TerrainType;
 
 /**
- * Class for the management of the Carcassonne game properties.
+ * Class for the management of the Carcassonne game settings.
  * @author Timur Saglam
  */
 public class GameSettings {
@@ -27,10 +27,7 @@ public class GameSettings {
     private boolean chaosMode;
 
     /**
-     * Basic constructor. Loads the properties file, creates a new one if the file does not exist.
-     * @param FILE_NAME is the name of the property file.
-     * @param fileComment is the description in the property file.
-     * @param bundleName is the symbolic name of the {@link Bundle}.
+     * Creates a settings instance. Instances hold different setting values when one is changed.
      */
     public GameSettings() {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));

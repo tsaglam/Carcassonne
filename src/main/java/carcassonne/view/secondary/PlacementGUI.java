@@ -8,10 +8,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import carcassonne.control.GameSettings;
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.settings.GameSettings;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.placementbutton.PlacementButton;
 
