@@ -9,11 +9,11 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import carcassonne.control.MainController;
-import carcassonne.control.PaintShop;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
+import carcassonne.view.PaintShop;
 
 /**
  * Special {@link JLabel} for showing meeples.
