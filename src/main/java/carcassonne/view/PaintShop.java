@@ -1,4 +1,4 @@
-package carcassonne.control;
+package carcassonne.view;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -15,10 +15,9 @@ import javax.swing.ImageIcon;
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.GameMessage;
 
 /**
- * This is the Carcassonne paint shop! It paints the meeple images!
+ * This is the Carcassonne paint shop! It paints meeple images and tile highlights!
  * @author Timur Saglam
  */
 public class PaintShop {

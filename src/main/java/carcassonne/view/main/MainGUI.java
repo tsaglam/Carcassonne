@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 
 import carcassonne.control.MainController;
-import carcassonne.control.PaintShop;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
@@ -23,6 +22,7 @@ import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
 import carcassonne.settings.SystemProperties;
+import carcassonne.view.PaintShop;
 import carcassonne.view.main.menubar.MainMenuBar;
 import carcassonne.view.main.menubar.Scoreboard;
 

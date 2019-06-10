@@ -16,7 +16,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import carcassonne.settings.GameSettings;
-import carcassonne.control.PaintShop;
+import carcassonne.view.PaintShop;
 import carcassonne.model.terrain.TerrainType;
 
 /**
