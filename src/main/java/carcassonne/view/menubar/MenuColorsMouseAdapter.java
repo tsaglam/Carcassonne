@@ -1,4 +1,4 @@
-package carcassonne.view.main.menubar;
+package carcassonne.view.menubar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

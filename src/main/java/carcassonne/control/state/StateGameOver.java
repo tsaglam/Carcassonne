@@ -5,7 +5,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.main.menubar.Scoreboard;
+import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.secondary.GameStatisticsGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;

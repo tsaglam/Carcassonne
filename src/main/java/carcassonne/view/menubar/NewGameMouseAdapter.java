@@ -1,29 +1,29 @@
-package carcassonne.view.main.menubar;
+package carcassonne.view.menubar;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * A simple mouse adapter for the abort game button.
+ * A simple mouse adapter for the new game button.
  * @author Timur Saglam
  */
-public class AbortGameMouseAdapter extends MouseAdapter {
+public class NewGameMouseAdapter extends MouseAdapter {
     private final MainMenuBar menuBar;
 
     /**
      * Simple constructor.
      * @param menuBar sets the controller
      */
-    public AbortGameMouseAdapter(MainMenuBar menuBar) {
+    public NewGameMouseAdapter(MainMenuBar menuBar) {
         super();
         this.menuBar = menuBar;
     }
 
     /**
-     * Calls method on main menu bar for aborting the current game.
+     * Calls method on main menu bar for a new game.
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        menuBar.abortGame();
+        menuBar.newGame();
     }
 }
