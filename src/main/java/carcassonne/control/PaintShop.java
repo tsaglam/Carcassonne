@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.settings.GameSettings;
 import carcassonne.view.GameMessage;
 
 /**

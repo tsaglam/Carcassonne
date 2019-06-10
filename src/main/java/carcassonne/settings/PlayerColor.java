@@ -1,4 +1,4 @@
-package carcassonne.control;
+package carcassonne.settings;
 
 import java.awt.Color;
 

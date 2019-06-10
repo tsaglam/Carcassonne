@@ -1,4 +1,4 @@
-package carcassonne.control;
+package carcassonne.settings;
 
 /**
  * Interface for the notification of UI components.

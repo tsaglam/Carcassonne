@@ -3,9 +3,9 @@ package carcassonne.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import carcassonne.control.GameSettings;
-import carcassonne.control.PlayerColor;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.settings.GameSettings;
+import carcassonne.settings.PlayerColor;
 
 /**
  * The class for the player objects. It manages the meeples and the score.
@@ -17,15 +17,15 @@ public class Player {
     private final int number;
     private int overallScore;
     private Map<TerrainType, Integer> terrainSpecificScores;
-    private final GameSettings properties;
+    private final GameSettings settings;
 
     /**
      * Simple constructor.
      * @param number is the number of the player.
      */
-    public Player(int number, GameSettings properties) {
+    public Player(int number, GameSettings settings) {
         this.number = number;
-        this.properties = properties;
+        this.settings = settings;
         freeMeeples = MAX_MEEPLES;
         initializeScores();
     }
@@ -106,11 +106,11 @@ public class Player {
 
     // TODO (HIGH) Comment, mention that these methods are convienience methods
     public String getName() {
-        return properties.getPlayerName(number);
+        return settings.getPlayerName(number);
     }
 
     public PlayerColor getColor() {
-        return properties.getPlayerColor(number);
+        return settings.getPlayerColor(number);
     }
 
     @Override

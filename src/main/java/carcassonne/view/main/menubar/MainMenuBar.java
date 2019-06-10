@@ -12,9 +12,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
-import carcassonne.control.GameSettings;
 import carcassonne.control.MainController;
-import carcassonne.control.Notifiable;
+import carcassonne.settings.GameSettings;
+import carcassonne.settings.Notifiable;
 
 /**
  * The menu bar for the main GUI.
@@ -24,7 +24,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private static final long serialVersionUID = -599734693130415390L;
     private final MainController controller;
-    private final GameSettings properties;
+    private final GameSettings settings;
     private int playerCount;
     private JMenu menuGame;
     private JMenu menuOptions;
@@ -44,8 +44,8 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     public MainMenuBar(Scoreboard scoreboard, MainController controller) { // TODO (HIGH) make menu bar gray
         super();
         this.controller = controller;
-        properties = controller.getProperties();
-        properties.registerNotifiable(this);
+        settings = controller.getProperties();
+        settings.registerNotifiable(this);
         playerCount = 2;
         buildMenuGame();
         buildMenuOptions();
@@ -110,7 +110,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemChaosMode.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                properties.setChaosMode(!itemChaosMode.isSelected());
+                settings.setChaosMode(!itemChaosMode.isSelected());
             }
         });
         menuOptions.add(itemChaosMode);
@@ -135,7 +135,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         menuNames = new JMenu("Set Names");
         for (int i = 0; i < itemNames.length; i++) {
             itemNames[i] = new JMenuItem();
-            itemNames[i].addMouseListener(new MenuNamesMouseAdapter(i, properties));
+            itemNames[i].addMouseListener(new MenuNamesMouseAdapter(i, settings));
             menuNames.add(itemNames[i]);
         }
     }
@@ -145,7 +145,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         menuColors = new JMenu("Set Colors");
         for (int i = 0; i < itemColors.length; i++) {
             itemColors[i] = new JMenuItem();
-            itemColors[i].addMouseListener(new MenuColorsMouseAdapter(i, properties));
+            itemColors[i].addMouseListener(new MenuColorsMouseAdapter(i, settings));
             menuColors.add(itemColors[i]);
         }
     }
@@ -153,8 +153,8 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     @Override
     public void notifyChange() {
         for (int i = 0; i < itemColors.length; i++) {
-            Color color = properties.getPlayerColor(i).textColor();
-            String name = properties.getPlayerName(i);
+            Color color = settings.getPlayerColor(i).textColor();
+            String name = settings.getPlayerName(i);
             itemColors[i].setForeground(color);
             itemColors[i].setText("Color of " + name);
             itemNames[i].setForeground(color);
