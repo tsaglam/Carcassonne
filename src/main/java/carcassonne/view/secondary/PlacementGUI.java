@@ -13,7 +13,6 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.secondary.placementbutton.PlacementButton;
 
 /**
  * A GUI for the placement of Meeples on the Tile that was placed previously.

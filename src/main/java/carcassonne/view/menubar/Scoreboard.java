@@ -1,4 +1,4 @@
-package carcassonne.view.main.menubar;
+package carcassonne.view.menubar;
 
 import java.awt.Font;
 import java.util.ArrayList;

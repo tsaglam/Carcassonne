@@ -23,8 +23,8 @@ import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
 import carcassonne.settings.SystemProperties;
 import carcassonne.view.PaintShop;
-import carcassonne.view.main.menubar.MainMenuBar;
-import carcassonne.view.main.menubar.Scoreboard;
+import carcassonne.view.menubar.MainMenuBar;
+import carcassonne.view.menubar.Scoreboard;
 
 /**
  * The main GUI class.

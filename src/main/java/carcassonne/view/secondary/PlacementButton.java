@@ -1,4 +1,4 @@
-package carcassonne.view.secondary.placementbutton;
+package carcassonne.view.secondary;
 
 import javax.swing.JButton;
 

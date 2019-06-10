@@ -9,7 +9,7 @@ import carcassonne.model.grid.GridSpot;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.SystemProperties;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.main.menubar.Scoreboard;
+import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
