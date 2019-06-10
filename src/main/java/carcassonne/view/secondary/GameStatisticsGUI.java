@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -44,7 +45,7 @@ public class GameStatisticsGUI {
         table = new JTable(new GameStatisticsModel(round));
         // Header:
         DefaultTableCellRenderer defaultRenderer = new DefaultTableCellRenderer();
-        defaultRenderer.setHorizontalAlignment(JLabel.CENTER);
+        defaultRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         table.getTableHeader().setDefaultRenderer(defaultRenderer);
         // Columns:
         TableColumnModel model = table.getColumnModel();
@@ -96,13 +97,14 @@ public class GameStatisticsGUI {
 
         public CustomCellRenderer(Round round) {
             this.round = round;
-            setHorizontalAlignment(JLabel.CENTER); // Centers the text in cells.
+            setHorizontalAlignment(SwingConstants.CENTER); // Centers the text in cells.
         }
 
         /**
          * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object,
          * boolean, boolean, int, int)
          */
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             if (!isSelected) { // if selected the color white is more readable

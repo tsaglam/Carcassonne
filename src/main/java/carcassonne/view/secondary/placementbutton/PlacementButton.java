@@ -2,7 +2,6 @@ package carcassonne.view.secondary.placementbutton;
 
 import javax.swing.JButton;
 
-import carcassonne.control.GameOptions;
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 
@@ -16,7 +15,6 @@ import carcassonne.model.grid.GridDirection;
 public class PlacementButton extends JButton {
     private static final long serialVersionUID = -4580099806988033224L;
     private boolean enabled; // own enabled variable for fixing the isEnabled() method.
-    private final GameOptions options;
 
     /**
      * Simple constructor calling the <codeJButton>JButton()</code> constructor.
@@ -26,7 +24,6 @@ public class PlacementButton extends JButton {
      */
     public PlacementButton(MainController controller, int x, int y) {
         super();
-        options = GameOptions.getInstance();
         setup(controller, x, y);
     }
 
@@ -36,7 +33,8 @@ public class PlacementButton extends JButton {
      * @return true if the button is enabled.
      */
     public boolean isHackyEnabled() { // TODO (HIGH) is this hack still necesary?
-        if (options.operatingSystemName.startsWith("Mac") || options.operatingSystemName.equals("Windows 10")) {
+        String osName = System.getProperty("os.name");
+        if (osName.startsWith("Mac") || osName.equals("Windows 10")) {
             return isEnabled(); // normal function on mac os x
         } else {
             // own implementation to fix the functionality which is destroyed by the hack. If the
@@ -48,7 +46,8 @@ public class PlacementButton extends JButton {
 
     @Override
     public void setEnabled(boolean b) {
-        if (options.operatingSystemName.startsWith("Mac") || options.operatingSystemName.equals("Windows 10")) {
+        String osName = System.getProperty("os.name");
+        if (osName.startsWith("Mac") || osName.equals("Windows 10")) {
             super.setEnabled(b); // normal function on mac os x
         } else {
             // Hacky method, some variated code from the class javax.swing.AbstractButton.
