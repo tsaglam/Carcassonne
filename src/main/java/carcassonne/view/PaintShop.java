@@ -21,10 +21,14 @@ import carcassonne.settings.GameSettings;
  * @author Timur Saglam
  */
 public class PaintShop {
+    private static final int MAXIMAL_ALPHA = 255;
     private static final String HIGHLIGHT = "src/main/ressources/highlight.png"; // TODO (HIGH) move to options.
+    private static final String EMBLEM = "src/main/ressources/emblem.png"; // TODO (HIGH) move to options.
+
     private final Map<TerrainType, BufferedImage> imageMap;
     private final Map<TerrainType, BufferedImage> templateMap;
-    private BufferedImage highlightImage;
+    private final BufferedImage highlightImage;
+    private final BufferedImage emblemImage;
 
     /**
      * Basic constructor, creates base images and templates.
@@ -32,12 +36,8 @@ public class PaintShop {
     public PaintShop() {
         imageMap = buildImageMap(false);
         templateMap = buildImageMap(true);
-        File file = new File(HIGHLIGHT);
-        try {
-            highlightImage = ImageIO.read(file);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
+        highlightImage = loadImage(HIGHLIGHT);
+        emblemImage = loadImage(EMBLEM);
     }
 
     /**
@@ -71,6 +71,24 @@ public class PaintShop {
         return colorMaskBased(tileImage, highlightImage, player.getColor());
     }
 
+    /**
+     * Adds the emblem image to the top right of any tile image.
+     * @param originalTile is the original tile image without the emblem.
+     * @return a copy of the image with an emblem.
+     */
+    public ImageIcon addEmblem(BufferedImage originalTile) {
+        BufferedImage copy = deepCopy(originalTile);
+        for (int x = 0; x < emblemImage.getWidth(); x++) {
+            for (int y = 0; y < emblemImage.getHeight(); y++) {
+                Color emblemPixel = new Color(emblemImage.getRGB(x, y), true);
+                Color imagePixel = new Color(copy.getRGB(x, y), true);
+                Color blendedColor = blend(imagePixel, emblemPixel, false);
+                copy.setRGB(x, y, blendedColor.getRGB());
+            }
+        }
+        return new ImageIcon(copy);
+    }
+
     // prepares the base images and templates
     private Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
         Map<TerrainType, BufferedImage> map = new HashMap<>();
@@ -102,17 +120,25 @@ public class PaintShop {
                 Color maskPixel = new Color(maskImage.getRGB(x, y), true);
                 Color targetPixel = new Color(targetColor.getRed(), targetColor.getGreen(), targetColor.getBlue(), maskPixel.getAlpha());
                 Color imagePixel = new Color(image.getRGB(x, y), true);
-                Color blendedColor = blend(imagePixel, targetPixel);
+                Color blendedColor = blend(imagePixel, targetPixel, true);
                 image.setRGB(x, y, blendedColor.getRGB());
             }
         }
         return new ImageIcon(image);
     }
 
-    // Blends to colors correctly based on alpha composition.
-    private Color blend(Color first, Color second) {
-        double totalAlpha = first.getAlpha() + second.getAlpha();
-        double firstWeight = first.getAlpha() / totalAlpha;
+    /**
+     * Blends to colors correctly based on alpha composition. Either blends both colors or applies the second on the first
+     * one.
+     * @param first is the first color to be applied.
+     * @param second is the second color to be applied.
+     * @param blendEqually applies the second on the first one of true, blends on alpha values if false.
+     * @return the blended color.
+     */
+    private Color blend(Color first, Color second, boolean blendEqually) {
+        double totalAlpha = blendEqually ? first.getAlpha() + second.getAlpha() : MAXIMAL_ALPHA;
+        double firstWeight = blendEqually ? first.getAlpha() : MAXIMAL_ALPHA - second.getAlpha();
+        firstWeight /= totalAlpha;
         double secondWeight = second.getAlpha() / totalAlpha;
         double red = firstWeight * first.getRed() + secondWeight * second.getRed();
         double green = firstWeight * first.getGreen() + secondWeight * second.getGreen();
