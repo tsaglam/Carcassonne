@@ -56,7 +56,10 @@ public abstract class GridPattern {
     public void disburse() {
         if (!disbursed && complete && !involvedPlayers.isEmpty()) {
             determineDominantPlayers();
-            int emblems = (int) containedSpots.stream().filter(it -> it.getTile().hasEmblem()).count(); // count emblems
+            int emblems = 0;
+            if (patternType == TerrainType.CASTLE) {
+                emblems = (int) containedSpots.stream().filter(it -> it.getTile().hasEmblem()).count(); // count emblems
+            }
             int baseValue = (getSize() + emblems) * scoreMultiplier; // needs to call get size for field calculation
             for (Player player : involvedPlayers.keySet()) { // dominant players split the pot
                 player.addScore((int) Math.ceil(baseValue / involvedPlayers.size()), patternType);
