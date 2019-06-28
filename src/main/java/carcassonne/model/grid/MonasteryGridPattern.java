@@ -32,7 +32,7 @@ public class MonasteryGridPattern extends GridPattern {
         add(monasterySpot); // add monastery
         monasterySpot.setTag(MIDDLE, this);
         for (GridSpot neighbor : neighbors) {
-            spotList.add(neighbor);
+            containedSpots.add(neighbor);
         }
         if (neighbors.size() == GridDirection.neighbors().length) {
             complete = true;
