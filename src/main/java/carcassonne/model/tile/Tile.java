@@ -16,6 +16,7 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class Tile {
+    private static final int CASTLE_TRESHOLD = 6;
     private static final String FOLDER = "src/main/ressources/tiles/"; // TODO (HIGH) move to options.
     private static final String FILE_TYPE = ".png"; // TODO (HIGH) move to options.
     private GridSpot gridSpot;
@@ -83,7 +84,7 @@ public class Tile {
      * @return the terrain type, or null if the direction is not mapped.
      */
     public TerrainType getTerrain(GridDirection direction) {
-        return terrain.getAt(direction);
+        return terrain.at(direction);
     }
 
     /**
@@ -131,6 +132,21 @@ public class Tile {
      */
     public boolean hasMeepleSpot(GridDirection direction) {
         return terrain.getMeepleSpots().contains(direction);
+    }
+
+    /**
+     * Determines whether this tile has an emblem. Only large castle tiles can have emblems.
+     * @return true if it has an emblem, which doubles the points of this tile.
+     */
+    public boolean hasEmblem() {
+        int castleSize = 0;
+        for (GridDirection direction : GridDirection.values()) {
+            if (terrain.at(direction).equals(TerrainType.CASTLE)) {
+                castleSize++;
+            }
+
+        }
+        return castleSize >= CASTLE_TRESHOLD;
     }
 
     /**
