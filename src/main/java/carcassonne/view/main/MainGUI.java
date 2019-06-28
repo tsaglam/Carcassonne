@@ -231,7 +231,7 @@ public class MainGUI implements Notifiable {
         constraints = new GridBagConstraints();
         meepleGridWidth = gridWidth * MEEPLE_FACTOR;
         meepleGridHeight = gridHeight * MEEPLE_FACTOR;
-        constraints.weightx = 1;
+        constraints.weightx = 1; // evenly distributes meeple grid
         constraints.weighty = 1;
         meepleLabels = new ArrayList<>();
         meepleGrid = new MeepleLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
@@ -260,7 +260,7 @@ public class MainGUI implements Notifiable {
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                labelGrid[x][y] = new TileLabel(controller, x, y);
+                labelGrid[x][y] = new TileLabel(controller, paintShop, x, y);
                 tileLabels.add(labelGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;
