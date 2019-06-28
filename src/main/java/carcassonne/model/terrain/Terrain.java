@@ -49,7 +49,7 @@ public class Terrain {
      * @param direction is the specific direction.
      * @return the terrain type, or null if the direction is not mapped.
      */
-    public TerrainType getAt(GridDirection direction) {
+    public TerrainType at(GridDirection direction) {
         if (terrainMap.containsKey(direction)) {
             return terrainMap.get(direction);
         }
@@ -75,7 +75,7 @@ public class Terrain {
             return true; // directly connected through the middle of the tile
         } else if (from != MIDDLE && to != MIDDLE && (isIndirectConnected(from, to))) {
             return true; // is not from or to middle but indirectly connected (counter)clockwise
-        } else if (getAt(from) == TerrainType.FIELDS && getAt(to) == TerrainType.FIELDS) {
+        } else if (terrainMap.get(from) == TerrainType.FIELDS && terrainMap.get(to) == TerrainType.FIELDS) {
             return isImplicitlyConnected(from, to);
         }
         return false;
@@ -101,7 +101,7 @@ public class Terrain {
         meepleSpots = new LinkedList<>();
         meepleSpots.addAll(Arrays.asList(GridDirection.values()));
         for (GridDirection spot : GridDirection.values()) { // for every spot
-            if (getAt(spot) != TerrainType.OTHER && meepleSpots.contains(spot)) { // if not checked
+            if (terrainMap.get(spot) != TerrainType.OTHER && meepleSpots.contains(spot)) { // if not checked
                 LinkedList<GridDirection> removalList = new LinkedList<>();
                 int x = 0;
                 int y = 0;
@@ -128,8 +128,8 @@ public class Terrain {
 
     // checks for direct connection through middle:
     private boolean isDirectConnected(GridDirection from, GridDirection to) {
-        TerrainType middle = getAt(MIDDLE);
-        return getAt(from) == middle && getAt(to) == middle;
+        TerrainType middle = terrainMap.get(MIDDLE);
+        return terrainMap.get(from) == middle && terrainMap.get(to) == middle;
     }
 
     private boolean isImplicitlyConnected(GridDirection from, GridDirection to) {
@@ -157,7 +157,7 @@ public class Terrain {
         }
         GridDirection between = from.next(side); // between this and next corner
         GridDirection next = between.next(side); // next corner
-        if (getAt(between) == TerrainType.CASTLE && getAt(MIDDLE) != TerrainType.CASTLE) {
+        if (terrainMap.get(between) == TerrainType.CASTLE && terrainMap.get(MIDDLE) != TerrainType.CASTLE) {
             return isImplicitlyConnected(next, to, side);
         }
         return false;
@@ -178,7 +178,7 @@ public class Terrain {
         GridDirection next;
         while (current != to) { // while not at destination:
             next = current.next(side); // get the next direction
-            if (getAt(current) != getAt(next)) {
+            if (terrainMap.get(current) != terrainMap.get(next)) {
                 return false; // check if still connected
             }
             current = next; // set new current
@@ -192,7 +192,8 @@ public class Terrain {
         for (GridDirection anchor : anchorDirections) {
             GridDirection left = anchor.next(RotationDirection.LEFT);
             GridDirection right = anchor.next(RotationDirection.RIGHT);
-            if (getAt(anchor) == getAt(left) && getAt(anchor) == getAt(right) && meepleSpots.contains(left) && meepleSpots.contains(right)) {
+            if (terrainMap.get(anchor) == terrainMap.get(left) && terrainMap.get(anchor) == terrainMap.get(right) && meepleSpots.contains(left)
+                    && meepleSpots.contains(right)) {
                 removalList.add(left);
                 removalList.add(right);
                 if (addAnchor && !isConnected(anchor, MIDDLE)) {
