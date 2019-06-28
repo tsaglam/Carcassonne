@@ -24,7 +24,7 @@ public abstract class GridPattern {
     protected List<Meeple> meepleList;
     protected final TerrainType patternType;
     protected int scoreMultiplier;
-    protected List<GridSpot> spotList;
+    protected List<GridSpot> containedSpots;
 
     /**
      * Basic constructor taking only a tile type.
@@ -34,7 +34,7 @@ public abstract class GridPattern {
     protected GridPattern(TerrainType patternType, int scoreMultiplier) {
         this.patternType = patternType;
         this.scoreMultiplier = scoreMultiplier;
-        spotList = new LinkedList<>();
+        containedSpots = new LinkedList<>();
         meepleList = new LinkedList<>();
         involvedPlayers = new HashMap<>();
     }
@@ -45,7 +45,7 @@ public abstract class GridPattern {
      * @return true if the pattern already contains the grid spot.
      */
     public boolean contains(GridSpot spot) {
-        return spotList.contains(spot);
+        return containedSpots.contains(spot);
     }
 
     /**
@@ -56,8 +56,10 @@ public abstract class GridPattern {
     public void disburse() {
         if (!disbursed && complete && !involvedPlayers.isEmpty()) {
             determineDominantPlayers();
+            int emblems = (int) containedSpots.stream().filter(it -> it.getTile().hasEmblem()).count(); // count emblems
+            int baseValue = (getSize() + emblems) * scoreMultiplier; // needs to call get size for field calculation
             for (Player player : involvedPlayers.keySet()) { // dominant players split the pot
-                player.addScore((int) Math.ceil(getSize() * scoreMultiplier / involvedPlayers.size()), patternType);
+                player.addScore((int) Math.ceil(baseValue / involvedPlayers.size()), patternType);
             }
             for (Meeple meeple : meepleList) {
                 meeple.removePlacement(); // remove meeples from tiles.
@@ -90,7 +92,7 @@ public abstract class GridPattern {
      * @return the size.
      */
     public int getSize() {
-        return spotList.size();
+        return containedSpots.size();
     }
 
     /**
@@ -123,7 +125,7 @@ public abstract class GridPattern {
      * Removes all OWN tags of all tiles of the pattern.
      */
     public void removeOwnTags() {
-        for (GridSpot spot : spotList) {
+        for (GridSpot spot : containedSpots) {
             spot.removeTagsFrom(this);
         }
     }
@@ -132,7 +134,7 @@ public abstract class GridPattern {
      * Removes all tags of all tiles of the pattern. Needs to be called after ALL patterns of a tile have been created.
      */
     public void removeTileTags() {
-        for (GridSpot spot : spotList) {
+        for (GridSpot spot : containedSpots) {
             spot.removeTags();
         }
     }
@@ -183,7 +185,7 @@ public abstract class GridPattern {
      * @param spot is the spot to add.
      */
     protected void add(GridSpot spot) {
-        spotList.add(spot);
+        containedSpots.add(spot);
         if (spot.getTile().hasMeeple()) {
             addMeepleFrom(spot);
         }
