@@ -24,6 +24,7 @@ public class PlayerColor extends Color {
 
     /**
      * Creates a new player color based on a existing {@link Color}.
+     * @param color is the existing {@link Color}.
      */
     public PlayerColor(Color color) {
         this(color.getRed(), color.getGreen(), color.getBlue());
@@ -31,6 +32,7 @@ public class PlayerColor extends Color {
 
     /**
      * Returns the lighter and and desaturated version of the player color.
+     * @return the light {@link Color}.
      */
     public Color lightColor() {
         float[] hsb = Color.RGBtoHSB(getRed(), getGreen(), getBlue(), null);
@@ -41,6 +43,7 @@ public class PlayerColor extends Color {
 
     /**
      * Returns the no-alpha version of the player color.
+     * @return the {@link Color} without transparency.
      */
     public Color textColor() {
         return new Color(getRGB(), false); // remove transparency

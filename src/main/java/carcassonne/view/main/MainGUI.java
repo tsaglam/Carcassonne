@@ -153,6 +153,10 @@ public class MainGUI implements Notifiable {
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 
+    /**
+     * Resets the meeple preview on one specific {@link Tile}.
+     * @param tile is the specific {@link Tile}.
+     */
     public void resetMeeplePreview(Tile tile) {
         checkParameters(tile);
         int xBase = tile.getGridSpot().getX() * MEEPLE_FACTOR;
@@ -165,6 +169,11 @@ public class MainGUI implements Notifiable {
         frame.repaint(); // This is required! Removing this will paint black background.
     }
 
+    /**
+     * Enables the meeple preview on one specific {@link Tile}.
+     * @param tile is the specific {@link Tile}.
+     * @param currentPlayer determines the color of the preview.
+     */
     public void setMeeplePreview(Tile tile, Player currentPlayer) {
         checkParameters(tile, currentPlayer);
         int xBase = tile.getGridSpot().getX() * MEEPLE_FACTOR;

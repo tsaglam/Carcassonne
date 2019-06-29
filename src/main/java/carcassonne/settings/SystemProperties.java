@@ -37,14 +37,26 @@ public class SystemProperties {
         resolutionHeight = displayMode.getHeight() - taskBarHeight;
     }
 
+    /**
+     * Returns the height value of the screen resolution.
+     * @return the resolution height in pixel.
+     */
     public int getResolutionHeight() {
         return resolutionHeight;
     }
 
+    /**
+     * Returns the width value of the screen resolution.
+     * @return the resolution width in pixel.
+     */
     public int getResolutionWidth() {
         return resolutionWidth;
     }
 
+    /**
+     * Returns the estimated task bar height.
+     * @return the height in pixel.
+     */
     public int getTaskBarHeight() {
         return taskBarHeight;
     }

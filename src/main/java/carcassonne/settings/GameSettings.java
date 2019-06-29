@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 
 /**
@@ -12,19 +13,19 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class GameSettings {
-    private static final String EMPTY = "";
-    private static final String TEMPLATE = "_template";
-    private static final String PNG = ".png";
-    private static final String MEEPLE_PATH = "src/main/ressources/meeple/meeple_"; // TODO (HIGH) maybe move to paint shop?
-    public final static int TILE_SIZE = 100;
-    public final static int MAXIMAL_PLAYERS = 5;
+    public static final int MAXIMAL_PLAYERS = 5;
+    public static final int TILE_SIZE = 100;
     private static final PlayerColor[] DEFAULT_COLORS = { new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
             new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147) };
     private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };
+    private static final String EMPTY = "";
+    private static final String MEEPLE_PATH = "src/main/ressources/meeple/meeple_";
+    private static final String PNG = ".png";
+    private static final String TEMPLATE = "_template";
     private final List<Notifiable> changeListeners;
-    private final ArrayList<String> names;
-    private final ArrayList<PlayerColor> colors;
     private boolean chaosMode;
+    private final ArrayList<PlayerColor> colors;
+    private final ArrayList<String> names;
 
     /**
      * Creates a settings instance. Instances hold different setting values when one is changed.
@@ -35,24 +36,20 @@ public class GameSettings {
         changeListeners = new ArrayList<Notifiable>();
     }
 
-    public void notifyListeners() {
-        for (Notifiable notifiable : changeListeners) {
-            notifiable.notifyChange();
-        }
-    }
-
     /**
-     * Registers a UI element that wants to listen to changes.
-     * @param notifiable is the UI element.
+     * Returns the {@link PlayerColor} of a specific {@link Player}.
+     * @param playerNumber is the number of the {@link Player}.
+     * @return the {@link PlayerColor}.
      */
-    public void registerNotifiable(Notifiable notifiable) {
-        changeListeners.add(notifiable);
-    }
-
     public PlayerColor getPlayerColor(int playerNumber) {
         return colors.get(playerNumber);
     }
 
+    /**
+     * Returns the name of a specific {@link Player}.
+     * @param playerNumber is the number of the {@link Player}.
+     * @return the name.
+     */
     public String getPlayerName(int playerNumber) {
         return names.get(playerNumber);
     }
@@ -66,6 +63,14 @@ public class GameSettings {
     }
 
     /**
+     * Registers a UI element that wants to listen to changes.
+     * @param notifiable is the UI element.
+     */
+    public void registerNotifiable(Notifiable notifiable) {
+        changeListeners.add(notifiable);
+    }
+
+    /**
      * Sets the chaos mode setting.
      * @param chaosMode specifies whether chaos mode is active or not.
      */
@@ -73,14 +78,30 @@ public class GameSettings {
         this.chaosMode = chaosMode;
     }
 
+    /**
+     * Changes the {@link PlayerColor} of a specific {@link Player}.
+     * @param color is the new base {@link Color}.
+     * @param playerNumber is the number of the {@link Player}.
+     */
     public void setPlayerColor(Color color, int playerNumber) {
         colors.set(playerNumber, new PlayerColor(color));
         notifyListeners();
     }
 
+    /**
+     * Changes the name of a specific {@link Player}.
+     * @param name is the new name.
+     * @param playerNumber is the number of the {@link Player}.
+     */
     public void setPlayerName(String name, int playerNumber) {
         names.set(playerNumber, name);
         notifyListeners();
+    }
+
+    private void notifyListeners() {
+        for (Notifiable notifiable : changeListeners) {
+            notifiable.notifyChange();
+        }
     }
 
     /**

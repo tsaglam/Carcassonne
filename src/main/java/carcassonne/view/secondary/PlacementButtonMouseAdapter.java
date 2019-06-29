@@ -35,7 +35,7 @@ public class PlacementButtonMouseAdapter extends MouseAdapter {
     /**
      * Method for processing mouse clicks on the <code>MeepleButton</code> of the class. notifies the
      * <code>MainController</code> of the class.
-     * @param e is the <code>MouseEvent</code> of the click.
+     * @param event is the <code>MouseEvent</code> of the click.
      */
     @Override
     public void mouseClicked(MouseEvent event) {

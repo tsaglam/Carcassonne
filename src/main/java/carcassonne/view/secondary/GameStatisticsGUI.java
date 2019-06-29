@@ -94,7 +94,7 @@ public class GameStatisticsGUI {
 
         private final Round round;
 
-        public CustomCellRenderer(Round round) {
+        CustomCellRenderer(Round round) {
             this.round = round;
             setHorizontalAlignment(SwingConstants.CENTER); // Centers the text in cells.
         }

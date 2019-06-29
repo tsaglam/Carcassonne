@@ -62,11 +62,16 @@ public enum TileType {
      * @param amount is the standard amount of tiles of this type in a stack.
      * @param terrain are the terrain types on the tiles of this tile type
      */
-    private TileType(int amount, TerrainType... terrain) {
+    TileType(int amount, TerrainType... terrain) {
         this.amount = amount;
         this.terrain = terrain;
     }
 
+    /**
+     * Checks whether this {@link TileType} contains a specific {@link TerrainType}.
+     * @param terrainType is the specific {@link TerrainType}.
+     * @return true if it does.
+     */
     public boolean contains(TerrainType terrainType) {
         for (TerrainType tileTerrain : terrain) {
             if (tileTerrain.equals(terrainType)) {

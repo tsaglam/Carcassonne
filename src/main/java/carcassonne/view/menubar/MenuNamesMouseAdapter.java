@@ -3,6 +3,7 @@ package carcassonne.view.menubar;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import carcassonne.model.Player;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GameMessage;
 
@@ -16,7 +17,8 @@ public class MenuNamesMouseAdapter extends MouseAdapter {
 
     /**
      * Simple constructor.
-     * @param item is the correlating menu item.
+     * @param player is the {@link Player} whose names gets changed.
+     * @param settings are the {@link GameSettings}.
      */
     public MenuNamesMouseAdapter(int player, GameSettings settings) {
         super();
