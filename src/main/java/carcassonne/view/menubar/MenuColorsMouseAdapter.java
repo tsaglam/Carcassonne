@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.PaintShop;
-import carcassonne.model.terrain.TerrainType;
 
 /**
  * A mouse adapter for the selection of player colors. Listens to menu item clicks, event change and button pressing at
