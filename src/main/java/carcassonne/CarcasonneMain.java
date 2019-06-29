@@ -2,6 +2,7 @@ package carcassonne;
 
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import carcassonne.control.MainController;
 import carcassonne.view.GameMessage;
@@ -21,15 +22,14 @@ public final class CarcasonneMain {
      */
     public static void main(String[] args) {
         if (!System.getProperty(OS_NAME_KEY).startsWith(MAC)) { // TODO (MEDIUM) is this still needed?
-            try {
-                for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                    if (NIMBUS.equals(info.getName())) {
-                        UIManager.setLookAndFeel(info.getClassName());
-                        break;
+            for (LookAndFeelInfo lookAndFeel : UIManager.getInstalledLookAndFeels()) {
+                if (NIMBUS.equals(lookAndFeel.getName())) {
+                    try {
+                        UIManager.setLookAndFeel(lookAndFeel.getClassName());
+                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException exception) {
+                        GameMessage.showError("Could not use Nimbus LookAndFeel. Using default instead (" + exception.getMessage() + ").");
                     }
                 }
-            } catch (Exception exception) {
-                GameMessage.showError("Could not use Nimbus LookAndFeel. Using default look and feel instead (" + exception.getMessage() + ").");
             }
         }
         new MainController();
