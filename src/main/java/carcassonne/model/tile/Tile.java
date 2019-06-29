@@ -1,11 +1,7 @@
 package carcassonne.model.tile;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import carcassonne.model.Meeple;
@@ -14,23 +10,19 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.terrain.Terrain;
 import carcassonne.model.terrain.TerrainType;
-import carcassonne.view.GameMessage;
 
 /**
  * The tile of a grid.
  * @author Timur Saglam
  */
 public class Tile {
-    private static final int IMAGES_PER_TILE = 4;
     private static final int CASTLE_TRESHOLD = 6;
-    private static final String FOLDER = "src/main/ressources/tiles/"; // TODO (HIGH) move to options.
-    private static final String FILE_TYPE = ".png"; // TODO (HIGH) move to options.
     private GridSpot gridSpot;
-    private BufferedImage[] images; // tile image
     private Meeple meeple;
     private int rotation;
     private final Terrain terrain;
     private final TileType type;
+    private final TileDepiction tileDepiction;
 
     /**
      * Simple constructor.
@@ -46,7 +38,7 @@ public class Tile {
         this.type = type;
         terrain = new Terrain(type);
         meeple = null;
-        loadImages(FOLDER + type.name(), FILE_TYPE);
+        tileDepiction = new TileDepiction(type, hasEmblem());
     }
 
     /**
@@ -72,16 +64,8 @@ public class Tile {
      * Getter for the tile image. the image depends on the rotation.
      * @return the image of the tile with the tile specific rotation.
      */
-    public BufferedImage getImage() {
-        return images[rotation];
-    }
-
-    /**
-     * Getter for the tile image. the image depends on the rotation.
-     * @return the image of the tile with the tile specific rotation.
-     */
     public ImageIcon getIcon() {
-        return new ImageIcon(images[rotation]);
+        return tileDepiction.getCurrentDepiction();
     }
 
     /**
@@ -210,7 +194,7 @@ public class Tile {
      */
     public void rotateLeft() {
         terrain.rotateLeft();
-        rotation = rotation <= 0 ? 3 : rotation - 1; // update rotation indicator
+        tileDepiction.rotateRight();
     }
 
     /**
@@ -218,7 +202,7 @@ public class Tile {
      */
     public void rotateRight() {
         terrain.rotateRight();
-        rotation = rotation >= 3 ? 0 : rotation + 1; // update rotation indicator
+        tileDepiction.rotateRight();
     }
 
     /**
@@ -236,20 +220,6 @@ public class Tile {
     public String toString() {
         return type + getClass().getSimpleName() + "[coordinates: " + gridSpot + ", rotation: " + rotation + ", terrain" + terrain + ", Meeple: "
                 + meeple + "]";
-    }
-
-    // uses path to load images for all rotations.
-    private void loadImages(String tilePath, String fileType) {
-        images = new BufferedImage[4]; // create image array.
-        for (int i = 0; i < IMAGES_PER_TILE; i++) { // for every image:
-            File file = new File(tilePath + i + fileType);
-            try {
-                images[i] = ImageIO.read(file);
-            } catch (IOException exception) {
-                exception.printStackTrace();
-                GameMessage.showError("ERROR: Could not load image loacted at " + tilePath + i + fileType);
-            }
-        }
     }
 
     /**

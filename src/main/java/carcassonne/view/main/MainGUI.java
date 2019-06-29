@@ -260,7 +260,7 @@ public class MainGUI implements Notifiable {
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                labelGrid[x][y] = new TileLabel(controller, paintShop, x, y);
+                labelGrid[x][y] = new TileLabel(controller, x, y);
                 tileLabels.add(labelGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;

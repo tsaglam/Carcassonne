@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 import carcassonne.control.MainController;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
-import carcassonne.view.PaintShop;
 
 /**
  * Is a simple class derived form JLabel, which stores (additionally to the JLabel functions) the coordinates of the
@@ -22,7 +21,6 @@ public class TileLabel {
     private final Tile highlightTile;
     private final JLabel label;
     private ImageIcon coloredHighlight;
-    private PaintShop paintShop;
 
     /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
@@ -31,8 +29,7 @@ public class TileLabel {
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
-    public TileLabel(MainController controller, PaintShop paintShop, int x, int y) {
-        this.paintShop = paintShop;
+    public TileLabel(MainController controller, int x, int y) {
         label = new JLabel();
         defaultTile = new Tile(TileType.Null);
         highlightTile = new Tile(TileType.Null);
@@ -67,11 +64,7 @@ public class TileLabel {
 
     public void setTile(Tile tile) {
         this.tile = tile;
-        if (tile.hasEmblem()) {
-            label.setIcon(paintShop.addEmblem(tile.getImage()));
-        } else {
-            label.setIcon(tile.getIcon());
-        }
+        label.setIcon(tile.getIcon());
     }
 
     public void setColoredHighlight(ImageIcon coloredHighlight) {

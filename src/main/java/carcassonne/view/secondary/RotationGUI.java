@@ -60,7 +60,7 @@ public class RotationGUI extends SecondaryGUI {
 
     // build the GUI content
     private void buildContent() {
-        tileLabel = new JLabel(new Tile(TileType.Null).getIcon());
+        tileLabel = new JLabel(new Tile(TileType.Null).getIcon()); // Important for the UI size
         // create buttons:
         buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
         buttonRotateLeft = new JButton(new ImageIcon("src/main/ressources/icons/left.png"));
