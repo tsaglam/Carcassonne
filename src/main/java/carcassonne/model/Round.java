@@ -3,10 +3,10 @@ package carcassonne.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import carcassonne.settings.GameSettings;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
+import carcassonne.settings.GameSettings;
 
 /**
  * An object of the round class simulates a game round. It does not actively control the game. It represents the round
