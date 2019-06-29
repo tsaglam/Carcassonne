@@ -13,11 +13,12 @@ import java.util.List;
 import carcassonne.model.terrain.TerrainType;
 
 /**
- * Enum for the specific type of tiles. this is needed for the tile factory. It allows easy construction of tile
- * objects. Values use lower case for easy image importing. TODO (HIGH) rename enum values and tile image resources.
+ * Enumeration for the specific type of tiles. It allows easy construction of tile objects. This enum show the entirety
+ * of hardcoded data is this game. Everything else is algorithmically calculated from this date (e.g. tile placement,
+ * emblems, pattern completion). Values use lower case for easy image importing.
  * @author Timur
  */
-public enum TileType {
+public enum TileType { // TODO (HIGH) rename enum values and tile image resources.
     Null(0, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER),
     CastleCenter(1, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE),
     CastleCenterEntry(3, CASTLE, CASTLE, ROAD, CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, CASTLE),
