@@ -192,7 +192,7 @@ public class Tile {
      */
     public void rotateLeft() {
         terrain.rotateLeft();
-        tileDepiction.rotateRight();
+        tileDepiction.rotateLeft();
     }
 
     /**
