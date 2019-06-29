@@ -131,6 +131,7 @@ public class MainController {
 
     /**
      * Getter for the {@link GameSettings}, which grants access to the games settings.
+     * @return the {@link GameSettings} instance.
      */
     public GameSettings getProperties() {
         return settings;

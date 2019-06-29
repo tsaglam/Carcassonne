@@ -26,10 +26,8 @@ public class Tile {
 
     /**
      * Simple constructor.
-     * @param terrain is the array containing the terrain information.
-     * @param type is the tile type enum value of the tile.
-     * @param tilePath is the path to the tiles.
-     * @param fileType is the file type of the tiles.
+     * @param type is the specific {@link TileType} that defines the behavior and state of this tile. It contains the onl
+     * hard coded information.
      */
     public Tile(TileType type) {
         if (type == null) {

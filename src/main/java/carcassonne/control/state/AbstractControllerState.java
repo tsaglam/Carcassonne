@@ -150,6 +150,10 @@ public abstract class AbstractControllerState {
         scoreboard.updateStackSize(round.getStackSize());
     }
 
+    /**
+     * Highlights the surroundings of a {@link GridSpot} on the main UI.
+     * @param spot is the {@link GridSpot} that determines where to highlight.
+     */
     protected void highlightSurroundings(GridSpot spot) {
         for (GridSpot neighbor : grid.getNeighbors(spot, true, GridDirection.directNeighbors())) {
             if (neighbor != null && neighbor.isFree()) {

@@ -14,12 +14,23 @@ import carcassonne.model.terrain.RotationDirection;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 
+/**
+ * Grid pattern for fields.
+ * @author Timur Saglam
+ */
 public class FieldsPattern extends GridPattern {
+    private static final int POINTS_PER_CASTLE = 3;
     private final List<CastleAndRoadPattern> adjacentCastles;
     private final Grid grid;
 
+    /**
+     * Creates a new field pattern.
+     * @param startingSpot is the {@link GridSpot} where the pattern starts.
+     * @param startingDirection is the position on the spot where the pattern starts.
+     * @param grid is the correlating {@link Grid}.
+     */
     public FieldsPattern(GridSpot startingSpot, GridDirection startingDirection, Grid grid) {
-        super(FIELDS, 3);
+        super(FIELDS, POINTS_PER_CASTLE);
         this.grid = grid;
         adjacentCastles = new LinkedList<>();
         checkArgs(startingSpot, startingDirection, grid);

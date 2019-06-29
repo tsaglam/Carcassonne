@@ -26,6 +26,7 @@ public class Round {
      * Simple constructor that creates the grid, the tile stack and the players.
      * @param playerCount is the amount of players of the round.
      * @param grid is the grid of the round.
+     * @param settings are the {@link GameSettings}.
      */
     public Round(int playerCount, Grid grid, GameSettings settings) {
         this.grid = grid;
@@ -75,6 +76,10 @@ public class Round {
         return playerCount;
     }
 
+    /**
+     * Returns amounts of tiles left on the stack.
+     * @return the stack size.
+     */
     public int getStackSize() {
         return tileStack.getSize();
     }

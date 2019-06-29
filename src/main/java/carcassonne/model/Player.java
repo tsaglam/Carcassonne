@@ -22,6 +22,7 @@ public class Player {
     /**
      * Simple constructor.
      * @param number is the number of the player.
+     * @param settings are the {@link GameSettings}.
      */
     public Player(int number, GameSettings settings) {
         this.number = number;
@@ -34,7 +35,6 @@ public class Player {
      * Adds score to the players score value and keeps track of the type of score.
      * @param amount is the amount of points the player gets.
      * @param scoreType determines the score multiplier.
-     * @param gameOver determines if the game is running or not. Changes score multipliers.
      */
     public void addScore(int amount, TerrainType scoreType) {
         terrainSpecificScores.put(scoreType, terrainSpecificScores.get(scoreType) + amount);
@@ -104,11 +104,18 @@ public class Player {
         freeMeeples++;
     }
 
-    // TODO (HIGH) Comment, mention that these methods are convienience methods
+    /**
+     * Convenience method for {@link GameSettings#getPlayerName(int)}.
+     * @return the name of this player.
+     */
     public String getName() {
         return settings.getPlayerName(number);
     }
 
+    /**
+     * Convenience method for {@link GameSettings#getPlayerColor(int)}.
+     * @return the {@link PlayerColor} of this player.
+     */
     public PlayerColor getColor() {
         return settings.getPlayerColor(number);
     }

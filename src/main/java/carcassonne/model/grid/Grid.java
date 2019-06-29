@@ -12,7 +12,7 @@ import carcassonne.model.tile.TileType;
  * @author Timur Saglam
  */
 public class Grid {
-    private final static TileType FOUNDATION_TYPE = TileType.CastleWallRoad;
+    private static final TileType FOUNDATION_TYPE = TileType.CastleWallRoad;
     private final int width;
     private final int height;
     private final GridSpot[][] spots;
@@ -22,7 +22,6 @@ public class Grid {
      * Basic constructor
      * @param width is the grid width.
      * @param height is the grid height.
-     * @param foundationType is the tile type of the first tile in the middle of the grid.
      */
     public Grid(int width, int height) {
         this.width = width;
@@ -105,6 +104,12 @@ public class Grid {
         return modifiedPatterns; // get patterns.
     }
 
+    /**
+     * Returns the neighbor of a specific {@link GridSpot} in a specific direction or null of there is none.
+     * @param spot is the {@link GridSpot} from which the neighbor is requested.
+     * @param direction is the {@link GridDirection} where the neighbor is.
+     * @return the neighboring {@link GridSpot} or null if there is no tile placed.
+     */
     public GridSpot getNeighbor(GridSpot spot, GridDirection direction) {
         List<GridSpot> neighbors = getNeighbors(spot, false, direction);
         if (neighbors.isEmpty()) {
@@ -115,19 +120,11 @@ public class Grid {
     }
 
     /**
-     * Creates a list of neighbors of a tile on a specific spot.
-     * @param spot is the spot.
-     * @return the list of neighbors
-     */
-    public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots) {
-        return getNeighbors(spot, allowEmptySpots, GridDirection.neighbors());
-    }
-
-    /**
-     * Returns a specific neighbor of a grid spot if the neighbor exists and has a tile.
-     * @param spot is the spot of the tile.
-     * @param direction is the direction where the neighbor should be
-     * @return the neighbor, or null if it does not exist.
+     * Returns a list of neighbors of a specific {@link GridSpot}.
+     * @param spot is the specific {@link GridSpot}.
+     * @param allowEmptySpots determines whether empty spots are included or not.
+     * @param directions determines the directions where we check for neighbors.
+     * @return the list of any neighboring {@link GridSpot}.
      */
     public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection... directions) {
         checkParameters(spot);

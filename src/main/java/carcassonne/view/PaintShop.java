@@ -53,7 +53,7 @@ public class PaintShop {
     /**
      * Returns a custom colored meeple.
      * @param meepleType is the type of the meeple.
-     * @param playerNumber is the number of the player whose color is used.
+     * @param player is the {@link Player} whose color is used.
      * @return the colored meeple.
      */
     public ImageIcon getColoredMeeple(TerrainType meepleType, Player player) {
@@ -63,7 +63,6 @@ public class PaintShop {
     /**
      * Returns a custom colored highlight image.
      * @param player determines the color of the highlight.
-     * @param tileIcon is the tile to highlight.
      * @return the highlighted tile.
      */
     public ImageIcon getColoredHighlight(Player player) {

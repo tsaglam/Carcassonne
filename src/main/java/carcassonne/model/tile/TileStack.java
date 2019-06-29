@@ -56,7 +56,7 @@ public class TileStack {
 
     /**
      * Returns a tile that is not placed under the stack.
-     * @param is the tile to put back under the stack.
+     * @param tile is the tile to put back under the stack.
      */
     public void putBack(Tile tile) {
         if (tile.isPlaced()) {

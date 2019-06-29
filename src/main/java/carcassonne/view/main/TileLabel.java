@@ -24,7 +24,6 @@ public class TileLabel {
 
     /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
-     * @param image sets the ImageIcon of the label.
      * @param controller is the controller of the GUI.
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
@@ -62,23 +61,41 @@ public class TileLabel {
         });
     }
 
+    /**
+     * Shows a {@link Tile} image on this label.
+     * @param tile is the {@link Tile} that provides the image.
+     */
     public void setTile(Tile tile) {
         this.tile = tile;
         label.setIcon(tile.getIcon());
     }
 
+    /**
+     * Sets a colored mouseover highlight.
+     * @param coloredHighlight is the {@link ImageIcon} depicting the highlight.
+     */
     public void setColoredHighlight(ImageIcon coloredHighlight) {
         this.coloredHighlight = coloredHighlight;
     }
 
+    /**
+     * Enables the colored mouseover highlight.
+     */
     public void highlight() {
         setTile(highlightTile);
     }
 
+    /**
+     * Disables the colored mouseover highlight.
+     */
     public void reset() {
         setTile(defaultTile);
     }
 
+    /**
+     * Grants access to the {@link JLabel} of this label.
+     * @return the tile {@link JLabel}.
+     */
     public JLabel getLabel() {
         return label;
     }

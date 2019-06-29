@@ -31,6 +31,9 @@ public class MeepleLabel {
     /**
      * Creates a blank meeple label.
      * @param paintShop is the paint shop for the meeple generation.
+     * @param controller is the {@link MainController} of the game.
+     * @param direction is the {@link GridDirection} where the meeple label sits on the tile.
+     * @param frame is the main {@link JFrame} to repaint after setting icons.
      */
     public MeepleLabel(PaintShop paintShop, MainController controller, GridDirection direction, JFrame frame) {
         label = new JLabel();
@@ -79,9 +82,9 @@ public class MeepleLabel {
     }
 
     /**
-     * Sets the icon of the meeple label according to the player number and terrain type.
+     * Sets the icon of the meeple label according to the {@link Player} and terrain type.
      * @param terrain is the terrain type and affects the meeple type.
-     * @param playerNumber is the player number and affects the color.
+     * @param player is the {@link Player}, which affects the color.
      */
     public void setIcon(TerrainType terrain, Player player) {
         this.terrain = terrain;
@@ -94,6 +97,7 @@ public class MeepleLabel {
      * Sets the specific {@link TerrainType} as meeple placement preview, which means a transparent image of the correlating
      * meeple.
      * @param terrain is the specific {@link TerrainType}.
+     * @param player is the {@link Player} who is currently active.
      */
     public void setPreview(TerrainType terrain, Player player) {
         this.terrain = terrain;

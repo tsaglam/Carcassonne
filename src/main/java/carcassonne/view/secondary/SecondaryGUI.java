@@ -31,9 +31,8 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
 
     /**
      * Constructor for the class. Sets the controller of the GUI and the window title.
-     * @param controller sets the controller.
-     * @param ui is the main GUI.
-     * @param title sets the window title.
+     * @param controller sets the {@link MainController}.
+     * @param ui is the main graphical user interface.
      */
     public SecondaryGUI(MainController controller, MainGUI ui) {
         super(new GridBagLayout());

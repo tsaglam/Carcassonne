@@ -96,7 +96,6 @@ public enum GridDirection {
 
     /**
      * Calculates the opposite <code>GridDirection</code> for a specific <code>GridDirection</code>.
-     * @param from is the <code>GridDirection</code> the opposite gets calculated from.
      * @return the opposite <code>GridDirection</code>.
      */
     public GridDirection opposite() {
@@ -110,6 +109,7 @@ public enum GridDirection {
 
     /**
      * Returns a lower case version of the grid direction with spaces instead of underscores.
+     * @return the readable version.
      */
     public String toReadableString() {
         return toString().toLowerCase().replace('_', ' ');

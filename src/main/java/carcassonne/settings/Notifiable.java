@@ -8,5 +8,5 @@ public interface Notifiable {
     /**
      * Notifies the notifiable UI element about changes in the game options.
      */
-    public void notifyChange();
+    void notifyChange();
 }
