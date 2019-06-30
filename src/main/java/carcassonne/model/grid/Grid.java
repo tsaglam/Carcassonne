@@ -120,16 +120,18 @@ public class Grid {
     }
 
     /**
-     * Returns a list of neighbors of a specific {@link GridSpot}.
+     * Returns a list of neighbors of a specific {@link GridSpot} in specific directions.
      * @param spot is the specific {@link GridSpot}.
      * @param allowEmptySpots determines whether empty spots are included or not.
-     * @param directions determines the directions where we check for neighbors.
+     * @param directions determines the directions where we check for neighbors. If no directions are given, the default
+     * {@link GridDirection#neighbors()} is used.
      * @return the list of any neighboring {@link GridSpot}.
      */
     public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection... directions) {
         checkParameters(spot);
+        GridDirection[] directionsToCheck = directions.length == 0 ? GridDirection.neighbors() : directions; // use neighbors as default
         ArrayList<GridSpot> neighbors = new ArrayList<>(directions.length);
-        for (GridDirection direction : directions) {
+        for (GridDirection direction : directionsToCheck) {
             int newX = direction.addX(spot.getX());
             int newY = direction.addY(spot.getY());
             if (isOnGrid(newX, newY) && (allowEmptySpots || spots[newX][newY].isOccupied())) {
