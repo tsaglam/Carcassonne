@@ -129,9 +129,8 @@ public class Grid {
      */
     public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection... directions) {
         checkParameters(spot);
-        GridDirection[] directionsToCheck = directions.length == 0 ? GridDirection.neighbors() : directions; // use neighbors as default
         ArrayList<GridSpot> neighbors = new ArrayList<>(directions.length);
-        for (GridDirection direction : directionsToCheck) {
+        for (GridDirection direction : directions) {
             int newX = direction.addX(spot.getX());
             int newY = direction.addY(spot.getY());
             if (isOnGrid(newX, newY) && (allowEmptySpots || spots[newX][newY].isOccupied())) {

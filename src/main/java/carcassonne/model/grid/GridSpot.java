@@ -61,7 +61,7 @@ public class GridSpot {
         }
         // then check for monastery patterns:
         addPatternIfMonastery(this, results); // the tile itself
-        for (GridSpot neighbour : grid.getNeighbors(this, false)) {
+        for (GridSpot neighbour : grid.getNeighbors(this, false, GridDirection.neighbors())) {
             addPatternIfMonastery(neighbour, results); // neighbors
         }
         return results; // return all patterns.
