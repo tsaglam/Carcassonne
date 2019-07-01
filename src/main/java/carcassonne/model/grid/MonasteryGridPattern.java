@@ -28,7 +28,7 @@ public class MonasteryGridPattern extends GridPattern {
     }
 
     private void buildPattern(GridSpot monasterySpot, Grid grid) {
-        List<GridSpot> neighbors = grid.getNeighbors(monasterySpot, false);
+        List<GridSpot> neighbors = grid.getNeighbors(monasterySpot, false, GridDirection.neighbors());
         add(monasterySpot); // add monastery
         monasterySpot.setTag(MIDDLE, this);
         for (GridSpot neighbor : neighbors) {
