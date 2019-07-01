@@ -51,9 +51,9 @@ public enum TileType { // TODO (HIGH) rename enum values and tile image resource
     RoadEnd(2, FIELDS, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, OTHER),
     CastleCenterSides(1, FIELDS, FIELDS, CASTLE, FIELDS, OTHER, OTHER, OTHER, OTHER, CASTLE),
     CastleMini(1, FIELDS, FIELDS, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, CASTLE),
-    CastleWallEntryLeft(1, CASTLE, FIELDS, FIELDS, ROAD, OTHER, FIELDS, FIELDS, FIELDS, ROAD),
-    CastleWallEntryRight(1, CASTLE, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, ROAD),
-    CastleWallEntry(2, CASTLE, FIELDS, ROAD, FIELDS, OTHER, FIELDS, FIELDS, OTHER, ROAD);
+    CastleWallEntryLeft(0, CASTLE, FIELDS, FIELDS, ROAD, OTHER, FIELDS, FIELDS, FIELDS, ROAD),
+    CastleWallEntryRight(0, CASTLE, ROAD, FIELDS, FIELDS, FIELDS, FIELDS, FIELDS, OTHER, ROAD),
+    CastleWallEntry(0, CASTLE, FIELDS, ROAD, FIELDS, OTHER, FIELDS, FIELDS, OTHER, ROAD);
 
     private final TerrainType[] terrain;
     private final int amount;
