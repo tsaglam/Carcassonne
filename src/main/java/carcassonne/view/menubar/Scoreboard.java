@@ -33,7 +33,7 @@ public class Scoreboard implements Notifiable {
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
             scoreLabels[i].setForeground(settings.getPlayerColor(i).textColor());
-            scoreLabels[i].addMouseListener(new MenuColorsMouseAdapter(i, settings));
+            scoreLabels[i].addMouseListener(new MenuColorsMouseAdapter(i, settings)); // TODO (MEDIUM) async?
         }
         stackSizeLabel = new JLabel();
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
