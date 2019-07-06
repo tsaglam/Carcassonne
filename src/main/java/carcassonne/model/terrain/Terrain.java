@@ -156,9 +156,9 @@ public class Terrain {
             return true; // is connected
         }
         GridDirection between = from.next(side); // between this and next corner
-        GridDirection next = between.next(side); // next corner
-        if (terrainMap.get(between) == TerrainType.CASTLE && terrainMap.get(MIDDLE) != TerrainType.CASTLE) {
-            return isImplicitlyConnected(next, to, side);
+        GridDirection nextCorner = between.next(side); // next corner
+        if (terrainMap.get(between) == TerrainType.CASTLE && terrainMap.get(MIDDLE) == TerrainType.ROAD) {
+            return isImplicitlyConnected(nextCorner, to, side); // TODO (MEDIUM) check if street ENDS instead of checking on ROAD/CASTLE
         }
         return false;
     }
