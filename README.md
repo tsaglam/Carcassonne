@@ -14,7 +14,6 @@ Since then, this has been an ongoing project...
 
 ### Coming in the near future:
 * More tiles
-* Emblems for castle tiles
 * Improved settings
 
 ### Other planned features:
