@@ -8,7 +8,7 @@ import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
-import carcassonne.model.terrain.Terrain;
+import carcassonne.model.terrain.TileTerrain;
 import carcassonne.model.terrain.TerrainType;
 
 /**
@@ -20,7 +20,7 @@ public class Tile {
     private GridSpot gridSpot;
     private Meeple meeple;
     private int rotation;
-    private final Terrain terrain;
+    private final TileTerrain terrain;
     private final TileType type;
     private final TileDepiction tileDepiction;
 
@@ -34,7 +34,7 @@ public class Tile {
             throw new IllegalArgumentException("Tile type cannot be null");
         }
         this.type = type;
-        terrain = new Terrain(type);
+        terrain = new TileTerrain(type);
         meeple = null;
         tileDepiction = new TileDepiction(type, hasEmblem());
     }

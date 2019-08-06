@@ -101,8 +101,8 @@ public class FieldsPattern extends GridPattern {
             neighbors.add(MIDDLE); // the classic direction are adjacent to the middle
         }
         if (position.isSmallerOrEquals(TOP_LEFT)) { // everything except the middle has these two neighbors:
-            neighbors.add(position.next(RotationDirection.LEFT)); // counterclockwise adjacent position
-            neighbors.add(position.next(RotationDirection.RIGHT)); // clockwise adjacent position
+            neighbors.add(position.nextDirectionTo(RotationDirection.LEFT)); // counterclockwise adjacent position
+            neighbors.add(position.nextDirectionTo(RotationDirection.RIGHT)); // clockwise adjacent position
         } else {
             neighbors.addAll(Arrays.asList(GridDirection.directNeighbors())); // the middle has the classic directions as neighbors
         }
@@ -120,8 +120,8 @@ public class FieldsPattern extends GridPattern {
             if (position.isSmallerOrEquals(LEFT)) {
                 results.add(position); // for simple directions just return themselves.
             } else if (position.isSmallerOrEquals(TOP_LEFT)) {
-                addIfNotCastle(results, tile, position.next(RotationDirection.LEFT)); // for edges it depends whether the neighboring
-                addIfNotCastle(results, tile, position.next(RotationDirection.RIGHT)); // directions have castle terrain or not
+                addIfNotCastle(results, tile, position.nextDirectionTo(RotationDirection.LEFT)); // for edges it depends whether the neighboring
+                addIfNotCastle(results, tile, position.nextDirectionTo(RotationDirection.RIGHT)); // directions have castle terrain or not
             }
         }
         return results;
@@ -134,9 +134,9 @@ public class FieldsPattern extends GridPattern {
             return position.opposite(); // top, right, botton left are simply inverted
         } else if (position.isSmallerOrEquals(TOP_LEFT)) {
             if (neighborDirection.isLeftOf(position)) { // neighbor to the left of the corner
-                return position.opposite().next(RotationDirection.LEFT).next(RotationDirection.LEFT); // return opposite and two to the right
+                return position.opposite().nextDirectionTo(RotationDirection.LEFT).nextDirectionTo(RotationDirection.LEFT); // return opposite and two to the right
             } else { // neighbor to the right of the corner
-                return position.opposite().next(RotationDirection.RIGHT).next(RotationDirection.RIGHT); // return opposite and two to the left
+                return position.opposite().nextDirectionTo(RotationDirection.RIGHT).nextDirectionTo(RotationDirection.RIGHT); // return opposite and two to the left
             }
         }
         return position; // middle stays middle
