@@ -54,7 +54,7 @@ public enum GridDirection {
      * @return true if it is.
      */
     public boolean isLeftOf(GridDirection other) {
-        return next(RotationDirection.RIGHT) == other;
+        return nextDirectionTo(RotationDirection.RIGHT) == other;
     }
 
     /**
@@ -63,7 +63,7 @@ public enum GridDirection {
      * @return true if it is.
      */
     public boolean isRightOf(GridDirection other) {
-        return next(RotationDirection.LEFT) == other;
+        return nextDirectionTo(RotationDirection.LEFT) == other;
     }
 
     /**
@@ -80,7 +80,7 @@ public enum GridDirection {
      * @param side sets the side.
      * @return the next direction
      */
-    public GridDirection next(RotationDirection side) {
+    public GridDirection nextDirectionTo(RotationDirection side) {
         if (this == MIDDLE) {
             return this;
         }
