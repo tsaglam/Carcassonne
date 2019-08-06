@@ -157,8 +157,8 @@ public class Terrain {
         }
         GridDirection between = from.next(side); // between this and next corner
         GridDirection nextCorner = between.next(side); // next corner
-        if (terrainMap.get(between) == TerrainType.CASTLE && terrainMap.get(MIDDLE) == TerrainType.ROAD) {
-            return isImplicitlyConnected(nextCorner, to, side); // TODO (MEDIUM) check if street ENDS instead of checking on ROAD/CASTLE
+        if (hasNoCastleEntry(between)) {
+            return isImplicitlyConnected(nextCorner, to, side);
         }
         return false;
     }
@@ -202,6 +202,23 @@ public class Terrain {
             }
         }
         meepleSpots.removeAll(removalList);
+    }
+
+    /**
+     * Checks whether this tile terrain has a street passing through the center of the tile. This means the middle is of
+     * terrain street and is connected to at least two other sides.
+     */
+    private boolean hasPassingStreet() {
+        return terrainMap.get(MIDDLE) == TerrainType.ROAD
+                && Arrays.stream(GridDirection.tilePositions()).filter(it -> isDirectConnected(MIDDLE, it)).count() > 2;
+    }
+
+    /**
+     * Checks whether the tile terrain has a castle entry towards a specified castle position. This means no street ending
+     * towards it.
+     */
+    private boolean hasNoCastleEntry(GridDirection castlePosition) {
+        return terrainMap.get(castlePosition) == TerrainType.CASTLE && (terrainMap.get(MIDDLE) == TerrainType.OTHER || hasPassingStreet());
     }
 
     /**
