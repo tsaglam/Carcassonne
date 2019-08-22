@@ -44,7 +44,6 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
         createColorChooser();
         createCloseButton();
         pack();
-        setResizable(false);
         setLocationRelativeTo(null); // place in the center of the screen
     }
 
