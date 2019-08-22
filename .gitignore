@@ -1,2 +1,5 @@
 /bin/
 *.checkstyle
+*.project
+*.classpath
+*.eclipse.jdt.core.prefs
