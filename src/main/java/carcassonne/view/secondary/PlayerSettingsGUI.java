@@ -1,4 +1,4 @@
-package carcassonne.view.menubar;
+package carcassonne.view.secondary;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -22,7 +22,7 @@ import carcassonne.settings.GameSettings;
 import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
 
-public class PlayerColorChooser extends JFrame implements ChangeListener, ActionListener {
+public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionListener {
     private static final long serialVersionUID = 1293883978626527260L; // generated serial UID
     private static final String CHANGE_COLOR = "Choose Meeple Color:";
     private static final String EMPTY_NAME = "The player name cannot be empty!";
@@ -35,7 +35,7 @@ public class PlayerColorChooser extends JFrame implements ChangeListener, Action
     private final int playerNumber;
     private JTextField nameTextField;
 
-    public PlayerColorChooser(int playerNumber, GameSettings settings) {
+    public PlayerSettingsGUI(int playerNumber, GameSettings settings) {
         this.playerNumber = playerNumber;
         this.settings = settings;
         paintShop = new PaintShop();
@@ -44,6 +44,7 @@ public class PlayerColorChooser extends JFrame implements ChangeListener, Action
         createColorChooser();
         createCloseButton();
         pack();
+        setResizable(false);
         setLocationRelativeTo(null); // place in the center of the screen
     }
 
