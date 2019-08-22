@@ -15,11 +15,7 @@ Since then, this computer game has been an ongoing project...
 <img alt="a screenshot of the game" src="/preview.png?raw=true" width="600">
 </p>
 
-### Coming soon:
-* More tiles
-* Improved settings
-
-### Other planned features:
+### Planned Features:
 * Multiple zoom levels
 * Improved meeple icons
 * Key bindings
