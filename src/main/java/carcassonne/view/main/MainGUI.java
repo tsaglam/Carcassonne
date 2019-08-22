@@ -30,14 +30,14 @@ import carcassonne.view.menubar.Scoreboard;
  * The main GUI class.
  * @author Timur Saglam
  */
-public class MainGUI implements Notifiable {
+public class MainGUI extends JFrame implements Notifiable {
+    private static final long serialVersionUID = 5684446992452298030L; // generated UID
     private static final int MEEPLE_FACTOR = 3; // Meeples per tile length.
     private static final Color GUI_COLOR = new Color(190, 190, 190);
     private GridBagConstraints constraints;
     private final MainController controller;
     private final Scoreboard scoreboard;
     private final PaintShop paintShop;
-    private final JFrame frame;
     private final int tileSize;
     private final int gridHeight;
     private final int gridWidth;
@@ -59,7 +59,6 @@ public class MainGUI implements Notifiable {
         this.controller = controller;
         SystemProperties systemProperties = new SystemProperties();
         paintShop = new PaintShop();
-        frame = new JFrame();
         tileSize = GameSettings.TILE_SIZE;
         gridWidth = systemProperties.getResolutionWidth() / tileSize;
         gridHeight = systemProperties.getResolutionHeight() / tileSize;
@@ -75,7 +74,7 @@ public class MainGUI implements Notifiable {
     @Override
     public void notifyChange() {
         meepleLabels.forEach(it -> it.refresh());
-        frame.repaint();
+        repaint();
         if (currentPlayer != null) {
             setCurrentPlayer(currentPlayer);
         }
@@ -87,7 +86,7 @@ public class MainGUI implements Notifiable {
     public void rebuildGrids() {
         meepleLabels.forEach(it -> it.reset());
         tileLabels.forEach(it -> it.reset());
-        frame.repaint();
+        repaint();
     }
 
     /**
@@ -105,15 +104,7 @@ public class MainGUI implements Notifiable {
                 meepleGrid[spot.getX() * MEEPLE_FACTOR + x][spot.getY() * MEEPLE_FACTOR + y].reset();
             }
         }
-        frame.repaint();
-    }
-
-    /**
-     * Grants access to the JFrame of the main GUI.
-     * @return the {@link Jframe}.
-     */
-    public JFrame getFrame() {
-        return frame;
+        repaint();
     }
 
     /**
@@ -150,7 +141,7 @@ public class MainGUI implements Notifiable {
         int xpos = position.addX(spot.getX() * MEEPLE_FACTOR + 1);
         int ypos = position.addY(spot.getY() * MEEPLE_FACTOR + 1);
         meepleGrid[xpos][ypos].setIcon(tile.getTerrain(position), owner);
-        frame.repaint(); // This is required! Removing this will paint black background.
+        repaint(); // This is required! Removing this will paint black background.
     }
 
     /**
@@ -166,7 +157,7 @@ public class MainGUI implements Notifiable {
                 meepleGrid[xBase + x][yBase + y].reset();
             }
         }
-        frame.repaint(); // This is required! Removing this will paint black background.
+        repaint(); // This is required! Removing this will paint black background.
     }
 
     /**
@@ -186,7 +177,7 @@ public class MainGUI implements Notifiable {
                 }
             }
         }
-        frame.repaint(); // This is required! Removing this will paint black background.
+        repaint(); // This is required! Removing this will paint black background.
     }
 
     /**
@@ -215,13 +206,12 @@ public class MainGUI implements Notifiable {
 
     private void buildFrame(JLayeredPane layeredPane) {
         MainMenuBar menuBar = new MainMenuBar(scoreboard, controller);
-        frame.setJMenuBar(menuBar);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(layeredPane, BorderLayout.CENTER);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        setJMenuBar(menuBar);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+        add(layeredPane, BorderLayout.CENTER);
+        pack();
+        setLocationRelativeTo(null);
     }
 
     private JLayeredPane buildLayeredPane(JPanel meeplePanel, JPanel tilePanel) {
@@ -246,7 +236,7 @@ public class MainGUI implements Notifiable {
         meepleGrid = new MeepleLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
         for (int x = 0; x < meepleGridWidth; x++) {
             for (int y = 0; y < meepleGridHeight; y++) {
-                meepleGrid[x][y] = new MeepleLabel(paintShop, controller, GridDirection.values2D()[x % MEEPLE_FACTOR][y % MEEPLE_FACTOR], frame);
+                meepleGrid[x][y] = new MeepleLabel(paintShop, controller, GridDirection.values2D()[x % MEEPLE_FACTOR][y % MEEPLE_FACTOR], this);
                 meepleLabels.add(meepleGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;

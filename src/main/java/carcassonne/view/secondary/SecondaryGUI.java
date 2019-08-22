@@ -71,7 +71,7 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
      * Builds the frame and sets its properties.
      */
     private void buildFrame(MainGUI ui) {
-        dialog = new JDialog(ui.getFrame());
+        dialog = new JDialog(ui);
         dialog.getContentPane().add(this);
         dialog.setResizable(false);
         dialog.setAlwaysOnTop(true);

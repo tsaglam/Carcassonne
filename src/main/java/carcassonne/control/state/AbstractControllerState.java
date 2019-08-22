@@ -61,7 +61,7 @@ public abstract class AbstractControllerState {
      * Starts new round with a specific amount of players.
      * @param playerCount sets the amount of players.
      */
-    public abstract void newGame(int playerCount);
+    public abstract void newRound(int playerCount);
 
     /**
      * Method for the view to call if a user mans a tile with a Meeple.
