@@ -20,7 +20,7 @@ import carcassonne.settings.Notifiable;
  * The menu bar for the main GUI.
  * @author Timur Saglam
  */
-public class MainMenuBar extends JMenuBar implements Notifiable {
+public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIUM) Strings as constants
 
     private static final long serialVersionUID = -599734693130415390L;
     private final MainController controller;
@@ -29,12 +29,10 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private JMenu menuGame;
     private JMenu menuOptions;
     private JMenu menuPlayers;
-    private JMenu menuNames;
-    private JMenu menuColors;
+    private JMenu menuSettings;
     private JMenuItem itemNewGame;
     private JMenuItem itemAbortGame;
-    private JMenuItem[] itemColors;
-    private JMenuItem[] itemNames;
+    private JMenuItem[] itemSettings;
 
     /**
      * Simple constructor creating the menu bar.
@@ -98,14 +96,12 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private void buildMenuOptions() {
         // build player menu
         buildMenuPlayers();
-        buildMenuNames();
         buildMenuColors();
         notifyChange(); // set colors
         // build options menu:
         menuOptions = new JMenu("Options");
         menuOptions.add(menuPlayers);
-        menuOptions.add(menuNames);
-        menuOptions.add(menuColors);
+        menuOptions.add(menuSettings);
         JCheckBoxMenuItem itemChaosMode = new JCheckBoxMenuItem("Enable Chaos Mode");
         itemChaosMode.addMouseListener(new MouseAdapter() {
             @Override
@@ -118,7 +114,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildMenuPlayers() {
-        menuPlayers = new JMenu("Players");
+        menuPlayers = new JMenu("Amount of Players");
         JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameSettings.MAXIMAL_PLAYERS - 1];
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
@@ -130,35 +126,23 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemPlayerCount[0].setSelected(true);
     }
 
-    private void buildMenuNames() {
-        itemNames = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
-        menuNames = new JMenu("Set Names");
-        for (int i = 0; i < itemNames.length; i++) {
-            itemNames[i] = new JMenuItem();
-            itemNames[i].addMouseListener(new MenuNamesMouseAdapter(i, settings));
-            menuNames.add(itemNames[i]);
-        }
-    }
-
     private void buildMenuColors() { // TODO (MEDIUM) reduce duplication
-        itemColors = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
-        menuColors = new JMenu("Set Colors");
-        for (int i = 0; i < itemColors.length; i++) {
-            itemColors[i] = new JMenuItem();
-            itemColors[i].addMouseListener(new MenuColorsMouseAdapter(i, settings));
-            menuColors.add(itemColors[i]);
+        itemSettings = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
+        menuSettings = new JMenu("Player Settings");
+        for (int i = 0; i < itemSettings.length; i++) {
+            itemSettings[i] = new JMenuItem();
+            itemSettings[i].addMouseListener(new MenuColorsMouseAdapter(i, settings));
+            menuSettings.add(itemSettings[i]);
         }
     }
 
     @Override
     public void notifyChange() {
-        for (int i = 0; i < itemColors.length; i++) {
+        for (int i = 0; i < itemSettings.length; i++) {
             Color color = settings.getPlayerColor(i).textColor();
             String name = settings.getPlayerName(i);
-            itemColors[i].setForeground(color);
-            itemColors[i].setText("Color of " + name);
-            itemNames[i].setForeground(color);
-            itemNames[i].setText(name);
+            itemSettings[i].setForeground(color);
+            itemSettings[i].setText("Settings of " + name);
         }
     }
 
