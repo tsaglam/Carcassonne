@@ -7,14 +7,14 @@ import java.awt.event.MouseEvent;
  * A simple mouse adapter for the new game button.
  * @author Timur Saglam
  */
-public class NewGameMouseAdapter extends MouseAdapter {
+public class NewRoundMouseAdapter extends MouseAdapter {
     private final MainMenuBar menuBar;
 
     /**
      * Simple constructor.
      * @param menuBar sets the controller
      */
-    public NewGameMouseAdapter(MainMenuBar menuBar) {
+    public NewRoundMouseAdapter(MainMenuBar menuBar) {
         super();
         this.menuBar = menuBar;
     }
@@ -24,6 +24,6 @@ public class NewGameMouseAdapter extends MouseAdapter {
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        menuBar.newGame();
+        menuBar.newRound();
     }
 }

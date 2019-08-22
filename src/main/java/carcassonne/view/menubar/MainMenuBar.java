@@ -59,10 +59,10 @@ public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIU
     }
 
     /**
-     * Starts a new game with the controller.
+     * Starts a new round with the controller.
      */
-    public void newGame() {
-        controller.requestNewGame(playerCount);
+    public void newRound() {
+        controller.requestNewRound(playerCount);
     }
 
     /**
@@ -82,9 +82,9 @@ public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIU
 
     private void buildMenuGame() {
         // build items:
-        itemNewGame = new JMenuItem("Start new game");
-        itemAbortGame = new JMenuItem("Abort current game");
-        itemNewGame.addMouseListener(new NewGameMouseAdapter(this));
+        itemNewGame = new JMenuItem("Start New Round");
+        itemAbortGame = new JMenuItem("Abort Current Game");
+        itemNewGame.addMouseListener(new NewRoundMouseAdapter(this));
         itemAbortGame.addMouseListener(new AbortGameMouseAdapter(this));
         // build menu:
         menuGame = new JMenu("Game");

@@ -57,6 +57,13 @@ public class MainController {
     }
 
     /**
+     * Shows the main GUI.
+     */
+    public void startGame() {
+        mainGUI.setVisible(true);
+    }
+
+    /**
      * Changes the state of the controller to a new state.
      * @param stateType specifies which state is the new state.
      * @return the new state.
@@ -97,8 +104,8 @@ public class MainController {
      * Requests to start a new round with a specific amount of players.
      * @param playerCount sets the amount of players.
      */
-    public void requestNewGame(int playerCount) {
-        currentState.newGame(playerCount);
+    public void requestNewRound(int playerCount) {
+        currentState.newRound(playerCount);
     }
 
     /**

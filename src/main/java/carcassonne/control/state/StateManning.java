@@ -69,10 +69,10 @@ public class StateManning extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#newGame()
+     * @see carcassonne.control.state.AbstractControllerState#newRound()
      */
     @Override
-    public void newGame(int playerCount) {
+    public void newRound(int playerCount) {
         GameMessage.showWarning("Abort the current game before starting a new one.");
     }
 

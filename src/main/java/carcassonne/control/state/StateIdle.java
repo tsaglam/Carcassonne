@@ -43,10 +43,10 @@ public class StateIdle extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#newGame()
+     * @see carcassonne.control.state.AbstractControllerState#newRound()
      */
     @Override
-    public void newGame(int playerCount) {
+    public void newRound(int playerCount) {
         startNewRound(playerCount);
     }
 
