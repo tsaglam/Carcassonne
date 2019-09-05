@@ -26,6 +26,6 @@ public class MenuColorsMouseAdapter extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        colorChooser.setVisible(true);
+        colorChooser.updateAndShow();
     }
 }
