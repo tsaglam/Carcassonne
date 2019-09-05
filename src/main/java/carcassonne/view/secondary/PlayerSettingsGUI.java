@@ -47,6 +47,15 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
         setLocationRelativeTo(null); // place in the center of the screen
     }
 
+    /**
+     * Updates the name and color of the correlating player and then makes the UI visible.
+     */
+    public void updateAndShow() {
+        colorChooser.setColor(settings.getPlayerColor(playerNumber));
+        nameTextField.setText(settings.getPlayerName(playerNumber));
+        setVisible(true);
+    }
+
     @Override
     public void stateChanged(ChangeEvent event) {
         for (TerrainType terrain : TerrainType.basicTerrain()) {
@@ -67,7 +76,7 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
     }
 
     private final void createNamePanel() {
-        nameTextField = new JTextField(settings.getPlayerName(playerNumber));
+        nameTextField = new JTextField();
         JPanel namePanel = new JPanel();
         namePanel.setLayout(new BorderLayout());
         namePanel.add(nameTextField);
@@ -80,7 +89,6 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
         colorChooser.setBorder(BorderFactory.createTitledBorder(CHANGE_COLOR));
         colorChooser.getSelectionModel().addChangeListener(this);
         colorChooser.setPreviewPanel(createMeeplePreview());
-        colorChooser.setColor(settings.getPlayerColor(playerNumber));
         add(colorChooser, BorderLayout.CENTER);
     }
 
