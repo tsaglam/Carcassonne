@@ -5,7 +5,6 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.secondary.GameStatisticsGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
@@ -26,8 +25,8 @@ public class StateGameOver extends AbstractControllerState {
      * @param placementGUI sets the PlacementGUI
      * @param scoreboard sets the Scoreboard
      */
-    public StateGameOver(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
-        super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
+    public StateGameOver(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, rotationGUI, placementGUI);
     }
 
     /**
