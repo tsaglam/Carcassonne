@@ -4,7 +4,6 @@ import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -22,8 +21,8 @@ public class StateIdle extends AbstractControllerState {
      * @param placementGUI sets the PlacementGUI
      * @param scoreboard sets the Scoreboard
      */
-    public StateIdle(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
-        super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
+    public StateIdle(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, rotationGUI, placementGUI);
     }
 
     /**

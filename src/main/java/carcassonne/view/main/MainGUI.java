@@ -36,8 +36,8 @@ public class MainGUI extends JFrame implements Notifiable {
     private static final Color GUI_COLOR = new Color(190, 190, 190);
     private GridBagConstraints constraints;
     private final MainController controller;
-    private final Scoreboard scoreboard;
     private final PaintShop paintShop;
+    private MainMenuBar menuBar;
     private final int tileSize;
     private final int gridHeight;
     private final int gridWidth;
@@ -54,8 +54,7 @@ public class MainGUI extends JFrame implements Notifiable {
      * @param scoreboard sets the scoreboard.
      * @param controller sets the connection to the game controller.
      */
-    public MainGUI(Scoreboard scoreboard, MainController controller) {
-        this.scoreboard = scoreboard;
+    public MainGUI(MainController controller) {
         this.controller = controller;
         SystemProperties systemProperties = new SystemProperties();
         paintShop = new PaintShop();
@@ -190,6 +189,10 @@ public class MainGUI extends JFrame implements Notifiable {
         tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
     }
 
+    public Scoreboard getScoreboard() {
+        return menuBar.getScoreboard(); // TODO (MEDIUM) Find better solution.
+    }
+
     private void checkParameters(Object... parameters) {
         for (Object parameter : parameters) {
             if (parameter == null) {
@@ -205,7 +208,7 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     private void buildFrame(JLayeredPane layeredPane) {
-        MainMenuBar menuBar = new MainMenuBar(scoreboard, controller);
+        menuBar = new MainMenuBar(controller);
         setJMenuBar(menuBar);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());

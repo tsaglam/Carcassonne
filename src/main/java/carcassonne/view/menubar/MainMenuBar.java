@@ -20,8 +20,12 @@ import carcassonne.settings.Notifiable;
  * The menu bar for the main GUI.
  * @author Timur Saglam
  */
-public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIUM) Strings as constants
+public class MainMenuBar extends JMenuBar implements Notifiable {
 
+    private static final long serialVersionUID = -599734693130415390L;
+    private static final String GAME = "Game";
+    private static final String ABORT = "Abort Current Game";
+    private static final String NEW_ROUND = "Start New Round";
     private static final String SETTINGS_OF = "Settings of ";
     private static final String SETTINGS = "Player Settings";
     private static final String PLAYERS = " Players";
@@ -29,7 +33,6 @@ public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIU
     private static final String CHAOS_MODE = "Enable Chaos Mode";
     private static final String OPTIONS = "Options";
     private static final String LARGE_SPACE = "          ";
-    private static final long serialVersionUID = -599734693130415390L;
     private final MainController controller;
     private final GameSettings settings;
     private int playerCount;
@@ -47,12 +50,12 @@ public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIU
      * @param scoreboard sets the scoreboard of the menu bar.
      * @param controller sets the connection to game the controller.
      */
-    public MainMenuBar(Scoreboard scoreboard, MainController controller) { // TODO (HIGH) make menu bar gray
+    public MainMenuBar(MainController controller) { // TODO (HIGH) make menu bar gray
         super();
         this.controller = controller;
-        this.scoreboard = scoreboard;
         settings = controller.getProperties();
         settings.registerNotifiable(this);
+        scoreboard = new Scoreboard(settings);
         playerCount = 2;
         buildMenuGame();
         buildMenuOptions();
@@ -71,7 +74,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIU
      * Starts a new round with the controller.
      */
     public void newRound() {
-        controller.requestNewRound(playerCount);
+        controller.requestNewRound(playerCount); // TODO (HIGH) move into adapters
     }
 
     /**
@@ -80,6 +83,24 @@ public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIU
      */
     public void setPlayerCount(int players) {
         playerCount = players;
+    }
+
+    /**
+     * Grants access to the scoreboard of the menu bar.
+     * @return the scoreboard.
+     */
+    public Scoreboard getScoreboard() {
+        return scoreboard;
+    }
+
+    @Override
+    public void notifyChange() {
+        for (int i = 0; i < itemSettings.length; i++) {
+            Color color = settings.getPlayerColor(i).textColor();
+            String name = settings.getPlayerName(i);
+            itemSettings[i].setForeground(color);
+            itemSettings[i].setText(SETTINGS_OF + name);
+        }
     }
 
     // adds labels of the scoreboard to the menu bar.
@@ -91,23 +112,21 @@ public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIU
 
     private void buildMenuGame() {
         // build items:
-        itemNewGame = new JMenuItem("Start New Round");
-        itemAbortGame = new JMenuItem("Abort Current Game");
+        itemNewGame = new JMenuItem(NEW_ROUND);
+        itemAbortGame = new JMenuItem(ABORT);
         itemNewGame.addMouseListener(new NewRoundMouseAdapter(this));
         itemAbortGame.addMouseListener(new AbortGameMouseAdapter(this));
         // build menu:
-        menuGame = new JMenu("Game");
+        menuGame = new JMenu(GAME);
         menuGame.add(itemNewGame);
         menuGame.add(itemAbortGame);
         add(menuGame);
     }
 
     private void buildMenuOptions() {
-        // build player menu
         buildMenuPlayers();
         buildMenuSettings();
         notifyChange(); // set colors
-        // build options menu:
         menuOptions = new JMenu(OPTIONS);
         menuOptions.add(menuPlayers);
         menuOptions.add(menuSettings);
@@ -140,19 +159,8 @@ public class MainMenuBar extends JMenuBar implements Notifiable { // TODO (MEDIU
         menuSettings = new JMenu(SETTINGS);
         for (int i = 0; i < itemSettings.length; i++) {
             itemSettings[i] = new JMenuItem();
-            itemSettings[i].addMouseListener(new MenuSettingsMouseAdapter(i, settings));
+            itemSettings[i].addMouseListener(scoreboard.getSettingsMouseListener(i));
             menuSettings.add(itemSettings[i]);
         }
     }
-
-    @Override
-    public void notifyChange() {
-        for (int i = 0; i < itemSettings.length; i++) {
-            Color color = settings.getPlayerColor(i).textColor();
-            String name = settings.getPlayerName(i);
-            itemSettings[i].setForeground(color);
-            itemSettings[i].setText(SETTINGS_OF + name);
-        }
-    }
-
 }

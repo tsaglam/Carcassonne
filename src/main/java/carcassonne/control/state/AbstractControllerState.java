@@ -36,13 +36,12 @@ public abstract class AbstractControllerState {
      * @param placementGUI sets the PlacementGUI
      * @param scoreboard sets the Scoreboard
      */
-    public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI,
-            Scoreboard scoreboard) {
+    public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
         this.controller = controller;
         this.mainGUI = mainGUI;
         this.rotationGUI = rotationGUI;
         this.placementGUI = placementGUI;
-        this.scoreboard = scoreboard;
+        scoreboard = mainGUI.getScoreboard();
     }
 
     /**

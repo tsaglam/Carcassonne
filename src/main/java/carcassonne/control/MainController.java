@@ -13,7 +13,6 @@ import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -30,7 +29,6 @@ public class MainController {
     private final MainGUI mainGUI;
     private final RotationGUI rotationGUI;
     private final PlacementGUI placementGUI;
-    private final Scoreboard scoreboard;
     private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
     private AbstractControllerState currentState;
     private final GameSettings settings;
@@ -40,20 +38,19 @@ public class MainController {
      */
     public MainController() {
         settings = new GameSettings();
-        scoreboard = new Scoreboard(settings);
-        mainGUI = new MainGUI(scoreboard, this);
+        mainGUI = new MainGUI(this);
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
         stateMap = new HashMap<>();
-        settings.registerNotifiable(scoreboard);
+        settings.registerNotifiable(mainGUI.getScoreboard());
         settings.registerNotifiable(mainGUI);
         settings.registerNotifiable(placementGUI);
         settings.registerNotifiable(rotationGUI);
-        currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI, scoreboard);
+        currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI);
         registerState(currentState);
-        registerState(new StateManning(this, mainGUI, rotationGUI, placementGUI, scoreboard));
-        registerState(new StatePlacing(this, mainGUI, rotationGUI, placementGUI, scoreboard));
-        registerState(new StateGameOver(this, mainGUI, rotationGUI, placementGUI, scoreboard));
+        registerState(new StateManning(this, mainGUI, rotationGUI, placementGUI));
+        registerState(new StatePlacing(this, mainGUI, rotationGUI, placementGUI));
+        registerState(new StateGameOver(this, mainGUI, rotationGUI, placementGUI));
     }
 
     /**
@@ -130,7 +127,7 @@ public class MainController {
      * @param newGrid sets the new grid.
      */
     public void updateStates(Round newRound, Grid newGrid) {
-        scoreboard.rebuild(newRound.getPlayerCount());
+        mainGUI.getScoreboard().rebuild(newRound.getPlayerCount());
         for (AbstractControllerState state : stateMap.values()) {
             state.updateState(newRound, newGrid);
         }

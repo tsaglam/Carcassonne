@@ -1,6 +1,7 @@
 package carcassonne.view.menubar;
 
 import java.awt.Font;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,7 @@ public class Scoreboard implements Notifiable {
     private final JLabel[] scoreLabels;
     private final JLabel stackSizeLabel;
     private final ArrayList<JLabel> allLabels;
+    private final ArrayList<MouseListener> settingsMouseListeners;
     private final GameSettings settings;
 
     /**
@@ -30,10 +32,13 @@ public class Scoreboard implements Notifiable {
     public Scoreboard(GameSettings settings) { // TODO (HIGH) link with players?
         this.settings = settings;
         scoreLabels = new JLabel[GameSettings.MAXIMAL_PLAYERS];
+        settingsMouseListeners = new ArrayList<>();
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
             scoreLabels[i].setForeground(settings.getPlayerColor(i).textColor());
-            scoreLabels[i].addMouseListener(new MenuSettingsMouseAdapter(i, settings));
+            MouseListener listener = new MenuSettingsMouseAdapter(i, settings);
+            settingsMouseListeners.add(listener);
+            scoreLabels[i].addMouseListener(listener);
         }
         stackSizeLabel = new JLabel();
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
@@ -94,6 +99,15 @@ public class Scoreboard implements Notifiable {
      */
     public void updateStackSize(int stackSize) {
         stackSizeLabel.setText("   [Stack Size: " + stackSize + "]");
+    }
+
+    /**
+     * Grants access to a specific mouse listener of one players settings.
+     * @param playerNumber specifies the player.
+     * @return the correlating mouse listener.
+     */
+    public MouseListener getSettingsMouseListener(int playerNumber) {
+        return settingsMouseListeners.get(playerNumber);
     }
 
     @Override

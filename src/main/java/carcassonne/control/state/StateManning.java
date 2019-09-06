@@ -11,7 +11,6 @@ import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
 
@@ -29,8 +28,8 @@ public class StateManning extends AbstractControllerState {
      * @param placementGUI sets the PlacementGUI
      * @param scoreboard sets the Scoreboard
      */
-    public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI, Scoreboard scoreboard) {
-        super(controller, mainGUI, rotationGUI, placementGUI, scoreboard);
+    public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, rotationGUI, placementGUI);
     }
 
     /**
