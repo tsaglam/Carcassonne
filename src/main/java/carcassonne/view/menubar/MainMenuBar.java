@@ -35,13 +35,12 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private static final String LARGE_SPACE = "          ";
     private final MainController controller;
     private final GameSettings settings;
-    private int playerCount;
     private JMenu menuGame;
     private JMenu menuOptions;
     private JMenu menuPlayers;
     private JMenu menuSettings;
-    private JMenuItem itemNewGame;
-    private JMenuItem itemAbortGame;
+    private JMenuItem itemNewRound;
+    private JMenuItem itemAbortRound;
     private JMenuItem[] itemSettings;
     private final Scoreboard scoreboard;
 
@@ -56,33 +55,10 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         settings = controller.getProperties();
         settings.registerNotifiable(this);
         scoreboard = new Scoreboard(settings);
-        playerCount = 2;
         buildMenuGame();
         buildMenuOptions();
         add(new JLabel(LARGE_SPACE));
         add(scoreboard);
-    }
-
-    /**
-     * Aborts the current game with the controller.
-     */
-    public void abortGame() {
-        controller.requestAbortGame();
-    }
-
-    /**
-     * Starts a new round with the controller.
-     */
-    public void newRound() {
-        controller.requestNewRound(playerCount); // TODO (HIGH) move into adapters
-    }
-
-    /**
-     * Sets the amount of players for the next game.
-     * @param players sets the amount of players.
-     */
-    public void setPlayerCount(int players) {
-        playerCount = players;
     }
 
     /**
@@ -111,15 +87,15 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildMenuGame() {
-        // build items:
-        itemNewGame = new JMenuItem(NEW_ROUND);
-        itemAbortGame = new JMenuItem(ABORT);
-        itemNewGame.addMouseListener(new NewRoundMouseAdapter(this));
-        itemAbortGame.addMouseListener(new AbortGameMouseAdapter(this));
+        itemNewRound = new JMenuItem(NEW_ROUND);
+        itemAbortRound = new JMenuItem(ABORT);
+        itemAbortRound.setEnabled(false);
+        itemNewRound.addMouseListener(new NewRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
+        itemAbortRound.addMouseListener(new AbortRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
         // build menu:
         menuGame = new JMenu(GAME);
-        menuGame.add(itemNewGame);
-        menuGame.add(itemAbortGame);
+        menuGame.add(itemNewRound);
+        menuGame.add(itemAbortRound);
         add(menuGame);
     }
 
@@ -147,7 +123,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
             itemPlayerCount[i] = new JRadioButtonMenuItem((i + 2) + PLAYERS);
-            itemPlayerCount[i].addMouseListener(new MenuPlayersMouseAdapter(this, (i + 2)));
+            itemPlayerCount[i].addMouseListener(new MenuPlayersMouseAdapter(settings, (i + 2)));
             group.add(itemPlayerCount[i]);
             menuPlayers.add(itemPlayerCount[i]);
         }

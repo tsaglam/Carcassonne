@@ -99,10 +99,9 @@ public class MainController {
 
     /**
      * Requests to start a new round with a specific amount of players.
-     * @param playerCount sets the amount of players.
      */
-    public void requestNewRound(int playerCount) {
-        currentState.newRound(playerCount);
+    public void requestNewRound() {
+        currentState.newRound(settings.getAmountOfPlayers());
     }
 
     /**

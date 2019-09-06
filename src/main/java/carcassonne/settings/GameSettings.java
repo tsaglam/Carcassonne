@@ -24,7 +24,10 @@ public class GameSettings {
     private static final String TEMPLATE = "_template";
     private final List<Notifiable> changeListeners;
     private boolean chaosMode;
+    private int amountOfPlayers;
+
     private final ArrayList<PlayerColor> colors;
+
     private final ArrayList<String> names;
 
     /**
@@ -33,7 +36,16 @@ public class GameSettings {
     public GameSettings() {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
+        amountOfPlayers = 2;
         changeListeners = new ArrayList<Notifiable>();
+    }
+
+    /**
+     * Returns how many player are playing in the next round.
+     * @return the amount of players.
+     */
+    public int getAmountOfPlayers() {
+        return amountOfPlayers;
     }
 
     /**
@@ -63,11 +75,11 @@ public class GameSettings {
     }
 
     /**
-     * Registers a UI element that wants to listen to changes.
-     * @param notifiable is the UI element.
+     * Specifies how many player are playing in the next round.
+     * @param amountOfPlayers is the amount of players.
      */
-    public void registerNotifiable(Notifiable notifiable) {
-        changeListeners.add(notifiable);
+    public void setAmountOfPlayers(int amountOfPlayers) {
+        this.amountOfPlayers = amountOfPlayers;
     }
 
     /**
@@ -96,6 +108,14 @@ public class GameSettings {
     public void setPlayerName(String name, int playerNumber) {
         names.set(playerNumber, name);
         notifyListeners();
+    }
+
+    /**
+     * Registers a UI element that wants to listen to changes.
+     * @param notifiable is the UI element.
+     */
+    public void registerNotifiable(Notifiable notifiable) {
+        changeListeners.add(notifiable);
     }
 
     private void notifyListeners() {
