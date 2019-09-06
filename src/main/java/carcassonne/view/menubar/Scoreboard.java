@@ -33,7 +33,7 @@ public class Scoreboard implements Notifiable {
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
             scoreLabels[i].setForeground(settings.getPlayerColor(i).textColor());
-            scoreLabels[i].addMouseListener(new MenuColorsMouseAdapter(i, settings)); // TODO (MEDIUM) async?
+            scoreLabels[i].addMouseListener(new MenuSettingsMouseAdapter(i, settings));
         }
         stackSizeLabel = new JLabel();
         allLabels = new ArrayList<>(Arrays.asList(scoreLabels));
@@ -47,9 +47,7 @@ public class Scoreboard implements Notifiable {
      * Disables all the scoreboard labels.
      */
     public void disable() {
-        for (JLabel label : allLabels) {
-            label.setVisible(false);
-        }
+        allLabels.forEach(it -> it.setVisible(false));
         stackSizeLabel.setVisible(false);
     }
 
@@ -57,9 +55,7 @@ public class Scoreboard implements Notifiable {
      * Enables all the scoreboard labels.
      */
     public void enable() {
-        for (JLabel label : allLabels) {
-            label.setVisible(true);
-        }
+        allLabels.forEach(it -> it.setVisible(true));
     }
 
     /**
