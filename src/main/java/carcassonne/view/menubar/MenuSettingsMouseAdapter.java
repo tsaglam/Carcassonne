@@ -11,7 +11,7 @@ import carcassonne.view.secondary.PlayerSettingsGUI;
  * the same time.
  * @author Timur Saglam
  */
-public class MenuColorsMouseAdapter extends MouseAdapter {
+public class MenuSettingsMouseAdapter extends MouseAdapter {
     private final PlayerSettingsGUI colorChooser;
 
     /**
@@ -19,7 +19,7 @@ public class MenuColorsMouseAdapter extends MouseAdapter {
      * @param playerNumber is the number of the player whose color gets chosen.
      * @param settings are the {@link GameSettings}.
      */
-    public MenuColorsMouseAdapter(int playerNumber, GameSettings settings) {
+    public MenuSettingsMouseAdapter(int playerNumber, GameSettings settings) {
         super();
         colorChooser = new PlayerSettingsGUI(playerNumber, settings);
     }
