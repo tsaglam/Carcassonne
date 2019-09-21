@@ -193,6 +193,10 @@ public class MainGUI extends JFrame implements Notifiable {
         return menuBar.getScoreboard(); // TODO (MEDIUM) Find better solution.
     }
 
+    public void resetMenuState() {
+        menuBar.enableStart(); // TODO (MEDIUM) Find better solution.
+    }
+
     private void checkParameters(Object... parameters) {
         for (Object parameter : parameters) {
             if (parameter == null) {

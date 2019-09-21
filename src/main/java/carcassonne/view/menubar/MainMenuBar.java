@@ -139,4 +139,9 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
             menuSettings.add(itemSettings[i]);
         }
     }
+
+    public void enableStart() {
+        itemNewRound.setEnabled(true);
+        itemAbortRound.setEnabled(false);
+    }
 }
