@@ -91,7 +91,7 @@ public enum GridDirection {
                 position = i; // save cycle position
             }
         }
-        return cycle[(8 + position + side.toInt()) % 8];
+        return cycle[(cycle.length + position + side.toInt()) % cycle.length];
     }
 
     /**
