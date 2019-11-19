@@ -18,14 +18,14 @@ import carcassonne.view.main.MainGUI;
  * Super class for all other smaller GUI beneath the main GUI.
  * @author Timur Saglam
  */
-public abstract class SecondaryGUI extends JPanel implements Notifiable {
+public abstract class SecondaryGUI extends JDialog implements Notifiable {
     private static final int INITIAL_X = 100;
     private static final int INITIAL_Y = 150;
     private static final long serialVersionUID = 4056347951568551115L;
     protected GridBagConstraints constraints;
     protected MainController controller;
     protected Player currentPlayer;
-    protected JDialog dialog;
+    protected JPanel panel;
     protected SystemProperties systemProperties;
     protected Tile tile;
 
@@ -35,18 +35,12 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
      * @param ui is the main graphical user interface.
      */
     public SecondaryGUI(MainController controller, MainGUI ui) {
-        super(new GridBagLayout());
+        super(ui);
+        panel = new JPanel(new GridBagLayout());
         this.controller = controller;
         systemProperties = new SystemProperties();
         constraints = new GridBagConstraints();
         buildFrame(ui);
-    }
-
-    /**
-     * Hides the GUI.
-     */
-    public void disableFrame() {
-        dialog.setVisible(false);
     }
 
     /**
@@ -61,35 +55,34 @@ public abstract class SecondaryGUI extends JPanel implements Notifiable {
         }
         this.tile = tile;
         this.currentPlayer = currentPlayer;
-        setBackground(currentPlayer.getColor().lightColor());
+        panel.setBackground(currentPlayer.getColor().lightColor());
         update(); // TODO (MEDIUM) rename method, be more specific
-        dialog.setVisible(true);
-        dialog.toFront(); // sets the focus on the secondary GUI, removes need for double clicks
+        setVisible(true);
+        toFront(); // sets the focus on the secondary GUI, removes need for double clicks
     }
 
     /*
      * Builds the frame and sets its properties.
      */
     private void buildFrame(MainGUI ui) {
-        dialog = new JDialog(ui);
-        dialog.getContentPane().add(this);
-        dialog.setResizable(false);
-        dialog.setAlwaysOnTop(true);
-        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        dialog.setLocation(INITIAL_X, INITIAL_Y);
+        getContentPane().add(panel);
+        setResizable(false);
+        setAlwaysOnTop(true);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setLocation(INITIAL_X, INITIAL_Y);
     }
 
     /**
      * Should be called at the end of a constructor of a subclass.
      */
     protected void finishFrame() {
-        dialog.pack();
+        pack();
     }
 
     @Override
     public void notifyChange() {
         if (currentPlayer != null) { // only if UI is in use.
-            setBackground(currentPlayer.getColor().lightColor());
+            panel.setBackground(currentPlayer.getColor().lightColor());
         }
     }
 

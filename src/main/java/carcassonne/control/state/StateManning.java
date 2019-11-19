@@ -157,6 +157,6 @@ public class StateManning extends AbstractControllerState {
      */
     @Override
     protected void exit() {
-        placementGUI.disableFrame();
+        placementGUI.setVisible(false);
     }
 }

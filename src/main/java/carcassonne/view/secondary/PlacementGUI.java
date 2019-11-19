@@ -47,7 +47,7 @@ public class PlacementGUI extends SecondaryGUI {
                 button[x][y].setToolTipText("Place Meeple on the " + GridDirection.values2D()[x][y].toReadableString() + " of the tile.");
                 constraints.gridx = x;
                 constraints.gridy = y + 1;
-                add(button[x][y], constraints);
+                panel.add(button[x][y], constraints);
             }
         }
     }
@@ -57,7 +57,7 @@ public class PlacementGUI extends SecondaryGUI {
         buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
         defaultButtonColor = buttonSkip.getBackground();
         constraints.gridwidth = 3;
-        add(buttonSkip, constraints);
+        panel.add(buttonSkip, constraints);
         buttonSkip.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

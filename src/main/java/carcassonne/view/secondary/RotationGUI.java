@@ -74,15 +74,15 @@ public class RotationGUI extends SecondaryGUI {
         // set constraints:
         constraints.fill = GridBagConstraints.BOTH;
         // add buttons:
-        add(buttonRotateLeft, constraints);
-        add(buttonSkip, constraints);
-        add(buttonRotateRight, constraints);
+        panel.add(buttonRotateLeft, constraints);
+        panel.add(buttonSkip, constraints);
+        panel.add(buttonRotateRight, constraints);
         // change constraints and add label:
         constraints.gridy = 1;
         constraints.gridx = 0;
         constraints.ipady = 0;
         constraints.gridwidth = 3;
-        add(tileLabel, constraints);
+        panel.add(tileLabel, constraints);
     }
 
     /**
