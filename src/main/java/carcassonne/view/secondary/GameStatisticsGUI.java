@@ -20,10 +20,10 @@ import carcassonne.model.Round;
  * A class for the game statistics GUI.
  * @author Timur Saglam
  */
-public class GameStatisticsGUI {
+public class GameStatisticsGUI extends JFrame {
 
+    private static final long serialVersionUID = 2862334382605282126L; // generated UID
     protected MainController controller;
-    private JFrame frame;
     private JButton buttonClose;
     private JTable table;
 
@@ -35,7 +35,6 @@ public class GameStatisticsGUI {
     public GameStatisticsGUI(MainController controller, Round round) {
         this.controller = controller;
         buildTable(round);
-
         buildButtonClose();
         buildFrame();
     }
@@ -58,8 +57,8 @@ public class GameStatisticsGUI {
      * Hides and disposes the GUI.
      */
     public void closeGUI() {
-        frame.setVisible(false);
-        frame.dispose();
+        setVisible(false);
+        dispose();
     }
 
     private void buildButtonClose() {
@@ -73,16 +72,15 @@ public class GameStatisticsGUI {
     }
 
     private void buildFrame() {
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
-        frame.add(table, BorderLayout.CENTER);
-        frame.add(buttonClose, BorderLayout.SOUTH);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setAlwaysOnTop(true);
-        frame.setVisible(true);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setLayout(new BorderLayout());
+        add(table.getTableHeader(), BorderLayout.PAGE_START);
+        add(table, BorderLayout.CENTER);
+        add(buttonClose, BorderLayout.SOUTH);
+        pack();
+        setLocationRelativeTo(null);
+        setAlwaysOnTop(true);
+        setVisible(true);
     }
 
     /**

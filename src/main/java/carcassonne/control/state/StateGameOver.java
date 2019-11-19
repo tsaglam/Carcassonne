@@ -96,6 +96,7 @@ public class StateGameOver extends AbstractControllerState {
         mainGUI.resetMenuState();
         GameMessage.showMessage("The game is over. Winning player(s): " + round.getWinningPlayers());
         gameStatistics = new GameStatisticsGUI(controller, round);
+        mainGUI.addSubInterfaces(gameStatistics, placementGUI, rotationGUI);
     }
 
     /**
