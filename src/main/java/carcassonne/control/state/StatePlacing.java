@@ -107,7 +107,7 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     protected void exit() {
-        rotationGUI.disableFrame();
+        rotationGUI.setVisible(false);
     }
 
 }
