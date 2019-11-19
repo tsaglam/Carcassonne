@@ -2,6 +2,7 @@ package carcassonne.view.main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ import carcassonne.settings.SystemProperties;
 import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
-import carcassonne.view.secondary.SecondaryGUI;
 
 /**
  * The main GUI class.
@@ -200,10 +200,10 @@ public class MainGUI extends JFrame implements Notifiable {
 
     /**
      * Enslaves sub user interfaces, they are minimized with this GUI.
-     * @param subUserInterfaces are the user interfaces to enslave.
+     * @param userInterfaces are the user interfaces to enslave.
      */
-    public void addSubInterface(SecondaryGUI... subUserInterfaces) {
-        this.addWindowListener(new SubComponentAdapter(subUserInterfaces));
+    public void addSubInterfaces(Component... userInterfaces) {
+        this.addWindowListener(new SubComponentAdapter(userInterfaces));
     }
 
     private void checkParameters(Object... parameters) {

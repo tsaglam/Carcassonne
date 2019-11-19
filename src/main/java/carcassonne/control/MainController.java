@@ -41,7 +41,7 @@ public class MainController {
         mainGUI = new MainGUI(this);
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
-        mainGUI.addSubInterface(placementGUI, rotationGUI);
+        mainGUI.addSubInterfaces(placementGUI, rotationGUI);
         stateMap = new HashMap<>();
         settings.registerNotifiable(mainGUI.getScoreboard());
         settings.registerNotifiable(mainGUI);
