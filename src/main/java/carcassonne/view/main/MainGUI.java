@@ -203,7 +203,7 @@ public class MainGUI extends JFrame implements Notifiable {
      * @param subUserInterfaces are the user interfaces to enslave.
      */
     public void addSubInterface(SecondaryGUI... subUserInterfaces) {
-        this.addWindowListener(new SubUserInterfaceAdapter(subUserInterfaces));
+        this.addWindowListener(new SubComponentAdapter(subUserInterfaces));
     }
 
     private void checkParameters(Object... parameters) {
