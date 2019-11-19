@@ -25,6 +25,7 @@ import carcassonne.settings.SystemProperties;
 import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
+import carcassonne.view.secondary.SecondaryGUI;
 
 /**
  * The main GUI class.
@@ -195,6 +196,14 @@ public class MainGUI extends JFrame implements Notifiable {
 
     public void resetMenuState() {
         menuBar.enableStart(); // TODO (MEDIUM) Find better solution.
+    }
+
+    /**
+     * Enslaves sub user interfaces, they are minimized with this GUI.
+     * @param subUserInterfaces are the user interfaces to enslave.
+     */
+    public void addSubInterface(SecondaryGUI... subUserInterfaces) {
+        this.addWindowListener(new SubUserInterfaceAdapter(subUserInterfaces));
     }
 
     private void checkParameters(Object... parameters) {
