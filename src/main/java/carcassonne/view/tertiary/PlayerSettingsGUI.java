@@ -1,4 +1,4 @@
-package carcassonne.view.secondary;
+package carcassonne.view.tertiary;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

@@ -1,4 +1,4 @@
-package carcassonne.view.secondary;
+package carcassonne.view.tertiary;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -6,14 +6,15 @@ import carcassonne.model.Round;
 import carcassonne.model.terrain.TerrainType;
 
 /**
- * Model class for the game statistics GUI.
+ * Model class for the game statistics GUI. Acts as an adapter that offers the data of the round to the game statistics
+ * GUI.
  * @author Timur Saglam
  */
 public class GameStatisticsModel extends AbstractTableModel {
 
-    private static final long serialVersionUID = -7138458001360243937L;
+    private static final long serialVersionUID = -7138458001360243937L; // generated UID
     private final Round round;
-    private final String[] header = { "player", "castle", "road", "monastery", "field", "overall score" };
+    private static final String[] HEADER = { "Player", "Castle", "Road", "Monastery", "Field", "SCORE" };
 
     /**
      * Creates the game statistics model with the current round.
@@ -26,12 +27,12 @@ public class GameStatisticsModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return header.length;
+        return HEADER.length;
     }
 
     @Override
     public String getColumnName(int column) {
-        return header[column];
+        return HEADER[column];
     }
 
     @Override
