@@ -56,7 +56,7 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
         this.tile = tile;
         this.currentPlayer = currentPlayer;
         panel.setBackground(currentPlayer.getColor().lightColor());
-        update(); // TODO (MEDIUM) rename method, be more specific
+        updateGUI();
         setVisible(true);
         toFront(); // sets the focus on the secondary GUI, removes need for double clicks
     }
@@ -90,6 +90,6 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
      * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update the GUI content according
      * to the tiles properties.
      */
-    protected abstract void update();
+    protected abstract void updateGUI();
 
 }
