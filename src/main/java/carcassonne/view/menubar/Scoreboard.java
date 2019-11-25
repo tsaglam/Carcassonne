@@ -29,7 +29,7 @@ public class Scoreboard implements Notifiable {
      * Standard constructor. Creates score board.
      * @param settings are the {@link GameSettings}.
      */
-    public Scoreboard(GameSettings settings) { // TODO (HIGH) link with players?
+    public Scoreboard(GameSettings settings) { // TODO (MEDIUM) link with players?
         this.settings = settings;
         scoreLabels = new JLabel[GameSettings.MAXIMAL_PLAYERS];
         settingsMouseListeners = new ArrayList<>();

@@ -15,6 +15,12 @@ import carcassonne.model.terrain.TerrainType;
 public class GameSettings {
     public static final int MAXIMAL_PLAYERS = 5;
     public static final int TILE_SIZE = 100;
+    public static final String TILE_FILE_TYPE = ".png";
+    public static final String HIGHLIGHT_PATH = "src/main/ressources/highlight.png";
+    public static final String NULL_TILE_PATH = "src/main/ressources/tiles/Null0.png";
+    public static final String EMBLEM_PATH = "src/main/ressources/emblem.png";
+    public static final String TILE_FOLDER_PATH = "src/main/ressources/tiles/";
+    
     private static final PlayerColor[] DEFAULT_COLORS = { new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
             new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147) };
     private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };

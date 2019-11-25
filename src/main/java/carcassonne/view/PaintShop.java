@@ -22,9 +22,7 @@ import carcassonne.settings.GameSettings;
  */
 public class PaintShop {
     private static final int MAXIMAL_ALPHA = 255;
-    private static final String HIGHLIGHT = "src/main/ressources/highlight.png"; // TODO (HIGH) move to options.
-    private static final String EMBLEM = "src/main/ressources/emblem.png"; // TODO (HIGH) move to options.
-
+    
     private final Map<TerrainType, BufferedImage> imageMap;
     private final Map<TerrainType, BufferedImage> templateMap;
     private final BufferedImage highlightImage;
@@ -36,8 +34,8 @@ public class PaintShop {
     public PaintShop() {
         imageMap = buildImageMap(false);
         templateMap = buildImageMap(true);
-        highlightImage = loadImage(HIGHLIGHT);
-        emblemImage = loadImage(EMBLEM);
+        highlightImage = loadImage(GameSettings.HIGHLIGHT_PATH);
+        emblemImage = loadImage(GameSettings.EMBLEM_PATH);
     }
 
     /**
@@ -66,7 +64,7 @@ public class PaintShop {
      * @return the highlighted tile.
      */
     public ImageIcon getColoredHighlight(Player player) {
-        BufferedImage tileImage = loadImage("src/main/ressources/tiles/Null0.png"); // TODO (HIGH) move to properties
+        BufferedImage tileImage = loadImage(GameSettings.NULL_TILE_PATH);
         return colorMaskBased(tileImage, highlightImage, player.getColor());
     }
 
