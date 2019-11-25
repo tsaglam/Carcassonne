@@ -71,7 +71,7 @@ public class PlacementGUI extends SecondaryGUI {
      * to the tiles properties.
      */
     @Override
-    protected void update() {
+    protected void updateGUI() {
         GridDirection[][] directions = GridDirection.values2D();
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {

@@ -46,14 +46,14 @@ public class RotationGUI extends SecondaryGUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 tile.rotateLeft();
-                update();
+                updateGUI();
             }
         });
         buttonRotateRight.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 tile.rotateRight();
-                update();
+                updateGUI();
             }
         });
     }
@@ -90,7 +90,7 @@ public class RotationGUI extends SecondaryGUI {
      * to the tiles properties.
      */
     @Override
-    protected void update() {
+    protected void updateGUI() {
         tileLabel.setIcon(tile.getIcon());
     }
 }
