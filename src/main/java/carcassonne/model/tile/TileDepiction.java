@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import carcassonne.settings.GameSettings;
 import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
 
@@ -17,8 +18,6 @@ import carcassonne.view.PaintShop;
  * @author Timur Saglam
  */
 public class TileDepiction {
-    private static final String FILE_TYPE = ".png"; // TODO (HIGH) move to options.
-    private static final String FOLDER = "src/main/ressources/tiles/"; // TODO (HIGH) move to options.
     private static final int IMAGES_PER_TILE = 4;
 
     private final ArrayList<ImageIcon> images;
@@ -34,7 +33,7 @@ public class TileDepiction {
         images = new ArrayList<>(IMAGES_PER_TILE); // create image array.
         paintShop = new PaintShop();
         for (int index = 0; index < IMAGES_PER_TILE; index++) { // for every image
-            String imagePath = FOLDER + tileType.name() + index + FILE_TYPE;
+            String imagePath = GameSettings.TILE_FOLDER_PATH + tileType.name() + index + GameSettings.TILE_FILE_TYPE;
             if (hasEmblem) {
                 loadImageAndPaintEmblem(imagePath);
             } else {
