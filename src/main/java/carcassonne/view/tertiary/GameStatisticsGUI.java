@@ -1,29 +1,31 @@
-package carcassonne.view.secondary;
+package carcassonne.view.tertiary;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Round;
 
 /**
- * A class for the game statistics GUI.
+ * A class for the game statistics GUI that shows the final scores of a round.
  * @author Timur Saglam
  */
 public class GameStatisticsGUI extends JFrame {
-
     private static final long serialVersionUID = 2862334382605282126L; // generated UID
-    protected MainController controller;
+    private static final int ADDITIONAL_VERTICLE_SIZE = 100; // ensures that all text is readable
+    static final int SCORE_COLUMN = 5;
+    static final Color HEADER_COLOR = new Color(220, 220, 220);
+    static final Color BODY_COLOR = new Color(237, 237, 237);
+    private final MainController controller;
     private JButton buttonClose;
     private JTable table;
 
@@ -41,16 +43,17 @@ public class GameStatisticsGUI extends JFrame {
 
     private void buildTable(Round round) {
         table = new JTable(new GameStatisticsModel(round));
-        // Header:
-        DefaultTableCellRenderer defaultRenderer = new DefaultTableCellRenderer();
-        defaultRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        table.getTableHeader().setDefaultRenderer(defaultRenderer);
         // Columns:
         TableColumnModel model = table.getColumnModel();
-        CustomCellRenderer renderer = new CustomCellRenderer(round);
+        CellRenderer renderer = new CellRenderer(round);
         for (int i = 0; i < model.getColumnCount(); i++) {
             model.getColumn(i).setCellRenderer(renderer);
         }
+        // Header:
+        JTableHeader header = table.getTableHeader();
+        header.setDefaultRenderer(new HeaderRenderer());
+        header.setReorderingAllowed(false);
+        table.setBackground(BODY_COLOR);
     }
 
     /**
@@ -66,13 +69,13 @@ public class GameStatisticsGUI extends JFrame {
         buttonClose.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                setVisible(false);
                 controller.requestSkip();
             }
         });
     }
 
     private void buildFrame() {
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setLayout(new BorderLayout());
         add(table.getTableHeader(), BorderLayout.PAGE_START);
         add(table, BorderLayout.CENTER);
@@ -81,33 +84,13 @@ public class GameStatisticsGUI extends JFrame {
         setLocationRelativeTo(null);
         setAlwaysOnTop(true);
         setVisible(true);
-    }
-
-    /**
-     * Custom renderer that sets the colors for the player names.
-     * @author Timur Saglam
-     */
-    private class CustomCellRenderer extends DefaultTableCellRenderer {
-        private static final long serialVersionUID = 1280736206678504709L;
-
-        private final Round round;
-
-        CustomCellRenderer(Round round) {
-            this.round = round;
-            setHorizontalAlignment(SwingConstants.CENTER); // Centers the text in cells.
-        }
-
-        /**
-         * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object,
-         * boolean, boolean, int, int)
-         */
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (!isSelected) { // if selected the color white is more readable
-                component.setForeground(round.getPlayer(row).getColor().textColor());
+        setMinimumSize(new Dimension(getSize().width + ADDITIONAL_VERTICLE_SIZE, getSize().height));
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                controller.requestSkip();
             }
-            return component;
-        }
+        });
     }
 }

@@ -4,7 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import carcassonne.settings.GameSettings;
-import carcassonne.view.secondary.PlayerSettingsGUI;
+import carcassonne.view.tertiary.PlayerSettingsGUI;
 
 /**
  * A mouse adapter for the selection of player colors. Listens to menu item clicks, event change and button pressing at

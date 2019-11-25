@@ -5,9 +5,9 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.secondary.GameStatisticsGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
+import carcassonne.view.tertiary.GameStatisticsGUI;
 
 /**
  * The specific state where the statistics are shown can be placed.
