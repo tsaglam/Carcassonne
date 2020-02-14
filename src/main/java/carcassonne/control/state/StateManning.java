@@ -146,7 +146,7 @@ public class StateManning extends AbstractControllerState {
             mainGUI.setMeeplePreview(round.getCurrentTile(), round.getActivePlayer());
             placementGUI.setTile(round.getCurrentTile(), round.getActivePlayer());
         } else {
-            GameMessage.showMessage("You have no Meeples left. Regain meeples by Completion to place Meepels again. ");
+            GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meepeles again.");
             processGridPatterns();
             startNextTurn();
         }
