@@ -9,7 +9,7 @@ public enum RotationDirection {
     RIGHT;
 
     /**
-     * Returns an integer for the rotation direction.
+     * Returns an integer for the orientation direction.
      * @return 1 for right and -1 for left.
      */
     public int toInt() {

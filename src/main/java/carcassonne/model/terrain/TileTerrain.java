@@ -98,6 +98,9 @@ public class TileTerrain {
         rotate(GridDirection.indirectNeighbors());
     }
 
+    /**
+     * Creates the list of positions on the tile where a meeple can be placed.
+     */
     private void createMeepleSpots() { // TODO (HIGH) Improve code quality.
         meepleSpots = new LinkedList<>();
         meepleSpots.addAll(Arrays.asList(GridDirection.values()));
