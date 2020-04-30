@@ -10,6 +10,7 @@ import java.awt.GraphicsEnvironment;
 public class SystemProperties {
     private static final String MAC_OS_X = "Mac OS X";
     private static final String WINDOWS_7 = "Windows 7";
+    private static final String WINDOWS_10 = "Windows 10";
     private static final String OS_NAME_KEY = "os.name";
     private final String osName;
     private final int resolutionHeight;
@@ -26,6 +27,9 @@ public class SystemProperties {
         switch (osName) {
         case WINDOWS_7:
             taskBarHeight = 40;
+            break;
+        case WINDOWS_10:
+            taskBarHeight = 60;
             break;
         case MAC_OS_X:
             taskBarHeight = 27;
