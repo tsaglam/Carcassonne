@@ -69,7 +69,7 @@ public class ZoomPanel extends JPanel {
     }
 
     @Override
-    public void paint(Graphics graphics) {
+    public void paintComponent(Graphics graphics) {
         Graphics2D graphics2D = (Graphics2D) graphics;
         if (unpaintedZoom) {
             AffineTransform affineTransform = new AffineTransform();
@@ -93,6 +93,6 @@ public class ZoomPanel extends JPanel {
                 unpaintedDrag = false;
             }
         }
-        super.paint(graphics2D);
+        super.paintComponent(graphics2D);
     }
 }
