@@ -14,7 +14,6 @@ import java.util.List;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.OverlayLayout;
 
 /**
  * Custom {@link JLayeredPane} which allows zooming and dragging its content. Content that should be able to be zoomed
@@ -36,7 +35,6 @@ public class ZoomLayeredPane extends JLayeredPane {
      */
     public ZoomLayeredPane() {
         new JLayeredPane();
-        setLayout(new OverlayLayout(this));
         zoomablePanels = new LinkedList<>();
         initListeners();
         setVisible(true);
