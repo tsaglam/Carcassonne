@@ -1,5 +1,6 @@
 package carcassonne.control;
 
+import java.awt.EventQueue;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +59,11 @@ public class MainController {
      * Shows the main GUI.
      */
     public void startGame() {
-        mainGUI.setVisible(true);
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                mainGUI.setVisible(true);
+            }
+        });
     }
 
     /**
