@@ -14,7 +14,7 @@ public class TileImageScalingCache {
     private static final HashMap<String, ImageIcon> chachedImageIcons = new HashMap<>();
 
     private TileImageScalingCache() {
-        // private constructor to prevent instantiation!
+        // private constructor ensures non-instantiability!
     }
 
     /**

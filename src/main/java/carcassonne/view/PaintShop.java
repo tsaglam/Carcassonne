@@ -31,11 +31,8 @@ public class PaintShop {
     private static final BufferedImage emblemImage = loadImage(GameSettings.EMBLEM_PATH);
     private static final BufferedImage highlightBaseImage = loadImage(GameSettings.NULL_TILE_PATH);
 
-    /**
-     * Basic constructor, creates base images and templates.
-     */
     private PaintShop() {
-        // private constructor to prevent instantiation!
+        // private constructor ensures non-instantiability!
     }
 
     /**

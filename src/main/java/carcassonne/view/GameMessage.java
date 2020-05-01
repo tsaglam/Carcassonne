@@ -10,7 +10,7 @@ public final class GameMessage {
     private static final String TITLE = "Carcassonne";
 
     private GameMessage() {
-        // Private constructor for helper class.
+        // private constructor ensures non-instantiability!
     }
 
     /**
