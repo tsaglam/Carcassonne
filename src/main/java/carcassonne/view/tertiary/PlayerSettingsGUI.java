@@ -22,6 +22,10 @@ import carcassonne.settings.GameSettings;
 import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
 
+/**
+ * Custom UI for the play settings. Allows changing the name and the color of a player.
+ * @author Timur Saglam
+ */
 public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionListener {
     private static final long serialVersionUID = 1293883978626527260L; // generated serial UID
     private static final String CHANGE_COLOR = "Choose Meeple Color:";
@@ -35,6 +39,11 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
     private final int playerNumber;
     private JTextField nameTextField;
 
+    /**
+     * Creates a new player settings UI for a specific player.
+     * @param playerNumber is the number of the player.
+     * @param settings are the game settings which are modified based on the user interaction with this UI.
+     */
     public PlayerSettingsGUI(int playerNumber, GameSettings settings) {
         this.playerNumber = playerNumber;
         this.settings = settings;
@@ -75,7 +84,7 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
         }
     }
 
-    private final void createNamePanel() {
+    private void createNamePanel() {
         nameTextField = new JTextField();
         JPanel namePanel = new JPanel();
         namePanel.setLayout(new BorderLayout());
@@ -84,7 +93,7 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
         add(namePanel, BorderLayout.NORTH);
     }
 
-    private final void createColorChooser() {
+    private void createColorChooser() {
         colorChooser = new JColorChooser();
         colorChooser.setBorder(BorderFactory.createTitledBorder(CHANGE_COLOR));
         colorChooser.getSelectionModel().addChangeListener(this);
@@ -92,7 +101,7 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
         add(colorChooser, BorderLayout.CENTER);
     }
 
-    private final JPanel createMeeplePreview() {
+    private JPanel createMeeplePreview() {
         JPanel previewPanel = new JPanel();
         labelMap = new HashMap<>();
         for (TerrainType terrain : TerrainType.basicTerrain()) {

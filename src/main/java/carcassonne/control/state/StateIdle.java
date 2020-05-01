@@ -19,7 +19,6 @@ public class StateIdle extends AbstractControllerState {
      * @param mainGUI sets the MainGUI
      * @param rotationGUI sets the RotationGUI
      * @param placementGUI sets the PlacementGUI
-     * @param scoreboard sets the Scoreboard
      */
     public StateIdle(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
         super(controller, mainGUI, rotationGUI, placementGUI);

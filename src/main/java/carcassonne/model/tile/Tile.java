@@ -1,5 +1,8 @@
 package carcassonne.model.tile;
 
+import static carcassonne.model.terrain.RotationDirection.LEFT;
+import static carcassonne.model.terrain.RotationDirection.RIGHT;
+
 import java.awt.Image;
 import java.util.List;
 
@@ -9,11 +12,8 @@ import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
-import carcassonne.model.terrain.TileTerrain;
 import carcassonne.model.terrain.TerrainType;
-
-import static carcassonne.model.terrain.RotationDirection.LEFT;
-import static carcassonne.model.terrain.RotationDirection.RIGHT;
+import carcassonne.model.terrain.TileTerrain;
 
 /**
  * The tile of a grid.
@@ -64,13 +64,18 @@ public class Tile {
     }
 
     /**
-     * Getter for the tile image. the image depends on the orientation.
-     * @return the image of the tile with the tile specific orientation.
+     * Getter for the tile image. The image depends on the orientation of the tile.
+     * @return the image depicting the tile.
      */
     public ImageIcon getIcon() {
         return tileDepiction.getCurrentDepiction();
     }
 
+    /**
+     * Getter for the scaled tile image. The image depends on the orientation of the tile.
+     * @param edgeLength specifies the edge length of the image in pixels.
+     * @return the image depicting the tile.
+     */
     public ImageIcon getScaledIcon(int edgeLength) {
         if (TileImageScalingCache.containsScaledImage(this, edgeLength)) {
             return TileImageScalingCache.getScaledImage(this, edgeLength);
