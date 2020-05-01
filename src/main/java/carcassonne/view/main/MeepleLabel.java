@@ -20,7 +20,7 @@ import carcassonne.view.PaintShop;
  * @author Timur Saglam
  */
 public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom levels
-    private final ImageIcon imageEmpty;
+    private final static ImageIcon EMPTY_IMAGE = new ImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false));
     private Player player;
     private final MouseAdapter mouseAdapter;
     private TerrainType terrain;
@@ -35,7 +35,6 @@ public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom lev
      */
     public MeepleLabel(MainController controller, GridDirection direction, JFrame frame) {
         label = new JLabel();
-        imageEmpty = new ImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false));
         preview = false;
         reset();
         mouseAdapter = new MouseAdapter() {
@@ -72,7 +71,7 @@ public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom lev
      */
     public void reset() {
         terrain = TerrainType.OTHER;
-        label.setIcon(imageEmpty);
+        label.setIcon(EMPTY_IMAGE);
         label.removeMouseListener(mouseAdapter);
     }
 
