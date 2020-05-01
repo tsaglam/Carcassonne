@@ -1,5 +1,6 @@
 package carcassonne.model.tile;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class TileDepiction {
     private static final int IMAGES_PER_TILE = 4;
 
     private final ArrayList<ImageIcon> images;
+    private final TileType tileType;
     private int rotation;
 
     /**
@@ -29,14 +31,11 @@ public class TileDepiction {
      * @param hasEmblem determines whether the tile representation includes an emblem.
      */
     public TileDepiction(TileType tileType, boolean hasEmblem) {
+        this.tileType = tileType;
         images = new ArrayList<>(IMAGES_PER_TILE); // create image array.
         for (int index = 0; index < IMAGES_PER_TILE; index++) { // for every image
             String imagePath = GameSettings.TILE_FOLDER_PATH + tileType.name() + index + GameSettings.TILE_FILE_TYPE;
-            if (hasEmblem) {
-                loadImageAndPaintEmblem(imagePath);
-            } else {
-                images.add(new ImageIcon(imagePath));
-            }
+            loadImage(imagePath, index, hasEmblem);
         }
     }
 
@@ -46,6 +45,20 @@ public class TileDepiction {
      */
     public ImageIcon getCurrentDepiction() {
         return images.get(rotation);
+    }
+
+    /**
+     * Returns the current depiction according to the orientation.
+     * @param edgeLength is the edge length of the (quadratic) image in pixels.
+     * @return the {@link ImageIcon} which is the current depiction.
+     */
+    public ImageIcon getCurrentScaledDepiction(int edgeLength) {
+        if (TileImageScalingCache.containsScaledImage(tileType, rotation, edgeLength)) {
+            return TileImageScalingCache.getScaledImage(tileType, rotation, edgeLength);
+        }
+        ImageIcon scaledImage = new ImageIcon(images.get(rotation).getImage().getScaledInstance(edgeLength, edgeLength, Image.SCALE_SMOOTH));
+        TileImageScalingCache.putScaledImage(scaledImage, tileType, rotation, edgeLength);
+        return scaledImage;
     }
 
     /**
@@ -62,11 +75,25 @@ public class TileDepiction {
         rotation = rotation >= 3 ? 0 : rotation + 1; // update orientation indicator
     }
 
-    private void loadImageAndPaintEmblem(String imagePath) {
+    private void loadImage(String imagePath, int index, boolean hasEmblem) {
+        if (TileImageScalingCache.containsScaledImage(tileType, index, 300)) { // TODO (HIGH) use constant for full res
+            images.add(TileImageScalingCache.getScaledImage(tileType, index, 300));
+        } else if (hasEmblem) {
+            loadImageAndPaintEmblem(imagePath, index);
+        } else {
+            ImageIcon image = new ImageIcon(imagePath);
+            TileImageScalingCache.putScaledImage(image, tileType, index, 300);
+            images.add(image);
+        }
+    }
+
+    private void loadImageAndPaintEmblem(String imagePath, int index) {
         File file = new File(imagePath);
         try {
             BufferedImage image = ImageIO.read(file);
-            images.add(new PaintShop().addEmblem(image)); // only create paint shop when needed to increase performance
+            ImageIcon paintedImage = PaintShop.addEmblem(image);
+            images.add(paintedImage);
+            TileImageScalingCache.putScaledImage(paintedImage, tileType, index, 300);
         } catch (IOException exception) {
             exception.printStackTrace();
             GameMessage.showError("ERROR: Could not load image loacted at " + imagePath);

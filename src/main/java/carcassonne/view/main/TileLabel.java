@@ -8,7 +8,6 @@ import javax.swing.JLabel;
 
 import carcassonne.control.MainController;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileType;
 
 /**
  * Is a simple class derived form JLabel, which stores (additionally to the JLabel functions) the coordinates of the
@@ -19,6 +18,7 @@ public class TileLabel {
     private Tile tile;
     private final Tile defaultTile;
     private final Tile highlightTile;
+
     private final JLabel label;
     private ImageIcon coloredHighlight;
     private int tileSize;
@@ -30,12 +30,12 @@ public class TileLabel {
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
-    public TileLabel(int tileSize, MainController controller, int x, int y) {
+    public TileLabel(int tileSize, Tile defaultTile, Tile highlightTile, MainController controller, int x, int y) {
+        this.defaultTile = defaultTile;
+        this.highlightTile = highlightTile;
         label = new JLabel();
         this.tileSize = tileSize;
-        defaultTile = new Tile(TileType.Null);
-        highlightTile = new Tile(TileType.Null);
-        defaultTile.rotateRight();
+
         reset();
         label.addMouseListener(new MouseAdapter() {
             /**

@@ -11,6 +11,7 @@ import javax.swing.JPanel;
  * Specialized {@link JPanel} that can be zoomed and dragged.
  * @author Timur Saglam
  */
+@Deprecated // no longer in use as it only zooms the graphical representation, but the objects themselves.
 public class ZoomPanel extends JPanel {
 
     private static final long serialVersionUID = 5955569383721340729L;

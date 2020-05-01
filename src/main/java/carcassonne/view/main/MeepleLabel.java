@@ -21,7 +21,6 @@ import carcassonne.view.PaintShop;
  */
 public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom levels
     private final ImageIcon imageEmpty;
-    private final PaintShop paintShop;
     private Player player;
     private final MouseAdapter mouseAdapter;
     private TerrainType terrain;
@@ -30,17 +29,15 @@ public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom lev
 
     /**
      * Creates a blank meeple label.
-     * @param paintShop is the paint shop for the meeple generation.
      * @param controller is the {@link MainController} of the game.
      * @param direction is the {@link GridDirection} where the meeple label sits on the tile.
      * @param frame is the main {@link JFrame} to repaint after setting icons.
      */
-    public MeepleLabel(PaintShop paintShop, MainController controller, GridDirection direction, JFrame frame) {
+    public MeepleLabel(MainController controller, GridDirection direction, JFrame frame) {
         label = new JLabel();
         imageEmpty = new ImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false));
         preview = false;
         reset();
-        this.paintShop = paintShop;
         mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
@@ -114,7 +111,7 @@ public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom lev
     }
 
     private void setMeepleIcon() {
-        label.setIcon(paintShop.getColoredMeeple(terrain, player));
+        label.setIcon(PaintShop.getColoredMeeple(terrain, player));
     }
 
     private void setPreviewIcon() {
