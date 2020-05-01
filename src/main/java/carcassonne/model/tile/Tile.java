@@ -1,9 +1,5 @@
 package carcassonne.model.tile;
 
-import static carcassonne.model.terrain.RotationDirection.LEFT;
-import static carcassonne.model.terrain.RotationDirection.RIGHT;
-
-import java.awt.Image;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -23,7 +19,6 @@ public class Tile {
     private static final int CASTLE_TRESHOLD = 6;
     private GridSpot gridSpot;
     private Meeple meeple;
-    private GridDirection orientation;
     private final TileTerrain terrain;
     private final TileType type;
     private final TileDepiction tileDepiction;
@@ -38,7 +33,6 @@ public class Tile {
             throw new IllegalArgumentException("Tile type cannot be null");
         }
         this.type = type;
-        orientation = GridDirection.TOP;
         terrain = new TileTerrain(type);
         meeple = null;
         tileDepiction = new TileDepiction(type, hasEmblem());
@@ -77,12 +71,7 @@ public class Tile {
      * @return the image depicting the tile.
      */
     public ImageIcon getScaledIcon(int edgeLength) {
-        if (TileImageScalingCache.containsScaledImage(this, edgeLength)) {
-            return TileImageScalingCache.getScaledImage(this, edgeLength);
-        }
-        ImageIcon scaledImage = new ImageIcon(getIcon().getImage().getScaledInstance(edgeLength, edgeLength, Image.SCALE_SMOOTH));
-        TileImageScalingCache.putScaledImage(scaledImage, this, edgeLength);
-        return scaledImage;
+        return tileDepiction.getCurrentScaledDepiction(edgeLength);
     }
 
     /**
@@ -108,14 +97,6 @@ public class Tile {
      */
     public TileType getType() {
         return type;
-    }
-
-    /**
-     * Gets the orientation of the tile, which indicates if it has been rotated. The default is {@link GridDirection#TOP}.
-     * @return the orientation direction.
-     */
-    public GridDirection getOrientation() {
-        return orientation;
     }
 
     /**
@@ -220,7 +201,6 @@ public class Tile {
     public void rotateLeft() {
         terrain.rotateLeft();
         tileDepiction.rotateLeft();
-        orientation = orientation.nextDirectionTo(LEFT).nextDirectionTo(LEFT); // skips corner directions
     }
 
     /**
@@ -229,7 +209,6 @@ public class Tile {
     public void rotateRight() {
         terrain.rotateRight();
         tileDepiction.rotateRight();
-        orientation = orientation.nextDirectionTo(RIGHT).nextDirectionTo(RIGHT); // skips corner directions
     }
 
     /**
@@ -245,8 +224,7 @@ public class Tile {
 
     @Override
     public String toString() {
-        return type + getClass().getSimpleName() + "[coordinates: " + gridSpot + ", orientation: " + orientation + ", terrain" + terrain
-                + ", Meeple: " + meeple + "]";
+        return type + getClass().getSimpleName() + "[coordinates: " + gridSpot + ", terrain" + terrain + ", Meeple: " + meeple + "]";
     }
 
     /**

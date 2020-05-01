@@ -1,6 +1,5 @@
 package carcassonne.control;
 
-import java.awt.EventQueue;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +41,7 @@ public class MainController {
         mainGUI = new MainGUI(this);
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
-        mainGUI.addSubInterfaces(placementGUI, rotationGUI);
+        mainGUI.addSubInterfaces(placementGUI, rotationGUI); // TODO (HIGH) instead of cyclic dependency the main UI should create the sub UIs
         stateMap = new HashMap<>();
         settings.registerNotifiable(mainGUI.getScoreboard());
         settings.registerNotifiable(mainGUI);
@@ -59,11 +58,7 @@ public class MainController {
      * Shows the main GUI.
      */
     public void startGame() {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                mainGUI.setVisible(true);
-            }
-        });
+        mainGUI.setVisible(true);
     }
 
     /**

@@ -18,27 +18,24 @@ import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
 
 /**
- * This is the Carcassonne paint shop! It paints meeple images and tile highlights!
+ * This is the Carcassonne paint shop! It paints meeple images and tile highlights! It is implemented as a utility class
+ * with static methods to increase performance through avoiding loading images more often that needed.
  * @author Timur Saglam
  */
-public class PaintShop { // TODO (HIGH) increase performance, this is instantiated often and takes time on startup, maybe make static?
+public class PaintShop {
     private static final int MAXIMAL_ALPHA = 255;
 
-    private final Map<TerrainType, BufferedImage> imageMap;
-    private final Map<TerrainType, BufferedImage> templateMap;
-    private final BufferedImage highlightImage;
-    private final BufferedImage emblemImage;
-    private final BufferedImage highlightBaseImage;
+    private static final Map<TerrainType, BufferedImage> imageMap = buildImageMap(false);
+    private static final Map<TerrainType, BufferedImage> templateMap = buildImageMap(true);
+    private static final BufferedImage highlightImage = loadImage(GameSettings.HIGHLIGHT_PATH);
+    private static final BufferedImage emblemImage = loadImage(GameSettings.EMBLEM_PATH);
+    private static final BufferedImage highlightBaseImage = loadImage(GameSettings.NULL_TILE_PATH);
 
     /**
      * Basic constructor, creates base images and templates.
      */
-    public PaintShop() {
-        imageMap = buildImageMap(false);
-        templateMap = buildImageMap(true);
-        highlightImage = loadImage(GameSettings.HIGHLIGHT_PATH);
-        emblemImage = loadImage(GameSettings.EMBLEM_PATH);
-        highlightBaseImage = loadImage(GameSettings.NULL_TILE_PATH);
+    private PaintShop() {
+        // private constructor to prevent instantiation!
     }
 
     /**
@@ -47,7 +44,7 @@ public class PaintShop { // TODO (HIGH) increase performance, this is instantiat
      * @param color is the custom color.
      * @return the colored meeple.
      */
-    public ImageIcon getColoredMeeple(TerrainType meepleType, Color color) {
+    public static ImageIcon getColoredMeeple(TerrainType meepleType, Color color) {
         return paintMeeple(meepleType, color.getRGB());
     }
 
@@ -57,7 +54,7 @@ public class PaintShop { // TODO (HIGH) increase performance, this is instantiat
      * @param player is the {@link Player} whose color is used.
      * @return the colored meeple.
      */
-    public ImageIcon getColoredMeeple(TerrainType meepleType, Player player) {
+    public static ImageIcon getColoredMeeple(TerrainType meepleType, Player player) {
         return getColoredMeeple(meepleType, player.getColor());
     }
 
@@ -66,7 +63,7 @@ public class PaintShop { // TODO (HIGH) increase performance, this is instantiat
      * @param player determines the color of the highlight.
      * @return the highlighted tile.
      */
-    public ImageIcon getColoredHighlight(Player player, int size) {
+    public static ImageIcon getColoredHighlight(Player player, int size) {
         ImageIcon coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
         return new ImageIcon(coloredImage.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH));
     }
@@ -76,7 +73,7 @@ public class PaintShop { // TODO (HIGH) increase performance, this is instantiat
      * @param originalTile is the original tile image without the emblem.
      * @return a copy of the image with an emblem.
      */
-    public ImageIcon addEmblem(BufferedImage originalTile) {
+    public static ImageIcon addEmblem(BufferedImage originalTile) {
         BufferedImage copy = deepCopy(originalTile);
         for (int x = 0; x < emblemImage.getWidth(); x++) {
             for (int y = 0; y < emblemImage.getHeight(); y++) {
@@ -90,7 +87,7 @@ public class PaintShop { // TODO (HIGH) increase performance, this is instantiat
     }
 
     // prepares the base images and templates
-    private Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
+    private static Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
         Map<TerrainType, BufferedImage> map = new HashMap<>();
         for (TerrainType terrainType : TerrainType.basicTerrain()) {
             BufferedImage meepleImage = loadImage(GameSettings.getMeeplePath(terrainType, isTemplate));
@@ -100,7 +97,7 @@ public class PaintShop { // TODO (HIGH) increase performance, this is instantiat
     }
 
     // Colors a meeple with RGB color.
-    private ImageIcon paintMeeple(TerrainType meepleType, int color) {
+    private static ImageIcon paintMeeple(TerrainType meepleType, int color) {
         BufferedImage image = deepCopy(imageMap.get(meepleType));
         BufferedImage template = templateMap.get(meepleType);
         for (int x = 0; x < template.getWidth(); x++) {
@@ -113,7 +110,7 @@ public class PaintShop { // TODO (HIGH) increase performance, this is instantiat
         return new ImageIcon(image);
     }
 
-    private ImageIcon colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
+    private static ImageIcon colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
         BufferedImage image = deepCopy(imageToColor);
         for (int x = 0; x < maskImage.getWidth(); x++) {
             for (int y = 0; y < maskImage.getHeight(); y++) {
@@ -135,7 +132,7 @@ public class PaintShop { // TODO (HIGH) increase performance, this is instantiat
      * @param blendEqually applies the second on the first one of true, blends on alpha values if false.
      * @return the blended color.
      */
-    private Color blend(Color first, Color second, boolean blendEqually) {
+    private static Color blend(Color first, Color second, boolean blendEqually) {
         double totalAlpha = blendEqually ? first.getAlpha() + second.getAlpha() : MAXIMAL_ALPHA;
         double firstWeight = blendEqually ? first.getAlpha() : MAXIMAL_ALPHA - second.getAlpha();
         firstWeight /= totalAlpha;
@@ -148,14 +145,14 @@ public class PaintShop { // TODO (HIGH) increase performance, this is instantiat
     }
 
     // copies a image to avoid side effects.
-    private BufferedImage deepCopy(BufferedImage image) {
+    private static BufferedImage deepCopy(BufferedImage image) {
         ColorModel model = image.getColorModel();
         boolean isAlphaPremultiplied = model.isAlphaPremultiplied();
         WritableRaster raster = image.copyData(null);
         return new BufferedImage(model, raster, isAlphaPremultiplied, null);
     }
 
-    private BufferedImage loadImage(String path) {
+    private static BufferedImage loadImage(String path) {
         File file = new File(path);
         try {
             return ImageIO.read(file);

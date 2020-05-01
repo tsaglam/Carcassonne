@@ -1,5 +1,7 @@
 package carcassonne;
 
+import java.awt.EventQueue;
+
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -23,6 +25,7 @@ public final class Carcassonne {
      * @param args are not used.
      */
     public static void main(String[] args) {
+        GameMessage.getUserInput(""); // TODO remove
         if (!System.getProperty(OS_NAME_KEY).startsWith(MAC)) { // TODO (MEDIUM) is this still needed?
             for (LookAndFeelInfo lookAndFeel : UIManager.getInstalledLookAndFeels()) {
                 if (NIMBUS.equals(lookAndFeel.getName())) {
@@ -34,8 +37,12 @@ public final class Carcassonne {
                 }
             }
         }
-        MainController controller = new MainController();
-        controller.startGame();
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                MainController controller = new MainController();
+                controller.startGame();
+            }
+        });
     }
 
     private Carcassonne() {

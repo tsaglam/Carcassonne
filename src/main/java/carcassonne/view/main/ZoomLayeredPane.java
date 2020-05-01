@@ -20,6 +20,7 @@ import javax.swing.JPanel;
  * or dragged needs to be added in a {@link ZoomPanel}.
  * @author Timur Saglam
  */
+@Deprecated // no longer in use as it only zooms the graphical representation, but the objects themselves.
 public class ZoomLayeredPane extends JLayeredPane {
     private static final long serialVersionUID = -3506712384606634583L;
     private static final double ZOOM_STEP = 1.1;

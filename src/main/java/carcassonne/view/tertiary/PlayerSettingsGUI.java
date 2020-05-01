@@ -34,7 +34,6 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
     private static final String CHANGE_NAME = "Choose Player Name:";
     private JColorChooser colorChooser;
     private Map<TerrainType, JLabel> labelMap;
-    private final PaintShop paintShop;
     private final GameSettings settings;
     private final int playerNumber;
     private JTextField nameTextField;
@@ -47,7 +46,6 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
     public PlayerSettingsGUI(int playerNumber, GameSettings settings) {
         this.playerNumber = playerNumber;
         this.settings = settings;
-        paintShop = new PaintShop();
         setLayout(new BorderLayout());
         createNamePanel();
         createColorChooser();
@@ -68,7 +66,7 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
     @Override
     public void stateChanged(ChangeEvent event) {
         for (TerrainType terrain : TerrainType.basicTerrain()) {
-            ImageIcon icon = paintShop.getColoredMeeple(terrain, colorChooser.getColor());
+            ImageIcon icon = PaintShop.getColoredMeeple(terrain, colorChooser.getColor());
             labelMap.get(terrain).setIcon(icon); // Update the preview labels.
         }
     }
