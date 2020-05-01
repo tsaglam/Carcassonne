@@ -34,7 +34,6 @@ public abstract class AbstractControllerState {
      * @param mainGUI sets the MainGUI
      * @param rotationGUI sets the RotationGUI
      * @param placementGUI sets the PlacementGUI
-     * @param scoreboard sets the Scoreboard
      */
     public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
         this.controller = controller;

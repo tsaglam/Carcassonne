@@ -13,6 +13,10 @@ public class TileImageScalingCache {
     private static final String KEY_SEPARATOR = "|";
     private static final HashMap<String, ImageIcon> chachedImageIcons = new HashMap<>();
 
+    private TileImageScalingCache() {
+        // private constructor to prevent instantiation!
+    }
+
     /**
      * Checks if there is an existing scaled image in this cache.
      * @param tile is the tile that specifies the base image and its orientation.

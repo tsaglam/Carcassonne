@@ -26,7 +26,6 @@ public class StateManning extends AbstractControllerState {
      * @param mainGUI sets the MainGUI
      * @param rotationGUI sets the RotationGUI
      * @param placementGUI sets the PlacementGUI
-     * @param scoreboard sets the Scoreboard
      */
     public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
         super(controller, mainGUI, rotationGUI, placementGUI);

@@ -21,15 +21,18 @@ public class TileLabel {
     private final Tile highlightTile;
     private final JLabel label;
     private ImageIcon coloredHighlight;
+    private int tileSize;
 
     /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
+     * @param tileSize is the initial edge length of the tile according to the zoom level.
      * @param controller is the controller of the GUI.
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
-    public TileLabel(MainController controller, int x, int y) {
+    public TileLabel(int tileSize, MainController controller, int x, int y) {
         label = new JLabel();
+        this.tileSize = tileSize;
         defaultTile = new Tile(TileType.Null);
         highlightTile = new Tile(TileType.Null);
         defaultTile.rotateRight();
@@ -67,7 +70,16 @@ public class TileLabel {
      */
     public void setTile(Tile tile) {
         this.tile = tile;
-        label.setIcon(tile.getIcon());
+        label.setIcon(tile.getScaledIcon(tileSize));
+    }
+
+    /**
+     * Adapts the size of the tile to make the tile label larger or smaller.
+     * @param tileSize is the new tile size in pixels.
+     */
+    public void setTileSize(int tileSize) {
+        this.tileSize = tileSize;
+        label.setIcon(tile.getScaledIcon(tileSize));
     }
 
     /**

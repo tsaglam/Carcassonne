@@ -19,7 +19,7 @@ import carcassonne.view.PaintShop;
  * Special {@link JLabel} for showing meeples.
  * @author Timur Saglam
  */
-public class MeepleLabel {
+public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom levels
     private final ImageIcon imageEmpty;
     private final PaintShop paintShop;
     private Player player;
@@ -52,13 +52,11 @@ public class MeepleLabel {
             @Override
             public void mouseEntered(MouseEvent event) {
                 setMeepleIcon();
-                frame.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent event) {
                 setPreviewIcon();
-                frame.repaint();
             }
         };
     }

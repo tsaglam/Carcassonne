@@ -15,6 +15,7 @@ import javax.swing.JRadioButtonMenuItem;
 import carcassonne.control.MainController;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
+import carcassonne.view.main.MainGUI;
 
 /**
  * The menu bar for the main GUI.
@@ -22,6 +23,7 @@ import carcassonne.settings.Notifiable;
  */
 public class MainMenuBar extends JMenuBar implements Notifiable {
 
+    private static final String VIEW = "View";
     private static final long serialVersionUID = -599734693130415390L;
     private static final String GAME = "Game";
     private static final String ABORT = "Abort Current Game";
@@ -38,25 +40,29 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private JMenu menuGame;
     private JMenu menuOptions;
     private JMenu menuPlayers;
+    private JMenu menuView;
     private JMenu menuSettings;
     private JMenuItem itemNewRound;
     private JMenuItem itemAbortRound;
     private JMenuItem[] itemSettings;
     private final Scoreboard scoreboard;
+    private final MainGUI mainUI;
 
     /**
      * Simple constructor creating the menu bar.
-     * @param scoreboard sets the scoreboard of the menu bar.
      * @param controller sets the connection to game the controller.
+     * @param mainUI is the main GUI instance.
      */
-    public MainMenuBar(MainController controller) { // TODO (MEDIUM) make menu bar gray
+    public MainMenuBar(MainController controller, MainGUI mainUI) { // TODO (MEDIUM) make menu bar gray
         super();
         this.controller = controller;
+        this.mainUI = mainUI;
         settings = controller.getProperties();
         settings.registerNotifiable(this);
         scoreboard = new Scoreboard(settings);
         buildMenuGame();
         buildMenuOptions();
+        buildViewMenu();
         add(new JLabel(LARGE_SPACE));
         add(scoreboard);
     }
@@ -100,8 +106,8 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildMenuOptions() {
-        buildMenuPlayers();
-        buildMenuSettings();
+        buildPlayerMenu();
+        buildSettingsMenu();
         notifyChange(); // set colors
         menuOptions = new JMenu(OPTIONS);
         menuOptions.add(menuPlayers);
@@ -117,7 +123,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         add(menuOptions);
     }
 
-    private void buildMenuPlayers() {
+    private void buildPlayerMenu() {
         menuPlayers = new JMenu(AMOUNT);
         JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameSettings.MAXIMAL_PLAYERS - 1];
         ButtonGroup group = new ButtonGroup();
@@ -130,7 +136,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemPlayerCount[0].setSelected(true);
     }
 
-    private void buildMenuSettings() { // TODO (MEDIUM) reduce duplication
+    private void buildSettingsMenu() { // TODO (MEDIUM) reduce duplication
         itemSettings = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
         menuSettings = new JMenu(SETTINGS);
         for (int i = 0; i < itemSettings.length; i++) {
@@ -138,6 +144,27 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
             itemSettings[i].addMouseListener(scoreboard.getSettingsMouseListener(i));
             menuSettings.add(itemSettings[i]);
         }
+    }
+
+    private void buildViewMenu() { // TODO (HIGH) maybe a slider?
+        menuView = new JMenu(VIEW);
+        JMenuItem zoomIn = new JMenuItem("Zoom in");
+        JMenuItem zoomOut = new JMenuItem("Zoom out");
+        zoomIn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent event) {
+                mainUI.zoomIn();
+            }
+        });
+        zoomOut.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent event) {
+                mainUI.zoomOut();
+            }
+        });
+        menuView.add(zoomIn);
+        menuView.add(zoomOut);
+        add(menuView);
     }
 
     public void enableStart() {

@@ -14,10 +14,11 @@ import carcassonne.model.tile.TileType;
 import carcassonne.view.main.MainGUI;
 
 /**
- * GUI class for the tile rotation. It lets the user look at the tile to place and rotate it both right and left.
+ * GUI class for the tile orientation. It lets the user look at the tile to place and rotate it both right and left.
  * @author Timur Saglam
  */
 public class RotationGUI extends SecondaryGUI {
+    private static final int TILE_PREVIEW_SIZE = 100;
     private static final long serialVersionUID = -5179683977081970564L;
     private JButton buttonRotateLeft;
     private JButton buttonRotateRight;
@@ -60,7 +61,8 @@ public class RotationGUI extends SecondaryGUI {
 
     // build the GUI content
     private void buildContent() {
-        tileLabel = new JLabel(new Tile(TileType.Null).getIcon()); // Important for the UI size
+        ImageIcon defaultImage = new Tile(TileType.Null).getScaledIcon(TILE_PREVIEW_SIZE);
+        tileLabel = new JLabel(defaultImage); // Important for the UI size
         // create buttons:
         buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
         buttonRotateLeft = new JButton(new ImageIcon("src/main/ressources/icons/left.png"));
@@ -91,6 +93,6 @@ public class RotationGUI extends SecondaryGUI {
      */
     @Override
     protected void updateGUI() {
-        tileLabel.setIcon(tile.getIcon());
+        tileLabel.setIcon(tile.getScaledIcon(TILE_PREVIEW_SIZE));
     }
 }

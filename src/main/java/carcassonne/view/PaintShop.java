@@ -1,6 +1,7 @@
 package carcassonne.view;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -20,13 +21,14 @@ import carcassonne.settings.GameSettings;
  * This is the Carcassonne paint shop! It paints meeple images and tile highlights!
  * @author Timur Saglam
  */
-public class PaintShop {
+public class PaintShop { // TODO (HIGH) increase performance, this is instantiated often and takes time on startup, maybe make static?
     private static final int MAXIMAL_ALPHA = 255;
-    
+
     private final Map<TerrainType, BufferedImage> imageMap;
     private final Map<TerrainType, BufferedImage> templateMap;
     private final BufferedImage highlightImage;
     private final BufferedImage emblemImage;
+    private final BufferedImage highlightBaseImage;
 
     /**
      * Basic constructor, creates base images and templates.
@@ -36,6 +38,7 @@ public class PaintShop {
         templateMap = buildImageMap(true);
         highlightImage = loadImage(GameSettings.HIGHLIGHT_PATH);
         emblemImage = loadImage(GameSettings.EMBLEM_PATH);
+        highlightBaseImage = loadImage(GameSettings.NULL_TILE_PATH);
     }
 
     /**
@@ -63,9 +66,9 @@ public class PaintShop {
      * @param player determines the color of the highlight.
      * @return the highlighted tile.
      */
-    public ImageIcon getColoredHighlight(Player player) {
-        BufferedImage tileImage = loadImage(GameSettings.NULL_TILE_PATH);
-        return colorMaskBased(tileImage, highlightImage, player.getColor());
+    public ImageIcon getColoredHighlight(Player player, int size) {
+        ImageIcon coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
+        return new ImageIcon(coloredImage.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH));
     }
 
     /**
