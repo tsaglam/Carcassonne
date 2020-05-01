@@ -35,7 +35,6 @@ public class TileLabel {
         this.highlightTile = highlightTile;
         label = new JLabel();
         this.tileSize = tileSize;
-
         reset();
         label.addMouseListener(new MouseAdapter() {
             /**

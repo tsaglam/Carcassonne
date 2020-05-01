@@ -100,11 +100,11 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     private void updateToChangedZoomLevel() {
-        ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
-        for (TileLabel label : tileLabels) {
-            label.setColoredHighlight(newHighlight);
-            label.setTileSize(zoomLevel);
+        if (currentPlayer != null) { // only update highlights when there is an active round
+            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
+            tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
         }
+        tileLabels.forEach(it -> it.setTileSize(zoomLevel));
     }
 
     /**
