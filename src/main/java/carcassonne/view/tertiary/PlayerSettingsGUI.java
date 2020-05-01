@@ -48,16 +48,18 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
         this.settings = settings;
         setLayout(new BorderLayout());
         createNamePanel();
-        createColorChooser();
         createCloseButton();
-        pack();
-        setLocationRelativeTo(null); // place in the center of the screen
     }
 
     /**
      * Updates the name and color of the correlating player and then makes the UI visible.
      */
     public void updateAndShow() {
+        if (colorChooser == null) { // create JColorChoser on demand for optimal performance
+            createColorChooser();
+            pack(); // adapt UI size to content
+            setLocationRelativeTo(null); // place UI in the center of the screen
+        }
         colorChooser.setColor(settings.getPlayerColor(playerNumber));
         nameTextField.setText(settings.getPlayerName(playerNumber));
         setVisible(true);

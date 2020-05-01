@@ -2,6 +2,7 @@ package carcassonne;
 
 import java.awt.EventQueue;
 
+import javax.swing.JColorChooser;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -29,6 +30,7 @@ public final class Carcassonne {
     public static void main(String[] args) {
         setLookAndFeel();
         preloadImages();
+        preloadUIComponents();
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 MainController controller = new MainController();
@@ -71,5 +73,17 @@ public final class Carcassonne {
             }
         });
         loader.start();
+    }
+
+    /**
+     * Creates a JColorChooser while the game starts, as its first instantiation can take up to a second. Pre-loading
+     * therefore improves the start-up time.
+     */
+    private static void preloadUIComponents() {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new JColorChooser(); // first instantiation can take more than a second
+            }
+        });
     }
 }

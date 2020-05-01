@@ -42,11 +42,11 @@ public class MainController {
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
         mainGUI.addSubInterfaces(placementGUI, rotationGUI); // TODO (HIGH) instead of cyclic dependency the main UI should create the sub UIs
-        stateMap = new HashMap<>();
         settings.registerNotifiable(mainGUI.getScoreboard());
         settings.registerNotifiable(mainGUI);
         settings.registerNotifiable(placementGUI);
         settings.registerNotifiable(rotationGUI);
+        stateMap = new HashMap<>();
         currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI);
         registerState(currentState);
         registerState(new StateManning(this, mainGUI, rotationGUI, placementGUI));
