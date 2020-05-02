@@ -38,7 +38,7 @@ import carcassonne.view.menubar.Scoreboard;
  */
 // TODO (HIGH) Custom classes for the two panels.
 public class MainGUI extends JFrame implements Notifiable {
-    private static final int ZOOM_STEP_SIZE = 50; // TODO (HIGH) find a decent step size
+    private static final int ZOOM_STEP_SIZE = 25; // TODO (HIGH) find a decent step size
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 50;
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
@@ -102,6 +102,14 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     /**
+     * Grants access to the current zoom level of the UI.
+     * @return the zoom level.
+     */
+    public int getZoom() {
+        return zoomLevel;
+    }
+
+    /**
      * Zooms out if the minimum zoom level has not been reached.
      */
     public void zoomOut() {
@@ -111,7 +119,7 @@ public class MainGUI extends JFrame implements Notifiable {
         }
     }
 
-    private void updateToChangedZoomLevel(boolean preview) {
+    private void updateToChangedZoomLevel(boolean preview) { // TODO (HIGH) test putting a time limit here
         if (currentPlayer != null && !preview) { // only update highlights when there is an active round
             ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
             tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
