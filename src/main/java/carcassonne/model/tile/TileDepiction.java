@@ -50,14 +50,17 @@ public class TileDepiction {
     /**
      * Returns the current depiction according to the orientation.
      * @param edgeLength is the edge length of the (quadratic) image in pixels.
+     * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the {@link ImageIcon} which is the current depiction.
      */
-    public ImageIcon getCurrentScaledDepiction(int edgeLength) {
-        if (TileImageScalingCache.containsScaledImage(tileType, rotation, edgeLength)) {
+    public ImageIcon getCurrentScaledDepiction(int edgeLength, boolean fastScaling) {
+        if (TileImageScalingCache.containsScaledImage(tileType, rotation, edgeLength, fastScaling)) {
             return TileImageScalingCache.getScaledImage(tileType, rotation, edgeLength);
-        }
-        ImageIcon scaledImage = new ImageIcon(images.get(rotation).getImage().getScaledInstance(edgeLength, edgeLength, Image.SCALE_SMOOTH));
-        TileImageScalingCache.putScaledImage(scaledImage, tileType, rotation, edgeLength);
+        } // TODO (HIGH) check how often the cache is used for the full render after preview
+        int scalingStrategy = fastScaling ? Image.SCALE_FAST : Image.SCALE_SMOOTH;
+        // TODO (HIGH) either use multiple threads for image scaling or implement something fast
+        ImageIcon scaledImage = new ImageIcon(images.get(rotation).getImage().getScaledInstance(edgeLength, edgeLength, scalingStrategy));
+        TileImageScalingCache.putScaledImage(scaledImage, tileType, rotation, edgeLength, fastScaling);
         return scaledImage;
     }
 
@@ -76,13 +79,13 @@ public class TileDepiction {
     }
 
     private void loadImage(String imagePath, int index, boolean hasEmblem) {
-        if (TileImageScalingCache.containsScaledImage(tileType, index, 300)) { // TODO (HIGH) use constant for full res
+        if (TileImageScalingCache.containsScaledImage(tileType, index, 300, false)) { // TODO (HIGH) use constant for full res
             images.add(TileImageScalingCache.getScaledImage(tileType, index, 300));
         } else if (hasEmblem) {
             loadImageAndPaintEmblem(imagePath, index);
         } else {
             ImageIcon image = new ImageIcon(imagePath);
-            TileImageScalingCache.putScaledImage(image, tileType, index, 300);
+            TileImageScalingCache.putScaledImage(image, tileType, index, 300, false);
             images.add(image);
         }
     }
@@ -93,7 +96,7 @@ public class TileDepiction {
             BufferedImage image = ImageIO.read(file);
             ImageIcon paintedImage = PaintShop.addEmblem(image);
             images.add(paintedImage);
-            TileImageScalingCache.putScaledImage(paintedImage, tileType, index, 300);
+            TileImageScalingCache.putScaledImage(paintedImage, tileType, index, 300, false);
         } catch (IOException exception) {
             exception.printStackTrace();
             GameMessage.showError("ERROR: Could not load image loacted at " + imagePath);

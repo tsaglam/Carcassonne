@@ -76,9 +76,9 @@ public class TileLabel {
      * Adapts the size of the tile to make the tile label larger or smaller.
      * @param tileSize is the new tile size in pixels.
      */
-    public void setTileSize(int tileSize) {
+    public void setTileSize(int tileSize, boolean preview) {
         this.tileSize = tileSize;
-        label.setIcon(tile.getScaledIcon(tileSize));
+        label.setIcon(tile.getScaledIcon(tileSize, preview));
     }
 
     /**

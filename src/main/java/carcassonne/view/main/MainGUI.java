@@ -85,7 +85,19 @@ public class MainGUI extends JFrame implements Notifiable {
     public void zoomIn() { // TODO (HIGH) use listener or move to class that encapsulates the scrollpane and layered pane
         if (zoomLevel < MAX_ZOOM_LEVEL) {
             zoomLevel += ZOOM_STEP_SIZE;
-            updateToChangedZoomLevel();
+            updateToChangedZoomLevel(false);
+        }
+    }
+
+    /**
+     * Updates the zoom level if it is in the valid range.
+     * @param level is the zoom level.
+     * @param preview specifies whether fast calculations for preview purposes should be used.
+     */
+    public void setZoom(int level, boolean preview) { // TODO (HIGH) use listener or move to class that encapsulates the scrollpane and layered pane
+        if (level <= MAX_ZOOM_LEVEL && level >= MIN_ZOOM_LEVEL) {
+            zoomLevel = level;
+            updateToChangedZoomLevel(preview);
         }
     }
 
@@ -95,16 +107,16 @@ public class MainGUI extends JFrame implements Notifiable {
     public void zoomOut() {
         if (zoomLevel > MIN_ZOOM_LEVEL) {
             zoomLevel -= ZOOM_STEP_SIZE;
-            updateToChangedZoomLevel();
+            updateToChangedZoomLevel(false);
         }
     }
 
-    private void updateToChangedZoomLevel() {
-        if (currentPlayer != null) { // only update highlights when there is an active round
+    private void updateToChangedZoomLevel(boolean preview) {
+        if (currentPlayer != null && !preview) { // only update highlights when there is an active round
             ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
             tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
         }
-        tileLabels.forEach(it -> it.setTileSize(zoomLevel));
+        tileLabels.forEach(it -> it.setTileSize(zoomLevel, preview));
     }
 
     /**
