@@ -11,6 +11,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import carcassonne.control.MainController;
 import carcassonne.settings.GameSettings;
@@ -146,23 +149,43 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         }
     }
 
-    private void buildViewMenu() { // TODO (HIGH) maybe a slider?
+    private void buildViewMenu() {
         menuView = new JMenu(VIEW);
-        JMenuItem zoomIn = new JMenuItem("Zoom in");
-        JMenuItem zoomOut = new JMenuItem("Zoom out");
+        JSlider slider = new JSlider(50, 300, 100);
+        slider.setPaintTicks(true);
+        slider.setOrientation(JSlider.VERTICAL);
+        slider.setMinorTickSpacing(10);
+        slider.setMajorTickSpacing(50);
+        slider.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                mainUI.setZoom(slider.getValue(), false);
+            }
+        });
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mainUI.setZoom(slider.getValue(), true);
+            }
+        });
+        JMenuItem zoomIn = new JMenuItem("Zoom In");
+        JMenuItem zoomOut = new JMenuItem("Zoom Out");
         zoomIn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {
                 mainUI.zoomIn();
+                slider.setValue(mainUI.getZoom());
             }
         });
         zoomOut.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {
                 mainUI.zoomOut();
+                slider.setValue(mainUI.getZoom());
             }
         });
         menuView.add(zoomIn);
+        menuView.add(slider);
         menuView.add(zoomOut);
         add(menuView);
     }
