@@ -6,7 +6,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 
 /**
- * Is a simple class derived form JButton, which stores (additionally to the JButton functions) the coordinates of the
+ * This is a simple class derived form JButton, which stores (additionally to the JButton functions) the coordinates of the
  * button on the button grid. It also uses a little hack to allow the GUI to set the background color of a
  * placementButton (while using Nimbus LookAndFeel), even if it is disabled. Without the hack it's not so easy to
  * accomplish that functionality.
