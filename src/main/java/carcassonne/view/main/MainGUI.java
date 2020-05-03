@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.OverlayLayout;
 
 import carcassonne.control.MainController;
@@ -38,7 +39,7 @@ import carcassonne.view.menubar.Scoreboard;
  */
 // TODO (HIGH) Custom classes for the two panels.
 public class MainGUI extends JFrame implements Notifiable {
-    private static final int ZOOM_STEP_SIZE = 25; // TODO (HIGH) find a decent step size
+    private static final int ZOOM_STEP_SIZE = 25;
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 50;
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
@@ -58,6 +59,7 @@ public class MainGUI extends JFrame implements Notifiable {
     private List<MeepleLabel> meepleLabels;
     private Player currentPlayer;
     private JLayeredPane layeredPane;
+    private JScrollPane scrollPane;
     private final SystemProperties systemProperties;
     private int zoomLevel;
 
@@ -70,7 +72,7 @@ public class MainGUI extends JFrame implements Notifiable {
         this.controller = controller;
         systemProperties = new SystemProperties();
         tileSize = GameSettings.TILE_SIZE;
-        zoomLevel = 100;
+        zoomLevel = 125;
         gridWidth = systemProperties.getResolutionWidth() / tileSize;
         gridHeight = systemProperties.getResolutionHeight() / tileSize;
         JPanel tilePanel = buildTilePanel();
@@ -82,9 +84,19 @@ public class MainGUI extends JFrame implements Notifiable {
     /**
      * Zooms in if the maximum zoom level has not been reached.
      */
-    public void zoomIn() { // TODO (HIGH) use listener or move to class that encapsulates the scrollpane and layered pane
+    public void zoomIn() { // TODO (HIGH) use listener or move to class that encapsulates the scroll pane and layered pane
         if (zoomLevel < MAX_ZOOM_LEVEL) {
             zoomLevel += ZOOM_STEP_SIZE;
+            updateToChangedZoomLevel(false);
+        }
+    }
+
+    /**
+     * Zooms out if the minimum zoom level has not been reached.
+     */
+    public void zoomOut() {
+        if (zoomLevel > MIN_ZOOM_LEVEL) {
+            zoomLevel -= ZOOM_STEP_SIZE;
             updateToChangedZoomLevel(false);
         }
     }
@@ -109,22 +121,14 @@ public class MainGUI extends JFrame implements Notifiable {
         return zoomLevel;
     }
 
-    /**
-     * Zooms out if the minimum zoom level has not been reached.
-     */
-    public void zoomOut() {
-        if (zoomLevel > MIN_ZOOM_LEVEL) {
-            zoomLevel -= ZOOM_STEP_SIZE;
-            updateToChangedZoomLevel(false);
-        }
-    }
-
-    private void updateToChangedZoomLevel(boolean preview) { // TODO (HIGH) test putting a time limit here
+    private void updateToChangedZoomLevel(boolean preview) { // TODO (HIGH) test putting a time limit here? or limit zoom steps?
         if (currentPlayer != null && !preview) { // only update highlights when there is an active round
             ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
             tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
         }
         tileLabels.forEach(it -> it.setTileSize(zoomLevel, preview));
+        // TODO (HIGH) can be janky when zooming too fast. Why?
+        centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
     }
 
     /**
@@ -280,17 +284,19 @@ public class MainGUI extends JFrame implements Notifiable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JScrollPane scrollPane = new JScrollPane(layeredPane); // TODO (HIGH) Fix scroll bar visual weirdness on win 10
+        scrollPane = new JScrollPane(layeredPane); // TODO (HIGH) Fix scroll bar visual weirdness on win 10
         scrollPane.setPreferredSize(new Dimension(gridWidth * tileSize, gridHeight * tileSize));
         add(scrollPane, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(null);
+        centerScrollPaneView();
+    }
 
-        // center scroll pane
+    private void centerScrollPaneView() {
         Rectangle bounds = scrollPane.getViewport().getViewRect();
-        Dimension size = scrollPane.getViewport().getViewSize();
-        int x = (size.width - bounds.width) / 2;
-        int y = (size.height - bounds.height) / 2;
+        Dimension size = scrollPane.getViewport().getView().getPreferredSize();
+        int x = (int) Math.round((size.width - bounds.width) / 2.0);
+        int y = (int) (Math.round(size.height - bounds.height) / 2.0);
         scrollPane.getViewport().setViewPosition(new Point(x, y));
     }
 
