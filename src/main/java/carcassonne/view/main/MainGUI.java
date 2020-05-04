@@ -9,14 +9,15 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JViewport;
 import javax.swing.OverlayLayout;
 
 import carcassonne.control.MainController;
@@ -126,7 +127,9 @@ public class MainGUI extends JFrame implements Notifiable {
             ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
             tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
         }
-        tileLabels.forEach(it -> it.setTileSize(zoomLevel, preview));
+        // Parallel stream for improved performance:
+        Arrays.stream(labelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
+                .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
         // TODO (HIGH) can be janky when zooming too fast. Why?
         centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
     }
