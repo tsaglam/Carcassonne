@@ -19,6 +19,8 @@ import carcassonne.view.PaintShop;
  * @author Timur Saglam
  */
 public class TileDepiction {
+    private static final int FULL_RESOLUTION = 300;
+
     private static final int IMAGES_PER_TILE = 4;
 
     private final ArrayList<ImageIcon> images;
@@ -56,9 +58,9 @@ public class TileDepiction {
     public ImageIcon getCurrentScaledDepiction(int edgeLength, boolean fastScaling) {
         if (TileImageScalingCache.containsScaledImage(tileType, rotation, edgeLength, fastScaling)) {
             return TileImageScalingCache.getScaledImage(tileType, rotation, edgeLength);
-        } // TODO (HIGH) check how often the cache is used for the full render after preview
+        }
         int scalingStrategy = fastScaling ? Image.SCALE_FAST : Image.SCALE_SMOOTH;
-        // TODO (HIGH) either use multiple threads for image scaling or implement something fast
+        // TODO (HIGH) implement something really fast?
         ImageIcon scaledImage = new ImageIcon(images.get(rotation).getImage().getScaledInstance(edgeLength, edgeLength, scalingStrategy));
         TileImageScalingCache.putScaledImage(scaledImage, tileType, rotation, edgeLength, fastScaling);
         return scaledImage;
@@ -79,13 +81,13 @@ public class TileDepiction {
     }
 
     private void loadImage(String imagePath, int index, boolean hasEmblem) {
-        if (TileImageScalingCache.containsScaledImage(tileType, index, 300, false)) { // TODO (HIGH) use constant for full res
-            images.add(TileImageScalingCache.getScaledImage(tileType, index, 300));
+        if (TileImageScalingCache.containsScaledImage(tileType, index, FULL_RESOLUTION, false)) { // TODO (HIGH) use constant for full res
+            images.add(TileImageScalingCache.getScaledImage(tileType, index, FULL_RESOLUTION));
         } else if (hasEmblem) {
             loadImageAndPaintEmblem(imagePath, index);
         } else {
             ImageIcon image = new ImageIcon(imagePath);
-            TileImageScalingCache.putScaledImage(image, tileType, index, 300, false);
+            TileImageScalingCache.putScaledImage(image, tileType, index, FULL_RESOLUTION, false);
             images.add(image);
         }
     }
@@ -96,7 +98,7 @@ public class TileDepiction {
             BufferedImage image = ImageIO.read(file);
             ImageIcon paintedImage = PaintShop.addEmblem(image);
             images.add(paintedImage);
-            TileImageScalingCache.putScaledImage(paintedImage, tileType, index, 300, false);
+            TileImageScalingCache.putScaledImage(paintedImage, tileType, index, FULL_RESOLUTION, false);
         } catch (IOException exception) {
             exception.printStackTrace();
             GameMessage.showError("ERROR: Could not load image loacted at " + imagePath);
