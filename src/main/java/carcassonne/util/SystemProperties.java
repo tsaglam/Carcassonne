@@ -1,10 +1,10 @@
-package carcassonne.settings;
+package carcassonne.util;
 
 import java.awt.DisplayMode;
 import java.awt.GraphicsEnvironment;
 
 /**
- * Encapsules system-specific properties like OS name and screen resolution.
+ * Encapsulates system-specific properties like OS name and screen resolution.
  * @author Timur Saglam
  */
 public class SystemProperties {

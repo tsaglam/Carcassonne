@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import carcassonne.settings.GameSettings;
+import carcassonne.util.FastImageScaler;
 import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
 
@@ -59,9 +60,7 @@ public class TileDepiction {
         if (TileImageScalingCache.containsScaledImage(tileType, rotation, edgeLength, fastScaling)) {
             return TileImageScalingCache.getScaledImage(tileType, rotation, edgeLength);
         }
-        int scalingStrategy = fastScaling ? Image.SCALE_FAST : Image.SCALE_SMOOTH;
-        // TODO (HIGH) implement something really fast?
-        ImageIcon scaledImage = new ImageIcon(images.get(rotation).getImage().getScaledInstance(edgeLength, edgeLength, scalingStrategy));
+        ImageIcon scaledImage = new ImageIcon(scaleImage(edgeLength, fastScaling));
         TileImageScalingCache.putScaledImage(scaledImage, tileType, rotation, edgeLength, fastScaling);
         return scaledImage;
     }
@@ -80,8 +79,15 @@ public class TileDepiction {
         rotation = rotation >= 3 ? 0 : rotation + 1; // update orientation indicator
     }
 
+    private Image scaleImage(int edgeLength, boolean fastScaling) {
+        if (fastScaling) {
+            return FastImageScaler.scaleImage(images.get(rotation).getImage(), edgeLength);
+        }
+        return images.get(rotation).getImage().getScaledInstance(edgeLength, edgeLength, Image.SCALE_SMOOTH);
+    }
+
     private void loadImage(String imagePath, int index, boolean hasEmblem) {
-        if (TileImageScalingCache.containsScaledImage(tileType, index, FULL_RESOLUTION, false)) { // TODO (HIGH) use constant for full res
+        if (TileImageScalingCache.containsScaledImage(tileType, index, FULL_RESOLUTION, false)) {
             images.add(TileImageScalingCache.getScaledImage(tileType, index, FULL_RESOLUTION));
         } else if (hasEmblem) {
             loadImageAndPaintEmblem(imagePath, index);

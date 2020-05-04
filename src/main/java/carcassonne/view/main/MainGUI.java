@@ -29,7 +29,7 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
-import carcassonne.settings.SystemProperties;
+import carcassonne.util.SystemProperties;
 import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
@@ -130,6 +130,19 @@ public class MainGUI extends JFrame implements Notifiable {
         // Parallel stream for improved performance:
         Arrays.stream(labelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
                 .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
+
+        // Dimension size = scrollPane.getViewport().getViewSize();
+        // Point position = scrollPane.getViewport().getViewPosition();
+        // System.err.println("start " + scrollPane.getViewport().getViewPosition());
+        // double ratio = 1 - (zoomLevel - ZOOM_STEP_SIZE) / (double) zoomLevel;
+        // System.err.println("ratio: " + ratio + " adding width " + size.getWidth() * ratio);
+        // int x = (int) (position.getX() + (size.getWidth() * ratio));
+        // int y = (int) (position.getY() * (size.getHeight() * ratio));
+        // System.err.println(new Point(x, y));
+        // scrollPane.getViewport().setViewPosition(new Point(x, y));
+        // System.err.println("end " + scrollPane.getViewport().getViewPosition());
+        // System.err.println();
+
         // TODO (HIGH) can be janky when zooming too fast. Why?
         centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
     }
