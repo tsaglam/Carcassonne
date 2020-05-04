@@ -11,7 +11,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.Notifiable;
-import carcassonne.settings.SystemProperties;
+import carcassonne.util.SystemProperties;
 import carcassonne.view.main.MainGUI;
 
 /**
