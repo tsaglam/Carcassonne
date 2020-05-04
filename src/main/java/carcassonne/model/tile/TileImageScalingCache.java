@@ -1,6 +1,6 @@
 package carcassonne.model.tile;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.ImageIcon;
 
@@ -11,8 +11,8 @@ import javax.swing.ImageIcon;
  */
 public class TileImageScalingCache {
     private static final int SHIFT_VALUE = 1000;
-    private static final HashMap<Integer, ImageIcon> chachedImageIcons = new HashMap<>(); // TODO (HIGH) use linked hashmap with LRU
-    private static final HashMap<Integer, Boolean> chachedScalingInformation = new HashMap<>();
+    private static final ConcurrentHashMap<Integer, ImageIcon> chachedImageIcons = new ConcurrentHashMap<>(); // TODO (HIGH) use linked hashmap with LRU
+    private static final ConcurrentHashMap<Integer, Boolean> chachedScalingInformation = new ConcurrentHashMap<>();
 
     private TileImageScalingCache() {
         // private constructor ensures non-instantiability!
