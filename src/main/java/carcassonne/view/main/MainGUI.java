@@ -132,6 +132,7 @@ public class MainGUI extends JFrame implements Notifiable {
         Arrays.stream(labelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
                 .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
         centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
+        layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
     }
 
     /**
