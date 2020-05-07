@@ -3,16 +3,15 @@ package carcassonne.view.main;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
-import carcassonne.settings.GameSettings;
 import carcassonne.view.PaintShop;
 
 /**
@@ -20,12 +19,14 @@ import carcassonne.view.PaintShop;
  * @author Timur Saglam
  */
 public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom levels
-    private final static ImageIcon EMPTY_IMAGE = new ImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false));
+    private static final int MEEPLE_SCALING_THRESHOLD = 100;
+    private static final int INITIAL_MEEPLE_SIZE = 25;
     private Player player;
     private final MouseAdapter mouseAdapter;
     private TerrainType terrain;
     private final JLabel label;
     private boolean preview;
+    private int meepleSize;
 
     /**
      * Creates a blank meeple label.
@@ -33,10 +34,12 @@ public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom lev
      * @param direction is the {@link GridDirection} where the meeple label sits on the tile.
      * @param frame is the main {@link JFrame} to repaint after setting icons.
      */
-    public MeepleLabel(MainController controller, GridDirection direction, JFrame frame) {
-        label = new JLabel();
+    public MeepleLabel(int scalingFactor, MainController controller, GridDirection direction, JFrame frame) {
+        meepleSize = INITIAL_MEEPLE_SIZE;
+        terrain = TerrainType.OTHER;
+        label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize), SwingConstants.CENTER); // TODO (HIGH) still needed?
         preview = false;
-        reset();
+
         mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
@@ -71,7 +74,7 @@ public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom lev
      */
     public void reset() {
         terrain = TerrainType.OTHER;
-        label.setIcon(EMPTY_IMAGE);
+        setEmptyIcon();
         label.removeMouseListener(mouseAdapter);
     }
 
@@ -109,11 +112,32 @@ public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom lev
         return label;
     }
 
+    /**
+     * Specifies the size of the meeple and therefore the meeple label.
+     * @param scalingFactor the new size in percent. Might be limited by the MEEPLE_SCALING_THRESHOLD. Set to 100 for the
+     * original size.
+     */
+    public void setMeepleSize(int scalingFactor) {
+        int limitedFactor = scalingFactor > MEEPLE_SCALING_THRESHOLD ? MEEPLE_SCALING_THRESHOLD : scalingFactor;
+        meepleSize = INITIAL_MEEPLE_SIZE * limitedFactor / 100;
+        if (terrain == TerrainType.OTHER) {
+            setEmptyIcon();
+        } else if (preview == true) {
+            setPreviewIcon();
+        } else {
+            setMeepleIcon();
+        }
+    }
+
+    private void setEmptyIcon() {
+        label.setIcon(PaintShop.getPreviewMeeple(terrain, meepleSize));
+    }
+
     private void setMeepleIcon() {
-        label.setIcon(PaintShop.getColoredMeeple(terrain, player));
+        label.setIcon(PaintShop.getColoredMeeple(terrain, player, meepleSize));
     }
 
     private void setPreviewIcon() {
-        label.setIcon(new ImageIcon(GameSettings.getMeeplePath(terrain, false)));
+        setEmptyIcon();
     }
 }
