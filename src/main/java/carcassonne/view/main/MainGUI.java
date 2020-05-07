@@ -31,6 +31,7 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
+import carcassonne.util.LookAndFeelUtil;
 import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
@@ -291,8 +292,7 @@ public class MainGUI extends JFrame implements Notifiable {
         setJMenuBar(menuBar);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-
-        scrollPane = new JScrollPane(layeredPane); // TODO (HIGH) Fix scroll bar visual weirdness on win 10
+        scrollPane = LookAndFeelUtil.createModifiedScrollpane(layeredPane);
         scrollPane.setPreferredSize(new Dimension(gridWidth * tileSize, gridHeight * tileSize));
         add(scrollPane, BorderLayout.CENTER);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
