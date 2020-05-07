@@ -58,7 +58,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         super();
         this.controller = controller;
         this.mainUI = mainUI;
-        settings = controller.getProperties();
+        settings = controller.getSettings();
         settings.registerNotifiable(this);
         scoreboard = new Scoreboard(settings);
         buildMenuGame();
