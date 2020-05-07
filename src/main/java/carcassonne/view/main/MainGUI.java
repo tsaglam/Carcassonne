@@ -126,7 +126,6 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     private void updateToChangedZoomLevel(boolean preview) { // TODO (HIGH) test putting a time limit here? or limit zoom steps?
-        long start = System.currentTimeMillis();
         if (currentPlayer != null && !preview) { // only update highlights when there is an active round
             ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
             tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
@@ -138,8 +137,6 @@ public class MainGUI extends JFrame implements Notifiable {
         meepleLabels.forEach(it -> it.setMeepleSize(zoomLevel));
         centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
         layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
     }
 
     /**
