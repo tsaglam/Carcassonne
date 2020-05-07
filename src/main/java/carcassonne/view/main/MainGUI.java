@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.OverlayLayout;
+import javax.swing.border.LineBorder;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
@@ -30,7 +31,6 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
-import carcassonne.util.SystemProperties;
 import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
@@ -41,12 +41,14 @@ import carcassonne.view.menubar.Scoreboard;
  */
 // TODO (HIGH) Custom classes for the two panels.
 public class MainGUI extends JFrame implements Notifiable {
+    private static final Color GRID_BORDER_COLOR = new Color(100, 100, 100);
+    private static final int GRID_BORDER_SIZE = 2;
+    private static final Color GUI_COLOR = new Color(190, 190, 190);
     private static final int ZOOM_STEP_SIZE = 25;
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 50;
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
     private static final int MEEPLE_FACTOR = 3; // Meeples per tile length.
-    private static final Color GUI_COLOR = new Color(190, 190, 190);
     private GridBagConstraints constraints;
     private final MainController controller;
     private MainMenuBar menuBar;
@@ -62,7 +64,6 @@ public class MainGUI extends JFrame implements Notifiable {
     private Player currentPlayer;
     private JLayeredPane layeredPane;
     private JScrollPane scrollPane;
-    private final SystemProperties systemProperties;
     private int zoomLevel;
     private JPanel meeplePanel;
     private JPanel tilePanel;
@@ -74,11 +75,10 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public MainGUI(MainController controller) {
         this.controller = controller;
-        systemProperties = new SystemProperties();
+        gridWidth = controller.getSettings().getGridWidth();
+        gridHeight = controller.getSettings().getGridHeight();
         tileSize = GameSettings.TILE_SIZE;
         zoomLevel = 125;
-        gridWidth = systemProperties.getResolutionWidth() / tileSize;
-        gridHeight = systemProperties.getResolutionHeight() / tileSize;
         JPanel tilePanel = buildTilePanel();
         JPanel meeplePanel = buildMeeplePanel();
         layeredPane = buildLayeredPane(meeplePanel, tilePanel);
@@ -298,6 +298,7 @@ public class MainGUI extends JFrame implements Notifiable {
         scrollPane = new JScrollPane(layeredPane); // TODO (HIGH) Fix scroll bar visual weirdness on win 10
         scrollPane.setPreferredSize(new Dimension(gridWidth * tileSize, gridHeight * tileSize));
         add(scrollPane, BorderLayout.CENTER);
+        setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
         pack();
         setLocationRelativeTo(null);
         centerScrollPaneView();
@@ -326,6 +327,7 @@ public class MainGUI extends JFrame implements Notifiable {
         meeplePanel.setOpaque(false);
         meeplePanel.setLayout(new GridBagLayout());
         meeplePanel.setMaximumSize(tilePanel.getPreferredSize());
+        meeplePanel.setBorder(new LineBorder(GRID_BORDER_COLOR, GRID_BORDER_SIZE));
         constraints = new GridBagConstraints();
         meepleGridWidth = gridWidth * MEEPLE_FACTOR;
         meepleGridHeight = gridHeight * MEEPLE_FACTOR;
@@ -353,6 +355,7 @@ public class MainGUI extends JFrame implements Notifiable {
         tilePanel = new JPanel();
         tilePanel.setBackground(GUI_COLOR);
         tilePanel.setLayout(new GridBagLayout());
+
         constraints = new GridBagConstraints();
         tileLabels = new ArrayList<>();
         labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.

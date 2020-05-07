@@ -7,7 +7,6 @@ import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.settings.GameSettings;
-import carcassonne.util.SystemProperties;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
@@ -114,11 +113,9 @@ public abstract class AbstractControllerState {
      * @param playerCount is the specific number of players.
      */
     protected void startNewRound(int playerCount) {
-        SystemProperties systemProperties = new SystemProperties();
-        int gridWidth = systemProperties.getResolutionWidth() / GameSettings.TILE_SIZE;
-        int gridHeight = systemProperties.getResolutionHeight() / GameSettings.TILE_SIZE;
-        Grid newGrid = new Grid(gridWidth, gridHeight);
-        Round newRound = new Round(playerCount, newGrid, controller.getProperties());
+        GameSettings settings = controller.getSettings();
+        Grid newGrid = new Grid(settings.getGridWidth(), settings.getGridHeight());
+        Round newRound = new Round(playerCount, newGrid, controller.getSettings());
         controller.updateStates(newRound, newGrid);
         updateScores();
         updateStackSize();

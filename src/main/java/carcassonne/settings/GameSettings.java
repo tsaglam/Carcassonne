@@ -21,7 +21,7 @@ public class GameSettings {
     public static final String NULL_TILE_PATH = "src/main/ressources/tiles/Null0.png";
     public static final String EMBLEM_PATH = "src/main/ressources/emblem.png";
     public static final String TILE_FOLDER_PATH = "src/main/ressources/tiles/";
-    
+
     private static final PlayerColor[] DEFAULT_COLORS = { new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
             new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147) };
     private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };
@@ -32,6 +32,8 @@ public class GameSettings {
     private final List<Notifiable> changeListeners;
     private boolean chaosMode;
     private int amountOfPlayers;
+    private int gridWidth;
+    private int gridHeight;
 
     private final ArrayList<PlayerColor> colors;
 
@@ -44,6 +46,9 @@ public class GameSettings {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
         amountOfPlayers = 2;
+        gridWidth = 27;
+        gridHeight = 15;
+                
         changeListeners = new ArrayList<Notifiable>();
     }
 
@@ -53,6 +58,22 @@ public class GameSettings {
      */
     public int getAmountOfPlayers() {
         return amountOfPlayers;
+    }
+
+    /**
+     * Getter for the height of the grid.
+     * @return the gridHeight the grid height in tiles.
+     */
+    public int getGridHeight() {
+        return gridHeight;
+    }
+
+    /**
+     * Getter for the width of the grid.
+     * @return the gridWidth the grid width in tiles.
+     */
+    public int getGridWidth() {
+        return gridWidth;
     }
 
     /**
@@ -82,6 +103,14 @@ public class GameSettings {
     }
 
     /**
+     * Registers a UI element that wants to listen to changes.
+     * @param notifiable is the UI element.
+     */
+    public void registerNotifiable(Notifiable notifiable) {
+        changeListeners.add(notifiable);
+    }
+
+    /**
      * Specifies how many player are playing in the next round.
      * @param amountOfPlayers is the amount of players.
      */
@@ -95,6 +124,22 @@ public class GameSettings {
      */
     public void setChaosMode(boolean chaosMode) {
         this.chaosMode = chaosMode;
+    }
+
+    /**
+     * Setter for the height of grid.
+     * @param gridHeight the grid height in tiles.
+     */
+    public void setGridHeight(int gridHeight) {
+        this.gridHeight = gridHeight;
+    }
+
+    /**
+     * Setter for the width of grid.
+     * @param gridWidth the grid width in tiles.
+     */
+    public void setGridWidth(int gridWidth) {
+        this.gridWidth = gridWidth;
     }
 
     /**
@@ -118,21 +163,6 @@ public class GameSettings {
     }
 
     /**
-     * Registers a UI element that wants to listen to changes.
-     * @param notifiable is the UI element.
-     */
-    public void registerNotifiable(Notifiable notifiable) {
-        changeListeners.add(notifiable);
-    }
-
-    private void notifyListeners() {
-        PaintShop.clearCachedImages();
-        for (Notifiable notifiable : changeListeners) {
-            notifiable.notifyChange();
-        }
-    }
-
-    /**
      * Builds the path to the image of a specific meeple type.
      * @param type is the type of terrain the meeple occupies.
      * @param isTemplate specifies whether the template image should be loaded.
@@ -140,5 +170,12 @@ public class GameSettings {
      */
     public static String getMeeplePath(TerrainType type, boolean isTemplate) {
         return MEEPLE_PATH + type.toString().toLowerCase() + (isTemplate ? TEMPLATE : EMPTY) + PNG;
+    }
+
+    private void notifyListeners() {
+        PaintShop.clearCachedImages();
+        for (Notifiable notifiable : changeListeners) {
+            notifiable.notifyChange();
+        }
     }
 }
