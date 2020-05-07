@@ -7,6 +7,7 @@ import java.util.List;
 
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.view.PaintShop;
 
 /**
  * Class for the management of the Carcassonne game settings.
@@ -125,6 +126,7 @@ public class GameSettings {
     }
 
     private void notifyListeners() {
+        PaintShop.clearCachedImages();
         for (Notifiable notifiable : changeListeners) {
             notifiable.notifyChange();
         }

@@ -27,6 +27,7 @@ import carcassonne.view.PaintShop;
  * @author Timur Saglam
  */
 public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionListener {
+    private static final int MEEPLE_PREVIEW_SIZE = 30;
     private static final long serialVersionUID = 1293883978626527260L; // generated serial UID
     private static final String CHANGE_COLOR = "Choose Meeple Color:";
     private static final String EMPTY_NAME = "The player name cannot be empty!";
@@ -68,7 +69,7 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
     @Override
     public void stateChanged(ChangeEvent event) {
         for (TerrainType terrain : TerrainType.basicTerrain()) {
-            ImageIcon icon = PaintShop.getColoredMeeple(terrain, colorChooser.getColor());
+            ImageIcon icon = PaintShop.getColoredMeeple(terrain, colorChooser.getColor(), MEEPLE_PREVIEW_SIZE);
             labelMap.get(terrain).setIcon(icon); // Update the preview labels.
         }
     }

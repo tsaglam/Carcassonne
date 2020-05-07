@@ -23,10 +23,13 @@ import carcassonne.settings.GameSettings;
  * @author Timur Saglam
  */
 public class PaintShop {
+    private static final String KEY_SEPARATOR = "|";
     private static final int MAXIMAL_ALPHA = 255;
+    private static final int SCALING_STRATEGY = Image.SCALE_SMOOTH;
 
     private static final Map<TerrainType, BufferedImage> imageMap = buildImageMap(false);
     private static final Map<TerrainType, BufferedImage> templateMap = buildImageMap(true);
+    private static final HashMap<String, ImageIcon> chachedMeepleImages = new HashMap<>();
     private static final BufferedImage highlightImage = loadImage(GameSettings.HIGHLIGHT_PATH);
     private static final BufferedImage emblemImage = loadImage(GameSettings.EMBLEM_PATH);
     private static final BufferedImage highlightBaseImage = loadImage(GameSettings.NULL_TILE_PATH);
@@ -41,8 +44,14 @@ public class PaintShop {
      * @param color is the custom color.
      * @return the colored meeple.
      */
-    public static ImageIcon getColoredMeeple(TerrainType meepleType, Color color) {
-        return paintMeeple(meepleType, color.getRGB());
+    public static ImageIcon getColoredMeeple(TerrainType meepleType, Color color, int size) {
+        String key = createKey(color, meepleType, size);
+        if (chachedMeepleImages.containsKey(key)) {
+            return chachedMeepleImages.get(key);
+        }
+        ImageIcon image = paintMeeple(meepleType, color.getRGB(), size);
+        chachedMeepleImages.put(key, image);
+        return image;
     }
 
     /**
@@ -51,8 +60,23 @@ public class PaintShop {
      * @param player is the {@link Player} whose color is used.
      * @return the colored meeple.
      */
-    public static ImageIcon getColoredMeeple(TerrainType meepleType, Player player) {
-        return getColoredMeeple(meepleType, player.getColor());
+    public static ImageIcon getColoredMeeple(TerrainType meepleType, Player player, int size) {
+        return getColoredMeeple(meepleType, player.getColor(), size);
+    }
+
+    /**
+     * Creates a non-colored meeple image icon.
+     * @param meepleTypeis the type of the meeple.
+     * @return non-colored meeple image.
+     */
+    public static ImageIcon getPreviewMeeple(TerrainType meepleType, int size) {
+        String key = createKey(meepleType, size);
+        if (chachedMeepleImages.containsKey(key)) {
+            return chachedMeepleImages.get(key);
+        }
+        ImageIcon image = new ImageIcon(imageMap.get(meepleType).getScaledInstance(size, size, SCALING_STRATEGY));
+        chachedMeepleImages.put(key, image);
+        return image;
     }
 
     /**
@@ -83,10 +107,17 @@ public class PaintShop {
         return new ImageIcon(copy);
     }
 
+    /**
+     * Clears the meeple image cache. Should be cleared when player colors change.
+     */
+    public static void clearCachedImages() {
+        chachedMeepleImages.clear();
+    }
+
     // prepares the base images and templates
     private static Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
         Map<TerrainType, BufferedImage> map = new HashMap<>();
-        for (TerrainType terrainType : TerrainType.basicTerrain()) {
+        for (TerrainType terrainType : TerrainType.values()) {
             BufferedImage meepleImage = loadImage(GameSettings.getMeeplePath(terrainType, isTemplate));
             map.put(terrainType, meepleImage);
         }
@@ -94,7 +125,7 @@ public class PaintShop {
     }
 
     // Colors a meeple with RGB color.
-    private static ImageIcon paintMeeple(TerrainType meepleType, int color) {
+    private static ImageIcon paintMeeple(TerrainType meepleType, int color, int size) {
         BufferedImage image = deepCopy(imageMap.get(meepleType));
         BufferedImage template = templateMap.get(meepleType);
         for (int x = 0; x < template.getWidth(); x++) {
@@ -104,7 +135,7 @@ public class PaintShop {
                 }
             }
         }
-        return new ImageIcon(image);
+        return new ImageIcon(image.getScaledInstance(size, size, Image.SCALE_SMOOTH));
     }
 
     private static ImageIcon colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
@@ -158,5 +189,13 @@ public class PaintShop {
             GameMessage.showError("ERROR: Could not load image loacted at " + path);
             return null;
         }
+    }
+
+    private static String createKey(TerrainType meepleType, int size) {
+        return meepleType + KEY_SEPARATOR + size + KEY_SEPARATOR; // TODO (MEDIUM) choose more efficient composite key
+    }
+
+    private static String createKey(Color color, TerrainType meepleType, int size) {
+        return createKey(meepleType, size) + color.getRGB();
     }
 }

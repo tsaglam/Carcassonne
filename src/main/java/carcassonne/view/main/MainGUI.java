@@ -64,6 +64,8 @@ public class MainGUI extends JFrame implements Notifiable {
     private JScrollPane scrollPane;
     private final SystemProperties systemProperties;
     private int zoomLevel;
+    private JPanel meeplePanel;
+    private JPanel tilePanel;
 
     /**
      * Constructor of the main GUI. creates the GUI with a scoreboard.
@@ -124,15 +126,20 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     private void updateToChangedZoomLevel(boolean preview) { // TODO (HIGH) test putting a time limit here? or limit zoom steps?
+        long start = System.currentTimeMillis();
         if (currentPlayer != null && !preview) { // only update highlights when there is an active round
             ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
             tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
         }
-        // Parallel stream for improved performance:
+        // Parallel stream for improved performance when grid is full:
         Arrays.stream(labelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
                 .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
+        meeplePanel.setMaximumSize(tilePanel.getPreferredSize()); // IMPORTANT: Ensures that the meeples are on the tiles.
+        meepleLabels.forEach(it -> it.setMeepleSize(zoomLevel));
         centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
         layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
     }
 
     /**
@@ -315,19 +322,21 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     private JPanel buildMeeplePanel() {
-        JPanel meeplePanel = new JPanel();
+        meeplePanel = new JPanel();
         meeplePanel.setOpaque(false);
         meeplePanel.setLayout(new GridBagLayout());
+        meeplePanel.setMaximumSize(tilePanel.getPreferredSize());
         constraints = new GridBagConstraints();
         meepleGridWidth = gridWidth * MEEPLE_FACTOR;
         meepleGridHeight = gridHeight * MEEPLE_FACTOR;
         constraints.weightx = 1; // evenly distributes meeple grid
         constraints.weighty = 1;
+        constraints.fill = GridBagConstraints.BOTH;
         meepleLabels = new ArrayList<>();
         meepleGrid = new MeepleLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
         for (int x = 0; x < meepleGridWidth; x++) {
             for (int y = 0; y < meepleGridHeight; y++) {
-                meepleGrid[x][y] = new MeepleLabel(controller, GridDirection.values2D()[x % MEEPLE_FACTOR][y % MEEPLE_FACTOR], this);
+                meepleGrid[x][y] = new MeepleLabel(zoomLevel, controller, GridDirection.values2D()[x % MEEPLE_FACTOR][y % MEEPLE_FACTOR], this);
                 meepleLabels.add(meepleGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;
@@ -341,7 +350,7 @@ public class MainGUI extends JFrame implements Notifiable {
      * Creates the grid of labels.
      */
     private JPanel buildTilePanel() {
-        JPanel tilePanel = new JPanel();
+        tilePanel = new JPanel();
         tilePanel.setBackground(GUI_COLOR);
         tilePanel.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();

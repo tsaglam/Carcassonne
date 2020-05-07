@@ -152,10 +152,10 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         JSlider slider = new JSlider(50, 300, mainUI.getZoom());
         slider.setPaintTicks(true);
         slider.setOrientation(JSlider.VERTICAL);
-        slider.setMinorTickSpacing(10);
+        slider.setMinorTickSpacing(5);
         slider.setMajorTickSpacing(50);
+        slider.setSnapToTicks(true);
         ZoomSliderListener zoomListener = new ZoomSliderListener(mainUI, slider);
-
         slider.addMouseListener(zoomListener);
         slider.addChangeListener(zoomListener);
         JMenuItem zoomIn = new JMenuItem("Zoom In");
