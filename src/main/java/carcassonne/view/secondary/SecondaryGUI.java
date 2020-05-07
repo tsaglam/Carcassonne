@@ -11,7 +11,6 @@ import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.Notifiable;
-import carcassonne.util.SystemProperties;
 import carcassonne.view.main.MainGUI;
 
 /**
@@ -26,7 +25,6 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
     protected MainController controller;
     protected Player currentPlayer;
     protected JPanel panel;
-    protected SystemProperties systemProperties;
     protected Tile tile;
 
     /**
@@ -38,7 +36,6 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
         super(ui);
         panel = new JPanel(new GridBagLayout());
         this.controller = controller;
-        systemProperties = new SystemProperties();
         constraints = new GridBagConstraints();
         buildFrame(ui);
     }
