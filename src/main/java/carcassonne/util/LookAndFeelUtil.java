@@ -12,7 +12,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Timur Saglam
  */
 public class LookAndFeelUtil {
-    private static final String WINDOWS = "WINDOWS";
+    private static final String WINDOWS = "Windows";
     private static final String OS_NAME_PROPERTY = "os.name";
 
     /**
