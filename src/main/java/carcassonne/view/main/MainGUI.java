@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
@@ -40,34 +41,31 @@ import carcassonne.view.menubar.Scoreboard;
  * The main GUI class.
  * @author Timur Saglam
  */
-// TODO (HIGH) Custom classes for the two panels.
+// TODO (HIGH) Custom classes for the two layers.
 public class MainGUI extends JFrame implements Notifiable {
     private static final Color GRID_BORDER_COLOR = new Color(100, 100, 100);
     private static final int GRID_BORDER_SIZE = 2;
     private static final Color GUI_COLOR = new Color(190, 190, 190);
-    private static final int ZOOM_STEP_SIZE = 25;
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 50;
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
-    private static final int MEEPLE_FACTOR = 3; // Meeples per tile length.
+    private static final int ZOOM_STEP_SIZE = 25;
     private GridBagConstraints constraints;
     private final MainController controller;
-    private MainMenuBar menuBar;
-    private final int tileSize;
+    private Player currentPlayer;
     private final int gridHeight;
     private final int gridWidth;
-    private int meepleGridHeight;
-    private int meepleGridWidth;
-    private TileLabel[][] labelGrid;
-    private List<TileLabel> tileLabels;
-    private MeepleLabel[][] meepleGrid;
-    private List<MeepleLabel> meepleLabels;
-    private Player currentPlayer;
     private JLayeredPane layeredPane;
+    private List<MeepleDepictionPanel> meepleLabels;
+    private JPanel meepleLayer;
+    private MeepleDepictionPanel[][] meeplePanelGrid;
+    private MainMenuBar menuBar;
     private JScrollPane scrollPane;
+    private TileDepiction[][] tileLabelGrid;
+    private List<TileDepiction> tileLabels;
+    private JPanel tileLayer;
+    private final int tileSize;
     private int zoomLevel;
-    private JPanel meeplePanel;
-    private JPanel tilePanel;
 
     /**
      * Constructor of the main GUI. creates the GUI with a scoreboard.
@@ -80,10 +78,67 @@ public class MainGUI extends JFrame implements Notifiable {
         gridHeight = controller.getSettings().getGridHeight();
         tileSize = GameSettings.TILE_SIZE;
         zoomLevel = 125;
-        JPanel tilePanel = buildTilePanel();
-        JPanel meeplePanel = buildMeeplePanel();
+        JPanel tilePanel = buildTileLayer();
+        JPanel meeplePanel = buildMeepleLayer();
         layeredPane = buildLayeredPane(meeplePanel, tilePanel);
         buildFrame(layeredPane);
+    }
+
+    /**
+     * Rebuilds the label grid and the meeple grid if the game should be restarted.
+     */
+    public void rebuildGrids() {
+        meepleLabels.forEach(it -> it.forEach(label -> label.reset()));
+        tileLabels.forEach(it -> it.reset());
+    }
+
+    /**
+     * Removes meeple on a tile on the grid.
+     * @param meeple is the meeple that should be removed.
+     */
+    public void removeMeeple(Meeple meeple) {
+        checkParameters(meeple);
+        GridSpot spot = meeple.getLocation().getGridSpot();
+        if (spot == null) { // make sure meeple is placed
+            throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI: " + meeple);
+        }
+        int x = spot.getX();
+        int y = spot.getY();
+        checkCoordinates(x, y);
+        meeplePanelGrid[x][y].forEach(it -> it.reset());
+    }
+
+    /**
+     * Resets the meeple preview on one specific {@link Tile}.
+     * @param tile is the specific {@link Tile}.
+     */
+    public void resetMeeplePreview(Tile tile) {
+        checkParameters(tile);
+        int x = tile.getGridSpot().getX();
+        int y = tile.getGridSpot().getY();
+        checkCoordinates(x, y);
+        meeplePanelGrid[x][y].forEach(it -> it.reset());
+    }
+
+    public void resetMenuState() {
+        menuBar.enableStart(); // TODO (MEDIUM) Find better solution.
+    }
+
+    public void showUI() {
+        setVisible(true);
+        centerScrollPaneView();
+    }
+
+    public Scoreboard getScoreboard() {
+        return menuBar.getScoreboard(); // TODO (MEDIUM) Find better solution.
+    }
+
+    /**
+     * Grants access to the current zoom level of the UI.
+     * @return the zoom level.
+     */
+    public int getZoom() {
+        return zoomLevel;
     }
 
     /**
@@ -119,61 +174,51 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     /**
-     * Grants access to the current zoom level of the UI.
-     * @return the zoom level.
+     * Notifies the the main GUI about a (new) current player. This allows the UI to adapt color schemes to the player.
+     * @param currentPlayer is the current {@link Player}.
      */
-    public int getZoom() {
-        return zoomLevel;
-    }
-
-    private void updateToChangedZoomLevel(boolean preview) { // TODO (HIGH) test putting a time limit here? or limit zoom steps?
-        if (currentPlayer != null && !preview) { // only update highlights when there is an active round
-            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
-            tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
-        }
-        // Parallel stream for improved performance when grid is full:
-        Arrays.stream(labelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
-                .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
-        meeplePanel.setMaximumSize(tilePanel.getPreferredSize()); // IMPORTANT: Ensures that the meeples are on the tiles.
-        meepleLabels.forEach(it -> it.setMeepleSize(zoomLevel));
-        centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
-        layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+        ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
+        tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
     }
 
     /**
-     * Refreshes the meeple labels to get the new colors.
+     * Highlights a position on the grid to indicate that the tile is a possible placement spot.
+     * @param x is the x coordinate.
+     * @param y is the y coordinate.
      */
-    @Override
-    public void notifyChange() {
-        meepleLabels.forEach(it -> it.refresh());
-        if (currentPlayer != null) {
-            setCurrentPlayer(currentPlayer);
-        }
+    public void setHighlight(int x, int y) {
+        checkCoordinates(x, y);
+        tileLabelGrid[x][y].highlight();
     }
 
     /**
-     * Rebuilds the label grid and the meeple grid if the game should be restarted.
+     * Draws meeple on a tile on the grid.
+     * @param tile is the tile where the meeple gets drawn.
+     * @param position is the position on the tile where the meeple gets drawn.
+     * @param owner is the player that owns the meeple.
      */
-    public void rebuildGrids() {
-        meepleLabels.forEach(it -> it.reset());
-        tileLabels.forEach(it -> it.reset());
+    public void setMeeple(Tile tile, GridDirection position, Player owner) {
+        checkParameters(tile, position, owner);
+        int x = tile.getGridSpot().getX();
+        int y = tile.getGridSpot().getY();
+        checkCoordinates(x, y);
+        meeplePanelGrid[x][y].getMeepleLabel(position).setIcon(tile.getTerrain(position), owner);
     }
 
     /**
-     * Removes meeple on a tile on the grid.
-     * @param meeple is the meeple that should be removed.
+     * Enables the meeple preview on one specific {@link Tile}.
+     * @param tile is the specific {@link Tile}.
+     * @param currentPlayer determines the color of the preview.
      */
-    public void removeMeeple(Meeple meeple) {
-        checkParameters(meeple);
-        GridSpot spot = meeple.getLocation().getGridSpot();
-        if (spot == null) { // make sure meeple is placed
-            throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI: " + meeple);
-        }
-        for (int y = 0; y < MEEPLE_FACTOR; y++) {
-            for (int x = 0; x < MEEPLE_FACTOR; x++) {
-                meepleGrid[spot.getX() * MEEPLE_FACTOR + x][spot.getY() * MEEPLE_FACTOR + y].reset();
-            }
-        }
+    public void setMeeplePreview(Tile tile, Player currentPlayer) {
+        checkParameters(tile, currentPlayer);
+        int x = tile.getGridSpot().getX();
+        int y = tile.getGridSpot().getY();
+        checkCoordinates(x, y);
+        meeplePanelGrid[x][y].setMeeplePreview(tile, currentPlayer);
+        layeredPane.repaint(); // This is required! Removing this will paint black background.
     }
 
     /**
@@ -185,84 +230,7 @@ public class MainGUI extends JFrame implements Notifiable {
     public void setTile(Tile tile, int x, int y) {
         checkParameters(tile);
         checkCoordinates(x, y);
-        labelGrid[x][y].setTile(tile);
-    }
-
-    /**
-     * Highlights a position on the grid to indicate that the tile is a possible placement spot.
-     * @param x is the x coordinate.
-     * @param y is the y coordinate.
-     */
-    public void setHighlight(int x, int y) {
-        checkCoordinates(x, y);
-        labelGrid[x][y].highlight();
-    }
-
-    /**
-     * Draws meeple on a tile on the grid.
-     * @param tile is the tile where the meeple gets drawn.
-     * @param position is the position on the tile where the meeple gets drawn.
-     * @param owner is the player that owns the meeple.
-     */
-    public void setMeeple(Tile tile, GridDirection position, Player owner) {
-        checkParameters(tile, position, owner);
-        GridSpot spot = tile.getGridSpot();
-        int xpos = position.getX() + (spot.getX() * MEEPLE_FACTOR + 1);
-        int ypos = position.getY() + (spot.getY() * MEEPLE_FACTOR + 1);
-        meepleGrid[xpos][ypos].setIcon(tile.getTerrain(position), owner);
-    }
-
-    /**
-     * Resets the meeple preview on one specific {@link Tile}.
-     * @param tile is the specific {@link Tile}.
-     */
-    public void resetMeeplePreview(Tile tile) {
-        checkParameters(tile);
-        int xBase = tile.getGridSpot().getX() * MEEPLE_FACTOR;
-        int yBase = tile.getGridSpot().getY() * MEEPLE_FACTOR;
-        for (int y = 0; y < MEEPLE_FACTOR; y++) {
-            for (int x = 0; x < MEEPLE_FACTOR; x++) {
-                meepleGrid[xBase + x][yBase + y].reset();
-            }
-        }
-    }
-
-    /**
-     * Enables the meeple preview on one specific {@link Tile}.
-     * @param tile is the specific {@link Tile}.
-     * @param currentPlayer determines the color of the preview.
-     */
-    public void setMeeplePreview(Tile tile, Player currentPlayer) {
-        checkParameters(tile, currentPlayer);
-        int xBase = tile.getGridSpot().getX() * MEEPLE_FACTOR;
-        int yBase = tile.getGridSpot().getY() * MEEPLE_FACTOR;
-        GridDirection[][] directions = GridDirection.values2D();
-        for (int y = 0; y < MEEPLE_FACTOR; y++) {
-            for (int x = 0; x < MEEPLE_FACTOR; x++) {
-                if (tile.hasMeepleSpot(directions[x][y]) && controller.requestPlacementStatus(directions[x][y])) {
-                    meepleGrid[xBase + x][yBase + y].setPreview(tile.getTerrain(directions[x][y]), currentPlayer);
-                }
-            }
-        }
-        layeredPane.repaint(); // This is required! Removing this will paint black background.
-    }
-
-    /**
-     * Notifies the the main GUI about a (new) current player. This allows the UI to adapt color schemes to the player.
-     * @param currentPlayer is the current {@link Player}.
-     */
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-        ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
-        tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
-    }
-
-    public Scoreboard getScoreboard() {
-        return menuBar.getScoreboard(); // TODO (MEDIUM) Find better solution.
-    }
-
-    public void resetMenuState() {
-        menuBar.enableStart(); // TODO (MEDIUM) Find better solution.
+        tileLabelGrid[x][y].setTile(tile);
     }
 
     /**
@@ -273,17 +241,14 @@ public class MainGUI extends JFrame implements Notifiable {
         this.addWindowListener(new SubComponentAdapter(userInterfaces));
     }
 
-    private void checkParameters(Object... parameters) {
-        for (Object parameter : parameters) {
-            if (parameter == null) {
-                throw new IllegalArgumentException("Parameters such as Tile, Meeple, and Player cannot be null!");
-            }
-        }
-    }
-
-    private void checkCoordinates(int x, int y) {
-        if (x < 0 && x >= gridWidth || y < 0 && y >= gridHeight) {
-            throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
+    /**
+     * Refreshes the meeple labels to get the new colors.
+     */
+    @Override
+    public void notifyChange() {
+        meepleLabels.forEach(it -> it.forEach(label -> label.refresh()));
+        if (currentPlayer != null) {
+            setCurrentPlayer(currentPlayer);
         }
     }
 
@@ -295,10 +260,67 @@ public class MainGUI extends JFrame implements Notifiable {
         scrollPane = LookAndFeelUtil.createModifiedScrollpane(layeredPane);
         scrollPane.setPreferredSize(new Dimension(gridWidth * tileSize, gridHeight * tileSize));
         add(scrollPane, BorderLayout.CENTER);
-        setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
         pack();
         setLocationRelativeTo(null);
-        centerScrollPaneView();
+        // centerScrollPaneView();
+    }
+
+    private JLayeredPane buildLayeredPane(JPanel meeplePanel, JPanel tilePanel) {
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setLayout(new OverlayLayout(layeredPane));
+        layeredPane.add(tilePanel, 1);
+        layeredPane.add(meeplePanel, 0);
+        return layeredPane;
+    }
+
+    private JPanel buildMeepleLayer() {
+        meepleLayer = new JPanel();
+        meepleLayer.setOpaque(false);
+        meepleLayer.setLayout(new GridBagLayout());
+        meepleLayer.setMaximumSize(tileLayer.getPreferredSize());
+        meepleLayer.setBorder(new LineBorder(GRID_BORDER_COLOR, GRID_BORDER_SIZE));
+        constraints = new GridBagConstraints();
+        constraints.weightx = 1; // evenly distributes meeple grid
+        constraints.weighty = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        meepleLabels = new ArrayList<>();
+        meeplePanelGrid = new MeepleDepictionPanel[gridWidth][gridHeight]; // build array of labels.
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
+                meeplePanelGrid[x][y] = new MeepleDepictionPanel(zoomLevel, controller, this);
+                meepleLabels.add(meeplePanelGrid[x][y]);
+                constraints.gridx = x;
+                constraints.gridy = y;
+                meepleLayer.add(meeplePanelGrid[x][y], constraints); // add label with constraints
+            }
+        }
+        return meepleLayer;
+    }
+
+    /*
+     * Creates the grid of labels.
+     */
+    private JPanel buildTileLayer() {
+        tileLayer = new JPanel();
+        tileLayer.setBackground(GUI_COLOR);
+        tileLayer.setLayout(new GridBagLayout());
+        constraints = new GridBagConstraints();
+        tileLabels = new ArrayList<>();
+        tileLabelGrid = new TileDepiction[gridWidth][gridHeight]; // build array of labels.
+        Tile defaultTile = new Tile(TileType.Null);
+        Tile highlightTile = new Tile(TileType.Null);
+        defaultTile.rotateRight();
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
+                tileLabelGrid[x][y] = new TileDepiction(zoomLevel, defaultTile, highlightTile, controller, x, y);
+                tileLabels.add(tileLabelGrid[x][y]);
+                constraints.gridx = x;
+                constraints.gridy = y;
+                tileLayer.add(tileLabelGrid[x][y].getLabel(), constraints); // add label with constraints
+            }
+        }
+        return tileLayer;
     }
 
     private void centerScrollPaneView() {
@@ -311,63 +333,31 @@ public class MainGUI extends JFrame implements Notifiable {
         scrollPane.getViewport().setViewPosition(new Point(x, y));
     }
 
-    private JLayeredPane buildLayeredPane(JPanel meeplePanel, JPanel tilePanel) {
-        JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setLayout(new OverlayLayout(layeredPane));
-        layeredPane.add(tilePanel, 1);
-        layeredPane.add(meeplePanel, 0);
-        return layeredPane;
+    private void checkCoordinates(int x, int y) {
+        if (x < 0 && x >= gridWidth || y < 0 && y >= gridHeight) {
+            throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
+        }
     }
 
-    private JPanel buildMeeplePanel() {
-        meeplePanel = new JPanel();
-        meeplePanel.setOpaque(false);
-        meeplePanel.setLayout(new GridBagLayout());
-        meeplePanel.setMaximumSize(tilePanel.getPreferredSize());
-        meeplePanel.setBorder(new LineBorder(GRID_BORDER_COLOR, GRID_BORDER_SIZE));
-        constraints = new GridBagConstraints();
-        meepleGridWidth = gridWidth * MEEPLE_FACTOR;
-        meepleGridHeight = gridHeight * MEEPLE_FACTOR;
-        constraints.weightx = 1; // evenly distributes meeple grid
-        constraints.weighty = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        meepleLabels = new ArrayList<>();
-        meepleGrid = new MeepleLabel[meepleGridWidth][meepleGridHeight]; // build array of labels.
-        for (int x = 0; x < meepleGridWidth; x++) {
-            for (int y = 0; y < meepleGridHeight; y++) {
-                meepleGrid[x][y] = new MeepleLabel(zoomLevel, controller, GridDirection.values2D()[x % MEEPLE_FACTOR][y % MEEPLE_FACTOR], this);
-                meepleLabels.add(meepleGrid[x][y]);
-                constraints.gridx = x;
-                constraints.gridy = y;
-                meeplePanel.add(meepleGrid[x][y].getLabel(), constraints); // add label with constraints
+    private void checkParameters(Object... parameters) {
+        for (Object parameter : parameters) {
+            if (parameter == null) {
+                throw new IllegalArgumentException("Parameters such as Tile, Meeple, and Player cannot be null!");
             }
         }
-        return meeplePanel;
     }
 
-    /*
-     * Creates the grid of labels.
-     */
-    private JPanel buildTilePanel() {
-        tilePanel = new JPanel();
-        tilePanel.setBackground(GUI_COLOR);
-        tilePanel.setLayout(new GridBagLayout());
-
-        constraints = new GridBagConstraints();
-        tileLabels = new ArrayList<>();
-        labelGrid = new TileLabel[gridWidth][gridHeight]; // build array of labels.
-        Tile defaultTile = new Tile(TileType.Null);
-        Tile highlightTile = new Tile(TileType.Null);
-        defaultTile.rotateRight();
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                labelGrid[x][y] = new TileLabel(zoomLevel, defaultTile, highlightTile, controller, x, y);
-                tileLabels.add(labelGrid[x][y]);
-                constraints.gridx = x;
-                constraints.gridy = y;
-                tilePanel.add(labelGrid[x][y].getLabel(), constraints); // add label with constraints
-            }
+    private void updateToChangedZoomLevel(boolean preview) {
+        if (currentPlayer != null && !preview) { // only update highlights when there is an active round
+            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
+            tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
         }
-        return tilePanel;
+        // Parallel stream for improved performance when grid is full:
+        Arrays.stream(tileLabelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
+                .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
+        meepleLayer.setMaximumSize(tileLayer.getPreferredSize()); // IMPORTANT: Ensures that the meeples are on the tiles.
+        meepleLabels.forEach(it -> it.setSize(zoomLevel));
+        centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
+        layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
     }
 }

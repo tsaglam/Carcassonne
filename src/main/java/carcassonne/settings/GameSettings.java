@@ -46,8 +46,8 @@ public class GameSettings {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
         amountOfPlayers = 2;
-        gridWidth = 27;
-        gridHeight = 15;
+        gridWidth = 29;
+        gridHeight = 19;
                 
         changeListeners = new ArrayList<Notifiable>();
     }
