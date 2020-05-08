@@ -131,8 +131,8 @@ public class Grid {
         checkParameters(spot);
         ArrayList<GridSpot> neighbors = new ArrayList<>(directions.length);
         for (GridDirection direction : directions) {
-            int newX = direction.addX(spot.getX());
-            int newY = direction.addY(spot.getY());
+            int newX = direction.getX() + spot.getX();
+            int newY = direction.getY() + spot.getY();
             if (isOnGrid(newX, newY) && (allowEmptySpots || spots[newX][newY].isOccupied())) {
                 neighbors.add(spots[newX][newY]); // return calculated neighbor if valid:
             }
@@ -253,8 +253,8 @@ public class Grid {
 
     // method tries to find a path of free grid spaces to the grid border.
     private boolean findBoundary(GridSpot spot, GridDirection direction, boolean[][] visitedPositions) {
-        int newX = direction.addX(spot.getX()); // get coordinates
-        int newY = direction.addY(spot.getY()); // of free space
+        int newX = direction.getX() + spot.getX(); // get coordinates
+        int newY = direction.getY() + spot.getY(); // of free space
         if (isOnGrid(newX, newY)) { // if on grid
             if (spots[newX][newY].isOccupied()) {
                 return false; // is a tile, can't go through tiles
