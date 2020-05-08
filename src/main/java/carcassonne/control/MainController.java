@@ -58,7 +58,7 @@ public class MainController {
      * Shows the main GUI.
      */
     public void startGame() {
-        mainGUI.setVisible(true);
+        mainGUI.showUI();
     }
 
     /**

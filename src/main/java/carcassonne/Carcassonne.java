@@ -32,6 +32,7 @@ public final class Carcassonne {
         preloadImages();
         preloadUIComponents();
         EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 MainController controller = new MainController();
                 controller.startGame();
@@ -66,6 +67,7 @@ public final class Carcassonne {
      */
     private static void preloadImages() {
         Thread loader = new Thread(new Runnable() {
+            @Override
             public void run() {
                 for (TileType tileType : TileType.values()) {
                     new Tile(tileType);
@@ -81,6 +83,7 @@ public final class Carcassonne {
      */
     private static void preloadUIComponents() {
         EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new JColorChooser(); // first instantiation can take more than a second
             }

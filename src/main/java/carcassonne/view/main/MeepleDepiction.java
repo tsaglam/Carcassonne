@@ -18,7 +18,7 @@ import carcassonne.view.PaintShop;
  * Special {@link JLabel} for showing meeples.
  * @author Timur Saglam
  */
-public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom levels
+public class MeepleDepiction {
     private static final int MEEPLE_SCALING_THRESHOLD = 100;
     private static final int INITIAL_MEEPLE_SIZE = 25;
     private Player player;
@@ -34,7 +34,7 @@ public class MeepleLabel { // TODO (HIGH) implement scaling for certain zoom lev
      * @param direction is the {@link GridDirection} where the meeple label sits on the tile.
      * @param frame is the main {@link JFrame} to repaint after setting icons.
      */
-    public MeepleLabel(int scalingFactor, MainController controller, GridDirection direction, JFrame frame) {
+    public MeepleDepiction(int scalingFactor, MainController controller, GridDirection direction, JFrame frame) {
         meepleSize = INITIAL_MEEPLE_SIZE;
         terrain = TerrainType.OTHER;
         label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize), SwingConstants.CENTER); // TODO (HIGH) still needed?

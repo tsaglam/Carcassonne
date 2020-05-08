@@ -14,7 +14,7 @@ import carcassonne.model.tile.Tile;
  * label on the label grid.
  * @author Timur Saglam
  */
-public class TileLabel {
+public class TileDepiction {
     private Tile tile;
     private final Tile defaultTile;
     private final Tile highlightTile;
@@ -30,7 +30,7 @@ public class TileLabel {
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
-    public TileLabel(int tileSize, Tile defaultTile, Tile highlightTile, MainController controller, int x, int y) {
+    public TileDepiction(int tileSize, Tile defaultTile, Tile highlightTile, MainController controller, int x, int y) {
         this.defaultTile = defaultTile;
         this.highlightTile = highlightTile;
         label = new JLabel();
@@ -38,7 +38,7 @@ public class TileLabel {
         reset();
         label.addMouseListener(new MouseAdapter() {
             /**
-             * Method for processing mouse clicks on the <code>TileLabel</code> of the class. notifies the
+             * Method for processing mouse clicks on the <code>TileDepiction</code> of the class. notifies the
              * <code>MainController</code> of the class.
              * @param e is the <code>MouseEvent</code> of the click.
              */

@@ -12,6 +12,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 
 import carcassonne.control.MainController;
 import carcassonne.settings.GameSettings;
@@ -151,7 +152,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         menuView = new JMenu(VIEW);
         JSlider slider = new JSlider(50, 300, mainUI.getZoom());
         slider.setPaintTicks(true);
-        slider.setOrientation(JSlider.VERTICAL);
+        slider.setOrientation(SwingConstants.VERTICAL);
         slider.setMinorTickSpacing(5);
         slider.setMajorTickSpacing(50);
         slider.setSnapToTicks(true);
