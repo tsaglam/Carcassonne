@@ -112,8 +112,8 @@ public class TileTerrain {
                 for (GridDirection other : GridDirection.values()) {
                     if (isConnected(spot, other)) { // for every connected spot
                         removalList.add(other); // mark as part of pattern
-                        x = other.addX(x);
-                        y = other.addY(y);
+                        x += other.getX();
+                        y += other.getY();
                     }
                 }
                 x = (int) Math.round(x / 3.0); // calculate center of pattern

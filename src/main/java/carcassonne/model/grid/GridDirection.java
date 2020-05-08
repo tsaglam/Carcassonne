@@ -19,33 +19,29 @@ public enum GridDirection {
     MIDDLE;
 
     /**
-     * Adds a x coordinate and a <code> GridDirection</code>.
-     * @param coordinate is the x coordinate.
-     * @return the sum as an x coordinate.
+     * Returns the X coordinate of a <code>GridDirection</code>.
+     * @return either -1, 0, or 1.
      */
-    public int addX(int coordinate) {
-        int result = coordinate;
+    public int getX() {
         if (this == TOP_RIGHT || this == RIGHT || this == BOTTOM_RIGHT) {
-            result++;
+            return 1;
         } else if (this == TOP_LEFT || this == LEFT || this == BOTTOM_LEFT) {
-            result--;
+            return -1;
         }
-        return result;
+        return 0;
     }
 
     /**
-     * Adds a y coordinate and a <code> GridDirection</code>.
-     * @param coordinate is the y coordinate.
-     * @return the sum as an y coordinate.
+     * Returns the Y coordinate of a <code>GridDirection</code>.
+     * @return either -1, 0, or 1.
      */
-    public int addY(int coordinate) {
-        int result = coordinate;
+    public int getY() {
         if (this == BOTTOM_LEFT || this == BOTTOM || this == BOTTOM_RIGHT) {
-            result++;
+            return 1;
         } else if (this == TOP_LEFT || this == TOP || this == TOP_RIGHT) {
-            result--;
+            return -1;
         }
-        return result;
+        return 0;
     }
 
     /**

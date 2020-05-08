@@ -207,8 +207,8 @@ public class MainGUI extends JFrame implements Notifiable {
     public void setMeeple(Tile tile, GridDirection position, Player owner) {
         checkParameters(tile, position, owner);
         GridSpot spot = tile.getGridSpot();
-        int xpos = position.addX(spot.getX() * MEEPLE_FACTOR + 1);
-        int ypos = position.addY(spot.getY() * MEEPLE_FACTOR + 1);
+        int xpos = position.getX() + (spot.getX() * MEEPLE_FACTOR + 1);
+        int ypos = position.getY() + (spot.getY() * MEEPLE_FACTOR + 1);
         meepleGrid[xpos][ypos].setIcon(tile.getTerrain(position), owner);
     }
 
