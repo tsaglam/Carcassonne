@@ -1,12 +1,17 @@
 package carcassonne.view;
 
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
+
+import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileType;
 
 /**
  * Message class for showing the user small messages.
  * @author Timur Saglam
  */
 public final class GameMessage {
+    private static final int GAME_ICON_SIZE = 75;
     private static final String TITLE = "Carcassonne";
 
     private GameMessage() {
@@ -46,7 +51,15 @@ public final class GameMessage {
         show(messageText, JOptionPane.WARNING_MESSAGE);
     }
 
+    /**
+     * Creates a game icon for dialogs.
+     * @return the game {@link Icon}.
+     */
+    public static Icon getGameIcon() {
+        return new Tile(TileType.Null).getScaledIcon(GAME_ICON_SIZE);
+    }
+
     private static void show(String messageText, int type) {
-        JOptionPane.showMessageDialog(null, messageText, TITLE, type);
+        JOptionPane.showMessageDialog(null, messageText, TITLE, type, getGameIcon());
     }
 }
