@@ -9,6 +9,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -261,9 +263,9 @@ public class MainGUI extends JFrame implements Notifiable {
         scrollPane.setPreferredSize(new Dimension(gridWidth * tileSize, gridHeight * tileSize));
         add(scrollPane, BorderLayout.CENTER);
         setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
+        addWindowListener(new WindowMaximizationAdapter(this));
         pack();
-        setLocationRelativeTo(null);
-        // centerScrollPaneView();
+
     }
 
     private JLayeredPane buildLayeredPane(JPanel meeplePanel, JPanel tilePanel) {
