@@ -53,8 +53,8 @@ public class MainGUI extends JFrame implements Notifiable {
     private GridBagConstraints constraints;
     private final MainController controller;
     private Player currentPlayer;
-    private final int gridHeight;
-    private final int gridWidth;
+    private int gridHeight;
+    private int gridWidth;
     private JLayeredPane layeredPane;
     private List<MeepleDepictionPanel> meepleLabels;
     private JPanel meepleLayer;
@@ -324,10 +324,10 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     private void centerScrollPaneView() {
-        JViewport viewport = scrollPane.getViewport();
-        viewport.validate(); // IMPORTANT: required to prevent a shaking view!
-        Dimension size = viewport.getViewSize();
-        Rectangle bounds = viewport.getViewRect();
+        revalidate(); // IMPORTANT: required to prevent a shaking view!
+        int borders = GRID_BORDER_SIZE + GRID_BORDER_SIZE;
+        Dimension size = new Dimension(gridWidth * zoomLevel + borders, gridHeight * zoomLevel + borders);
+        Rectangle bounds = scrollPane.getViewport().getViewRect();
         int x = (int) (Math.round((size.width - bounds.width) / 2.0));
         int y = (int) (Math.round((size.height - bounds.height) / 2.0));
         scrollPane.getViewport().setViewPosition(new Point(x, y));
