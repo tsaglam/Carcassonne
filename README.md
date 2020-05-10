@@ -16,9 +16,7 @@ Development started in 2016, and since then, this computer game has been an ongo
 The latest release is [version 1.4](https://github.com/tsaglam/Carcassonne/releases/tag/v1.4), all release notes can be found [here](https://github.com/tsaglam/Carcassonne/releases).
 
 ### Planned Features:
-* Multiple zoom levels
-* Improved meeple icons
+* Playing with a hand of tiles
 * Key bindings
 * Timed rounds
 * Playing in teams
-* Playing with a hand of tiles
