@@ -1,4 +1,4 @@
-package carcassonne.view;
+package carcassonne.view.menubar;
 
 import java.awt.BorderLayout;
 import java.text.NumberFormat;
@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
 import carcassonne.settings.GameSettings;
+import carcassonne.view.GameMessage;
 
 /**
  * Custom dialog for changing the grid size.
@@ -22,8 +23,8 @@ public class GridSizeDialog extends JPanel {
     private static final int SPACE = 100;
     private static final String CROSS = " x ";
     private static final String HEIGHT = "Height:";
-    private static final int MAX_VALUE = 999;
-    private static final String MESSAGE = "Changes to the grid size will affect the next game. Choose values between 3 and 999.";
+    private static final int MAX_VALUE = 99;
+    private static final String MESSAGE = "Changes to the grid size will affect the next game. Choose values between 3 and 99.";
     private static final int MIN_VALUE = 3;
     private static final String NOT_CORRECT = " is not a valid grid sizes!";
     private static final long serialVersionUID = 6533357898928866596L;

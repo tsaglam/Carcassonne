@@ -37,7 +37,7 @@ public class MeepleDepiction {
     public MeepleDepiction(int scalingFactor, MainController controller, GridDirection direction, JFrame frame) {
         meepleSize = INITIAL_MEEPLE_SIZE;
         terrain = TerrainType.OTHER;
-        label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize), SwingConstants.CENTER); // TODO (HIGH) still needed?
+        label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize), SwingConstants.CENTER);
         preview = false;
 
         mouseAdapter = new MouseAdapter() {

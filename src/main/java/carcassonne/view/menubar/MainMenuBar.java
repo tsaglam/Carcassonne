@@ -15,7 +15,6 @@ import javax.swing.JRadioButtonMenuItem;
 import carcassonne.control.MainController;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
-import carcassonne.view.GridSizeDialog;
 import carcassonne.view.main.MainGUI;
 
 /**
@@ -55,7 +54,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
      * @param controller sets the connection to game the controller.
      * @param mainUI is the main GUI instance.
      */
-    public MainMenuBar(MainController controller, MainGUI mainUI) { // TODO (MEDIUM) make menu bar gray
+    public MainMenuBar(MainController controller, MainGUI mainUI) {
         super();
         this.controller = controller;
         this.mainUI = mainUI;
