@@ -77,7 +77,7 @@ public class StateIdle extends AbstractControllerState {
      */
     @Override
     protected void entry() {
-        mainGUI.rebuildGrids();
+        mainGUI.resetGrid();
     }
 
     /**

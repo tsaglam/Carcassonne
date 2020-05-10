@@ -34,6 +34,7 @@ public class GameSettings {
     private int amountOfPlayers;
     private int gridWidth;
     private int gridHeight;
+    private boolean gridSizeChanged;
 
     private final ArrayList<PlayerColor> colors;
 
@@ -48,7 +49,7 @@ public class GameSettings {
         amountOfPlayers = 2;
         gridWidth = 29;
         gridHeight = 19;
-                
+        gridSizeChanged = false;
         changeListeners = new ArrayList<Notifiable>();
     }
 
@@ -132,6 +133,7 @@ public class GameSettings {
      */
     public void setGridHeight(int gridHeight) {
         this.gridHeight = gridHeight;
+        gridSizeChanged = true;
     }
 
     /**
@@ -140,6 +142,23 @@ public class GameSettings {
      */
     public void setGridWidth(int gridWidth) {
         this.gridWidth = gridWidth;
+        gridSizeChanged = true;
+    }
+
+    /**
+     * Gives information whether the user or the game changed the grid size settings.
+     * @return the true if the size was changed.
+     */
+    public boolean isGridSizeChanged() {
+        return gridSizeChanged;
+    }
+
+    /**
+     * Sets the indicator of grid size change.
+     * @param gridSizeChanged the value to set the indicator to.
+     */
+    public void setGridSizeChanged(boolean gridSizeChanged) {
+        this.gridSizeChanged = gridSizeChanged;
     }
 
     /**
