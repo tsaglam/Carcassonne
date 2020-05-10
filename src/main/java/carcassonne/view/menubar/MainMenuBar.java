@@ -128,14 +128,13 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         });
         menuOptions.add(itemChaosMode);
         JMenuItem itemGridSize = new JMenuItem(GRID_SIZE);
-        itemGridSize.setEnabled(false); // TODO (HIGH) Enable when fully implemented, uncomment following lines.
-//        GridSizeDialog dialog = new GridSizeDialog(settings);
-//        itemGridSize.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent event) {
-//                dialog.showDialog();
-//            }
-//        });
+        GridSizeDialog dialog = new GridSizeDialog(settings);
+        itemGridSize.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent event) {
+                dialog.showDialog();
+            }
+        });
         menuOptions.add(itemGridSize);
         add(menuOptions);
     }

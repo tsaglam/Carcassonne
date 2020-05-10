@@ -9,8 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JViewport;
 import javax.swing.OverlayLayout;
 import javax.swing.border.LineBorder;
 
@@ -76,8 +73,7 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public MainGUI(MainController controller) {
         this.controller = controller;
-        gridWidth = controller.getSettings().getGridWidth();
-        gridHeight = controller.getSettings().getGridHeight();
+        updateGridSize();
         tileSize = GameSettings.TILE_SIZE;
         zoomLevel = 125;
         JPanel tilePanel = buildTileLayer();
@@ -87,11 +83,23 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     /**
-     * Rebuilds the label grid and the meeple grid if the game should be restarted.
+     * Resets the tile grid and the meeple grid to return to the initial state.
      */
-    public void rebuildGrids() {
+    public void resetGrid() {
         meepleLabels.forEach(it -> it.forEach(label -> label.reset()));
         tileLabels.forEach(it -> it.reset());
+    }
+
+    /**
+     * Rebuilds the grid to adapt it to a changed grid size. Therefore, the grid size is updated before rebuilding.
+     */
+    public void rebuildGrid() {// TODO (HIGH) deduplicate with constructor.
+        updateGridSize();
+        layeredPane.remove(tileLayer);
+        layeredPane.remove(meepleLayer);
+        layeredPane.add(buildTileLayer(), 1);
+        layeredPane.add(buildMeepleLayer(), 0);
+        revalidate();
     }
 
     /**
@@ -254,6 +262,11 @@ public class MainGUI extends JFrame implements Notifiable {
         }
     }
 
+    private void updateGridSize() {
+        gridWidth = controller.getSettings().getGridWidth();
+        gridHeight = controller.getSettings().getGridHeight();
+    }
+
     private void buildFrame(JLayeredPane layeredPane) {
         menuBar = new MainMenuBar(controller, this);
         setJMenuBar(menuBar);
@@ -281,6 +294,8 @@ public class MainGUI extends JFrame implements Notifiable {
         meepleLayer.setOpaque(false);
         meepleLayer.setLayout(new GridBagLayout());
         meepleLayer.setMaximumSize(tileLayer.getPreferredSize());
+        meepleLayer.setSize(tileLayer.getPreferredSize());
+        meepleLayer.setMinimumSize(tileLayer.getPreferredSize());
         meepleLayer.setBorder(new LineBorder(GRID_BORDER_COLOR, GRID_BORDER_SIZE));
         constraints = new GridBagConstraints();
         constraints.weightx = 1; // evenly distributes meeple grid
@@ -358,6 +373,7 @@ public class MainGUI extends JFrame implements Notifiable {
         Arrays.stream(tileLabelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
                 .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
         meepleLayer.setMaximumSize(tileLayer.getPreferredSize()); // IMPORTANT: Ensures that the meeples are on the tiles.
+        meepleLayer.setMinimumSize(tileLayer.getPreferredSize());
         meepleLabels.forEach(it -> it.setSize(zoomLevel));
         centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
         layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
