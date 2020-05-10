@@ -55,7 +55,7 @@ public class MainGUI extends JFrame implements Notifiable {
     private int gridHeight;
     private int gridWidth;
     private JLayeredPane layeredPane;
-    private List<MeepleDepictionPanel> meepleLabels;
+    private List<MeepleDepictionPanel> meeplePanels;
     private JPanel meepleLayer;
     private MeepleDepictionPanel[][] meeplePanelGrid;
     private MainMenuBar menuBar;
@@ -86,20 +86,21 @@ public class MainGUI extends JFrame implements Notifiable {
      * Resets the tile grid and the meeple grid to return to the initial state.
      */
     public void resetGrid() {
-        meepleLabels.forEach(it -> it.forEach(label -> label.reset()));
+        meeplePanels.forEach(it -> it.forEach(label -> label.reset()));
         tileLabels.forEach(it -> it.reset());
+        revalidate();
     }
 
     /**
      * Rebuilds the grid to adapt it to a changed grid size. Therefore, the grid size is updated before rebuilding.
      */
-    public void rebuildGrid() {// TODO (HIGH) deduplicate with constructor.
+    public void rebuildGrid() {
         updateGridSize();
         layeredPane.remove(tileLayer);
         layeredPane.remove(meepleLayer);
         layeredPane.add(buildTileLayer(), 1);
         layeredPane.add(buildMeepleLayer(), 0);
-        revalidate();
+        centerScrollPaneView();
     }
 
     /**
@@ -154,7 +155,7 @@ public class MainGUI extends JFrame implements Notifiable {
     /**
      * Zooms in if the maximum zoom level has not been reached.
      */
-    public void zoomIn() { // TODO (HIGH) use listener or move to class that encapsulates the scroll pane and layered pane
+    public void zoomIn() {
         if (zoomLevel < MAX_ZOOM_LEVEL) {
             zoomLevel += ZOOM_STEP_SIZE;
             updateToChangedZoomLevel(false);
@@ -176,7 +177,7 @@ public class MainGUI extends JFrame implements Notifiable {
      * @param level is the zoom level.
      * @param preview specifies whether fast calculations for preview purposes should be used.
      */
-    public void setZoom(int level, boolean preview) { // TODO (HIGH) use listener or move to class that encapsulates the scrollpane and layered pane
+    public void setZoom(int level, boolean preview) {
         if (level <= MAX_ZOOM_LEVEL && level >= MIN_ZOOM_LEVEL) {
             zoomLevel = level;
             updateToChangedZoomLevel(preview);
@@ -256,7 +257,7 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     @Override
     public void notifyChange() {
-        meepleLabels.forEach(it -> it.forEach(label -> label.refresh()));
+        meeplePanels.forEach(it -> it.forEach(label -> label.refresh()));
         if (currentPlayer != null) {
             setCurrentPlayer(currentPlayer);
         }
@@ -293,20 +294,18 @@ public class MainGUI extends JFrame implements Notifiable {
         meepleLayer = new JPanel();
         meepleLayer.setOpaque(false);
         meepleLayer.setLayout(new GridBagLayout());
-        meepleLayer.setMaximumSize(tileLayer.getPreferredSize());
-        meepleLayer.setSize(tileLayer.getPreferredSize());
-        meepleLayer.setMinimumSize(tileLayer.getPreferredSize());
+        synchronizeLayerSizes();
         meepleLayer.setBorder(new LineBorder(GRID_BORDER_COLOR, GRID_BORDER_SIZE));
         constraints = new GridBagConstraints();
         constraints.weightx = 1; // evenly distributes meeple grid
         constraints.weighty = 1;
         constraints.fill = GridBagConstraints.BOTH;
-        meepleLabels = new ArrayList<>();
+        meeplePanels = new ArrayList<>();
         meeplePanelGrid = new MeepleDepictionPanel[gridWidth][gridHeight]; // build array of labels.
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 meeplePanelGrid[x][y] = new MeepleDepictionPanel(zoomLevel, controller, this);
-                meepleLabels.add(meeplePanelGrid[x][y]);
+                meeplePanels.add(meeplePanelGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;
                 meepleLayer.add(meeplePanelGrid[x][y], constraints); // add label with constraints
@@ -372,10 +371,15 @@ public class MainGUI extends JFrame implements Notifiable {
         // Parallel stream for improved performance when grid is full:
         Arrays.stream(tileLabelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
                 .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
-        meepleLayer.setMaximumSize(tileLayer.getPreferredSize()); // IMPORTANT: Ensures that the meeples are on the tiles.
-        meepleLayer.setMinimumSize(tileLayer.getPreferredSize());
-        meepleLabels.forEach(it -> it.setSize(zoomLevel));
+        synchronizeLayerSizes(); // IMPORTANT: Ensures that the meeples are on the tiles.
+        meeplePanels.forEach(it -> it.setSize(zoomLevel));
         centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
         layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
+    }
+
+    private void synchronizeLayerSizes() {
+        meepleLayer.setMaximumSize(tileLayer.getPreferredSize());
+        meepleLayer.setPreferredSize(tileLayer.getPreferredSize());
+        meepleLayer.setMinimumSize(tileLayer.getPreferredSize());
     }
 }

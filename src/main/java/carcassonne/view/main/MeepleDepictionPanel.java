@@ -70,12 +70,12 @@ public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepic
     public Dimension getMinimumSize() {
         return size;
     }
-    
+
     @Override
     public Dimension getMaximumSize() {
         return size;
     }
-    
+
     @Override
     public Dimension getSize() {
         return size;
