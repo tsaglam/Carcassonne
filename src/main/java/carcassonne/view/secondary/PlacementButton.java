@@ -6,14 +6,17 @@ import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 
 /**
- * This is a simple class derived form JButton, which stores (additionally to the JButton functions) the coordinates of the
- * button on the button grid. It also uses a little hack to allow the GUI to set the background color of a
+ * This is a simple class derived form JButton, which stores (additionally to the JButton functions) the coordinates of
+ * the button on the button grid. It also uses a little hack to allow the GUI to set the background color of a
  * placementButton (while using Nimbus LookAndFeel), even if it is disabled. Without the hack it's not so easy to
  * accomplish that functionality.
  * @author Timur Saglam
  */
 public class PlacementButton extends JButton {
     private static final long serialVersionUID = -4580099806988033224L;
+    private static final String WINDOWS_10 = "Windows 10";
+    private static final String OS_NAME = "os.name";
+    private static final String MAC = "Mac";
     private boolean enabled; // own enabled variable for fixing the isEnabled() method.
 
     /**
@@ -32,9 +35,9 @@ public class PlacementButton extends JButton {
      * systems it checks a custom variable set by the custom setEnabled method.
      * @return true if the button is enabled.
      */
-    public boolean isHackyEnabled() { // TODO (HIGH) is this hack still necesary?
-        String osName = System.getProperty("os.name");
-        if (osName.startsWith("Mac") || osName.equals("Windows 10")) {
+    public boolean isHackyEnabled() {
+        String osName = System.getProperty(OS_NAME);
+        if (osName.startsWith(MAC) || osName.equals(WINDOWS_10)) {
             return isEnabled(); // normal function on mac os x
         } else {
             // own implementation to fix the functionality which is destroyed by the hack. If the
@@ -45,18 +48,16 @@ public class PlacementButton extends JButton {
     }
 
     @Override
-    public void setEnabled(boolean b) {
-        String osName = System.getProperty("os.name");
-        if (osName.startsWith("Mac") || osName.equals("Windows 10")) {
-            super.setEnabled(b); // normal function on mac os x
+    public void setEnabled(boolean value) {
+        String osName = System.getProperty(OS_NAME);
+        if (osName.startsWith(MAC) || osName.equals(WINDOWS_10)) {
+            super.setEnabled(value); // normal function on mac os x
         } else {
             // Hacky method, some variated code from the class javax.swing.AbstractButton.
-            if (!b && model.isRollover()) {
+            if (!value && model.isRollover()) {
                 model.setRollover(false);
             }
-            // super.setEnabled(b); // This is the missing line from the original method.
-            // model.setEnabled(b);
-            enabled = b; // set own enabled variable.
+            enabled = value; // set own enabled variable.
             repaint();
         }
     }
