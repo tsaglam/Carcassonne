@@ -118,6 +118,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         menuOptions = new JMenu(OPTIONS);
         menuOptions.add(menuPlayers);
         menuOptions.add(menuSettings);
+        menuOptions.addSeparator();
         JCheckBoxMenuItem itemChaosMode = new JCheckBoxMenuItem(CHAOS_MODE);
         itemChaosMode.addMouseListener(new MouseAdapter() {
             @Override
