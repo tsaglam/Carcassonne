@@ -20,7 +20,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.OverlayLayout;
-import javax.swing.border.LineBorder;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
@@ -42,13 +41,12 @@ import carcassonne.view.menubar.Scoreboard;
  */
 // TODO (HIGH) Custom classes for the two layers.
 public class MainGUI extends JFrame implements Notifiable {
-    private static final Color GRID_BORDER_COLOR = new Color(100, 100, 100);
-    private static final int GRID_BORDER_SIZE = 2;
     private static final Color GUI_COLOR = new Color(190, 190, 190);
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 50;
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
     private static final int ZOOM_STEP_SIZE = 25;
+    private static final Dimension MINIMAL_WINDOW_SIZE = new Dimension(640, 480);
     private GridBagConstraints constraints;
     private final MainController controller;
     private Player currentPlayer;
@@ -276,6 +274,7 @@ public class MainGUI extends JFrame implements Notifiable {
         scrollPane = LookAndFeelUtil.createModifiedScrollpane(layeredPane);
         scrollPane.setPreferredSize(new Dimension(gridWidth * tileSize, gridHeight * tileSize));
         add(scrollPane, BorderLayout.CENTER);
+        setMinimumSize(MINIMAL_WINDOW_SIZE);
         setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
         addWindowListener(new WindowMaximizationAdapter(this));
         pack();
@@ -295,7 +294,6 @@ public class MainGUI extends JFrame implements Notifiable {
         meepleLayer.setOpaque(false);
         meepleLayer.setLayout(new GridBagLayout());
         synchronizeLayerSizes();
-        meepleLayer.setBorder(new LineBorder(GRID_BORDER_COLOR, GRID_BORDER_SIZE));
         constraints = new GridBagConstraints();
         constraints.weightx = 1; // evenly distributes meeple grid
         constraints.weighty = 1;
@@ -341,8 +339,7 @@ public class MainGUI extends JFrame implements Notifiable {
 
     private void centerScrollPaneView() {
         revalidate(); // IMPORTANT: required to prevent a shaking view!
-        int borders = GRID_BORDER_SIZE + GRID_BORDER_SIZE;
-        Dimension size = new Dimension(gridWidth * zoomLevel + borders, gridHeight * zoomLevel + borders);
+        Dimension size = new Dimension(gridWidth * zoomLevel, gridHeight * zoomLevel);
         Rectangle bounds = scrollPane.getViewport().getViewRect();
         int x = (int) (Math.round((size.width - bounds.width) / 2.0));
         int y = (int) (Math.round((size.height - bounds.height) / 2.0));
@@ -378,8 +375,9 @@ public class MainGUI extends JFrame implements Notifiable {
     }
 
     private void synchronizeLayerSizes() {
-        meepleLayer.setMaximumSize(tileLayer.getPreferredSize());
-        meepleLayer.setPreferredSize(tileLayer.getPreferredSize());
-        meepleLayer.setMinimumSize(tileLayer.getPreferredSize());
+        Dimension layerSize = new Dimension(gridWidth * zoomLevel, gridHeight * zoomLevel);
+        meepleLayer.setMaximumSize(layerSize);
+        meepleLayer.setPreferredSize(layerSize);
+        meepleLayer.setMinimumSize(layerSize);
     }
 }
