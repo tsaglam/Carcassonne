@@ -9,6 +9,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
+import carcassonne.settings.GameSettings;
 import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
@@ -19,6 +20,7 @@ import carcassonne.view.secondary.RotationGUI;
  * @author Timur Saglam
  */
 public class StateManning extends AbstractControllerState {
+    private boolean[] noMeeplesNotification;
 
     /**
      * Constructor of the state.
@@ -29,6 +31,7 @@ public class StateManning extends AbstractControllerState {
      */
     public StateManning(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
         super(controller, mainGUI, rotationGUI, placementGUI);
+        noMeeplesNotification = new boolean[GameSettings.MAXIMAL_PLAYERS]; // stores whether a player was already notified about a lack of meeples
     }
 
     /**
@@ -141,11 +144,16 @@ public class StateManning extends AbstractControllerState {
      */
     @Override
     protected void entry() {
-        if (round.getActivePlayer().hasFreeMeeples()) {
-            mainGUI.setMeeplePreview(round.getCurrentTile(), round.getActivePlayer());
-            placementGUI.setTile(round.getCurrentTile(), round.getActivePlayer());
+        Player player = round.getActivePlayer();
+        if (player.hasFreeMeeples()) {
+            noMeeplesNotification[player.getNumber()] = false; // resets out of meeple message!
+            mainGUI.setMeeplePreview(round.getCurrentTile(), player);
+            placementGUI.setTile(round.getCurrentTile(), player);
         } else {
-            GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meepeles again.");
+            if (!noMeeplesNotification[player.getNumber()]) { // Only warn player once until he regains meeples
+                GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meepeles again.");
+                noMeeplesNotification[player.getNumber()] = true;
+            }
             processGridPatterns();
             startNextTurn();
         }
