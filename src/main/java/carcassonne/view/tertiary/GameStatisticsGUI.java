@@ -7,19 +7,20 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Round;
+import carcassonne.view.main.MainGUI;
 
 /**
  * A class for the game statistics GUI that shows the final scores of a round.
  * @author Timur Saglam
  */
-public class GameStatisticsGUI extends JFrame {
+public class GameStatisticsGUI extends JDialog {
     private static final long serialVersionUID = 2862334382605282126L; // generated UID
     private static final int ADDITIONAL_VERTICLE_SIZE = 100; // ensures that all text is readable
     static final int SCORE_COLUMN = 5;
@@ -34,7 +35,8 @@ public class GameStatisticsGUI extends JFrame {
      * @param controller is the game controller.
      * @param round is the current round.
      */
-    public GameStatisticsGUI(MainController controller, Round round) {
+    public GameStatisticsGUI(MainGUI mainUI, MainController controller, Round round) {
+        super(mainUI);
         this.controller = controller;
         buildTable(round);
         buildButtonClose();
@@ -82,7 +84,6 @@ public class GameStatisticsGUI extends JFrame {
         add(buttonClose, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(null);
-        setAlwaysOnTop(true);
         setVisible(true);
         setMinimumSize(new Dimension(getSize().width + ADDITIONAL_VERTICLE_SIZE, getSize().height));
         setResizable(false);

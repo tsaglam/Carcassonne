@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import carcassonne.model.Player;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
+import carcassonne.view.main.MainGUI;
 
 /**
  * Is the scoreboard class of the game. Manages a score label for each player.
@@ -29,14 +30,14 @@ public class Scoreboard implements Notifiable {
      * Standard constructor. Creates score board.
      * @param settings are the {@link GameSettings}.
      */
-    public Scoreboard(GameSettings settings) { // TODO (MEDIUM) link with players?
+    public Scoreboard(GameSettings settings, MainGUI mainUI) { // TODO (MEDIUM) link with players?
         this.settings = settings;
         scoreLabels = new JLabel[GameSettings.MAXIMAL_PLAYERS];
         settingsMouseListeners = new ArrayList<>();
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
             scoreLabels[i].setForeground(settings.getPlayerColor(i).textColor());
-            MouseListener listener = new MenuSettingsMouseAdapter(i, settings);
+            MouseListener listener = new MenuSettingsMouseAdapter(i, settings, mainUI);
             settingsMouseListeners.add(listener);
             scoreLabels[i].addMouseListener(listener);
         }

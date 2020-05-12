@@ -1,4 +1,4 @@
-package carcassonne.view.menubar;
+package carcassonne.view.tertiary;
 
 import java.awt.BorderLayout;
 import java.text.NumberFormat;

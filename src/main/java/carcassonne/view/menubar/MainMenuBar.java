@@ -16,6 +16,7 @@ import carcassonne.control.MainController;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.tertiary.GridSizeDialog;
 
 /**
  * The menu bar for the main GUI.
@@ -60,7 +61,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         this.mainUI = mainUI;
         settings = controller.getSettings();
         settings.registerNotifiable(this);
-        scoreboard = new Scoreboard(settings);
+        scoreboard = new Scoreboard(settings, mainUI);
         buildGameMenu();
         buildOptionsMenu();
         buildViewMenu();

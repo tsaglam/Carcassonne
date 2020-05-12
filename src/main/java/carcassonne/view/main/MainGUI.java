@@ -2,7 +2,6 @@ package carcassonne.view.main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -241,15 +240,7 @@ public class MainGUI extends JFrame implements Notifiable {
         checkCoordinates(x, y);
         tileLabelGrid[x][y].setTile(tile);
     }
-
-    /**
-     * Enslaves sub user interfaces, they are minimized with this GUI.
-     * @param userInterfaces are the user interfaces to enslave.
-     */
-    public void addSubInterfaces(Component... userInterfaces) {
-        this.addWindowListener(new SubComponentAdapter(userInterfaces));
-    }
-
+    
     /**
      * Refreshes the meeple labels to get the new colors.
      */
