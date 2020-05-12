@@ -64,7 +64,6 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
     private void buildFrame(MainGUI ui) {
         getContentPane().add(panel);
         setResizable(false);
-        setAlwaysOnTop(true);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setLocation(INITIAL_X, INITIAL_Y);
     }

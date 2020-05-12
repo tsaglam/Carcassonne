@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import carcassonne.settings.GameSettings;
+import carcassonne.view.main.MainGUI;
 import carcassonne.view.tertiary.PlayerSettingsGUI;
 
 /**
@@ -19,9 +20,9 @@ public class MenuSettingsMouseAdapter extends MouseAdapter {
      * @param playerNumber is the number of the player whose color gets chosen.
      * @param settings are the {@link GameSettings}.
      */
-    public MenuSettingsMouseAdapter(int playerNumber, GameSettings settings) {
+    public MenuSettingsMouseAdapter(int playerNumber, GameSettings settings, MainGUI mainUI) {
         super();
-        colorChooser = new PlayerSettingsGUI(playerNumber, settings);
+        colorChooser = new PlayerSettingsGUI(playerNumber, settings, mainUI);
     }
 
     @Override

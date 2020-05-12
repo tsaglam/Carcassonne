@@ -15,6 +15,7 @@ import carcassonne.view.tertiary.GameStatisticsGUI;
  */
 public class StateGameOver extends AbstractControllerState {
 
+    private static final String GAME_OVER_MESSAGE = "The game is over. Winning player(s): ";
     private GameStatisticsGUI gameStatistics;
 
     /**
@@ -93,9 +94,8 @@ public class StateGameOver extends AbstractControllerState {
         updateScores();
         updateStackSize();
         mainGUI.resetMenuState();
-        GameMessage.showMessage("The game is over. Winning player(s): " + round.getWinningPlayers());
-        gameStatistics = new GameStatisticsGUI(controller, round);
-        mainGUI.addSubInterfaces(gameStatistics, placementGUI, rotationGUI);
+        GameMessage.showMessage(GAME_OVER_MESSAGE + round.getWinningPlayers());
+        gameStatistics = new GameStatisticsGUI(mainGUI, controller, round);
     }
 
     /**

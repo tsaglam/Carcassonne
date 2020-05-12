@@ -10,7 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,12 +21,13 @@ import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
+import carcassonne.view.main.MainGUI;
 
 /**
  * Custom UI for the play settings. Allows changing the name and the color of a player.
  * @author Timur Saglam
  */
-public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionListener {
+public class PlayerSettingsGUI extends JDialog implements ChangeListener, ActionListener {
     private static final int MEEPLE_PREVIEW_SIZE = 30;
     private static final long serialVersionUID = 1293883978626527260L; // generated serial UID
     private static final String CHANGE_COLOR = "Choose Meeple Color:";
@@ -44,7 +45,8 @@ public class PlayerSettingsGUI extends JFrame implements ChangeListener, ActionL
      * @param playerNumber is the number of the player.
      * @param settings are the game settings which are modified based on the user interaction with this UI.
      */
-    public PlayerSettingsGUI(int playerNumber, GameSettings settings) {
+    public PlayerSettingsGUI(int playerNumber, GameSettings settings, MainGUI mainUI) {
+        super(mainUI);
         this.playerNumber = playerNumber;
         this.settings = settings;
         setLayout(new BorderLayout());

@@ -41,7 +41,6 @@ public class MainController {
         mainGUI = new MainGUI(this);
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
-        mainGUI.addSubInterfaces(placementGUI, rotationGUI); // TODO (HIGH) instead of cyclic dependency the main UI should create the sub UIs
         settings.registerNotifiable(mainGUI.getScoreboard());
         settings.registerNotifiable(mainGUI);
         settings.registerNotifiable(placementGUI);
