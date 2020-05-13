@@ -4,6 +4,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.ImageIcon;
 
+import carcassonne.util.LRUHashMap;
+
 /**
  * Caches scaled images of tiles to improve the performance. When zooming in or out all static images are only rendered
  * ones per zoom level.
@@ -11,8 +13,8 @@ import javax.swing.ImageIcon;
  */
 public class TileImageScalingCache {
     private static final int SHIFT_VALUE = 1000;
-    private static final ConcurrentHashMap<Integer, ImageIcon> chachedImageIcons = new ConcurrentHashMap<>(); // TODO (HIGH) use linked hashmap with LRU
-    private static final ConcurrentHashMap<Integer, Boolean> chachedScalingInformation = new ConcurrentHashMap<>();
+    private static final LRUHashMap<Integer, ImageIcon> cachedImageIcons = new LRUHashMap<>();
+    private static final ConcurrentHashMap<Integer, Boolean> cachedScalingInformation = new ConcurrentHashMap<>();
 
     private TileImageScalingCache() {
         // private constructor ensures non-instantiability!
@@ -27,9 +29,9 @@ public class TileImageScalingCache {
     public static boolean containsScaledImage(TileType tileType, int rotation, int resolution, boolean preview) {
         int key = createKey(tileType, rotation, resolution);
         if (preview) {
-            return chachedImageIcons.containsKey(key);
+            return cachedImageIcons.containsKey(key);
         }
-        return chachedImageIcons.containsKey(key) && !chachedScalingInformation.get(key);
+        return cachedImageIcons.containsKey(key) && !cachedScalingInformation.get(key);
     }
 
     /**
@@ -39,7 +41,7 @@ public class TileImageScalingCache {
      * @return the scaled image or null if there is none.
      */
     public static ImageIcon getScaledImage(TileType tileType, int rotation, int resolution) {
-        return chachedImageIcons.get(createKey(tileType, rotation, resolution));
+        return cachedImageIcons.get(createKey(tileType, rotation, resolution));
     }
 
     /**
@@ -48,17 +50,33 @@ public class TileImageScalingCache {
      * @param tileType is the type of the tile for which the image was scaled for.
      * @param resolution is the edge with of the scaled image.
      */
-    public static void putScaledImage(ImageIcon image, TileType tileType, int rotation, int resolution, boolean preview) {
-        int key = createKey(tileType, rotation, resolution);
-        chachedImageIcons.put(key, image);
-        chachedScalingInformation.put(key, preview);
+    public static synchronized void putScaledImage(ImageIcon image, TileType tileType, int rotation, int resolution, boolean preview) {
+        int key = createKey(tileType, rotation, resolution); // TODO (HIGH) make whole class thread safe
+        cachedImageIcons.put(key, image);
+        cachedScalingInformation.put(key, preview);
+        restoreConsistency();
     }
 
     /**
      * Clears the cache, removing all stored tile images.
      */
     public static void clear() {
-        chachedImageIcons.clear();
+        cachedImageIcons.clear();
+        cachedScalingInformation.clear();
+    }
+    
+    public static int size() {
+        return cachedImageIcons.size();
+    }
+
+    /**
+     * Restores consistency between the cached images and the cached scaling information.
+     */
+    private static void restoreConsistency() {
+        Integer lastRemovedKey = cachedImageIcons.getLastRemovedKey();
+        if (lastRemovedKey != null && cachedScalingInformation.contains(lastRemovedKey)) {
+            cachedScalingInformation.remove(lastRemovedKey);
+        }
     }
 
     /**
