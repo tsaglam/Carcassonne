@@ -3,6 +3,9 @@ package carcassonne.view.secondary;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -11,6 +14,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.Notifiable;
+import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.main.MainGUI;
 
 /**
@@ -38,6 +42,16 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
         this.controller = controller;
         constraints = new GridBagConstraints();
         buildFrame(ui);
+    }
+    
+    /**
+     * Adds the global key bindings to this UI.
+     * @param keyBindings are the global key bindings.
+     */
+    public void addKeyBindings(GlobalKeyBindingManager keyBindings) {
+        InputMap inputMap = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = panel.getActionMap();
+        keyBindings.addKeyBindingsToMaps(inputMap, actionMap);
     }
 
     /**

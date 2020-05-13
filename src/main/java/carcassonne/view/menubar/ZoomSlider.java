@@ -28,8 +28,8 @@ public class ZoomSlider extends JSlider {
         ZoomSliderListener zoomListener = new ZoomSliderListener(mainUI, this);
         addMouseListener(zoomListener);
         addChangeListener(zoomListener);
-        zoomIn = new JMenuItem("Zoom In");
-        zoomOut = new JMenuItem("Zoom Out");
+        zoomIn = new JMenuItem("Zoom In (+)");
+        zoomOut = new JMenuItem("Zoom Out (-)");
         zoomIn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {
