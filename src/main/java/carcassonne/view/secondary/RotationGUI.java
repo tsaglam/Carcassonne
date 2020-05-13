@@ -36,6 +36,26 @@ public class RotationGUI extends SecondaryGUI {
         finishFrame();
     }
 
+    /**
+     * If the UI is active, rotates the tile to the right.
+     */
+    public void rotateRight() {
+        if (isVisible()) {
+            tile.rotateRight();
+            updateGUI();
+        }
+    }
+
+    /**
+     * If the UI is active, rotates the tile to the left.
+     */
+    public void rotateLeft() {
+        if (isVisible()) {
+            tile.rotateLeft();
+            updateGUI();
+        }
+    }
+
     private void addMouseAdapters() {
         buttonSkip.addMouseListener(new MouseAdapter() {
             @Override
@@ -46,15 +66,13 @@ public class RotationGUI extends SecondaryGUI {
         buttonRotateLeft.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                tile.rotateLeft();
-                updateGUI();
+                rotateLeft();
             }
         });
         buttonRotateRight.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                tile.rotateRight();
-                updateGUI();
+                rotateRight();
             }
         });
     }

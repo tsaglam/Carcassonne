@@ -12,6 +12,7 @@ import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.settings.GameSettings;
+import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.RotationGUI;
@@ -38,9 +39,14 @@ public class MainController {
      */
     public MainController() {
         settings = new GameSettings();
-        mainGUI = new MainGUI(this);
+
+        mainGUI = new MainGUI(this); // TODO (HIGH) Either main UI or dedicated UI controller should create the secondary UIs
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
+        GlobalKeyBindingManager keyBindings = new GlobalKeyBindingManager(this, mainGUI, rotationGUI);
+        mainGUI.addKeyBindings(keyBindings);
+        rotationGUI.addKeyBindings(keyBindings);
+        placementGUI.addKeyBindings(keyBindings);
         settings.registerNotifiable(mainGUI.getScoreboard());
         settings.registerNotifiable(mainGUI);
         settings.registerNotifiable(placementGUI);
@@ -65,7 +71,7 @@ public class MainController {
      * @param stateType specifies which state is the new state.
      * @return the new state.
      */
-    public AbstractControllerState changeState(Class<? extends AbstractControllerState> stateType) {                                        // (HIGH)
+    public AbstractControllerState changeState(Class<? extends AbstractControllerState> stateType) {
         currentState = stateMap.get(stateType);
         if (currentState == null) {
             throw new IllegalStateException("State is not registered: " + stateType);

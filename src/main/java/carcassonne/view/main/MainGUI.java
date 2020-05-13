@@ -13,7 +13,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -30,6 +33,7 @@ import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
 import carcassonne.util.LookAndFeelUtil;
+import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
@@ -40,6 +44,7 @@ import carcassonne.view.menubar.Scoreboard;
  */
 // TODO (HIGH) Custom classes for the two layers.
 public class MainGUI extends JFrame implements Notifiable {
+    private static final int SCROLL_SPEED = 15;
     private static final Color GUI_COLOR = new Color(190, 190, 190);
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 50;
@@ -77,6 +82,16 @@ public class MainGUI extends JFrame implements Notifiable {
         JPanel meeplePanel = buildMeepleLayer();
         layeredPane = buildLayeredPane(meeplePanel, tilePanel);
         buildFrame(layeredPane);
+    }
+
+    /**
+     * Adds the global key bindings to this UI.
+     * @param keyBindings are the global key bindings.
+     */
+    public void addKeyBindings(GlobalKeyBindingManager keyBindings) {
+        InputMap inputMap = scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = scrollPane.getActionMap();
+        keyBindings.addKeyBindingsToMaps(inputMap, actionMap);
     }
 
     /**
@@ -240,7 +255,7 @@ public class MainGUI extends JFrame implements Notifiable {
         checkCoordinates(x, y);
         tileLabelGrid[x][y].setTile(tile);
     }
-    
+
     /**
      * Refreshes the meeple labels to get the new colors.
      */
@@ -257,6 +272,50 @@ public class MainGUI extends JFrame implements Notifiable {
         gridHeight = controller.getSettings().getGridHeight();
     }
 
+    private void centerScrollPaneView() {
+        revalidate(); // IMPORTANT: required to prevent a shaking view!
+        Dimension size = new Dimension(gridWidth * zoomLevel, gridHeight * zoomLevel);
+        Rectangle bounds = scrollPane.getViewport().getViewRect();
+        int x = (int) (Math.round((size.width - bounds.width) / 2.0));
+        int y = (int) (Math.round((size.height - bounds.height) / 2.0));
+        scrollPane.getViewport().setViewPosition(new Point(x, y));
+    }
+
+    private void checkCoordinates(int x, int y) {
+        if (x < 0 && x >= gridWidth || y < 0 && y >= gridHeight) {
+            throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
+        }
+    }
+
+    private void checkParameters(Object... parameters) {
+        for (Object parameter : parameters) {
+            if (parameter == null) {
+                throw new IllegalArgumentException("Parameters such as Tile, Meeple, and Player cannot be null!");
+            }
+        }
+    }
+
+    private void updateToChangedZoomLevel(boolean preview) {
+        if (currentPlayer != null && !preview) { // only update highlights when there is an active round
+            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
+            tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
+        }
+        // Parallel stream for improved performance when grid is full:
+        Arrays.stream(tileLabelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
+                .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
+        synchronizeLayerSizes(); // IMPORTANT: Ensures that the meeples are on the tiles.
+        meeplePanels.forEach(it -> it.setSize(zoomLevel));
+        centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
+        layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
+    }
+
+    private void synchronizeLayerSizes() {
+        Dimension layerSize = new Dimension(gridWidth * zoomLevel, gridHeight * zoomLevel);
+        meepleLayer.setMaximumSize(layerSize);
+        meepleLayer.setPreferredSize(layerSize);
+        meepleLayer.setMinimumSize(layerSize);
+    }
+
     private void buildFrame(JLayeredPane layeredPane) {
         menuBar = new MainMenuBar(controller, this);
         setJMenuBar(menuBar);
@@ -264,12 +323,14 @@ public class MainGUI extends JFrame implements Notifiable {
         setLayout(new BorderLayout());
         scrollPane = LookAndFeelUtil.createModifiedScrollpane(layeredPane);
         scrollPane.setPreferredSize(new Dimension(gridWidth * tileSize, gridHeight * tileSize));
+        scrollPane.getVerticalScrollBar().setUnitIncrement(SCROLL_SPEED);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(SCROLL_SPEED);
         add(scrollPane, BorderLayout.CENTER);
         setMinimumSize(MINIMAL_WINDOW_SIZE);
         setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
         addWindowListener(new WindowMaximizationAdapter(this));
         pack();
-
+    
     }
 
     private JLayeredPane buildLayeredPane(JPanel meeplePanel, JPanel tilePanel) {
@@ -326,49 +387,5 @@ public class MainGUI extends JFrame implements Notifiable {
             }
         }
         return tileLayer;
-    }
-
-    private void centerScrollPaneView() {
-        revalidate(); // IMPORTANT: required to prevent a shaking view!
-        Dimension size = new Dimension(gridWidth * zoomLevel, gridHeight * zoomLevel);
-        Rectangle bounds = scrollPane.getViewport().getViewRect();
-        int x = (int) (Math.round((size.width - bounds.width) / 2.0));
-        int y = (int) (Math.round((size.height - bounds.height) / 2.0));
-        scrollPane.getViewport().setViewPosition(new Point(x, y));
-    }
-
-    private void checkCoordinates(int x, int y) {
-        if (x < 0 && x >= gridWidth || y < 0 && y >= gridHeight) {
-            throw new IllegalArgumentException("Invalid label grid position (" + x + ", " + y + ")");
-        }
-    }
-
-    private void checkParameters(Object... parameters) {
-        for (Object parameter : parameters) {
-            if (parameter == null) {
-                throw new IllegalArgumentException("Parameters such as Tile, Meeple, and Player cannot be null!");
-            }
-        }
-    }
-
-    private void updateToChangedZoomLevel(boolean preview) {
-        if (currentPlayer != null && !preview) { // only update highlights when there is an active round
-            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
-            tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
-        }
-        // Parallel stream for improved performance when grid is full:
-        Arrays.stream(tileLabelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
-                .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
-        synchronizeLayerSizes(); // IMPORTANT: Ensures that the meeples are on the tiles.
-        meeplePanels.forEach(it -> it.setSize(zoomLevel));
-        centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
-        layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
-    }
-
-    private void synchronizeLayerSizes() {
-        Dimension layerSize = new Dimension(gridWidth * zoomLevel, gridHeight * zoomLevel);
-        meepleLayer.setMaximumSize(layerSize);
-        meepleLayer.setPreferredSize(layerSize);
-        meepleLayer.setMinimumSize(layerSize);
     }
 }

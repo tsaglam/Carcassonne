@@ -95,7 +95,7 @@ public class StateGameOver extends AbstractControllerState {
         updateStackSize();
         mainGUI.resetMenuState();
         GameMessage.showMessage(GAME_OVER_MESSAGE + round.getWinningPlayers());
-        gameStatistics = new GameStatisticsGUI(mainGUI, controller, round);
+        gameStatistics = new GameStatisticsGUI(mainGUI, controller, round); // TODO (HIGH) key bindings for this UI?
     }
 
     /**
