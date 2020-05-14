@@ -50,8 +50,8 @@ public class TileImageScalingCache {
      * @param tileType is the type of the tile for which the image was scaled for.
      * @param resolution is the edge with of the scaled image.
      */
-    public static synchronized void putScaledImage(ImageIcon image, TileType tileType, int rotation, int resolution, boolean preview) {
-        int key = createKey(tileType, rotation, resolution); // TODO (HIGH) make whole class thread safe
+    public static void putScaledImage(ImageIcon image, TileType tileType, int rotation, int resolution, boolean preview) {
+        int key = createKey(tileType, rotation, resolution);
         cachedImageIcons.put(key, image);
         cachedScalingInformation.put(key, preview);
         restoreConsistency();

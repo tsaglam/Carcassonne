@@ -40,7 +40,7 @@ public class MainController {
     public MainController() {
         settings = new GameSettings();
 
-        mainGUI = new MainGUI(this); // TODO (HIGH) Either main UI or dedicated UI controller should create the secondary UIs
+        mainGUI = new MainGUI(this);
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
         GlobalKeyBindingManager keyBindings = new GlobalKeyBindingManager(this, mainGUI, rotationGUI);
