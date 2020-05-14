@@ -2,7 +2,6 @@ package carcassonne.model.tile;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,6 +13,7 @@ import javax.swing.ImageIcon;
 
 import carcassonne.settings.GameSettings;
 import carcassonne.util.FastImageScaler;
+import carcassonne.util.ImageLoadingUtil;
 import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
 
@@ -23,14 +23,14 @@ import carcassonne.view.PaintShop;
  * @author Timur Saglam
  */
 public class TileDepiction {
-    private static final int SHIFT_VALUE = 1000;
-    private static final int SINGLE_PERMIT = 1;
     private static final int FULL_RESOLUTION = 300;
     private static final int IMAGES_PER_TILE = 4;
+    private static final int SHIFT_VALUE = 1000;
+    private static final int SINGLE_PERMIT = 1;
     private static final ConcurrentMap<Integer, Semaphore> semaphores = new ConcurrentHashMap<>();
     private final ArrayList<ImageIcon> images;
-    private final TileType tileType;
     private int rotation;
+    private final TileType tileType;
 
     /**
      * Creates the tile depiction, which includes the representation of the tile in every orientation.
@@ -120,9 +120,8 @@ public class TileDepiction {
         } else if (hasEmblem) {
             loadImageAndPaintEmblem(imagePath, index);
         } else {
-            ImageIcon image = new ImageIcon(imagePath);
+            ImageIcon image = ImageLoadingUtil.createImageIcon(imagePath);
             TileImageScalingCache.putScaledImage(image, tileType, index, FULL_RESOLUTION, false);
-            images.add(image);
         }
     }
 
@@ -130,9 +129,8 @@ public class TileDepiction {
      * Loads a tile image for this tile depiction with a certain rotation index and paints its emblem.
      */
     private void loadImageAndPaintEmblem(String imagePath, int index) {
-        File file = new File(imagePath);
         try {
-            BufferedImage image = ImageIO.read(file);
+            BufferedImage image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(imagePath));
             ImageIcon paintedImage = PaintShop.addEmblem(image);
             images.add(paintedImage);
             TileImageScalingCache.putScaledImage(paintedImage, tileType, index, FULL_RESOLUTION, false);

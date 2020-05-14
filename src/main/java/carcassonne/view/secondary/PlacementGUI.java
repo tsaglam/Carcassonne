@@ -5,13 +5,13 @@ import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
+import carcassonne.util.ImageLoadingUtil;
 import carcassonne.view.main.MainGUI;
 
 /**
@@ -53,7 +53,7 @@ public class PlacementGUI extends SecondaryGUI {
     }
 
     private void buildButtonSkip() {
-        buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
+        buttonSkip = new JButton(ImageLoadingUtil.SKIP.createImageIcon());
         buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
         defaultButtonColor = buttonSkip.getBackground();
         constraints.gridwidth = 3;
@@ -77,9 +77,9 @@ public class PlacementGUI extends SecondaryGUI {
             for (int x = 0; x < 3; x++) {
                 TerrainType terrain = tile.getTerrain(directions[x][y]);
                 if (tile.hasMeepleSpot(directions[x][y])) {
-                    button[x][y].setIcon(new ImageIcon(GameSettings.getMeeplePath(terrain, false)));
+                    button[x][y].setIcon(ImageLoadingUtil.createImageIcon(GameSettings.getMeeplePath(terrain, false)));
                 } else {
-                    button[x][y].setIcon(new ImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false)));
+                    button[x][y].setIcon(ImageLoadingUtil.createImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false)));
                 }
                 if (controller.requestPlacementStatus(directions[x][y]) && tile.hasMeepleSpot(directions[x][y])) {
                     button[x][y].setEnabled(true);
