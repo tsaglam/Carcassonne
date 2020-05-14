@@ -14,13 +14,16 @@ import carcassonne.view.main.MainGUI;
 
 /**
  * Blockable event and mouse listener for the zoom slider. Blocking is required when the slider is internally changed.
+ * This listener also smoothes the dragging by limiting the updates to certain steps.
  * @author Timur Saglam
  */
 public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
 
+    private static final int SMOOTHING_FACTOR = 5; // only update zoom with this step size.
     private boolean blocked;
     private MainGUI mainUI;
     private JSlider slider;
+    private int previousValue;
 
     /**
      * Creates the listener.
@@ -31,6 +34,7 @@ public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
         blocked = false;
         this.mainUI = mainUI;
         this.slider = slider;
+        previousValue = -1;
     }
 
     @Override
@@ -42,8 +46,10 @@ public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
 
     @Override
     public void stateChanged(ChangeEvent event) {
-        if (!blocked) {
-            mainUI.setZoom(slider.getValue(), true);
+        int smoothedValue = slider.getValue() / SMOOTHING_FACTOR * SMOOTHING_FACTOR;
+        if (!blocked && previousValue != smoothedValue) { // limit zoom updated when dragging.
+            previousValue = smoothedValue;
+            mainUI.setZoom(smoothedValue, true);
         }
     }
 
