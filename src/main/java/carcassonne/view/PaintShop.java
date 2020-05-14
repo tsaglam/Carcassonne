@@ -5,17 +5,15 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
+import carcassonne.util.ImageLoadingUtil;
 
 /**
  * This is the Carcassonne paint shop! It paints meeple images and tile highlights! It is implemented as a utility class
@@ -23,19 +21,53 @@ import carcassonne.settings.GameSettings;
  * @author Timur Saglam
  */
 public class PaintShop {
+    private static final BufferedImage emblemImage = ImageLoadingUtil.EMBLEM.createBufferedImage();
+    private static final BufferedImage highlightBaseImage = ImageLoadingUtil.NULL_TILE.createBufferedImage();
+    private static final BufferedImage highlightImage = ImageLoadingUtil.HIGHLIGHT.createBufferedImage();
+    private static final Map<String, ImageIcon> chachedMeepleImages = new HashMap<>();
+    private static final Map<TerrainType, BufferedImage> templateMap = buildImageMap(true);
+    private static final Map<TerrainType, BufferedImage> imageMap = buildImageMap(false);
     private static final String KEY_SEPARATOR = "|";
     private static final int MAXIMAL_ALPHA = 255;
     private static final int SCALING_STRATEGY = Image.SCALE_SMOOTH;
 
-    private static final Map<TerrainType, BufferedImage> imageMap = buildImageMap(false);
-    private static final Map<TerrainType, BufferedImage> templateMap = buildImageMap(true);
-    private static final HashMap<String, ImageIcon> chachedMeepleImages = new HashMap<>();
-    private static final BufferedImage highlightImage = loadImage(GameSettings.HIGHLIGHT_PATH);
-    private static final BufferedImage emblemImage = loadImage(GameSettings.EMBLEM_PATH);
-    private static final BufferedImage highlightBaseImage = loadImage(GameSettings.NULL_TILE_PATH);
-
     private PaintShop() {
         // private constructor ensures non-instantiability!
+    }
+
+    /**
+     * Adds the emblem image to the top right of any tile image.
+     * @param originalTile is the original tile image without the emblem.
+     * @return a copy of the image with an emblem.
+     */
+    public static ImageIcon addEmblem(BufferedImage originalTile) {
+        BufferedImage copy = deepCopy(originalTile);
+        for (int x = 0; x < emblemImage.getWidth(); x++) {
+            for (int y = 0; y < emblemImage.getHeight(); y++) {
+                Color emblemPixel = new Color(emblemImage.getRGB(x, y), true);
+                Color imagePixel = new Color(copy.getRGB(x, y), true);
+                Color blendedColor = blend(imagePixel, emblemPixel, false);
+                copy.setRGB(x, y, blendedColor.getRGB());
+            }
+        }
+        return new ImageIcon(copy);
+    }
+
+    /**
+     * Clears the meeple image cache. Should be cleared when player colors change.
+     */
+    public static void clearCachedImages() {
+        chachedMeepleImages.clear();
+    }
+
+    /**
+     * Returns a custom colored highlight image.
+     * @param player determines the color of the highlight.
+     * @return the highlighted tile.
+     */
+    public static ImageIcon getColoredHighlight(Player player, int size) {
+        ImageIcon coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
+        return new ImageIcon(coloredImage.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH));
     }
 
     /**
@@ -80,79 +112,6 @@ public class PaintShop {
     }
 
     /**
-     * Returns a custom colored highlight image.
-     * @param player determines the color of the highlight.
-     * @return the highlighted tile.
-     */
-    public static ImageIcon getColoredHighlight(Player player, int size) {
-        ImageIcon coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
-        return new ImageIcon(coloredImage.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH));
-    }
-
-    /**
-     * Adds the emblem image to the top right of any tile image.
-     * @param originalTile is the original tile image without the emblem.
-     * @return a copy of the image with an emblem.
-     */
-    public static ImageIcon addEmblem(BufferedImage originalTile) {
-        BufferedImage copy = deepCopy(originalTile);
-        for (int x = 0; x < emblemImage.getWidth(); x++) {
-            for (int y = 0; y < emblemImage.getHeight(); y++) {
-                Color emblemPixel = new Color(emblemImage.getRGB(x, y), true);
-                Color imagePixel = new Color(copy.getRGB(x, y), true);
-                Color blendedColor = blend(imagePixel, emblemPixel, false);
-                copy.setRGB(x, y, blendedColor.getRGB());
-            }
-        }
-        return new ImageIcon(copy);
-    }
-
-    /**
-     * Clears the meeple image cache. Should be cleared when player colors change.
-     */
-    public static void clearCachedImages() {
-        chachedMeepleImages.clear();
-    }
-
-    // prepares the base images and templates
-    private static Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
-        Map<TerrainType, BufferedImage> map = new HashMap<>();
-        for (TerrainType terrainType : TerrainType.values()) {
-            BufferedImage meepleImage = loadImage(GameSettings.getMeeplePath(terrainType, isTemplate));
-            map.put(terrainType, meepleImage);
-        }
-        return map;
-    }
-
-    // Colors a meeple with RGB color.
-    private static ImageIcon paintMeeple(TerrainType meepleType, int color, int size) {
-        BufferedImage image = deepCopy(imageMap.get(meepleType));
-        BufferedImage template = templateMap.get(meepleType);
-        for (int x = 0; x < template.getWidth(); x++) {
-            for (int y = 0; y < template.getHeight(); y++) {
-                if (template.getRGB(x, y) == Color.BLACK.getRGB()) {
-                    image.setRGB(x, y, color);
-                }
-            }
-        }
-        return new ImageIcon(image.getScaledInstance(size, size, Image.SCALE_SMOOTH));
-    }
-
-    private static ImageIcon colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
-        BufferedImage image = deepCopy(imageToColor);
-        for (int x = 0; x < maskImage.getWidth(); x++) {
-            for (int y = 0; y < maskImage.getHeight(); y++) {
-                Color maskPixel = new Color(maskImage.getRGB(x, y), true);
-                Color targetPixel = new Color(targetColor.getRed(), targetColor.getGreen(), targetColor.getBlue(), maskPixel.getAlpha());
-                Color imagePixel = new Color(image.getRGB(x, y), true);
-                Color blendedColor = blend(imagePixel, targetPixel, true);
-                image.setRGB(x, y, blendedColor.getRGB());
-            }
-        }
-        return new ImageIcon(image);
-    }
-
-    /**
      * Blends to colors correctly based on alpha composition. Either blends both colors or applies the second on the first
      * one.
      * @param first is the first color to be applied.
@@ -172,6 +131,38 @@ public class PaintShop {
         return new Color((int) red, (int) green, (int) blue, alpha);
     }
 
+    // prepares the base images and templates
+    private static Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
+        Map<TerrainType, BufferedImage> map = new HashMap<>();
+        for (TerrainType terrainType : TerrainType.values()) {
+            BufferedImage meepleImage = ImageLoadingUtil.createBufferedImage(GameSettings.getMeeplePath(terrainType, isTemplate));
+            map.put(terrainType, meepleImage);
+        }
+        return map;
+    }
+
+    private static ImageIcon colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
+        BufferedImage image = deepCopy(imageToColor);
+        for (int x = 0; x < maskImage.getWidth(); x++) {
+            for (int y = 0; y < maskImage.getHeight(); y++) {
+                Color maskPixel = new Color(maskImage.getRGB(x, y), true);
+                Color targetPixel = new Color(targetColor.getRed(), targetColor.getGreen(), targetColor.getBlue(), maskPixel.getAlpha());
+                Color imagePixel = new Color(image.getRGB(x, y), true);
+                Color blendedColor = blend(imagePixel, targetPixel, true);
+                image.setRGB(x, y, blendedColor.getRGB());
+            }
+        }
+        return new ImageIcon(image);
+    }
+
+    private static String createKey(Color color, TerrainType meepleType, int size) {
+        return createKey(meepleType, size) + color.getRGB();
+    }
+
+    private static String createKey(TerrainType meepleType, int size) {
+        return meepleType + KEY_SEPARATOR + size + KEY_SEPARATOR; // TODO (MEDIUM) choose more efficient composite key
+    }
+
     // copies a image to avoid side effects.
     private static BufferedImage deepCopy(BufferedImage image) {
         ColorModel model = image.getColorModel();
@@ -180,22 +171,17 @@ public class PaintShop {
         return new BufferedImage(model, raster, isAlphaPremultiplied, null);
     }
 
-    private static BufferedImage loadImage(String path) {
-        File file = new File(path);
-        try {
-            return ImageIO.read(file);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            GameMessage.showError("ERROR: Could not load image loacted at " + path);
-            return null;
+    // Colors a meeple with RGB color.
+    private static ImageIcon paintMeeple(TerrainType meepleType, int color, int size) {
+        BufferedImage image = deepCopy(imageMap.get(meepleType));
+        BufferedImage template = templateMap.get(meepleType);
+        for (int x = 0; x < template.getWidth(); x++) {
+            for (int y = 0; y < template.getHeight(); y++) {
+                if (template.getRGB(x, y) == Color.BLACK.getRGB()) {
+                    image.setRGB(x, y, color);
+                }
+            }
         }
-    }
-
-    private static String createKey(TerrainType meepleType, int size) {
-        return meepleType + KEY_SEPARATOR + size + KEY_SEPARATOR; // TODO (MEDIUM) choose more efficient composite key
-    }
-
-    private static String createKey(Color color, TerrainType meepleType, int size) {
-        return createKey(meepleType, size) + color.getRGB();
+        return new ImageIcon(image.getScaledInstance(size, size, Image.SCALE_SMOOTH));
     }
 }

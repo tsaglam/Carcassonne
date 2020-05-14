@@ -14,11 +14,10 @@ import carcassonne.model.tile.Tile;
  * label on the label grid.
  * @author Timur Saglam
  */
-public class TileDepiction {
+public class TileDepiction { // TODO (MEDIUM) rename?
     private Tile tile;
     private final Tile defaultTile;
     private final Tile highlightTile;
-
     private final JLabel label;
     private ImageIcon coloredHighlight;
     private int tileSize;

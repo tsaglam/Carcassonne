@@ -15,28 +15,25 @@ import carcassonne.view.PaintShop;
  */
 public class GameSettings {
     public static final int MAXIMAL_PLAYERS = 5;
-    public static final int TILE_SIZE = 100;
     public static final String TILE_FILE_TYPE = ".png";
-    public static final String HIGHLIGHT_PATH = "src/main/ressources/highlight.png";
-    public static final String NULL_TILE_PATH = "src/main/ressources/tiles/Null0.png";
-    public static final String EMBLEM_PATH = "src/main/ressources/emblem.png";
-    public static final String TILE_FOLDER_PATH = "src/main/ressources/tiles/";
+    public static final String TILE_FOLDER_PATH = "tiles/";
+    public static final int TILE_SIZE = 100;
 
     private static final PlayerColor[] DEFAULT_COLORS = { new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
             new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147) };
     private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };
     private static final String EMPTY = "";
-    private static final String MEEPLE_PATH = "src/main/ressources/meeple/meeple_";
+    private static final String MEEPLE_PATH = "meeple/meeple_";
     private static final String PNG = ".png";
     private static final String TEMPLATE = "_template";
+    private int amountOfPlayers;
     private final List<Notifiable> changeListeners;
     private boolean chaosMode;
-    private int amountOfPlayers;
-    private int gridWidth;
+    private final ArrayList<PlayerColor> colors;
     private int gridHeight;
     private boolean gridSizeChanged;
 
-    private final ArrayList<PlayerColor> colors;
+    private int gridWidth;
 
     private final ArrayList<String> names;
 
@@ -104,6 +101,14 @@ public class GameSettings {
     }
 
     /**
+     * Gives information whether the user or the game changed the grid size settings.
+     * @return the true if the size was changed.
+     */
+    public boolean isGridSizeChanged() {
+        return gridSizeChanged;
+    }
+
+    /**
      * Registers a UI element that wants to listen to changes.
      * @param notifiable is the UI element.
      */
@@ -137,28 +142,20 @@ public class GameSettings {
     }
 
     /**
+     * Sets the indicator of grid size change.
+     * @param gridSizeChanged the value to set the indicator to.
+     */
+    public void setGridSizeChanged(boolean gridSizeChanged) {
+        this.gridSizeChanged = gridSizeChanged;
+    }
+
+    /**
      * Setter for the width of grid.
      * @param gridWidth the grid width in tiles.
      */
     public void setGridWidth(int gridWidth) {
         this.gridWidth = gridWidth;
         gridSizeChanged = true;
-    }
-
-    /**
-     * Gives information whether the user or the game changed the grid size settings.
-     * @return the true if the size was changed.
-     */
-    public boolean isGridSizeChanged() {
-        return gridSizeChanged;
-    }
-
-    /**
-     * Sets the indicator of grid size change.
-     * @param gridSizeChanged the value to set the indicator to.
-     */
-    public void setGridSizeChanged(boolean gridSizeChanged) {
-        this.gridSizeChanged = gridSizeChanged;
     }
 
     /**
@@ -181,20 +178,20 @@ public class GameSettings {
         notifyListeners();
     }
 
+    private void notifyListeners() {
+        PaintShop.clearCachedImages();
+        for (Notifiable notifiable : changeListeners) {
+            notifiable.notifyChange();
+        }
+    }
+
     /**
      * Builds the path to the image of a specific meeple type.
      * @param type is the type of terrain the meeple occupies.
      * @param isTemplate specifies whether the template image should be loaded.
      * @return the path as a String.
      */
-    public static String getMeeplePath(TerrainType type, boolean isTemplate) {
+    public static String getMeeplePath(TerrainType type, boolean isTemplate) { // TODO (MEDIUM) move to image loading utility class?
         return MEEPLE_PATH + type.toString().toLowerCase() + (isTemplate ? TEMPLATE : EMPTY) + PNG;
-    }
-
-    private void notifyListeners() {
-        PaintShop.clearCachedImages();
-        for (Notifiable notifiable : changeListeners) {
-            notifiable.notifyChange();
-        }
     }
 }

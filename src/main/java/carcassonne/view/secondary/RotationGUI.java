@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import carcassonne.control.MainController;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
+import carcassonne.util.ImageLoadingUtil;
 import carcassonne.view.main.MainGUI;
 
 /**
@@ -18,8 +19,8 @@ import carcassonne.view.main.MainGUI;
  * @author Timur Saglam
  */
 public class RotationGUI extends SecondaryGUI {
-    private static final int TILE_PREVIEW_SIZE = 100;
     private static final long serialVersionUID = -5179683977081970564L;
+    private static final int TILE_PREVIEW_SIZE = 100;
     private JButton buttonRotateLeft;
     private JButton buttonRotateRight;
     private JButton buttonSkip;
@@ -37,21 +38,21 @@ public class RotationGUI extends SecondaryGUI {
     }
 
     /**
-     * If the UI is active, rotates the tile to the right.
-     */
-    public void rotateRight() {
-        if (isVisible()) {
-            tile.rotateRight();
-            updateGUI();
-        }
-    }
-
-    /**
      * If the UI is active, rotates the tile to the left.
      */
     public void rotateLeft() {
         if (isVisible()) {
             tile.rotateLeft();
+            updateGUI();
+        }
+    }
+
+    /**
+     * If the UI is active, rotates the tile to the right.
+     */
+    public void rotateRight() {
+        if (isVisible()) {
+            tile.rotateRight();
             updateGUI();
         }
     }
@@ -82,9 +83,9 @@ public class RotationGUI extends SecondaryGUI {
         ImageIcon defaultImage = new Tile(TileType.Null).getScaledIcon(TILE_PREVIEW_SIZE);
         tileLabel = new JLabel(defaultImage); // Important for the UI size
         // create buttons:
-        buttonSkip = new JButton(new ImageIcon("src/main/ressources/icons/skip.png"));
-        buttonRotateLeft = new JButton(new ImageIcon("src/main/ressources/icons/left.png"));
-        buttonRotateRight = new JButton(new ImageIcon("src/main/ressources/icons/right.png"));
+        buttonSkip = new JButton(ImageLoadingUtil.SKIP.createImageIcon());
+        buttonRotateLeft = new JButton(ImageLoadingUtil.LEFT.createImageIcon());
+        buttonRotateRight = new JButton(ImageLoadingUtil.RIGHT.createImageIcon());
         // set tool tips:
         buttonSkip.setToolTipText("Don't place tile and skip turn");
         buttonRotateLeft.setToolTipText("Rotate left");
