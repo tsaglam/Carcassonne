@@ -15,6 +15,10 @@ import java.awt.image.BufferedImage;
  * @author Timur Saglam
  */
 public class FastImageScaler {
+    
+    private FastImageScaler() {
+        // private constructor ensures non-instantiability!
+    }
 
     /**
      * Scales a quadratic images to a image with a given resolution.
