@@ -11,7 +11,7 @@ import carcassonne.util.LRUHashMap;
  * ones per zoom level.
  * @author Timur Saglam
  */
-public class TileImageScalingCache {
+public final class TileImageScalingCache {
     private static final int SHIFT_VALUE = 1000;
     private static final LRUHashMap<Integer, ImageIcon> cachedImageIcons = new LRUHashMap<>();
     private static final ConcurrentHashMap<Integer, Boolean> cachedScalingInformation = new ConcurrentHashMap<>();
@@ -23,7 +23,9 @@ public class TileImageScalingCache {
     /**
      * Checks if there is an existing scaled image in this cache.
      * @param tileType is the type of the tile that specifies the base image and its orientation.
+     * @param rotation is the rotation of the correlating tile.
      * @param resolution is the edge with of the (quadratic) image.
+     * @param preview determines if the image should be a preview render or final render.
      * @return true if there is an existing image cached with the specified resolution.
      */
     public static boolean containsScaledImage(TileType tileType, int rotation, int resolution, boolean preview) {
@@ -37,6 +39,7 @@ public class TileImageScalingCache {
     /**
      * Retrieves an existing scaled image in this cache.
      * @param tileType is the type of the tile that specifies the base image and its orientation.
+     * @param rotation is the rotation of the correlating tile.
      * @param resolution is the edge with of the (quadratic) image.
      * @return the scaled image or null if there is none.
      */
@@ -48,7 +51,9 @@ public class TileImageScalingCache {
      * Places an scaled image in this cache to enable its reuse.
      * @param image is the scaled image.
      * @param tileType is the type of the tile for which the image was scaled for.
+     * @param rotation is the rotation of the correlating tile.
      * @param resolution is the edge with of the scaled image.
+     * @param preview determines if the image is a preview render or final render.
      */
     public static void putScaledImage(ImageIcon image, TileType tileType, int rotation, int resolution, boolean preview) {
         int key = createKey(tileType, rotation, resolution);
@@ -64,7 +69,11 @@ public class TileImageScalingCache {
         cachedImageIcons.clear();
         cachedScalingInformation.clear();
     }
-    
+
+    /**
+     * Returns the number of cached elements in this cache.
+     * @return the number of cached elements.
+     */
     public static int size() {
         return cachedImageIcons.size();
     }

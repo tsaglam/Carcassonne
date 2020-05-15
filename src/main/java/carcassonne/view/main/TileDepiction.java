@@ -25,6 +25,8 @@ public class TileDepiction { // TODO (MEDIUM) rename?
     /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
      * @param tileSize is the initial edge length of the tile according to the zoom level.
+     * @param defaultTile is the tile that determines the default look.
+     * @param highlightTile is the tile that determines the highlight look.
      * @param controller is the controller of the GUI.
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
@@ -74,6 +76,7 @@ public class TileDepiction { // TODO (MEDIUM) rename?
     /**
      * Adapts the size of the tile to make the tile label larger or smaller.
      * @param tileSize is the new tile size in pixels.
+     * @param preview determines if the size adjustment is part of the preview or final.
      */
     public void setTileSize(int tileSize, boolean preview) {
         this.tileSize = tileSize;

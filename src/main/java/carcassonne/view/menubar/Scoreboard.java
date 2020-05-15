@@ -29,6 +29,7 @@ public class Scoreboard implements Notifiable {
     /**
      * Standard constructor. Creates score board.
      * @param settings are the {@link GameSettings}.
+     * @param mainUI is the main user interface.
      */
     public Scoreboard(GameSettings settings, MainGUI mainUI) { // TODO (MEDIUM) link with players?
         this.settings = settings;

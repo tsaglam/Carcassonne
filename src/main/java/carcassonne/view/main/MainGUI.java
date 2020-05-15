@@ -70,7 +70,6 @@ public class MainGUI extends JFrame implements Notifiable {
 
     /**
      * Constructor of the main GUI. creates the GUI with a scoreboard.
-     * @param scoreboard sets the scoreboard.
      * @param controller sets the connection to the game controller.
      */
     public MainGUI(MainController controller) {
@@ -143,15 +142,25 @@ public class MainGUI extends JFrame implements Notifiable {
         meeplePanelGrid[x][y].forEach(it -> it.reset());
     }
 
+    /**
+     * Resets the state of the menu to allows restarting.
+     */
     public void resetMenuState() {
         menuBar.enableStart(); // TODO (MEDIUM) Find better solution.
     }
 
+    /**
+     * Shows the UI and centers the scrollpane view.
+     */
     public void showUI() {
         setVisible(true);
         centerScrollPaneView();
     }
 
+    /**
+     * Grants access to the scoreboard.
+     * @return the scoreboard.
+     */
     public Scoreboard getScoreboard() {
         return menuBar.getScoreboard(); // TODO (MEDIUM) Find better solution.
     }
@@ -330,7 +339,7 @@ public class MainGUI extends JFrame implements Notifiable {
         setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
         addWindowListener(new WindowMaximizationAdapter(this));
         pack();
-    
+
     }
 
     private JLayeredPane buildLayeredPane(JPanel meeplePanel, JPanel tilePanel) {

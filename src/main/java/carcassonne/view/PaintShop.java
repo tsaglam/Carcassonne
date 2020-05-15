@@ -20,7 +20,7 @@ import carcassonne.util.ImageLoadingUtil;
  * with static methods to increase performance through avoiding loading images more often that needed.
  * @author Timur Saglam
  */
-public class PaintShop {
+public final class PaintShop {
     private static final BufferedImage emblemImage = ImageLoadingUtil.EMBLEM.createBufferedImage();
     private static final BufferedImage highlightBaseImage = ImageLoadingUtil.NULL_TILE.createBufferedImage();
     private static final BufferedImage highlightImage = ImageLoadingUtil.HIGHLIGHT.createBufferedImage();
@@ -63,6 +63,7 @@ public class PaintShop {
     /**
      * Returns a custom colored highlight image.
      * @param player determines the color of the highlight.
+     * @param size is the edge length in pixels of the image.
      * @return the highlighted tile.
      */
     public static ImageIcon getColoredHighlight(Player player, int size) {
@@ -74,6 +75,7 @@ public class PaintShop {
      * Returns a custom colored meeple.
      * @param meepleType is the type of the meeple.
      * @param color is the custom color.
+     * @param size is the edge length in pixels of the image.
      * @return the colored meeple.
      */
     public static ImageIcon getColoredMeeple(TerrainType meepleType, Color color, int size) {
@@ -90,6 +92,7 @@ public class PaintShop {
      * Returns a custom colored meeple.
      * @param meepleType is the type of the meeple.
      * @param player is the {@link Player} whose color is used.
+     * @param size is the edge length in pixels of the image.
      * @return the colored meeple.
      */
     public static ImageIcon getColoredMeeple(TerrainType meepleType, Player player, int size) {
@@ -98,7 +101,8 @@ public class PaintShop {
 
     /**
      * Creates a non-colored meeple image icon.
-     * @param meepleTypeis the type of the meeple.
+     * @param meepleType is the type of the meeple.
+     * @param size is the edge length in pixels of the image.
      * @return non-colored meeple image.
      */
     public static ImageIcon getPreviewMeeple(TerrainType meepleType, int size) {

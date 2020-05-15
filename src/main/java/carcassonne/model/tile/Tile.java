@@ -77,7 +77,7 @@ public class Tile {
     /**
      * Getter for the scaled tile image. The image depends on the orientation of the tile.
      * @param edgeLength specifies the edge length of the image in pixels.
-     * @param specifies whether a fast scaling algorithm should be used.
+     * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the image depicting the tile.
      */
     public ImageIcon getScaledIcon(int edgeLength, boolean fastScaling) {

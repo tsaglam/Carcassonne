@@ -44,6 +44,7 @@ public class PlayerSettingsGUI extends JDialog implements ChangeListener, Action
      * Creates a new player settings UI for a specific player.
      * @param playerNumber is the number of the player.
      * @param settings are the game settings which are modified based on the user interaction with this UI.
+     * @param mainUI is the main user interface.
      */
     public PlayerSettingsGUI(int playerNumber, GameSettings settings, MainGUI mainUI) {
         super(mainUI);

@@ -32,6 +32,9 @@ public class GlobalKeyBindingManager {
 
     /**
      * Creates the key binding manager.
+     * @param controller is the main controller.
+     * @param mainUI is the main user interface.
+     * @param rotationUI is the user interface for rotating tiles.
      */
     public GlobalKeyBindingManager(MainController controller, MainGUI mainUI, RotationGUI rotationUI) {
         this.mainUI = mainUI;
@@ -56,6 +59,11 @@ public class GlobalKeyBindingManager {
         inputToActionKeys.add(inputToActionKey);
     }
 
+    /**
+     * Adds the global key bindings of the manager to the specified maps.
+     * @param inputMap is the map for the key inputs.
+     * @param actionMap is the map for the consequential actions.
+     */
     public void addKeyBindingsToMaps(InputMap inputMap, ActionMap actionMap) {
         for (String key : inputToActionKeys) {
             inputMap.put(inputs.get(key), key);
