@@ -19,7 +19,6 @@ public class LRUHashMap<K, V> extends LinkedHashMap<K, V> {
 
     /**
      * Creates the hash map.
-     * @param maximumSize is the maximal size of the hash map.
      */
     public LRUHashMap() {
         super(INITIAL_SIZE, LOAD_FACTOR, true);

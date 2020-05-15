@@ -17,7 +17,7 @@ public class WindowMaximizationAdapter extends WindowAdapter {
 
     /**
      * Creates the adapter for a specific {@link JFrame}
-     * @param is the specific {@link JFrame} to be maximized.
+     * @param frame is the specific {@link JFrame} to be maximized.
      */
     public WindowMaximizationAdapter(JFrame frame) {
         this.frame = frame;

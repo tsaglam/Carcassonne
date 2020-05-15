@@ -32,8 +32,10 @@ public class GameStatisticsGUI extends JDialog {
 
     /**
      * Creates the GUI and extracts the data from the current round.
+     * @param mainUI is the main user interface.
      * @param controller is the game controller.
      * @param round is the current round.
+     * @mainUI is the main user interface.
      */
     public GameStatisticsGUI(MainGUI mainUI, MainController controller, Round round) {
         super(mainUI);

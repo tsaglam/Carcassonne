@@ -15,11 +15,17 @@ import carcassonne.view.main.MainGUI;
  */
 public class ZoomSlider extends JSlider {
     private static final long serialVersionUID = -5518487902213410121L;
+    private static final int MAXIMUM_VALUE = 300;
+    private static final int MINIMUM_VALUE = 50;
     private JMenuItem zoomOut;
     private JMenuItem zoomIn;
 
+    /**
+     * Creates the slider.
+     * @param mainUI is the correlatin main user interface.f
+     */
     public ZoomSlider(MainGUI mainUI) {
-        super(50, 300, mainUI.getZoom());
+        super(MINIMUM_VALUE, MAXIMUM_VALUE, mainUI.getZoom());
         setPaintTicks(true);
         setOrientation(SwingConstants.VERTICAL);
         setMinorTickSpacing(5);

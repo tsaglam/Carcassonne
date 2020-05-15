@@ -69,6 +69,9 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         add(scoreboard);
     }
 
+    /**
+     * Enables the start button and disables the abort button.
+     */
     public void enableStart() {
         itemNewRound.setEnabled(true);
         itemAbortRound.setEnabled(false);

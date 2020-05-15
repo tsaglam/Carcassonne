@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
  * @see <a href=" https://www.locked.de/fast-image-scaling-in-java/">locked.de/fast-image-scaling-in-java</a>
  * @author Timur Saglam
  */
-public class FastImageScaler {
+public final class FastImageScaler {
     
     private FastImageScaler() {
         // private constructor ensures non-instantiability!

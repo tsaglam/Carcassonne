@@ -11,9 +11,13 @@ import javax.swing.UnsupportedLookAndFeelException;
  * Utility class for functionality regarding the {@link LookAndFeel} and the {@link UIManager}.
  * @author Timur Saglam
  */
-public class LookAndFeelUtil {
+public final class LookAndFeelUtil {
     private static final String WINDOWS = "Windows";
     private static final String OS_NAME_PROPERTY = "os.name";
+
+    private LookAndFeelUtil() {
+        // private constructor ensures non-instantiability!
+    }
 
     /**
      * Creates a modified {@link JScrollPane} that uses the default {@link LookAndFeel} instead of the current one (e.g.

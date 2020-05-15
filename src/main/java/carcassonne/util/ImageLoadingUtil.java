@@ -23,7 +23,7 @@ public enum ImageLoadingUtil {
 
     private final String path;
 
-    private ImageLoadingUtil(String path) {
+    ImageLoadingUtil(String path) {
         this.path = path;
     }
 
@@ -46,7 +46,7 @@ public enum ImageLoadingUtil {
     /**
      * Loads an image from a path and creates a buffered image.
      * @param path is the relative file path, omitting the resource folder path.
-     * @return
+     * @return the buffered image.
      */
     public static BufferedImage createBufferedImage(String path) {
         try {
