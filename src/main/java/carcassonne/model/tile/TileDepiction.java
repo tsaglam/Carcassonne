@@ -121,6 +121,7 @@ public class TileDepiction {
             loadImageAndPaintEmblem(imagePath, index);
         } else {
             ImageIcon image = ImageLoadingUtil.createImageIcon(imagePath);
+            images.add(image);
             TileImageScalingCache.putScaledImage(image, tileType, index, FULL_RESOLUTION, false);
         }
     }
