@@ -6,7 +6,10 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
@@ -14,6 +17,7 @@ import javax.swing.table.TableColumnModel;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Round;
+import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.main.MainGUI;
 
 /**
@@ -58,6 +62,16 @@ public class GameStatisticsGUI extends JDialog {
         header.setDefaultRenderer(new HeaderRenderer());
         header.setReorderingAllowed(false);
         table.setBackground(BODY_COLOR);
+    }
+
+    /**
+     * Adds the global key bindings to this UI.
+     * @param keyBindings are the global key bindings.
+     */
+    public void addKeyBindings(GlobalKeyBindingManager keyBindings) {
+        InputMap inputMap = table.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = table.getActionMap();
+        keyBindings.addKeyBindingsToMaps(inputMap, actionMap);
     }
 
     /**
