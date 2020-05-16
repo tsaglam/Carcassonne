@@ -33,6 +33,7 @@ public class MainController {
     private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
     private AbstractControllerState currentState;
     private final GameSettings settings;
+    private final GlobalKeyBindingManager keyBindings;
 
     /**
      * Basic constructor. Creates the view and the model of the game.
@@ -43,7 +44,7 @@ public class MainController {
         mainGUI = new MainGUI(this);
         rotationGUI = new RotationGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
-        GlobalKeyBindingManager keyBindings = new GlobalKeyBindingManager(this, mainGUI, rotationGUI);
+        keyBindings = new GlobalKeyBindingManager(this, mainGUI, rotationGUI);
         mainGUI.addKeyBindings(keyBindings);
         rotationGUI.addKeyBindings(keyBindings);
         placementGUI.addKeyBindings(keyBindings);
@@ -136,6 +137,14 @@ public class MainController {
         for (AbstractControllerState state : stateMap.values()) {
             state.updateState(newRound, newGrid);
         }
+    }
+
+    /**
+     * Getter for the global key binding manager.
+     * @return the global key bindings.
+     */
+    public GlobalKeyBindingManager getKeyBindings() {
+        return keyBindings;
     }
 
     /**

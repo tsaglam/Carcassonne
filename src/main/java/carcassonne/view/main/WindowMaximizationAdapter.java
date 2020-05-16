@@ -1,5 +1,6 @@
 package carcassonne.view.main;
 
+import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -28,7 +29,7 @@ public class WindowMaximizationAdapter extends WindowAdapter {
     public void windowActivated(WindowEvent event) {
         if (!maximized) {
             maximized = true;
-            frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
         }
 
     }
