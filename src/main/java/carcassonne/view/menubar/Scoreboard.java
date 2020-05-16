@@ -120,5 +120,4 @@ public class Scoreboard implements Notifiable {
             scoreLabels[i].setToolTipText(TOOL_TIP + settings.getPlayerName(i));
         }
     }
-
 }
