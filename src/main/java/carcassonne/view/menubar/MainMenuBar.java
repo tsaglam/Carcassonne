@@ -24,6 +24,7 @@ import carcassonne.view.tertiary.GridSizeDialog;
  */
 public class MainMenuBar extends JMenuBar implements Notifiable {
 
+    private static final long serialVersionUID = -599734693130415390L;
     private static final String GRID_SIZE = "Change Grid Size";
     private static final String ABORT = "Abort Current Game";
     private static final String AMOUNT = "Amount of Players";
@@ -33,7 +34,6 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private static final String NEW_ROUND = "Start New Round";
     private static final String OPTIONS = "Options";
     private static final String PLAYERS = " Players";
-    private static final long serialVersionUID = -599734693130415390L;
     private static final String SETTINGS = "Player Settings";
     private static final String SETTINGS_OF = "Settings of ";
     private static final String VIEW = "View";

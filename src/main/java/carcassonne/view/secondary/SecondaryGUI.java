@@ -12,7 +12,6 @@ import javax.swing.WindowConstants;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
-import carcassonne.model.tile.Tile;
 import carcassonne.settings.Notifiable;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.main.MainGUI;
@@ -28,8 +27,7 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
     protected GridBagConstraints constraints;
     protected MainController controller;
     protected Player currentPlayer;
-    protected JPanel panel;
-    protected Tile tile;
+    protected JPanel dialogPanel;
 
     /**
      * Constructor for the class. Sets the controller of the GUI and the window title.
@@ -38,62 +36,46 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
      */
     public SecondaryGUI(MainController controller, MainGUI ui) {
         super(ui);
-        panel = new JPanel(new GridBagLayout());
+        dialogPanel = new JPanel(new GridBagLayout());
         this.controller = controller;
         constraints = new GridBagConstraints();
         buildFrame(ui);
     }
-    
+
     /**
      * Adds the global key bindings to this UI.
      * @param keyBindings are the global key bindings.
      */
     public void addKeyBindings(GlobalKeyBindingManager keyBindings) {
-        InputMap inputMap = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = panel.getActionMap();
+        InputMap inputMap = dialogPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = dialogPanel.getActionMap();
         keyBindings.addKeyBindingsToMaps(inputMap, actionMap);
     }
 
-    /**
-     * Sets the tile of the GUI, updates the GUI and then makes it visible. Should be called to show the GUI. The method
-     * implements the template method pattern using the method <code>update()</code>.
-     * @param tile sets the tile.
-     * @param currentPlayer sets the color scheme according to the player.
-     */
-    public void setTile(Tile tile, Player currentPlayer) {
-        if (tile == null) {
-            throw new IllegalArgumentException("Tried to set the tile of the " + getClass().getSimpleName() + " to null.");
+    @Override
+    public void notifyChange() {
+        if (currentPlayer != null) { // only if UI is in use.
+            dialogPanel.setBackground(currentPlayer.getColor().lightColor());
         }
-        this.tile = tile;
-        this.currentPlayer = currentPlayer;
-        panel.setBackground(currentPlayer.getColor().lightColor());
-        updateGUI();
-        setVisible(true);
-        toFront(); // sets the focus on the secondary GUI, removes need for double clicks
     }
 
     /*
      * Builds the frame and sets its properties.
      */
     private void buildFrame(MainGUI ui) {
-        getContentPane().add(panel);
+        getContentPane().add(dialogPanel);
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setLocation(INITIAL_X, INITIAL_Y);
     }
 
-    /**
-     * Should be called at the end of a constructor of a subclass.
-     */
-    protected void finishFrame() {
+    protected void setPlayerAndUpdateGUI(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+        dialogPanel.setBackground(currentPlayer.getColor().lightColor());
+        updateGUI();
         pack();
-    }
-
-    @Override
-    public void notifyChange() {
-        if (currentPlayer != null) { // only if UI is in use.
-            panel.setBackground(currentPlayer.getColor().lightColor());
-        }
+        setVisible(true);
+        toFront(); // sets the focus on the secondary GUI, removes need for double clicks
     }
 
     /**

@@ -11,11 +11,12 @@ import carcassonne.control.state.StatePlacing;
 import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.RotationGUI;
+import carcassonne.view.secondary.PreviewGUI;
 
 /**
  * The MainController is the central class of the game. The game is started with the instantiation of this class. The
@@ -28,7 +29,7 @@ import carcassonne.view.secondary.RotationGUI;
  */
 public class MainController {
     private final MainGUI mainGUI;
-    private final RotationGUI rotationGUI;
+    private final PreviewGUI previewGUI;
     private final PlacementGUI placementGUI;
     private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
     private AbstractControllerState currentState;
@@ -42,22 +43,22 @@ public class MainController {
         settings = new GameSettings();
 
         mainGUI = new MainGUI(this);
-        rotationGUI = new RotationGUI(this, mainGUI);
+        previewGUI = new PreviewGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);
-        keyBindings = new GlobalKeyBindingManager(this, mainGUI, rotationGUI);
+        keyBindings = new GlobalKeyBindingManager(this, mainGUI, previewGUI);
         mainGUI.addKeyBindings(keyBindings);
-        rotationGUI.addKeyBindings(keyBindings);
+        previewGUI.addKeyBindings(keyBindings);
         placementGUI.addKeyBindings(keyBindings);
         settings.registerNotifiable(mainGUI.getScoreboard());
         settings.registerNotifiable(mainGUI);
         settings.registerNotifiable(placementGUI);
-        settings.registerNotifiable(rotationGUI);
+        settings.registerNotifiable(previewGUI);
         stateMap = new HashMap<>();
-        currentState = new StateIdle(this, mainGUI, rotationGUI, placementGUI);
+        currentState = new StateIdle(this, mainGUI, previewGUI, placementGUI);
         registerState(currentState);
-        registerState(new StateManning(this, mainGUI, rotationGUI, placementGUI));
-        registerState(new StatePlacing(this, mainGUI, rotationGUI, placementGUI));
-        registerState(new StateGameOver(this, mainGUI, rotationGUI, placementGUI));
+        registerState(new StateManning(this, mainGUI, previewGUI, placementGUI));
+        registerState(new StatePlacing(this, mainGUI, previewGUI, placementGUI));
+        registerState(new StateGameOver(this, mainGUI, previewGUI, placementGUI));
     }
 
     /**
@@ -132,10 +133,10 @@ public class MainController {
      * @param newRound sets the new round.
      * @param newGrid sets the new grid.
      */
-    public void updateStates(Round newRound, Grid newGrid) {
+    public void updateStates(Round newRound, TileStack tileStack, Grid newGrid) {
         mainGUI.getScoreboard().rebuild(newRound.getPlayerCount());
         for (AbstractControllerState state : stateMap.values()) {
-            state.updateState(newRound, newGrid);
+            state.updateState(newRound, tileStack, newGrid);
         }
     }
 

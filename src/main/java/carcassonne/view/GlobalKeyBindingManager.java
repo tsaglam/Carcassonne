@@ -14,7 +14,7 @@ import javax.swing.KeyStroke;
 
 import carcassonne.control.MainController;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.secondary.RotationGUI;
+import carcassonne.view.secondary.PreviewGUI;
 
 /**
  * Container class for global key bindings. Offers a global action map and input map which are supposed to be used as
@@ -27,7 +27,7 @@ public class GlobalKeyBindingManager {
     private HashMap<String, KeyStroke> inputs;
     private List<String> inputToActionKeys;
     private MainGUI mainUI;
-    private RotationGUI rotationUI;
+    private PreviewGUI rotationUI;
     private MainController controller;
 
     /**
@@ -36,7 +36,7 @@ public class GlobalKeyBindingManager {
      * @param mainUI is the main user interface.
      * @param rotationUI is the user interface for rotating tiles.
      */
-    public GlobalKeyBindingManager(MainController controller, MainGUI mainUI, RotationGUI rotationUI) {
+    public GlobalKeyBindingManager(MainController controller, MainGUI mainUI, PreviewGUI rotationUI) {
         this.mainUI = mainUI;
         this.rotationUI = rotationUI;
         this.controller = controller;
@@ -45,6 +45,7 @@ public class GlobalKeyBindingManager {
         inputToActionKeys = new ArrayList<>();
         addZoomKeyBindings();
         addRotationBindings();
+        addSelectionBindings();
     }
 
     /**
@@ -69,6 +70,32 @@ public class GlobalKeyBindingManager {
             inputMap.put(inputs.get(key), key);
             actionMap.put(key, actions.get(key));
         }
+    }
+
+    private void addSelectionBindings() {
+        // SELECT TILE ABOVE:
+        KeyStroke upStroke = KeyStroke.getKeyStroke(KeyEvent.VK_UP, NO_MODIFIER);
+        Action selectAboveAction = new AbstractAction() {
+            private static final long serialVersionUID = 5619589338409339194L;
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                rotationUI.selectAbove();
+            }
+        };
+        addKeyBinding("up", upStroke, selectAboveAction);
+
+        // SELECT TILE BELOW:
+        KeyStroke downStroke = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, NO_MODIFIER);
+        Action selectBelowAction = new AbstractAction() {
+            private static final long serialVersionUID = -8199202670185430564L;
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                rotationUI.selectBelow();
+            }
+        };
+        addKeyBinding("down", downStroke, selectBelowAction);
     }
 
     private void addRotationBindings() {

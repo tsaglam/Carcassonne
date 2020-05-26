@@ -6,11 +6,12 @@ import carcassonne.model.Round;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
+import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.RotationGUI;
+import carcassonne.view.secondary.PreviewGUI;
 
 /**
  * Is the abstract state of the state machine.
@@ -20,9 +21,10 @@ public abstract class AbstractControllerState {
 
     protected MainController controller;
     protected MainGUI mainGUI;
-    protected RotationGUI rotationGUI;
+    protected PreviewGUI previewGUI;
     protected PlacementGUI placementGUI;
     protected Round round;
+    protected TileStack tileStack;
     protected Grid grid;
     protected Scoreboard scoreboard;
 
@@ -31,13 +33,13 @@ public abstract class AbstractControllerState {
      * calls the <code>entry()</code> method.
      * @param controller sets the Controller
      * @param mainGUI sets the MainGUI
-     * @param rotationGUI sets the RotationGUI
+     * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public AbstractControllerState(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
+    public AbstractControllerState(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
         this.controller = controller;
         this.mainGUI = mainGUI;
-        this.rotationGUI = rotationGUI;
+        this.previewGUI = previewGUI;
         this.placementGUI = placementGUI;
         scoreboard = mainGUI.getScoreboard();
     }
@@ -83,9 +85,10 @@ public abstract class AbstractControllerState {
      * @param round sets the new round.
      * @param grid sets the new grid.
      */
-    public void updateState(Round round, Grid grid) {
+    public void updateState(Round round, TileStack tileStack, Grid grid) {
         this.round = round;
         this.grid = grid;
+        this.tileStack = tileStack;
     }
 
     /**
@@ -115,18 +118,24 @@ public abstract class AbstractControllerState {
     protected void startNewRound(int playerCount) {
         GameSettings settings = controller.getSettings();
         Grid newGrid = new Grid(settings.getGridWidth(), settings.getGridHeight());
-        Round newRound = new Round(playerCount, newGrid, controller.getSettings());
-        controller.updateStates(newRound, newGrid);
+        TileStack tileStack = new TileStack(playerCount, !settings.isChaosMode()); // TODO (HIGH) remove from round?
+        Round newRound = new Round(playerCount, tileStack, newGrid, controller.getSettings());
+        controller.updateStates(newRound, tileStack, newGrid);
         updateScores();
         updateStackSize();
-        GridSpot spot = round.getCurrentTile().getGridSpot(); // starting spot.
         if (settings.isGridSizeChanged()) {
             settings.setGridSizeChanged(false);
             mainGUI.rebuildGrid();
         }
+        GridSpot spot = grid.getFoundation(); // starting spot.
         mainGUI.setTile(spot.getTile(), spot.getX(), spot.getY());
         highlightSurroundings(spot);
-        round.nextTurn(); // first tile is drawn, player one is active.
+        for (int i = 0; i < round.getPlayerCount(); i++) {
+            Player player = round.getPlayer(i);
+            while (!player.hasFullHand()) {
+                player.addTile(tileStack.drawTile());
+            }
+        }
         mainGUI.setCurrentPlayer(round.getActivePlayer());
         changeState(StatePlacing.class);
     }
@@ -146,7 +155,7 @@ public abstract class AbstractControllerState {
      * Updates the label which displays the current stack size.
      */
     protected void updateStackSize() {
-        scoreboard.updateStackSize(round.getStackSize());
+        scoreboard.updateStackSize(tileStack.getSize());
     }
 
     /**
