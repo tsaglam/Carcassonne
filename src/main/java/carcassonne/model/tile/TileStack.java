@@ -37,6 +37,8 @@ public class TileStack {
         tiles = new Stack<>();
         returnedTiles = new LinkedList<>();
         fillStack();
+        rotateRandomly();
+        Collections.shuffle(tiles);
     }
 
     /**
@@ -90,7 +92,6 @@ public class TileStack {
                 tiles.add(new Tile(tileType));
             }
         }
-        Collections.shuffle(tiles);
     }
 
     private int getAmount(TileType tileType) {
@@ -130,6 +131,14 @@ public class TileStack {
             randomAmounts = new Stack<>(); // get all standard amounts in a stack
             randomAmounts.addAll(TileType.validTiles().stream().map(it -> it.getAmount()).collect(toList()));
             Collections.shuffle(randomAmounts);
+        }
+    }
+
+    private void rotateRandomly() {
+        for (Tile tile : tiles) {
+            for (int i = 0; i < Math.round(Math.random() * 4 - 0.5); i++) {
+                tile.rotateRight(); // Random orientation with equal chance for each orientation.
+            }
         }
     }
 }
