@@ -31,7 +31,7 @@ public class GameSettings {
     private final ArrayList<PlayerColor> colors;
     private int gridHeight;
     private boolean gridSizeChanged;
-
+    private int tilesPerPlayer;
     private int gridWidth;
 
     private final ArrayList<String> names;
@@ -43,6 +43,7 @@ public class GameSettings {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
         amountOfPlayers = 2;
+        tilesPerPlayer = 1;
         gridWidth = 25;
         gridHeight = 15;
         gridSizeChanged = false;
@@ -89,6 +90,14 @@ public class GameSettings {
      */
     public String getPlayerName(int playerNumber) {
         return names.get(playerNumber);
+    }
+
+    /**
+     * Specifies the tiles that each player can hold on his hand.
+     * @return the tiles per player.
+     */
+    public int getTilesPerPlayer() {
+        return tilesPerPlayer;
     }
 
     /**
@@ -175,6 +184,14 @@ public class GameSettings {
     public void setPlayerName(String name, int playerNumber) {
         names.set(playerNumber, name);
         notifyListeners();
+    }
+
+    /**
+     * Changes how many tiles each player can hold on his hand.
+     * @param tilesPerPlayer is the new amount of tiles per player.
+     */
+    public void setTilesPerPlayer(int tilesPerPlayer) {
+        this.tilesPerPlayer = tilesPerPlayer;
     }
 
     private void notifyListeners() {
