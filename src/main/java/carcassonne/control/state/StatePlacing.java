@@ -1,13 +1,14 @@
 package carcassonne.control.state;
 
 import carcassonne.control.MainController;
+import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.RotationGUI;
+import carcassonne.view.secondary.PreviewGUI;
 
 /**
  * The specific state when a Tile can be placed.
@@ -19,11 +20,11 @@ public class StatePlacing extends AbstractControllerState {
      * Constructor of the state.
      * @param controller sets the controller.
      * @param mainGUI sets the MainGUI
-     * @param rotationGUI sets the RotationGUI
+     * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StatePlacing(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
-        super(controller, mainGUI, rotationGUI, placementGUI);
+    public StatePlacing(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, previewGUI, placementGUI);
     }
 
     /**
@@ -64,8 +65,9 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     public void placeTile(int x, int y) {
-        Tile tile = round.getCurrentTile();
+        Tile tile = previewGUI.getSelectedTile();
         if (grid.place(x, y, tile)) {
+            round.getActivePlayer().dropTile(tile);
             mainGUI.setTile(tile, x, y);
             GridSpot spot = grid.getSpot(x, y);
             highlightSurroundings(spot);
@@ -81,7 +83,9 @@ public class StatePlacing extends AbstractControllerState {
         if (round.isOver()) {
             changeState(StateGameOver.class);
         } else {
-            round.skipCurrentTile();
+            Tile tile = previewGUI.getSelectedTile();
+            tileStack.putBack(tile);
+            round.getActivePlayer().dropTile(tile);
             round.nextTurn();
             mainGUI.setCurrentPlayer(round.getActivePlayer());
             entry();
@@ -93,11 +97,11 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     protected void entry() {
-        Tile currentTile = round.getCurrentTile();
-        for (int i = 0; i < Math.round(Math.random() * 4 - 0.5); i++) {
-            currentTile.rotateRight(); // Random orientation with equal chance for each orientation.
+        Player player = round.getActivePlayer();
+        if (!player.hasFullHand() && !tileStack.isEmpty()) {
+            player.addTile(tileStack.drawTile());
         }
-        rotationGUI.setTile(currentTile, round.getActivePlayer());
+        previewGUI.setTiles(player);
         updateStackSize();
     }
 
@@ -106,7 +110,7 @@ public class StatePlacing extends AbstractControllerState {
      */
     @Override
     protected void exit() {
-        rotationGUI.setVisible(false);
+        previewGUI.setVisible(false);
     }
 
 }

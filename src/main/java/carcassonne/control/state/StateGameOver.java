@@ -6,7 +6,7 @@ import carcassonne.model.grid.GridPattern;
 import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.RotationGUI;
+import carcassonne.view.secondary.PreviewGUI;
 import carcassonne.view.tertiary.GameStatisticsGUI;
 
 /**
@@ -22,11 +22,11 @@ public class StateGameOver extends AbstractControllerState {
      * Constructor of the state.
      * @param controller sets the Controller
      * @param mainGUI sets the MainGUI
-     * @param rotationGUI sets the RotationGUI
+     * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StateGameOver(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
-        super(controller, mainGUI, rotationGUI, placementGUI);
+    public StateGameOver(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, previewGUI, placementGUI);
     }
 
     /**

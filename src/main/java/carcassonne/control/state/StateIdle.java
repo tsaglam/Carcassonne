@@ -5,7 +5,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.RotationGUI;
+import carcassonne.view.secondary.PreviewGUI;
 
 /**
  * The specific state if no game is running.
@@ -17,11 +17,11 @@ public class StateIdle extends AbstractControllerState {
      * Constructor of the state.
      * @param controller sets the Controller
      * @param mainGUI sets the MainGUI
-     * @param rotationGUI sets the RotationGUI
+     * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StateIdle(MainController controller, MainGUI mainGUI, RotationGUI rotationGUI, PlacementGUI placementGUI) {
-        super(controller, mainGUI, rotationGUI, placementGUI);
+    public StateIdle(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
+        super(controller, mainGUI, previewGUI, placementGUI);
     }
 
     /**

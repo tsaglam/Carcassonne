@@ -1,9 +1,13 @@
 package carcassonne.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.PlayerColor;
 
@@ -13,11 +17,13 @@ import carcassonne.settings.PlayerColor;
  */
 public class Player {
     private static final int MAX_MEEPLES = 7;
+    private final int maximalTiles;
     private int freeMeeples;
     private final int number;
     private int overallScore;
     private Map<TerrainType, Integer> terrainSpecificScores;
     private final GameSettings settings;
+    private final List<Tile> handOfTiles;
 
     /**
      * Simple constructor.
@@ -28,6 +34,8 @@ public class Player {
         this.number = number;
         this.settings = settings;
         freeMeeples = MAX_MEEPLES;
+        maximalTiles = settings.getTilesPerPlayer();
+        handOfTiles = new ArrayList<>();
         initializeScores();
     }
 
@@ -42,11 +50,48 @@ public class Player {
     }
 
     /**
+     * Adds a tile to the hand of the player if there is space.
+     * @param tile the new tile.
+     * @return true if successfully added, false if the hand is full.
+     */
+    public boolean addTile(Tile tile) {
+        if (handOfTiles.size() < maximalTiles) {
+            return handOfTiles.add(tile);
+        }
+        return false;
+    }
+
+    /**
+     * Drops a tile from the hand of the player.
+     * @param tile is the tile to drop.
+     * @return true if it was dropped, false if it is not in the hand of the player.
+     */
+    public boolean dropTile(Tile tile) {
+        return handOfTiles.remove(tile);
+    }
+
+    /**
+     * Convenience method for {@link GameSettings#getPlayerColor(int)}.
+     * @return the {@link PlayerColor} of this player.
+     */
+    public PlayerColor getColor() {
+        return settings.getPlayerColor(number);
+    }
+
+    /**
      * Getter for the amount of free meeples.
      * @return the amount of free meeples.
      */
     public int getFreeMeeples() {
         return freeMeeples;
+    }
+
+    /**
+     * Gives access to the hand of tiles.
+     * @return the hand of tiles.
+     */
+    public Collection<Tile> getHandOfTiles() { // TODO (HIGH) should be read only
+        return handOfTiles;
     }
 
     /**
@@ -59,6 +104,14 @@ public class Player {
             return new Meeple(this);
         }
         throw new IllegalStateException("No unused meeples are left.");
+    }
+
+    /**
+     * Convenience method for {@link GameSettings#getPlayerName(int)}.
+     * @return the name of this player.
+     */
+    public String getName() {
+        return settings.getPlayerName(number);
     }
 
     /**
@@ -98,26 +151,26 @@ public class Player {
     }
 
     /**
+     * Checks if the hand of the player is full.
+     * @return true if full.
+     */
+    public boolean hasFullHand() {
+        return handOfTiles.size() == maximalTiles;
+    }
+    
+    /**
+     * Checks if the hand of the player is full.
+     * @return true if full.
+     */
+    public boolean hasEmptyHand() {
+        return handOfTiles.isEmpty();
+    }
+
+    /**
      * Returns a meeple after its job is down. Allows the player to place another meeple.
      */
     public void returnMeeple() {
         freeMeeples++;
-    }
-
-    /**
-     * Convenience method for {@link GameSettings#getPlayerName(int)}.
-     * @return the name of this player.
-     */
-    public String getName() {
-        return settings.getPlayerName(number);
-    }
-
-    /**
-     * Convenience method for {@link GameSettings#getPlayerColor(int)}.
-     * @return the {@link PlayerColor} of this player.
-     */
-    public PlayerColor getColor() {
-        return settings.getPlayerColor(number);
     }
 
     @Override

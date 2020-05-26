@@ -8,8 +8,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 
 import carcassonne.control.MainController;
+import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
 import carcassonne.view.main.MainGUI;
@@ -23,6 +25,7 @@ public class PlacementGUI extends SecondaryGUI {
     private PlacementButton[][] button;
     private JButton buttonSkip;
     private Color defaultButtonColor;
+    private Tile tile;
 
     /**
      * Simple constructor which uses the constructor of the <code>SmallGUI</code>.
@@ -34,7 +37,21 @@ public class PlacementGUI extends SecondaryGUI {
         constraints.fill = GridBagConstraints.BOTH;
         buildButtonSkip();
         buildButtonGrid();
-        finishFrame();
+        pack();
+    }
+    
+    /**
+     * Sets the tile of the GUI, updates the GUI and then makes it visible. Should be called to show the GUI. The method
+     * implements the template method pattern using the method <code>update()</code>.
+     * @param tile sets the tile.
+     * @param currentPlayer sets the color scheme according to the player.
+     */
+    public void setTile(Tile tile, Player currentPlayer) {
+        if (tile == null) {
+            throw new IllegalArgumentException("Tried to set the tile of the " + getClass().getSimpleName() + " to null.");
+        }
+        this.tile = tile;
+        setPlayerAndUpdateGUI(currentPlayer);
     }
 
     // build button grid
@@ -47,7 +64,7 @@ public class PlacementGUI extends SecondaryGUI {
                 button[x][y].setToolTipText("Place Meeple on the " + GridDirection.values2D()[x][y].toReadableString() + " of the tile.");
                 constraints.gridx = x;
                 constraints.gridy = y + 1;
-                panel.add(button[x][y], constraints);
+                dialogPanel.add(button[x][y], constraints);
             }
         }
     }
@@ -57,7 +74,7 @@ public class PlacementGUI extends SecondaryGUI {
         buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
         defaultButtonColor = buttonSkip.getBackground();
         constraints.gridwidth = 3;
-        panel.add(buttonSkip, constraints);
+        dialogPanel.add(buttonSkip, constraints);
         buttonSkip.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -90,6 +107,5 @@ public class PlacementGUI extends SecondaryGUI {
                 }
             }
         }
-        finishFrame();
     }
 }
