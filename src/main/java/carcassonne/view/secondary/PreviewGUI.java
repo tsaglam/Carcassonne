@@ -16,6 +16,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
+import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
 import carcassonne.view.main.MainGUI;
 
@@ -28,7 +29,6 @@ public class PreviewGUI extends SecondaryGUI {
     private static final int SELECTION_BORDER_WIDTH = 3;
     private static final int SELECTION_SIZE = 100;
     private static final int DEFAULT_SIZE = 90;
-    private static final int MAXIMUM_TILES = 5;
     private JButton buttonRotateLeft;
     private JButton buttonRotateRight;
     private JButton buttonSkip;
@@ -172,7 +172,7 @@ public class PreviewGUI extends SecondaryGUI {
         ImageIcon defaultImage = new Tile(TileType.Null).getScaledIcon(SELECTION_SIZE);
         tileLabels = new ArrayList<>();
         tiles = new ArrayList<>();
-        for (int i = 0; i < MAXIMUM_TILES; i++) {
+        for (int i = 0; i < GameSettings.MAXIMAL_TILES_ON_HAND; i++) {
             JLabel label = new JLabel(defaultImage);
             tileLabels.add(label);
             constraints.gridy++;
@@ -198,7 +198,7 @@ public class PreviewGUI extends SecondaryGUI {
     // Resets the selection index and adapts the tile labels to the given amount of tiles.
     private void updatePreviewLabels() {
         selectionIndex = 0;
-        for (int i = tiles.size(); i < MAXIMUM_TILES; i++) {
+        for (int i = tiles.size(); i < GameSettings.MAXIMAL_TILES_ON_HAND; i++) {
             tileLabels.get(i).setVisible(false);
         }
         for (int i = 0; i < tiles.size(); i++) {
