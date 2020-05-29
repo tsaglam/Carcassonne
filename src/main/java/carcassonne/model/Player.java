@@ -87,11 +87,11 @@ public class Player {
     }
 
     /**
-     * Gives access to the hand of tiles.
+     * Gives read access to the hand of tiles.
      * @return the hand of tiles.
      */
-    public Collection<Tile> getHandOfTiles() { // TODO (HIGH) should be read only
-        return handOfTiles;
+    public Collection<Tile> getHandOfTiles() {
+        return new ArrayList<>(handOfTiles);
     }
 
     /**
@@ -157,7 +157,7 @@ public class Player {
     public boolean hasFullHand() {
         return handOfTiles.size() == maximalTiles;
     }
-    
+
     /**
      * Checks if the hand of the player is full.
      * @return true if full.

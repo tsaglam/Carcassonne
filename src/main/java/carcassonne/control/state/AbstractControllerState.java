@@ -83,6 +83,7 @@ public abstract class AbstractControllerState {
     /**
      * Updates the round and the grid object after a new round was started.
      * @param round sets the new round.
+     * @param tileStack sets the tile stack.
      * @param grid sets the new grid.
      */
     public void updateState(Round round, TileStack tileStack, Grid grid) {
