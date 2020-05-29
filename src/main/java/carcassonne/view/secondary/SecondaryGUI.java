@@ -1,6 +1,5 @@
 package carcassonne.view.secondary;
 
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.ActionMap;
@@ -24,7 +23,6 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
     private static final int INITIAL_X = 100;
     private static final int INITIAL_Y = 150;
     private static final long serialVersionUID = 4056347951568551115L;
-    protected GridBagConstraints constraints;
     protected MainController controller;
     protected Player currentPlayer;
     protected JPanel dialogPanel;
@@ -38,7 +36,6 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
         super(ui);
         dialogPanel = new JPanel(new GridBagLayout());
         this.controller = controller;
-        constraints = new GridBagConstraints();
         buildFrame(ui);
     }
 
@@ -68,20 +65,16 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setLocation(INITIAL_X, INITIAL_Y);
     }
-
-    protected void setPlayerAndUpdateGUI(Player currentPlayer) {
+    
+    protected void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
         dialogPanel.setBackground(currentPlayer.getColor().lightColor());
-        updateGUI();
+    }
+
+    protected void showUI() {
         pack();
         setVisible(true);
         toFront(); // sets the focus on the secondary GUI, removes need for double clicks
     }
-
-    /**
-     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update the GUI content according
-     * to the tiles properties.
-     */
-    protected abstract void updateGUI();
 
 }
