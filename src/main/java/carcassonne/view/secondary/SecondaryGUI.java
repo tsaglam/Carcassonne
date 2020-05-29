@@ -65,12 +65,19 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setLocation(INITIAL_X, INITIAL_Y);
     }
-    
+
+    /**
+     * Sets the current player and updates the background color.
+     * @param currentPlayer is the player who is supposed to play his turn.
+     */
     protected void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
         dialogPanel.setBackground(currentPlayer.getColor().lightColor());
     }
 
+    /**
+     * Show the secondary UI and bring it to the front.
+     */
     protected void showUI() {
         pack();
         setVisible(true);
