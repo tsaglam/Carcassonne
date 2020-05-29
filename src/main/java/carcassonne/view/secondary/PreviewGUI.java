@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import carcassonne.control.MainController;
@@ -24,9 +25,10 @@ import carcassonne.view.main.MainGUI;
  */
 public class PreviewGUI extends SecondaryGUI {
     private static final long serialVersionUID = -5179683977081970564L;
-    private static final int TILE_INCREASE = 10;
+    private static final int SELECTION_BORDER_WIDTH = 3;
+    private static final int SELECTION_SIZE = 100;
+    private static final int DEFAULT_SIZE = 90;
     private static final int MAXIMUM_TILES = 5;
-    private static final int TILE_PREVIEW_SIZE = 100;
     private JButton buttonRotateLeft;
     private JButton buttonRotateRight;
     private JButton buttonSkip;
@@ -100,13 +102,28 @@ public class PreviewGUI extends SecondaryGUI {
     public void setTiles(Player currentPlayer) {
         tiles.clear();
         tiles.addAll(currentPlayer.getHandOfTiles());
-        setPlayerAndUpdateGUI(currentPlayer);
+        setCurrentPlayer(currentPlayer);
+        updatePreviewLabels();
+        showUI();
     }
 
     @Override
     public void notifyChange() {
         super.notifyChange();
-        selectTileLabel(selectionIndex);
+        updateTileLabel(selectionIndex);
+    }
+
+    /**
+     * Selects a specific tile label, increasing its size and adding a border. Resets the previous selection.
+     * @param index is the index of the label. If the index is not valid nothing will happen.
+     */
+    public void selectTileLabel(int index) {
+        if (index < tiles.size()) {
+            int oldSelection = selectionIndex;
+            selectionIndex = index;
+            updateTileLabel(index);
+            updateTileLabel(oldSelection);
+        }
     }
 
     private void addMouseAdapters() {
@@ -143,24 +160,22 @@ public class PreviewGUI extends SecondaryGUI {
         // set listeners:
         addMouseAdapters();
         // set constraints:
-        constraints.fill = GridBagConstraints.BOTH;
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.VERTICAL;
         // add buttons:
         dialogPanel.add(buttonRotateLeft, constraints);
         dialogPanel.add(buttonSkip, constraints);
         dialogPanel.add(buttonRotateRight, constraints);
         // change constraints and add label:
-        constraints.gridy = 0;
-        constraints.gridx = 0;
-        constraints.ipady = 0;
+        constraints.gridy = 1;
         constraints.gridwidth = 3;
-        ImageIcon defaultImage = new Tile(TileType.Null).getScaledIcon(TILE_PREVIEW_SIZE);
+        ImageIcon defaultImage = new Tile(TileType.Null).getScaledIcon(SELECTION_SIZE);
         tileLabels = new ArrayList<>();
         tiles = new ArrayList<>();
         for (int i = 0; i < MAXIMUM_TILES; i++) {
             JLabel label = new JLabel(defaultImage);
-            label.setVisible(true);
             tileLabels.add(label);
-            constraints.gridy = i + 1;
+            constraints.gridy++;
             final int index = i;
             label.addMouseListener(new MouseAdapter() {
                 @Override
@@ -172,41 +187,17 @@ public class PreviewGUI extends SecondaryGUI {
         }
     }
 
-    /**
-     * Selects a specific tile label, increasing its size and adding a border. Resets the previous selection.
-     * @param index is the index of the label.
-     */
-    private void selectTileLabel(int index) {
-        if (tiles.size() > 1 && index < tiles.size()) {
-            selectionIndex = index;
-            for (int i = 0; i < tiles.size(); i++) {
-                ImageIcon icon = tiles.get(i).getScaledIcon(TILE_PREVIEW_SIZE);
-                tileLabels.get(i).setIcon(icon);
-                tileLabels.get(i).setBorder(null);
-            }
-            JLabel label = tileLabels.get(index);
-            label.setIcon(tiles.get(index).getScaledIcon(TILE_PREVIEW_SIZE + TILE_INCREASE)); // TODO constant
-            label.setBorder(new LineBorder(currentPlayer.getColor().textColor(), 2)); // TODO constant
-            pack();
-        }
-    }
-
-    /**
-     * Updates the image of a specific tile label.
-     * @param index is the index of the label.
-     */
+    // Updates the image of a specific tile label.
     private void updateTileLabel(int index) {
-        int iconSize = tiles.size() > 1 && index == selectionIndex ? TILE_PREVIEW_SIZE + TILE_INCREASE : TILE_PREVIEW_SIZE;
-        ImageIcon icon = tiles.get(index).getScaledIcon(iconSize);
+        boolean selected = tiles.size() > 1 && index == selectionIndex; // is the label selected or not?
+        ImageIcon icon = tiles.get(index).getScaledIcon(selected ? SELECTION_SIZE : DEFAULT_SIZE);
         tileLabels.get(index).setIcon(icon);
+        tileLabels.get(index).setBorder(selected ? createSelectionBorder() : null);
     }
 
-    /**
-     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update the GUI content according
-     * to the tiles properties.
-     */
-    @Override
-    protected void updateGUI() {
+    // Resets the selection index and adapts the tile labels to the given amount of tiles.
+    private void updatePreviewLabels() {
+        selectionIndex = 0;
         for (int i = tiles.size(); i < MAXIMUM_TILES; i++) {
             tileLabels.get(i).setVisible(false);
         }
@@ -214,6 +205,11 @@ public class PreviewGUI extends SecondaryGUI {
             tileLabels.get(i).setVisible(true);
             updateTileLabel(i);
         }
-        selectTileLabel(0);
+        pack();
+    }
+
+    // Creates the selection border. The color is always up to date.
+    private Border createSelectionBorder() {
+        return new LineBorder(currentPlayer.getColor().textColor(), SELECTION_BORDER_WIDTH);
     }
 }

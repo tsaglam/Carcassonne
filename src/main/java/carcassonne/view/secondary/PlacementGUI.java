@@ -34,12 +34,11 @@ public class PlacementGUI extends SecondaryGUI {
      */
     public PlacementGUI(MainController controller, MainGUI ui) {
         super(controller, ui);
-        constraints.fill = GridBagConstraints.BOTH;
         buildButtonSkip();
         buildButtonGrid();
         pack();
     }
-    
+
     /**
      * Sets the tile of the GUI, updates the GUI and then makes it visible. Should be called to show the GUI. The method
      * implements the template method pattern using the method <code>update()</code>.
@@ -51,11 +50,15 @@ public class PlacementGUI extends SecondaryGUI {
             throw new IllegalArgumentException("Tried to set the tile of the " + getClass().getSimpleName() + " to null.");
         }
         this.tile = tile;
-        setPlayerAndUpdateGUI(currentPlayer);
+        setCurrentPlayer(currentPlayer);
+        updatePlacementButtons();
+        showUI();
     }
 
     // build button grid
     private void buildButtonGrid() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = 1;
         button = new PlacementButton[3][3];
         for (int y = 0; y < 3; y++) {
@@ -73,6 +76,8 @@ public class PlacementGUI extends SecondaryGUI {
         buttonSkip = new JButton(ImageLoadingUtil.SKIP.createImageIcon());
         buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
         defaultButtonColor = buttonSkip.getBackground();
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = 3;
         dialogPanel.add(buttonSkip, constraints);
         buttonSkip.addMouseListener(new MouseAdapter() {
@@ -84,11 +89,9 @@ public class PlacementGUI extends SecondaryGUI {
     }
 
     /**
-     * Primitive operation for the template method <code>setTile()</code>. Uses the tile to update the GUI content according
-     * to the tiles properties.
+     * Updates the buttons to reflect the current placement options.
      */
-    @Override
-    protected void updateGUI() {
+    private void updatePlacementButtons() {
         GridDirection[][] directions = GridDirection.values2D();
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
