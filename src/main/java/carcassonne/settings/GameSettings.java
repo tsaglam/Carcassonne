@@ -15,6 +15,7 @@ import carcassonne.view.PaintShop;
  */
 public class GameSettings {
     public static final int MAXIMAL_PLAYERS = 5;
+    public static final int MAXIMAL_TILES_ON_HAND = 5;
     public static final String TILE_FILE_TYPE = ".png";
     public static final String TILE_FOLDER_PATH = "tiles/";
     public static final int TILE_SIZE = 100;

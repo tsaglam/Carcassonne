@@ -23,8 +23,10 @@ import carcassonne.view.tertiary.GridSizeDialog;
  * @author Timur Saglam
  */
 public class MainMenuBar extends JMenuBar implements Notifiable {
-
     private static final long serialVersionUID = -599734693130415390L;
+    private static final String CLASSIC = " (Classic)";
+    private static final String TILES_PER_PLAYER = " Tiles on the Hand";
+    private static final String HAND_SETTINGS = "Hand of Tiles";
     private static final String GRID_SIZE = "Change Grid Size";
     private static final String ABORT = "Abort Current Game";
     private static final String AMOUNT = "Amount of Players";
@@ -34,7 +36,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private static final String NEW_ROUND = "Start New Round";
     private static final String OPTIONS = "Options";
     private static final String PLAYERS = " Players";
-    private static final String SETTINGS = "Player Settings";
+    private static final String COLOR_SETTINGS = "Color Settings";
     private static final String SETTINGS_OF = "Settings of ";
     private static final String VIEW = "View";
     private final MainController controller;
@@ -45,10 +47,12 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private JMenu menuGame;
     private JMenu menuOptions;
     private JMenu menuPlayers;
-    private JMenu menuSettings;
+    private JMenu menuColor;
     private JMenu menuView;
     private final Scoreboard scoreboard;
     private final GameSettings settings;
+    private JMenuItem[] itemTiles;
+    private JMenu menuHand;
 
     /**
      * Simple constructor creating the menu bar.
@@ -117,11 +121,13 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private void buildOptionsMenu() {
         buildPlayerMenu();
-        buildSettingsMenu();
+        buildHandMenu();
+        buildColorMenu();
         notifyChange(); // set colors
         menuOptions = new JMenu(OPTIONS);
         menuOptions.add(menuPlayers);
-        menuOptions.add(menuSettings);
+        menuOptions.add(menuHand);
+        menuOptions.add(menuColor);
         menuOptions.addSeparator();
         JCheckBoxMenuItem itemChaosMode = new JCheckBoxMenuItem(CHAOS_MODE);
         itemChaosMode.addMouseListener(new MouseAdapter() {
@@ -156,14 +162,37 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemPlayerCount[0].setSelected(true);
     }
 
-    private void buildSettingsMenu() { // TODO (MEDIUM) reduce duplication
+    private void buildColorMenu() { // TODO (MEDIUM) reduce duplication
         itemSettings = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
-        menuSettings = new JMenu(SETTINGS);
+        menuColor = new JMenu(COLOR_SETTINGS);
         for (int i = 0; i < itemSettings.length; i++) {
             itemSettings[i] = new JMenuItem();
             itemSettings[i].addMouseListener(scoreboard.getSettingsMouseListener(i));
-            menuSettings.add(itemSettings[i]);
+            menuColor.add(itemSettings[i]);
         }
+    }
+
+    private void buildHandMenu() {
+        itemTiles = new JRadioButtonMenuItem[GameSettings.MAXIMAL_TILES_ON_HAND];
+        menuHand = new JMenu(HAND_SETTINGS);
+        ButtonGroup group = new ButtonGroup();
+        for (int i = 0; i < itemTiles.length; i++) {
+            int numberOfTiles = i + 1;
+            String itemText = numberOfTiles + TILES_PER_PLAYER;
+            if (numberOfTiles == 1) {
+                itemText += CLASSIC;
+            }
+            itemTiles[i] = new JRadioButtonMenuItem(itemText);
+            itemTiles[i].addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    settings.setTilesPerPlayer(numberOfTiles);
+                }
+            });
+            group.add(itemTiles[i]);
+            menuHand.add(itemTiles[i]);
+        }
+        itemTiles[settings.getTilesPerPlayer() - 1].setSelected(true);
     }
 
     private void buildViewMenu() {
