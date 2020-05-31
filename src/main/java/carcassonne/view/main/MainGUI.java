@@ -180,6 +180,7 @@ public class MainGUI extends JFrame implements Notifiable {
         if (zoomLevel < MAX_ZOOM_LEVEL) {
             zoomLevel += ZOOM_STEP_SIZE;
             updateToChangedZoomLevel(false);
+            menuBar.getZoomSlider().setValue(zoomLevel); // ensures the slider is updated when using key bindings.
         }
     }
 
@@ -190,6 +191,7 @@ public class MainGUI extends JFrame implements Notifiable {
         if (zoomLevel > MIN_ZOOM_LEVEL) {
             zoomLevel -= ZOOM_STEP_SIZE;
             updateToChangedZoomLevel(false);
+            menuBar.getZoomSlider().setValue(zoomLevel); // ensures the slider is updated when using key bindings.
         }
     }
 

@@ -17,8 +17,10 @@ public class ZoomSlider extends JSlider {
     private static final long serialVersionUID = -5518487902213410121L;
     private static final int MAXIMUM_VALUE = 300;
     private static final int MINIMUM_VALUE = 50;
+    private static final int SLIDER_STEP_SIZE = 25;
     private JMenuItem zoomOut;
     private JMenuItem zoomIn;
+    private ZoomSliderListener zoomListener;
 
     /**
      * Creates the slider.
@@ -31,7 +33,7 @@ public class ZoomSlider extends JSlider {
         setMinorTickSpacing(5);
         setMajorTickSpacing(50);
         setSnapToTicks(true);
-        ZoomSliderListener zoomListener = new ZoomSliderListener(mainUI, this);
+        zoomListener = new ZoomSliderListener(mainUI, this);
         addMouseListener(zoomListener);
         addChangeListener(zoomListener);
         zoomIn = new JMenuItem("Zoom In (+)");
@@ -39,19 +41,13 @@ public class ZoomSlider extends JSlider {
         zoomIn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {
-                mainUI.zoomIn();
-                zoomListener.setBlocked(true);
-                setValue(mainUI.getZoom());
-                zoomListener.setBlocked(false);
+                setValue(getValue() + SLIDER_STEP_SIZE);
             }
         });
         zoomOut.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {
-                mainUI.zoomOut();
-                zoomListener.setBlocked(true);
-                setValue(mainUI.getZoom());
-                zoomListener.setBlocked(false);
+                setValue(getValue() - SLIDER_STEP_SIZE);
             }
         });
     }
