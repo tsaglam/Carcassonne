@@ -16,7 +16,7 @@ import carcassonne.view.main.MainGUI;
 public class ZoomSlider extends JSlider {
     private static final long serialVersionUID = -5518487902213410121L;
     private static final int MAXIMUM_VALUE = 300;
-    private static final int MINIMUM_VALUE = 50;
+    private static final int MINIMUM_VALUE = 25;
     private static final int SLIDER_STEP_SIZE = 25;
     private JMenuItem zoomOut;
     private JMenuItem zoomIn;
