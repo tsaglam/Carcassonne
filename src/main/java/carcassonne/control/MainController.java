@@ -41,7 +41,6 @@ public class MainController {
      */
     public MainController() {
         settings = new GameSettings();
-
         mainGUI = new MainGUI(this);
         previewGUI = new PreviewGUI(this, mainGUI);
         placementGUI = new PlacementGUI(this, mainGUI);

@@ -53,6 +53,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private final GameSettings settings;
     private JMenuItem[] itemTiles;
     private JMenu menuHand;
+    private ZoomSlider slider;
 
     /**
      * Simple constructor creating the menu bar.
@@ -87,6 +88,14 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
      */
     public Scoreboard getScoreboard() {
         return scoreboard;
+    }
+    
+    /**
+     * Grants access to the zoom slider of the menu bar.
+     * @return the slider.
+     */
+    public ZoomSlider getZoomSlider() {
+        return slider;
     }
 
     @Override
@@ -196,7 +205,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildViewMenu() {
-        ZoomSlider slider = new ZoomSlider(mainUI);
+        slider = new ZoomSlider(mainUI);
         menuView = new JMenu(VIEW);
         menuView.add(slider.getZoomIn());
         menuView.add(slider);
