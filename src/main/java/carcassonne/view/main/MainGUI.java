@@ -47,7 +47,7 @@ public class MainGUI extends JFrame implements Notifiable {
     private static final int SCROLL_SPEED = 15;
     private static final Color GUI_COLOR = new Color(190, 190, 190);
     private static final int MAX_ZOOM_LEVEL = 300;
-    private static final int MIN_ZOOM_LEVEL = 50;
+    private static final int MIN_ZOOM_LEVEL = 25;
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
     private static final int ZOOM_STEP_SIZE = 25;
     private static final Dimension MINIMAL_WINDOW_SIZE = new Dimension(640, 480);
