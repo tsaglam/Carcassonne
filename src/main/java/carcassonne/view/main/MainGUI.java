@@ -1,7 +1,6 @@
 package carcassonne.view.main;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -44,11 +43,10 @@ import carcassonne.view.menubar.Scoreboard;
  */
 // TODO (HIGH) Custom classes for the two layers.
 public class MainGUI extends JFrame implements Notifiable {
+    private static final long serialVersionUID = 5684446992452298030L; // generated UID
     private static final int SCROLL_SPEED = 15;
-    private static final Color GUI_COLOR = new Color(190, 190, 190);
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 25;
-    private static final long serialVersionUID = 5684446992452298030L; // generated UID
     private static final int ZOOM_STEP_SIZE = 25;
     private static final Dimension MINIMAL_WINDOW_SIZE = new Dimension(640, 480);
     private GridBagConstraints constraints;
@@ -380,7 +378,7 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     private JPanel buildTileLayer() {
         tileLayer = new JPanel();
-        tileLayer.setBackground(GUI_COLOR);
+        tileLayer.setBackground(GameSettings.GUI_COLOR);
         tileLayer.setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         tileLabels = new ArrayList<>();

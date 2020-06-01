@@ -14,6 +14,7 @@ import carcassonne.view.PaintShop;
  * @author Timur Saglam
  */
 public class GameSettings {
+    public static final Color GUI_COLOR = new Color(190, 190, 190);
     public static final int MAXIMAL_PLAYERS = 5;
     public static final int MAXIMAL_TILES_ON_HAND = 5;
     public static final String TILE_FILE_TYPE = ".png";
