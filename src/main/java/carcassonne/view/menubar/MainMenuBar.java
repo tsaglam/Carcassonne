@@ -11,18 +11,21 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSeparator;
 
 import carcassonne.control.MainController;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.tertiary.GridSizeDialog;
+import carcassonne.view.tertiary.TileDistributionGUI;
 
 /**
  * The menu bar for the main GUI.
  * @author Timur Saglam
  */
 public class MainMenuBar extends JMenuBar implements Notifiable {
+    private static final String DISTRIBUTION = "Tile Distribution Information";
     private static final long serialVersionUID = -599734693130415390L;
     private static final String CLASSIC = " (Classic)";
     private static final String TILES_PER_PLAYER = " Tiles on the Hand";
@@ -89,7 +92,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     public Scoreboard getScoreboard() {
         return scoreboard;
     }
-    
+
     /**
      * Grants access to the zoom slider of the menu bar.
      * @return the slider.
@@ -118,13 +121,22 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private void buildGameMenu() {
         itemNewRound = new JMenuItem(NEW_ROUND);
         itemAbortRound = new JMenuItem(ABORT);
+        JMenuItem itemDistribution = new JMenuItem(DISTRIBUTION);
         itemAbortRound.setEnabled(false);
         itemNewRound.addMouseListener(new NewRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
         itemAbortRound.addMouseListener(new AbortRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
+        itemDistribution.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                new TileDistributionGUI();
+            }
+        });
         // build menu:
         menuGame = new JMenu(GAME);
         menuGame.add(itemNewRound);
         menuGame.add(itemAbortRound);
+        menuGame.add(new JSeparator());
+        menuGame.add(itemDistribution);
         add(menuGame);
     }
 
