@@ -22,6 +22,7 @@ import carcassonne.settings.GameSettings;
  * @author Timur Saglam
  */
 public class TileDistributionGUI extends JDialog {
+    private static final String TITLE = "Standard Two-Player Game Tile Distribution";
     private static final long serialVersionUID = 1805511300999150753L;
     private static final String TIMES = "x ";
     private static final int BORDER_SIZE = 2;
@@ -70,6 +71,7 @@ public class TileDistributionGUI extends JDialog {
      * Shows and resizes the window.
      */
     private void buildWindow() {
+        setTitle(TITLE);
         setVisible(true);
         pack();
         setSize(getWidth() + PADDING * GRID_WIDTH, getHeight() + PADDING * GRID_HEIGHT);
