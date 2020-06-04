@@ -99,6 +99,14 @@ public enum TileType { // TODO (MEDIUM) rename enum values and tile image resour
     }
 
     /**
+     * Returns the tile type name with spaces between names in lower case.
+     * @return the readable representation, such as "castle wall".
+     */
+    public String readableRepresentation() {
+        return toString().replaceAll("([^_])([A-Z])", "$1 $2").toLowerCase();
+    }
+
+    /**
      * Returns a list of all valid tile types.
      * @return all tile types except {@link TileType#Null}.
      */
