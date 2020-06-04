@@ -1,6 +1,7 @@
 package carcassonne.view.tertiary;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
@@ -22,6 +23,7 @@ import carcassonne.settings.GameSettings;
  * @author Timur Saglam
  */
 public class TileDistributionGUI extends JDialog {
+    private static final String CLICK_TO_ROTATE = "Click to rotate the tile of type ";
     private static final String TITLE = "Standard Two-Player Game Tile Distribution";
     private static final long serialVersionUID = 1805511300999150753L;
     private static final String TIMES = "x ";
@@ -75,6 +77,7 @@ public class TileDistributionGUI extends JDialog {
         setVisible(true);
         pack();
         setSize(getWidth() + PADDING * GRID_WIDTH, getHeight() + PADDING * GRID_HEIGHT);
+        setLocationRelativeTo(null);
         setResizable(false);
     }
 
@@ -87,7 +90,10 @@ public class TileDistributionGUI extends JDialog {
         label.setBackground(GameSettings.GUI_COLOR);
         label.setOpaque(true);
         label.setBorder(border);
+        label.setToolTipText(CLICK_TO_ROTATE + tileType.readableRepresentation());
         label.setText(tileType.getAmount() + TIMES);
+        Font font = label.getFont();
+        label.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {

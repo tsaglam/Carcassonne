@@ -25,6 +25,7 @@ import carcassonne.view.main.MainGUI;
  * @author Timur Saglam
  */
 public class PreviewGUI extends SecondaryGUI {
+    private static final String TILE_TOOL_TIP = "Tile of type ";
     private static final long serialVersionUID = -5179683977081970564L;
     private static final int SELECTION_BORDER_WIDTH = 3;
     private static final int SELECTION_SIZE = 100;
@@ -191,6 +192,7 @@ public class PreviewGUI extends SecondaryGUI {
     private void updateTileLabel(int index) {
         boolean selected = tiles.size() > 1 && index == selectionIndex; // is the label selected or not?
         ImageIcon icon = tiles.get(index).getScaledIcon(selected ? SELECTION_SIZE : DEFAULT_SIZE);
+        tileLabels.get(index).setToolTipText(TILE_TOOL_TIP + tiles.get(index).getType().readableRepresentation());
         tileLabels.get(index).setIcon(icon);
         tileLabels.get(index).setBorder(selected ? createSelectionBorder() : null);
     }
