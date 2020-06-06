@@ -111,7 +111,9 @@ public class PreviewGUI extends SecondaryGUI {
     @Override
     public void notifyChange() {
         super.notifyChange();
-        updateTileLabel(selectionIndex);
+        if (!tiles.isEmpty()) {
+            updateTileLabel(selectionIndex);
+        }
     }
 
     /**
