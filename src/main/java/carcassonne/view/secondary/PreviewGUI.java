@@ -192,11 +192,12 @@ public class PreviewGUI extends SecondaryGUI {
 
     // Updates the image of a specific tile label.
     private void updateTileLabel(int index) {
-        boolean selected = tiles.size() > 1 && index == selectionIndex; // is the label selected or not?
-        ImageIcon icon = tiles.get(index).getScaledIcon(selected ? SELECTION_SIZE : DEFAULT_SIZE);
+        boolean singleTile = tiles.size() == 1;
+        boolean selected = index == selectionIndex; // is the label selected or not?
+        ImageIcon icon = tiles.get(index).getScaledIcon(selected || singleTile ? SELECTION_SIZE : DEFAULT_SIZE);
         tileLabels.get(index).setToolTipText(TILE_TOOL_TIP + tiles.get(index).getType().readableRepresentation());
         tileLabels.get(index).setIcon(icon);
-        tileLabels.get(index).setBorder(selected ? createSelectionBorder() : null);
+        tileLabels.get(index).setBorder(selected && !singleTile ? createSelectionBorder() : null);
     }
 
     // Resets the selection index and adapts the tile labels to the given amount of tiles.
