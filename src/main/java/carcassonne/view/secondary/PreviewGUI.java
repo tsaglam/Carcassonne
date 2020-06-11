@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -25,11 +26,13 @@ import carcassonne.view.main.MainGUI;
  * @author Timur Saglam
  */
 public class PreviewGUI extends SecondaryGUI {
+    private static final int BOTTOM_SPACE = 5;
+    private static final int SIZE_DIFFERENCE = 10;
     private static final String TILE_TOOL_TIP = "Tile of type ";
     private static final long serialVersionUID = -5179683977081970564L;
     private static final int SELECTION_BORDER_WIDTH = 3;
-    private static final int SELECTION_SIZE = 100;
-    private static final int DEFAULT_SIZE = 90;
+    private final int selectionSize;
+    private final int defaultSize;
     private JButton buttonRotateLeft;
     private JButton buttonRotateRight;
     private JButton buttonSkip;
@@ -46,6 +49,8 @@ public class PreviewGUI extends SecondaryGUI {
         super(controller, ui);
         buildContent();
         pack();
+        selectionSize = buttonSkip.getWidth() + buttonRotateLeft.getWidth() + buttonRotateRight.getWidth() -10;
+        defaultSize = selectionSize - SIZE_DIFFERENCE;
     }
 
     /**
@@ -164,15 +169,16 @@ public class PreviewGUI extends SecondaryGUI {
         addMouseAdapters();
         // set constraints:
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.VERTICAL;
+        constraints.fill = GridBagConstraints.NONE;
         // add buttons:
         dialogPanel.add(buttonRotateLeft, constraints);
         dialogPanel.add(buttonSkip, constraints);
         dialogPanel.add(buttonRotateRight, constraints);
         // change constraints and add label:
+        constraints.fill = GridBagConstraints.VERTICAL;
         constraints.gridy = 1;
         constraints.gridwidth = 3;
-        ImageIcon defaultImage = new Tile(TileType.Null).getScaledIcon(SELECTION_SIZE);
+        ImageIcon defaultImage = new Tile(TileType.Null).getScaledIcon(50);
         tileLabels = new ArrayList<>();
         tiles = new ArrayList<>();
         for (int i = 0; i < GameSettings.MAXIMAL_TILES_ON_HAND; i++) {
@@ -188,13 +194,14 @@ public class PreviewGUI extends SecondaryGUI {
             });
             dialogPanel.add(label, constraints);
         }
+        dialogPanel.add(Box.createVerticalStrut(BOTTOM_SPACE), constraints);
     }
 
     // Updates the image of a specific tile label.
     private void updateTileLabel(int index) {
         boolean singleTile = tiles.size() == 1;
         boolean selected = index == selectionIndex; // is the label selected or not?
-        ImageIcon icon = tiles.get(index).getScaledIcon(selected || singleTile ? SELECTION_SIZE : DEFAULT_SIZE);
+        ImageIcon icon = tiles.get(index).getScaledIcon(selected || singleTile ? selectionSize : defaultSize);
         tileLabels.get(index).setToolTipText(TILE_TOOL_TIP + tiles.get(index).getType().readableRepresentation());
         tileLabels.get(index).setIcon(icon);
         tileLabels.get(index).setBorder(selected && !singleTile ? createSelectionBorder() : null);

@@ -25,8 +25,8 @@ import carcassonne.view.tertiary.TileDistributionGUI;
  * @author Timur Saglam
  */
 public class MainMenuBar extends JMenuBar implements Notifiable {
-    private static final String DISTRIBUTION = "Tile Distribution Information";
     private static final long serialVersionUID = -599734693130415390L;
+    private static final String DISTRIBUTION = "Tile Distribution Information";
     private static final String CLASSIC = " (Classic)";
     private static final String TILES_PER_PLAYER = " Tiles on the Hand";
     private static final String HAND_SETTINGS = "Hand of Tiles";
