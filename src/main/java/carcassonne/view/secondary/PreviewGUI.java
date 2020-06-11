@@ -26,11 +26,12 @@ import carcassonne.view.main.MainGUI;
  * @author Timur Saglam
  */
 public class PreviewGUI extends SecondaryGUI {
-    private static final int BOTTOM_SPACE = 5;
-    private static final int SIZE_DIFFERENCE = 10;
-    private static final String TILE_TOOL_TIP = "Tile of type ";
     private static final long serialVersionUID = -5179683977081970564L;
+    private static final int BOTTOM_SPACE = 5;
+    private static final int VERTICAL_SPACE = 10;
+    private static final double SELECTION_FACTOR = 0.9;
     private static final int SELECTION_BORDER_WIDTH = 3;
+    private static final String TILE_TOOL_TIP = "Tile of type ";
     private final int selectionSize;
     private final int defaultSize;
     private JButton buttonRotateLeft;
@@ -49,8 +50,8 @@ public class PreviewGUI extends SecondaryGUI {
         super(controller, ui);
         buildContent();
         pack();
-        selectionSize = buttonSkip.getWidth() + buttonRotateLeft.getWidth() + buttonRotateRight.getWidth() -10;
-        defaultSize = selectionSize - SIZE_DIFFERENCE;
+        selectionSize = buttonSkip.getWidth() + buttonRotateLeft.getWidth() + buttonRotateRight.getWidth() - VERTICAL_SPACE;
+        defaultSize = (int) (selectionSize * SELECTION_FACTOR);
     }
 
     /**
@@ -194,6 +195,7 @@ public class PreviewGUI extends SecondaryGUI {
             });
             dialogPanel.add(label, constraints);
         }
+        constraints.gridy++;
         dialogPanel.add(Box.createVerticalStrut(BOTTOM_SPACE), constraints);
     }
 
