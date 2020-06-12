@@ -7,6 +7,7 @@ import java.util.List;
 
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.model.tile.TileDistribution;
 import carcassonne.view.PaintShop;
 
 /**
@@ -29,21 +30,21 @@ public class GameSettings {
     private static final String TEMPLATE = "_template";
     private int amountOfPlayers;
     private final List<Notifiable> changeListeners;
-    private boolean chaosMode;
     private final ArrayList<PlayerColor> colors;
     private int gridHeight;
     private boolean gridSizeChanged;
     private int tilesPerPlayer;
     private int gridWidth;
-
     private final ArrayList<String> names;
+    private final TileDistribution tileDistribution;
 
     /**
      * Creates a settings instance. Instances hold different setting values when one is changed.
      */
-    public GameSettings() {
+    public GameSettings() { // TODO (HIGH) add settings for stack size/multipliers
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
+        tileDistribution = new TileDistribution();
         amountOfPlayers = 2;
         tilesPerPlayer = 1;
         gridWidth = 25;
@@ -103,11 +104,11 @@ public class GameSettings {
     }
 
     /**
-     * Checks whether chaos mode is enabled.
-     * @return true if it is enabled.
+     * Getter for the current tile distribution.
+     * @return the tile distribution.
      */
-    public boolean isChaosMode() {
-        return chaosMode;
+    public TileDistribution getTileDistribution() {
+        return tileDistribution;
     }
 
     /**
@@ -132,14 +133,6 @@ public class GameSettings {
      */
     public void setAmountOfPlayers(int amountOfPlayers) {
         this.amountOfPlayers = amountOfPlayers;
-    }
-
-    /**
-     * Sets the chaos mode setting.
-     * @param chaosMode specifies whether chaos mode is active or not.
-     */
-    public void setChaosMode(boolean chaosMode) {
-        this.chaosMode = chaosMode;
     }
 
     /**
