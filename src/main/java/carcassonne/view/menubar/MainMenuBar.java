@@ -5,7 +5,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -33,7 +32,6 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private static final String GRID_SIZE = "Change Grid Size";
     private static final String ABORT = "Abort Current Game";
     private static final String AMOUNT = "Amount of Players";
-    private static final String CHAOS_MODE = "Enable Chaos Mode";
     private static final String GAME = "Game";
     private static final String LARGE_SPACE = "          ";
     private static final String NEW_ROUND = "Start New Round";
@@ -128,7 +126,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemDistribution.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                new TileDistributionGUI();
+                new TileDistributionGUI(settings.getTileDistribution());
             }
         });
         // build menu:
@@ -150,14 +148,6 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         menuOptions.add(menuHand);
         menuOptions.add(menuColor);
         menuOptions.addSeparator();
-        JCheckBoxMenuItem itemChaosMode = new JCheckBoxMenuItem(CHAOS_MODE);
-        itemChaosMode.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                settings.setChaosMode(!itemChaosMode.isSelected());
-            }
-        });
-        menuOptions.add(itemChaosMode);
         JMenuItem itemGridSize = new JMenuItem(GRID_SIZE);
         GridSizeDialog dialog = new GridSizeDialog(settings);
         itemGridSize.addMouseListener(new MouseAdapter() {
