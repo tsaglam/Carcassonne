@@ -67,7 +67,7 @@ public class TileQuantityPanel extends JPanel {
         textField.setText(Integer.toString(quantity));
     }
 
-    private final void createTileLabel(TileType type) {
+    private void createTileLabel(TileType type) {
         Tile tile = new Tile(type);
         JLabel label = new JLabel(tile.getScaledIcon(TILE_SIZE));
         label.setToolTipText(CLICK_TO_ROTATE + type.readableRepresentation());
@@ -83,7 +83,7 @@ public class TileQuantityPanel extends JPanel {
         add(label, BorderLayout.NORTH);
     }
 
-    private final void createTextField(int initialQuantity) {
+    private void createTextField(int initialQuantity) {
         NumberFormatter formatter = new NumberFormatter(NumberFormat.getIntegerInstance());
         formatter.setMinimum(0);
         formatter.setMaximum(99);
