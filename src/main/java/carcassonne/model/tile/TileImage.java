@@ -22,7 +22,7 @@ import carcassonne.view.PaintShop;
  * the graphical representation.
  * @author Timur Saglam
  */
-public class TileDepiction {
+public class TileImage {
     private static final int FULL_RESOLUTION = 300;
     private static final int IMAGES_PER_TILE = 4;
     private static final int SHIFT_VALUE = 1000;
@@ -37,7 +37,7 @@ public class TileDepiction {
      * @param tileType is the type of the tile, determines the image.
      * @param hasEmblem determines whether the tile representation includes an emblem.
      */
-    public TileDepiction(TileType tileType, boolean hasEmblem) {
+    public TileImage(TileType tileType, boolean hasEmblem) {
         this.tileType = tileType;
         images = new ArrayList<>(IMAGES_PER_TILE); // create image array.
         for (int index = 0; index < IMAGES_PER_TILE; index++) { // for every image
@@ -50,7 +50,7 @@ public class TileDepiction {
      * Returns the current depiction according to the orientation.
      * @return the {@link ImageIcon} which is the current depiction.
      */
-    public ImageIcon getCurrentDepiction() {
+    public ImageIcon getImageIcon() {
         return images.get(rotation);
     }
 
@@ -60,7 +60,7 @@ public class TileDepiction {
      * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the {@link ImageIcon} which is the current depiction.
      */
-    public ImageIcon getCurrentScaledDepiction(int edgeLength, boolean fastScaling) {
+    public ImageIcon getScaledImageIcon(int edgeLength, boolean fastScaling) {
         int lockKey = createKey(edgeLength);
         semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
         Semaphore lock = semaphores.get(lockKey);

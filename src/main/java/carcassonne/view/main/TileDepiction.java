@@ -14,7 +14,7 @@ import carcassonne.model.tile.Tile;
  * label on the label grid.
  * @author Timur Saglam
  */
-public class TileDepiction { // TODO (MEDIUM) rename?
+public class TileDepiction {
     private Tile tile;
     private final Tile defaultTile;
     private final Tile highlightTile;
@@ -39,7 +39,7 @@ public class TileDepiction { // TODO (MEDIUM) rename?
         reset();
         label.addMouseListener(new MouseAdapter() {
             /**
-             * Method for processing mouse clicks on the <code>TileDepiction</code> of the class. notifies the
+             * Method for processing mouse clicks on the <code>TileImage</code> of the class. notifies the
              * <code>MainController</code> of the class.
              * @param e is the <code>MouseEvent</code> of the click.
              */

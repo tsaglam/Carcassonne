@@ -21,7 +21,7 @@ public class Tile {
     private Meeple meeple;
     private final TileTerrain terrain;
     private final TileType type;
-    private final TileDepiction tileDepiction;
+    private final TileImage tileImage;
 
     /**
      * Simple constructor.
@@ -35,7 +35,7 @@ public class Tile {
         this.type = type;
         terrain = new TileTerrain(type);
         meeple = null;
-        tileDepiction = new TileDepiction(type, hasEmblem());
+        tileImage = new TileImage(type, hasEmblem());
     }
 
     /**
@@ -62,7 +62,7 @@ public class Tile {
      * @return the image depicting the tile.
      */
     public ImageIcon getIcon() {
-        return tileDepiction.getCurrentDepiction();
+        return tileImage.getImageIcon();
     }
 
     /**
@@ -71,7 +71,7 @@ public class Tile {
      * @return the image depicting the tile.
      */
     public ImageIcon getScaledIcon(int edgeLength) {
-        return tileDepiction.getCurrentScaledDepiction(edgeLength, false);
+        return tileImage.getScaledImageIcon(edgeLength, false);
     }
     
     /**
@@ -81,7 +81,7 @@ public class Tile {
      * @return the image depicting the tile.
      */
     public ImageIcon getScaledIcon(int edgeLength, boolean fastScaling) {
-        return tileDepiction.getCurrentScaledDepiction(edgeLength, fastScaling);
+        return tileImage.getScaledImageIcon(edgeLength, fastScaling);
     }
 
     /**
@@ -209,7 +209,7 @@ public class Tile {
      */
     public void rotateLeft() {
         terrain.rotateLeft();
-        tileDepiction.rotateLeft();
+        tileImage.rotateLeft();
     }
 
     /**
@@ -217,7 +217,7 @@ public class Tile {
      */
     public void rotateRight() {
         terrain.rotateRight();
-        tileDepiction.rotateRight();
+        tileImage.rotateRight();
     }
 
     /**
