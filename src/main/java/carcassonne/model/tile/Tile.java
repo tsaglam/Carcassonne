@@ -158,7 +158,6 @@ public class Tile {
             if (terrain.at(direction).equals(TerrainType.CASTLE)) {
                 castleSize++;
             }
-
         }
         return castleSize >= CASTLE_TRESHOLD;
     }

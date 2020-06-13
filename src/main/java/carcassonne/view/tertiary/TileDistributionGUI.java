@@ -1,21 +1,20 @@
 package carcassonne.view.tertiary;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 
-import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileDistribution;
 import carcassonne.model.tile.TileType;
-import carcassonne.settings.GameSettings;
 
 /**
  * User interface that shows all tiles and how often they are used in a standard game (two players, chaos mode
@@ -23,24 +22,30 @@ import carcassonne.settings.GameSettings;
  * @author Timur Saglam
  */
 public class TileDistributionGUI extends JDialog {
-    private static final String CLICK_TO_ROTATE = "Click to rotate the tile of type ";
-    private static final String TITLE = "Standard Two-Player Game Tile Distribution";
     private static final long serialVersionUID = 1805511300999150753L;
-    private static final String TIMES = "x ";
-    private static final int BORDER_SIZE = 2;
+    private static final String TITLE = "Standard Two-Player Game Tile Distribution";
     private static final int GRID_WIDTH = 11;
     private static final int GRID_HEIGHT = 3;
-    private static final int TILE_SIZE = 90;
     private static final int PADDING = 5;
-    private final Border border;
+    private final TileDistribution distribution;
+    private final List<TileQuantityPanel> quantityPanels;
 
     /**
      * Creates the UI and shows it.
+     * @param distribution is the {@link TileDistribution} to show in the UI.
      */
-    public TileDistributionGUI() {
-        border = new LineBorder(Color.DARK_GRAY, BORDER_SIZE);
+    public TileDistributionGUI(TileDistribution distribution) {
+        this.distribution = distribution;
+        distribution.createBackup();
+        quantityPanels = new ArrayList<>();
         buildPanel();
         buildWindow();
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                distribution.restoreLastBackup();
+            }
+        });
     }
 
     /*
@@ -56,17 +61,52 @@ public class TileDistributionGUI extends JDialog {
         constraints.gridy = 0;
         constraints.weightx = 1;
         constraints.weighty = 1;
-        for (TileType tileType : TileType.values()) {
-            if (tileType.getAmount() > 0) {
-                tilePanel.add(buildTileLabel(tileType), constraints);
-                constraints.gridx++;
-                if (constraints.gridx >= GRID_WIDTH) {
-                    constraints.gridx = 0;
-                    constraints.gridy++;
-                }
+        for (TileType tileType : TileType.enabledTiles()) {
+            TileQuantityPanel quantityPanel = new TileQuantityPanel(tileType, distribution.getQuantity(tileType));
+            quantityPanels.add(quantityPanel);
+            tilePanel.add(quantityPanel, constraints);
+            constraints.gridx++;
+            if (constraints.gridx >= GRID_WIDTH) {
+                constraints.gridx = 0;
+                constraints.gridy++;
             }
         }
+        buildButtons(tilePanel, constraints);
         getContentPane().add(tilePanel);
+    }
+
+    private void buildButtons(JPanel tilePanel, GridBagConstraints constraints) {
+        JButton shuffleButton = new JButton("Shuffle");
+        shuffleButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
+                distribution.shuffle();
+                quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
+            }
+        });
+        JButton resetButton = new JButton("Reset");
+        resetButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                distribution.reset();
+                quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
+            }
+        });
+        JButton acceptButton = new JButton("Accept");
+        acceptButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                dispose();
+                quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
+            }
+        });
+        constraints.gridx = 4;
+        tilePanel.add(shuffleButton, constraints);
+        constraints.gridx = 5;
+        tilePanel.add(resetButton, constraints);
+        constraints.gridx = 6;
+        tilePanel.add(acceptButton, constraints);
     }
 
     /*
@@ -79,28 +119,5 @@ public class TileDistributionGUI extends JDialog {
         setSize(getWidth() + PADDING * GRID_WIDTH, getHeight() + PADDING * GRID_HEIGHT);
         setLocationRelativeTo(null);
         setResizable(false);
-    }
-
-    /*
-     * Creates a single label for a tile based on the given tyle type.
-     */
-    private JLabel buildTileLabel(TileType tileType) {
-        Tile tile = new Tile(tileType);
-        JLabel label = new JLabel(tile.getScaledIcon(TILE_SIZE));
-        label.setBackground(GameSettings.GUI_COLOR);
-        label.setOpaque(true);
-        label.setBorder(border);
-        label.setToolTipText(CLICK_TO_ROTATE + tileType.readableRepresentation());
-        label.setText(tileType.getAmount() + TIMES);
-        Font font = label.getFont();
-        label.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                tile.rotateRight();
-                label.setIcon(tile.getScaledIcon(TILE_SIZE));
-            }
-        });
-        return label;
     }
 }
