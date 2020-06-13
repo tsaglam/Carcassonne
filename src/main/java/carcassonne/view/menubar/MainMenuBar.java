@@ -10,7 +10,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSeparator;
 
 import carcassonne.control.MainController;
 import carcassonne.settings.GameSettings;
@@ -25,7 +24,7 @@ import carcassonne.view.tertiary.TileDistributionGUI;
  */
 public class MainMenuBar extends JMenuBar implements Notifiable {
     private static final long serialVersionUID = -599734693130415390L;
-    private static final String DISTRIBUTION = "Tile Distribution Information";
+    private static final String DISTRIBUTION = "Change Tile Distribution";
     private static final String CLASSIC = " (Classic)";
     private static final String TILES_PER_PLAYER = " Tiles on the Hand";
     private static final String HAND_SETTINGS = "Hand of Tiles";
@@ -119,22 +118,12 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private void buildGameMenu() {
         itemNewRound = new JMenuItem(NEW_ROUND);
         itemAbortRound = new JMenuItem(ABORT);
-        JMenuItem itemDistribution = new JMenuItem(DISTRIBUTION);
         itemAbortRound.setEnabled(false);
         itemNewRound.addMouseListener(new NewRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
         itemAbortRound.addMouseListener(new AbortRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
-        itemDistribution.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                new TileDistributionGUI(settings.getTileDistribution());
-            }
-        });
-        // build menu:
         menuGame = new JMenu(GAME);
         menuGame.add(itemNewRound);
         menuGame.add(itemAbortRound);
-        menuGame.add(new JSeparator());
-        menuGame.add(itemDistribution);
         add(menuGame);
     }
 
@@ -157,6 +146,14 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
             }
         });
         menuOptions.add(itemGridSize);
+        JMenuItem itemDistribution = new JMenuItem(DISTRIBUTION);
+        itemDistribution.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                new TileDistributionGUI(settings.getTileDistribution());
+            }
+        });
+        menuOptions.add(itemDistribution);
         add(menuOptions);
     }
 
