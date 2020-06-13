@@ -62,15 +62,22 @@ public class TileDistribution {
     }
 
     /**
+     * Resets the distribution to the default distribution.
+     */
+    public void reset() {
+        distribution.clear();
+    }
+
+    /**
      * Shuffles the tile amounts. The shuffle is not completely random as it tries to avoid giving a tile type its original
      * amount.
      */
     public void shuffle() {
-        TileType.validTiles().forEach(it -> distribution.putIfAbsent(it, it.getAmount()));
+        TileType.enabledTiles().forEach(it -> distribution.putIfAbsent(it, it.getAmount()));
         Stack<Integer> tileAmounts = new Stack<Integer>();
         tileAmounts.addAll(distribution.values());
         Collections.shuffle(tileAmounts);
-        TileType.validTiles().forEach(it -> distribution.put(it, getPseudoRandomAmount(it, tileAmounts)));
+        TileType.enabledTiles().forEach(it -> distribution.put(it, getPseudoRandomAmount(it, tileAmounts)));
     }
 
     /**

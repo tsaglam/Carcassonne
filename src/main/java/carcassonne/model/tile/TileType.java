@@ -114,4 +114,12 @@ public enum TileType { // TODO (MEDIUM) rename enum values and tile image resour
         return stream(values()).filter(it -> it != Null).collect(toList());
     }
 
+    /**
+     * Returns a list of all valid tiles that are available in game.
+     * @return the list of enabled tiles.
+     */
+    public static List<TileType> enabledTiles() {
+        return stream(values()).filter(it -> it != Null && it.getAmount() > 0).collect(toList());
+    }
+
 }
