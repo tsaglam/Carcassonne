@@ -1,6 +1,6 @@
 package carcassonne.model.grid;
 
-import static carcassonne.model.grid.GridDirection.MIDDLE;
+import static carcassonne.model.grid.GridDirection.CENTER;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -205,8 +205,8 @@ public class GridSpot {
     }
 
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
-        if (spot.getTile().getTerrain(MIDDLE) == TerrainType.MONASTERY) {
-            if (spot.hasNoTagConnectedTo(MIDDLE)) {
+        if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY) {
+            if (spot.hasNoTagConnectedTo(CENTER)) {
                 patternList.add(new MonasteryGridPattern(spot, grid));
             }
         }

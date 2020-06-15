@@ -1,5 +1,7 @@
 package carcassonne.model.grid;
 
+import java.util.List;
+
 import carcassonne.model.terrain.RotationDirection;
 
 /**
@@ -8,24 +10,24 @@ import carcassonne.model.terrain.RotationDirection;
  * @author Timur Saglam
  */
 public enum GridDirection {
-    TOP,
-    RIGHT,
-    BOTTOM,
-    LEFT,
-    TOP_RIGHT,
-    BOTTOM_RIGHT,
-    BOTTOM_LEFT,
-    TOP_LEFT,
-    MIDDLE;
+    NORTH,
+    EAST,
+    SHOUTH,
+    WEST,
+    NORTH_EAST,
+    SOUTH_EAST,
+    SOUTH_WEST,
+    NORTH_WEST,
+    CENTER;
 
     /**
      * Returns the X coordinate of a <code>GridDirection</code>.
      * @return either -1, 0, or 1.
      */
     public int getX() {
-        if (this == TOP_RIGHT || this == RIGHT || this == BOTTOM_RIGHT) {
+        if (this == NORTH_EAST || this == EAST || this == SOUTH_EAST) {
             return 1;
-        } else if (this == TOP_LEFT || this == LEFT || this == BOTTOM_LEFT) {
+        } else if (this == NORTH_WEST || this == WEST || this == SOUTH_WEST) {
             return -1;
         }
         return 0;
@@ -36,9 +38,9 @@ public enum GridDirection {
      * @return either -1, 0, or 1.
      */
     public int getY() {
-        if (this == BOTTOM_LEFT || this == BOTTOM || this == BOTTOM_RIGHT) {
+        if (this == SOUTH_WEST || this == SHOUTH || this == SOUTH_EAST) {
             return 1;
-        } else if (this == TOP_LEFT || this == TOP || this == TOP_RIGHT) {
+        } else if (this == NORTH_WEST || this == NORTH || this == NORTH_EAST) {
             return -1;
         }
         return 0;
@@ -77,10 +79,10 @@ public enum GridDirection {
      * @return the next direction
      */
     public GridDirection nextDirectionTo(RotationDirection side) {
-        if (this == MIDDLE) {
+        if (this == CENTER) {
             return this;
         }
-        GridDirection[] cycle = { TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT };
+        GridDirection[] cycle = { NORTH, NORTH_EAST, EAST, SOUTH_EAST, SHOUTH, SOUTH_WEST, WEST, NORTH_WEST };
         int position = -2; // error case, sum with parameter side is negative
         for (int i = 0; i < cycle.length; i++) {
             if (cycle[i] == this) { // find in cycle
@@ -95,12 +97,12 @@ public enum GridDirection {
      * @return the opposite <code>GridDirection</code>.
      */
     public GridDirection opposite() {
-        if (ordinal() <= 3) { // for TOP, RIGHT, BOTTOM and LEFT:
+        if (ordinal() <= 3) { // for NORTH, EAST, SHOUTH and WEST:
             return values()[smallOpposite(ordinal())];
-        } else if (ordinal() <= 7) { // for TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT:
+        } else if (ordinal() <= 7) { // for NORTH_EAST, SOUTH_EAST, SOUTH_WEST and NORTH_WEST:
             return values()[bigOpposite(ordinal())];
         }
-        return MIDDLE; // middle is the opposite of itself.
+        return CENTER; // middle is the opposite of itself.
     }
 
     /**
@@ -120,43 +122,42 @@ public enum GridDirection {
     }
 
     /**
-     * Generates an array of the GridDirections for a direct neighbor on the grid.
-     * @return an array of TOP, RIGHT, BOTTOM and LEFT.
+     * Generates a list of the GridDirections for a direct neighbor on the grid.
+     * @return a list of NORTH, EAST, SHOUTH and WEST.
      */
-    public static GridDirection[] directNeighbors() {
-        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT };
+    public static List<GridDirection> directNeighbors() {
+        return List.of(NORTH, EAST, SHOUTH, WEST);
     }
 
     /**
-     * Generates an array of the GridDirections for a indirect neighbor on the grid.
-     * @return an array of TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT and TOP_LEFT.
+     * Generates a list of the GridDirections for a indirect neighbor on the grid.
+     * @return a list of NORTH_EAST, SOUTH_EAST, SOUTH_WEST and NORTH_WEST.
      */
-    public static GridDirection[] indirectNeighbors() {
-        return new GridDirection[] { TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
+    public static List<GridDirection> indirectNeighbors() {
+        return List.of(NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST);
     }
 
     /**
-     * Generates an array of the GridDirections for a neighbor on the grid.
-     * @return an array of all directions except MIDDLE.
+     * Generates a list of the GridDirections for a neighbor on the grid.
+     * @return a list of all directions except CENTER.
      */
-    public static GridDirection[] neighbors() {
-        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT };
+    public static List<GridDirection> neighbors() {
+        return List.of(NORTH, EAST, SHOUTH, WEST, NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST);
     }
 
     /**
-     * Generates an array of the GridDirections for all positions on a tile.
-     * @return an array of an array of TOP, RIGHT, BOTTOM, LEFT and MIDDLE.
+     * Generates a list of the GridDirections for all positions on a tile.
+     * @return a list of NORTH, EAST, SHOUTH, WEST and CENTER.
      */
-    public static GridDirection[] tilePositions() {
-        return new GridDirection[] { TOP, RIGHT, BOTTOM, LEFT, MIDDLE };
+    public static List<GridDirection> tilePositions() {
+        return List.of(NORTH, EAST, SHOUTH, WEST, CENTER);
     }
 
     /**
-     * Generates a two dimensional array of the GridDirections for their orientation on a tile.
-     * @return a 2D array of an array of TOP_LEFT, LEFT, BOTTOM_LEFT, TOP, MIDDLE, BOTTOM, TOP_RIGHT, RIGHT and
-     * BOTTOM_RIGHT.
+     * Generates a two dimensional list of the GridDirections for their orientation on a tile.
+     * @return a 2D list of of NORTH_WEST, WEST, SOUTH_WEST, NORTH, CENTER, SHOUTH, NORTH_EAST, EAST and SOUTH_EAST.
      */
     public static GridDirection[][] values2D() {
-        return new GridDirection[][] { { TOP_LEFT, LEFT, BOTTOM_LEFT }, { TOP, MIDDLE, BOTTOM }, { TOP_RIGHT, RIGHT, BOTTOM_RIGHT } };
+        return new GridDirection[][] { { NORTH_WEST, WEST, SOUTH_WEST }, { NORTH, CENTER, SHOUTH }, { NORTH_EAST, EAST, SOUTH_EAST } };
     }
 }

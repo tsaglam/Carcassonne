@@ -1,14 +1,14 @@
 package carcassonne.model.terrain;
 
-import static carcassonne.model.grid.GridDirection.BOTTOM;
-import static carcassonne.model.grid.GridDirection.BOTTOM_LEFT;
-import static carcassonne.model.grid.GridDirection.BOTTOM_RIGHT;
-import static carcassonne.model.grid.GridDirection.LEFT;
-import static carcassonne.model.grid.GridDirection.MIDDLE;
-import static carcassonne.model.grid.GridDirection.RIGHT;
-import static carcassonne.model.grid.GridDirection.TOP;
-import static carcassonne.model.grid.GridDirection.TOP_LEFT;
-import static carcassonne.model.grid.GridDirection.TOP_RIGHT;
+import static carcassonne.model.grid.GridDirection.CENTER;
+import static carcassonne.model.grid.GridDirection.EAST;
+import static carcassonne.model.grid.GridDirection.NORTH;
+import static carcassonne.model.grid.GridDirection.NORTH_EAST;
+import static carcassonne.model.grid.GridDirection.NORTH_WEST;
+import static carcassonne.model.grid.GridDirection.SHOUTH;
+import static carcassonne.model.grid.GridDirection.SOUTH_EAST;
+import static carcassonne.model.grid.GridDirection.SOUTH_WEST;
+import static carcassonne.model.grid.GridDirection.WEST;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -74,7 +74,7 @@ public class TileTerrain {
     public boolean isConnected(GridDirection from, GridDirection towards) {
         if (isDirectConnected(from, towards)) {
             return true; // directly connected through the middle of the tile
-        } else if (from != MIDDLE && towards != MIDDLE && (isIndirectConnected(from, towards))) {
+        } else if (from != CENTER && towards != CENTER && (isIndirectConnected(from, towards))) {
             return true; // is not from or to middle but indirectly connected (counter)clockwise
         } else if (terrain.get(from) == TerrainType.FIELDS && terrain.get(towards) == TerrainType.FIELDS) {
             return isImplicitlyConnected(from, towards); // is connected through implicit terrain information
@@ -86,8 +86,8 @@ public class TileTerrain {
      * Turns a tile 90 degree to the left.
      */
     public void rotateLeft() {
-        rotate(TOP, LEFT, BOTTOM, RIGHT);
-        rotate(TOP_RIGHT, TOP_LEFT, BOTTOM_LEFT, BOTTOM_RIGHT);
+        rotate(List.of(NORTH, WEST, SHOUTH, EAST));
+        rotate(List.of(NORTH_EAST, NORTH_WEST, SOUTH_WEST, SOUTH_EAST));
     }
 
     /**
@@ -134,7 +134,7 @@ public class TileTerrain {
      * Checks if the directions are directly connected through the middle
      */
     private boolean isDirectConnected(GridDirection from, GridDirection towards) {
-        TerrainType middle = terrain.get(MIDDLE);
+        TerrainType middle = terrain.get(CENTER);
         return terrain.get(from) == middle && terrain.get(towards) == middle;
     }
 
@@ -202,7 +202,7 @@ public class TileTerrain {
     /**
      * removes redundant meeple spots and optionally adds anchor spots.
      */
-    private void removeRedundantSpots(GridDirection[] anchorDirections, boolean addAnchor) {
+    private void removeRedundantSpots(List<GridDirection> anchorDirections, boolean addAnchor) {
         List<GridDirection> removalList = new LinkedList<>();
         for (GridDirection anchor : anchorDirections) {
             GridDirection left = anchor.nextDirectionTo(RotationDirection.LEFT);
@@ -211,7 +211,7 @@ public class TileTerrain {
                     && meepleSpots.contains(right)) {
                 removalList.add(left);
                 removalList.add(right);
-                if (addAnchor && !isConnected(anchor, MIDDLE)) {
+                if (addAnchor && !isConnected(anchor, CENTER)) {
                     meepleSpots.add(anchor);
                 }
             }
@@ -224,8 +224,8 @@ public class TileTerrain {
      * terrain street and is connected to at least two other sides.
      */
     private boolean hasPassingStreet() {
-        return terrain.get(MIDDLE) == TerrainType.ROAD
-                && Arrays.stream(GridDirection.tilePositions()).filter(it -> isDirectConnected(MIDDLE, it)).count() > 2;
+        return terrain.get(CENTER) == TerrainType.ROAD
+                && GridDirection.tilePositions().stream().filter(it -> isDirectConnected(CENTER, it)).count() > 2;
     }
 
     /**
@@ -233,15 +233,15 @@ public class TileTerrain {
      * towards it.
      */
     private boolean hasNoCastleEntry(GridDirection castlePosition) {
-        return terrain.get(castlePosition) == TerrainType.CASTLE && (terrain.get(MIDDLE) == TerrainType.OTHER || hasPassingStreet());
+        return terrain.get(castlePosition) == TerrainType.CASTLE && (terrain.get(CENTER) == TerrainType.OTHER || hasPassingStreet());
     }
 
     /**
      * Rotates the terrain at the specified directions clockwise.
      * @param directions are the specified directions.
      */
-    private void rotate(GridDirection... directions) {
-        TerrainType temporary = terrain.get(directions[directions.length - 1]); // get last one
+    private void rotate(List<GridDirection> directions) {
+        TerrainType temporary = terrain.get(directions.get(directions.size() - 1)); // get last one
         for (GridDirection direction : directions) { // rotate terrain through temporary:
             temporary = terrain.put(direction, temporary);
         }

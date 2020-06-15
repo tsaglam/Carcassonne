@@ -1,5 +1,7 @@
 package carcassonne.model.terrain;
 
+import java.util.List;
+
 import javax.print.attribute.standard.MediaSize.Other;
 
 /**
@@ -14,10 +16,10 @@ public enum TerrainType {
     OTHER;
 
     /**
-     * Generates an array of the basic terrain types, which is every terrain except {@link Other}.
-     * @return an array of an array of CASTLE, ROAD, MONASTERY, FIELDS.
+     * Generates a list of the basic terrain types, which is every terrain except {@link Other}.
+     * @return a list of CASTLE, ROAD, MONASTERY, FIELDS.
      */
-    public static TerrainType[] basicTerrain() {
-        return new TerrainType[] { CASTLE, ROAD, MONASTERY, FIELDS };
+    public static List<TerrainType> basicTerrain() {
+        return List.of(CASTLE, ROAD, MONASTERY, FIELDS);
     }
 }
