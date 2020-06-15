@@ -127,9 +127,9 @@ public class Grid {
      * {@link GridDirection#neighbors()} is used.
      * @return the list of any neighboring {@link GridSpot}.
      */
-    public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection... directions) {
+    public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, List<GridDirection> directions) {
         checkParameters(spot);
-        ArrayList<GridSpot> neighbors = new ArrayList<>(directions.length);
+        ArrayList<GridSpot> neighbors = new ArrayList<>();
         for (GridDirection direction : directions) {
             int newX = direction.getX() + spot.getX();
             int newY = direction.getY() + spot.getY();
@@ -138,6 +138,10 @@ public class Grid {
             }
         }
         return neighbors;
+    }
+
+    public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection direction) {
+        return getNeighbors(spot, allowEmptySpots, List.of(direction));
     }
 
     /**

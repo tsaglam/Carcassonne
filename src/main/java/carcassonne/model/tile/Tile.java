@@ -167,7 +167,7 @@ public class Tile {
      * @return true if is a monastery.
      */
     public boolean isMonastery() {
-        return getTerrain(GridDirection.MIDDLE) == TerrainType.MONASTERY;
+        return getTerrain(GridDirection.CENTER) == TerrainType.MONASTERY;
     }
 
     /**

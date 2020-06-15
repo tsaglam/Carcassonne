@@ -3,7 +3,7 @@
  */
 package carcassonne.model.grid;
 
-import static carcassonne.model.grid.GridDirection.MIDDLE;
+import static carcassonne.model.grid.GridDirection.CENTER;
 import static carcassonne.model.terrain.TerrainType.MONASTERY;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class MonasteryGridPattern extends GridPattern {
      */
     public MonasteryGridPattern(GridSpot spot, Grid grid) {
         super(MONASTERY, 1);
-        if (spot.getTile().getTerrain(MIDDLE) != MONASTERY) {
+        if (spot.getTile().getTerrain(CENTER) != MONASTERY) {
             throw new IllegalArgumentException("Can't create monastery pattern from non monastery tile");
         }
         buildPattern(spot, grid);
@@ -30,11 +30,11 @@ public class MonasteryGridPattern extends GridPattern {
     private void buildPattern(GridSpot monasterySpot, Grid grid) {
         List<GridSpot> neighbors = grid.getNeighbors(monasterySpot, false, GridDirection.neighbors());
         add(monasterySpot); // add monastery
-        monasterySpot.setTag(MIDDLE, this);
+        monasterySpot.setTag(CENTER, this);
         for (GridSpot neighbor : neighbors) {
             containedSpots.add(neighbor);
         }
-        if (neighbors.size() == GridDirection.neighbors().length) {
+        if (neighbors.size() == GridDirection.neighbors().size()) {
             complete = true;
         }
     }

@@ -1,12 +1,11 @@
 package carcassonne.model.grid;
 
-import static carcassonne.model.grid.GridDirection.LEFT;
-import static carcassonne.model.grid.GridDirection.MIDDLE;
-import static carcassonne.model.grid.GridDirection.TOP_LEFT;
+import static carcassonne.model.grid.GridDirection.CENTER;
+import static carcassonne.model.grid.GridDirection.NORTH_WEST;
+import static carcassonne.model.grid.GridDirection.WEST;
 import static carcassonne.model.terrain.TerrainType.CASTLE;
 import static carcassonne.model.terrain.TerrainType.FIELDS;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -97,14 +96,14 @@ public class FieldsPattern extends GridPattern {
      */
     private List<GridDirection> getAdjacentPositions(GridDirection position) {
         List<GridDirection> neighbors = new LinkedList<>();
-        if (position.isSmallerOrEquals(LEFT)) {
-            neighbors.add(MIDDLE); // the classic direction are adjacent to the middle
+        if (position.isSmallerOrEquals(WEST)) {
+            neighbors.add(CENTER); // the classic direction are adjacent to the middle
         }
-        if (position.isSmallerOrEquals(TOP_LEFT)) { // everything except the middle has these two neighbors:
+        if (position.isSmallerOrEquals(NORTH_WEST)) { // everything except the middle has these two neighbors:
             neighbors.add(position.nextDirectionTo(RotationDirection.LEFT)); // counterclockwise adjacent position
             neighbors.add(position.nextDirectionTo(RotationDirection.RIGHT)); // clockwise adjacent position
         } else {
-            neighbors.addAll(Arrays.asList(GridDirection.directNeighbors())); // the middle has the classic directions as neighbors
+            neighbors.addAll(GridDirection.directNeighbors()); // the middle has the classic directions as neighbors
         }
         return neighbors;
 
@@ -117,9 +116,9 @@ public class FieldsPattern extends GridPattern {
     private List<GridDirection> getFieldConnections(GridDirection position, Tile tile) {
         List<GridDirection> results = new LinkedList<>();
         if (tile.getTerrain(position) == TerrainType.FIELDS) {
-            if (position.isSmallerOrEquals(LEFT)) {
+            if (position.isSmallerOrEquals(WEST)) {
                 results.add(position); // for simple directions just return themselves.
-            } else if (position.isSmallerOrEquals(TOP_LEFT)) {
+            } else if (position.isSmallerOrEquals(NORTH_WEST)) {
                 addIfNotCastle(results, tile, position.nextDirectionTo(RotationDirection.LEFT)); // for edges it depends whether the neighboring
                 addIfNotCastle(results, tile, position.nextDirectionTo(RotationDirection.RIGHT)); // directions have castle terrain or not
             }
@@ -130,9 +129,9 @@ public class FieldsPattern extends GridPattern {
     // Returns the position on the grid of a neighboring tile on a direction which is directly in contact with a specific
     // position of the first tile.
     private GridDirection getFieldOpposite(GridDirection position, GridDirection neighborDirection) {
-        if (position.isSmallerOrEquals(LEFT)) {
-            return position.opposite(); // top, right, botton left are simply inverted
-        } else if (position.isSmallerOrEquals(TOP_LEFT)) {
+        if (position.isSmallerOrEquals(WEST)) {
+            return position.opposite(); // top, right, bottom, left are simply inverted
+        } else if (position.isSmallerOrEquals(NORTH_WEST)) {
             if (neighborDirection.isLeftOf(position)) { // neighbor to the left of the corner
                 return position.opposite().nextDirectionTo(RotationDirection.LEFT).nextDirectionTo(RotationDirection.LEFT); // return opposite and two to the right
             } else { // neighbor to the right of the corner
