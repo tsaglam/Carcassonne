@@ -32,7 +32,7 @@ public class AbortRoundMouseAdapter extends MouseAdapter {
      * Calls method on main menu bar for aborting the current game.
      */
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
         if (itemAbortRound.isEnabled()) {
             controller.requestAbortGame();
             itemAbortRound.setEnabled(false);

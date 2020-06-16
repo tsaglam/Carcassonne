@@ -9,6 +9,7 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.Locale;
 
 import carcassonne.model.terrain.TerrainType;
 
@@ -103,7 +104,7 @@ public enum TileType { // TODO (MEDIUM) rename enum values and tile image resour
      * @return the readable representation, such as "castle wall".
      */
     public String readableRepresentation() {
-        return toString().replaceAll("([^_])([A-Z])", "$1 $2").toLowerCase();
+        return toString().replaceAll("([^_])([A-Z])", "$1 $2").toLowerCase(Locale.UK);
     }
 
     /**

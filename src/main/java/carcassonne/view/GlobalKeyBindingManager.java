@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -23,22 +24,22 @@ import carcassonne.view.secondary.PreviewGUI;
  */
 public class GlobalKeyBindingManager {
     private static final int NO_MODIFIER = 0;
-    private HashMap<String, Action> actions;
-    private HashMap<String, KeyStroke> inputs;
-    private List<String> inputToActionKeys;
-    private MainGUI mainUI;
-    private PreviewGUI rotationUI;
-    private MainController controller;
+    private final Map<String, Action> actions;
+    private final Map<String, KeyStroke> inputs;
+    private final List<String> inputToActionKeys;
+    private final MainGUI mainUI;
+    private final PreviewGUI previewUI;
+    private final MainController controller;
 
     /**
      * Creates the key binding manager.
      * @param controller is the main controller.
      * @param mainUI is the main user interface.
-     * @param rotationUI is the user interface for rotating tiles.
+     * @param previewUI is the user interface for rotating tiles.
      */
     public GlobalKeyBindingManager(MainController controller, MainGUI mainUI, PreviewGUI rotationUI) {
         this.mainUI = mainUI;
-        this.rotationUI = rotationUI;
+        this.previewUI = rotationUI;
         this.controller = controller;
         actions = new HashMap<>();
         inputs = new HashMap<>();
@@ -80,7 +81,7 @@ public class GlobalKeyBindingManager {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                rotationUI.selectAbove();
+                previewUI.selectAbove();
             }
         };
         addKeyBinding("up", upStroke, selectAboveAction);
@@ -92,7 +93,7 @@ public class GlobalKeyBindingManager {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                rotationUI.selectBelow();
+                previewUI.selectBelow();
             }
         };
         addKeyBinding("down", downStroke, selectBelowAction);
@@ -106,7 +107,7 @@ public class GlobalKeyBindingManager {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                rotationUI.rotateLeft();
+                previewUI.rotateLeft();
             }
         };
         addKeyBinding("left", leftStroke, rotateLeftAction);
@@ -118,7 +119,7 @@ public class GlobalKeyBindingManager {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                rotationUI.rotateRight();
+                previewUI.rotateRight();
             }
         };
         addKeyBinding("right", rightStroke, rotateRightAction);

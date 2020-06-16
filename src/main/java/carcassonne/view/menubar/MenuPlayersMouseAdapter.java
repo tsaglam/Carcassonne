@@ -26,7 +26,7 @@ public class MenuPlayersMouseAdapter extends MouseAdapter {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
         settings.setAmountOfPlayers(playerCount);
     }
 

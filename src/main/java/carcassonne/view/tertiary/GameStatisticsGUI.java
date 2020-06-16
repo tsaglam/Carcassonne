@@ -86,7 +86,7 @@ public class GameStatisticsGUI extends JDialog {
         buttonClose = new JButton("Close");
         buttonClose.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent event) {
                 setVisible(false);
                 controller.requestSkip();
             }

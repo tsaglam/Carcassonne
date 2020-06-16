@@ -29,8 +29,6 @@ import carcassonne.view.secondary.PreviewGUI;
  */
 public class MainController {
     private final MainGUI mainGUI;
-    private final PreviewGUI previewGUI;
-    private final PlacementGUI placementGUI;
     private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
     private AbstractControllerState currentState;
     private final GameSettings settings;
@@ -42,8 +40,8 @@ public class MainController {
     public MainController() {
         settings = new GameSettings();
         mainGUI = new MainGUI(this);
-        previewGUI = new PreviewGUI(this, mainGUI);
-        placementGUI = new PlacementGUI(this, mainGUI);
+        PreviewGUI previewGUI = new PreviewGUI(this, mainGUI);
+        PlacementGUI placementGUI = new PlacementGUI(this, mainGUI);
         keyBindings = new GlobalKeyBindingManager(this, mainGUI, previewGUI);
         mainGUI.addKeyBindings(keyBindings);
         previewGUI.addKeyBindings(keyBindings);

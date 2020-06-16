@@ -18,9 +18,8 @@ public class ZoomSlider extends JSlider {
     private static final int MAXIMUM_VALUE = 300;
     private static final int MINIMUM_VALUE = 25;
     private static final int SLIDER_STEP_SIZE = 25;
-    private JMenuItem zoomOut;
-    private JMenuItem zoomIn;
-    private ZoomSliderListener zoomListener;
+    private final JMenuItem zoomOut;
+    private final JMenuItem zoomIn;
 
     /**
      * Creates the slider.
@@ -33,7 +32,7 @@ public class ZoomSlider extends JSlider {
         setMinorTickSpacing(5);
         setMajorTickSpacing(50);
         setSnapToTicks(true);
-        zoomListener = new ZoomSliderListener(mainUI, this);
+        ZoomSliderListener zoomListener = new ZoomSliderListener(mainUI, this);
         addMouseListener(zoomListener);
         addChangeListener(zoomListener);
         zoomIn = new JMenuItem("Zoom In (+)");

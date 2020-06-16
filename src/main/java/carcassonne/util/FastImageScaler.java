@@ -38,7 +38,7 @@ public final class FastImageScaler {
     private static BufferedImage scaleByHalf(Image image, int resolution) {
         int width = image.getWidth(null);
         int height = image.getHeight(null);
-        float factor = getBinFactor(width, height, resolution);
+        float factor = getBinFactor(width, resolution);
         width *= factor;
         height *= factor;
         BufferedImage scaled = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -64,7 +64,7 @@ public final class FastImageScaler {
         return scaled;
     }
 
-    private static float getBinFactor(int width, int height, int resolution) {
+    private static float getBinFactor(int width, int resolution) {
         float factor = 1;
         float target = resolution / (float) width;
         if (target <= 1) {

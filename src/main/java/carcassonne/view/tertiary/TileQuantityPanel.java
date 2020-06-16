@@ -26,7 +26,7 @@ public class TileQuantityPanel extends JPanel {
     private static final int TILE_SIZE = 100;
     private static final int BORDER_SIZE = 2;
     private static final String CLICK_TO_ROTATE = "Click to rotate the tile of type ";
-    private TileType type;
+    private final TileType type;
     private JTextField textField;
 
     /**

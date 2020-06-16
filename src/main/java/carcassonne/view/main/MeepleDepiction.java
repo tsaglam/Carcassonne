@@ -35,12 +35,11 @@ public class MeepleDepiction {
      * @param direction is the {@link GridDirection} where the meeple label sits on the tile.
      * @param frame is the main {@link JFrame} to repaint after setting icons.
      */
-    public MeepleDepiction(int scalingFactor, MainController controller, GridDirection direction, JFrame frame) {
+    public MeepleDepiction(MainController controller, GridDirection direction) {
         meepleSize = INITIAL_MEEPLE_SIZE;
         terrain = TerrainType.OTHER;
         label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize), SwingConstants.CENTER);
         preview = false;
-
         mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {

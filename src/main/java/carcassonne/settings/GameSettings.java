@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
@@ -30,12 +31,12 @@ public class GameSettings {
     private static final String TEMPLATE = "_template";
     private int amountOfPlayers;
     private final List<Notifiable> changeListeners;
-    private final ArrayList<PlayerColor> colors;
+    private final List<PlayerColor> colors;
     private int gridHeight;
     private boolean gridSizeChanged;
     private int tilesPerPlayer;
     private int gridWidth;
-    private final ArrayList<String> names;
+    private final List<String> names;
     private final TileDistribution tileDistribution;
 
     /**
@@ -203,6 +204,6 @@ public class GameSettings {
      * @return the path as a String.
      */
     public static String getMeeplePath(TerrainType type, boolean isTemplate) { // TODO (MEDIUM) move to image loading utility class?
-        return MEEPLE_PATH + type.toString().toLowerCase() + (isTemplate ? TEMPLATE : EMPTY) + PNG;
+        return MEEPLE_PATH + type.toString().toLowerCase(Locale.UK) + (isTemplate ? TEMPLATE : EMPTY) + PNG;
     }
 }

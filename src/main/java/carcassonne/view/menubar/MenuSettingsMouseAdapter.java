@@ -27,7 +27,7 @@ public class MenuSettingsMouseAdapter extends MouseAdapter {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
         colorChooser.updateAndShow();
     }
 }

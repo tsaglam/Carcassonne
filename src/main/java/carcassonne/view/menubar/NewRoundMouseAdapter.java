@@ -32,7 +32,7 @@ public class NewRoundMouseAdapter extends MouseAdapter {
      * Calls method on main menu bar for a new game.
      */
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent event) {
         if (itemNewRound.isEnabled()) {
             controller.requestNewRound();
             itemAbortRound.setEnabled(true);

@@ -152,7 +152,7 @@ public class Tile {
      * Determines whether this tile has an emblem. Only large castle tiles can have emblems.
      * @return true if it has an emblem, which doubles the points of this tile.
      */
-    public boolean hasEmblem() {
+    public final boolean hasEmblem() {
         int castleSize = 0;
         for (GridDirection direction : GridDirection.values()) {
             if (terrain.at(direction).equals(TerrainType.CASTLE)) {
