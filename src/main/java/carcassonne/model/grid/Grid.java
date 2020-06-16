@@ -48,9 +48,7 @@ public class Grid {
                 }
             }
         }
-        for (GridPattern pattern : patterns) {
-            pattern.removeTileTags(); // IMPORTANT
-        }
+        patterns.forEach(it -> it.removeTileTags()); // IMPORTANT
         return patterns; // get patterns.
     }
 
@@ -98,9 +96,7 @@ public class Grid {
             throw new IllegalArgumentException("Can't check for patterns on an free grid space");
         }
         List<GridPattern> modifiedPatterns = spot.createPatternList();
-        for (GridPattern pattern : modifiedPatterns) {
-            pattern.removeTileTags(); // VERY IMPORTANT!
-        }
+        modifiedPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
         return modifiedPatterns; // get patterns.
     }
 
@@ -286,5 +282,4 @@ public class Grid {
         foundation = spots[centerX][centerY];
         foundation.forcePlacement(new Tile(tileType));
     }
-
 }

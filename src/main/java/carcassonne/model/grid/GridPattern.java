@@ -64,9 +64,7 @@ public class GridPattern {
             for (Player player : involvedPlayers.keySet()) { // dominant players split the pot
                 player.addScore((int) Math.ceil(baseValue / involvedPlayers.size()), patternType);
             }
-            for (Meeple meeple : meepleList) {
-                meeple.removePlacement(); // remove meeples from tiles.
-            }
+            meepleList.forEach(it -> it.removePlacement()); // remove meeples from tiles.
             disbursed = true;
         }
     }
@@ -128,18 +126,14 @@ public class GridPattern {
      * Removes all OWN tags of all tiles of the pattern.
      */
     public void removeOwnTags() {
-        for (GridSpot spot : containedSpots) {
-            spot.removeTagsFrom(this);
-        }
+        containedSpots.forEach(it -> it.removeTagsFrom(this));
     }
 
     /**
      * Removes all tags of all tiles of the pattern. Needs to be called after ALL patterns of a tile have been created.
      */
     public void removeTileTags() {
-        for (GridSpot spot : containedSpots) {
-            spot.removeTags();
-        }
+        containedSpots.forEach(it -> it.removeTags());
     }
 
     @Override
@@ -172,9 +166,7 @@ public class GridPattern {
                 removalList.add(player); // add to removal list (remove later)
             }
         }
-        for (Player player : removalList) {
-            involvedPlayers.remove(player); // remove players who don't get points
-        }
+        removalList.forEach(it -> involvedPlayers.remove(it)); // remove players who don't get points
     }
 
     private boolean isPartOfPattern(GridSpot spot, GridDirection position) {
