@@ -16,7 +16,7 @@ import carcassonne.model.terrain.TileTerrain;
  * @author Timur Saglam
  */
 public class Tile {
-    private static final int CASTLE_TRESHOLD = 6;
+    private static final int CASTLE_THRESHOLD = 6; // size required for a castle to have an emblem
     private GridSpot gridSpot;
     private Meeple meeple;
     private final TileTerrain terrain;
@@ -73,7 +73,7 @@ public class Tile {
     public ImageIcon getScaledIcon(int edgeLength) {
         return tileImage.getScaledImageIcon(edgeLength, false);
     }
-    
+
     /**
      * Getter for the scaled tile image. The image depends on the orientation of the tile.
      * @param edgeLength specifies the edge length of the image in pixels.
@@ -159,7 +159,7 @@ public class Tile {
                 castleSize++;
             }
         }
-        return castleSize >= CASTLE_TRESHOLD;
+        return castleSize >= CASTLE_THRESHOLD;
     }
 
     /**

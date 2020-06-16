@@ -61,9 +61,7 @@ public class GridSpot {
         }
         // then check for monastery patterns:
         addPatternIfMonastery(this, results); // the tile itself
-        for (GridSpot neighbour : grid.getNeighbors(this, false, GridDirection.neighbors())) {
-            addPatternIfMonastery(neighbour, results); // neighbors
-        }
+        grid.getNeighbors(this, false, GridDirection.neighbors()).forEach(it -> addPatternIfMonastery(it, results));
         return results; // return all patterns.
     }
 
@@ -160,10 +158,7 @@ public class GridSpot {
      * Removes all the tags from the tile.
      */
     public void removeTags() {
-        for (GridDirection key : tagMap.keySet()) {
-            tagMap.get(key).clear();
-        }
-
+        tagMap.values().forEach(it -> it.clear());
     }
 
     /**
@@ -171,9 +166,7 @@ public class GridSpot {
      * @param pattern is the specific grid pattern.
      */
     public void removeTagsFrom(GridPattern pattern) {
-        for (GridDirection key : tagMap.keySet()) {
-            tagMap.get(key).remove(pattern);
-        }
+        tagMap.values().forEach(it -> it.remove(pattern));
     }
 
     /**
