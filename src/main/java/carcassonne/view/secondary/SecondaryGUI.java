@@ -36,7 +36,7 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
         super(ui);
         dialogPanel = new JPanel(new GridBagLayout());
         this.controller = controller;
-        buildFrame(ui);
+        buildFrame();
     }
 
     /**
@@ -59,7 +59,7 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
     /*
      * Builds the frame and sets its properties.
      */
-    private void buildFrame(MainGUI ui) {
+    private void buildFrame() {
         getContentPane().add(dialogPanel);
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

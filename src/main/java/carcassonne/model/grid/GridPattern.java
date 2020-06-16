@@ -16,7 +16,7 @@ import carcassonne.model.terrain.TerrainType;
  * pattern.
  * @author Timur Saglam
  */
-public abstract class GridPattern {
+public class GridPattern {
 
     private boolean disbursed;
     protected boolean complete;

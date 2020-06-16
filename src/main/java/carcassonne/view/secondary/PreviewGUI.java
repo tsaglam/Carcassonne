@@ -37,7 +37,7 @@ public class PreviewGUI extends SecondaryGUI {
     private JButton buttonRotateLeft;
     private JButton buttonRotateRight;
     private JButton buttonSkip;
-    private ArrayList<JLabel> tileLabels;
+    private List<JLabel> tileLabels;
     private List<Tile> tiles;
     private int selectionIndex;
 
@@ -138,19 +138,19 @@ public class PreviewGUI extends SecondaryGUI {
     private void addMouseAdapters() {
         buttonSkip.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent event) {
                 controller.requestSkip();
             }
         });
         buttonRotateLeft.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent event) {
                 rotateLeft();
             }
         });
         buttonRotateRight.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent event) {
                 rotateRight();
             }
         });
@@ -189,7 +189,7 @@ public class PreviewGUI extends SecondaryGUI {
             final int index = i;
             label.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mousePressed(MouseEvent e) {
+                public void mousePressed(MouseEvent event) {
                     selectTileLabel(index);
                 }
             });

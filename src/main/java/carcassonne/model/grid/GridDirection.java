@@ -1,6 +1,7 @@
 package carcassonne.model.grid;
 
 import java.util.List;
+import java.util.Locale;
 
 import carcassonne.model.terrain.RotationDirection;
 
@@ -110,7 +111,7 @@ public enum GridDirection {
      * @return the readable version.
      */
     public String toReadableString() {
-        return toString().toLowerCase().replace('_', ' ');
+        return toString().toLowerCase(Locale.UK).replace('_', ' ');
     }
 
     private int bigOpposite(int ordinal) {

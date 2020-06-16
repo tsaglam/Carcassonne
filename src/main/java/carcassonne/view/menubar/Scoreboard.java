@@ -22,8 +22,8 @@ public class Scoreboard implements Notifiable {
     private static final String TOOL_TIP = "Settings for player ";
     private final JLabel[] scoreLabels;
     private final JLabel stackSizeLabel;
-    private final ArrayList<JLabel> allLabels;
-    private final ArrayList<MouseListener> settingsMouseListeners;
+    private final List<JLabel> allLabels;
+    private final List<MouseListener> settingsMouseListeners;
     private final GameSettings settings;
 
     /**

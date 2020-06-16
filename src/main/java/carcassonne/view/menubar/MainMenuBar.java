@@ -44,14 +44,10 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private JMenuItem itemNewRound;
     private JMenuItem[] itemSettings;
     private final MainGUI mainUI;
-    private JMenu menuGame;
-    private JMenu menuOptions;
     private JMenu menuPlayers;
     private JMenu menuColor;
-    private JMenu menuView;
     private final Scoreboard scoreboard;
     private final GameSettings settings;
-    private JMenuItem[] itemTiles;
     private JMenu menuHand;
     private ZoomSlider slider;
 
@@ -99,7 +95,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     @Override
-    public void notifyChange() {
+    public final void notifyChange() {
         for (int i = 0; i < itemSettings.length; i++) {
             Color color = settings.getPlayerColor(i).textColor();
             String name = settings.getPlayerName(i);
@@ -121,7 +117,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemAbortRound.setEnabled(false);
         itemNewRound.addMouseListener(new NewRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
         itemAbortRound.addMouseListener(new AbortRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
-        menuGame = new JMenu(GAME);
+        JMenu menuGame = new JMenu(GAME);
         menuGame.add(itemNewRound);
         menuGame.add(itemAbortRound);
         add(menuGame);
@@ -132,7 +128,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         buildHandMenu();
         buildColorMenu();
         notifyChange(); // set colors
-        menuOptions = new JMenu(OPTIONS);
+        JMenu menuOptions = new JMenu(OPTIONS);
         menuOptions.add(menuPlayers);
         menuOptions.add(menuHand);
         menuOptions.add(menuColor);
@@ -149,7 +145,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         JMenuItem itemDistribution = new JMenuItem(DISTRIBUTION);
         itemDistribution.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed(MouseEvent event) {
                 new TileDistributionGUI(settings.getTileDistribution());
             }
         });
@@ -162,8 +158,8 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameSettings.MAXIMAL_PLAYERS - 1];
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
-            itemPlayerCount[i] = new JRadioButtonMenuItem((i + 2) + PLAYERS);
-            itemPlayerCount[i].addMouseListener(new MenuPlayersMouseAdapter(settings, (i + 2)));
+            itemPlayerCount[i] = new JRadioButtonMenuItem(i + 2 + PLAYERS);
+            itemPlayerCount[i].addMouseListener(new MenuPlayersMouseAdapter(settings, i + 2));
             group.add(itemPlayerCount[i]);
             menuPlayers.add(itemPlayerCount[i]);
         }
@@ -181,7 +177,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     }
 
     private void buildHandMenu() {
-        itemTiles = new JRadioButtonMenuItem[GameSettings.MAXIMAL_TILES_ON_HAND];
+        JMenuItem[] itemTiles = new JRadioButtonMenuItem[GameSettings.MAXIMAL_TILES_ON_HAND];
         menuHand = new JMenu(HAND_SETTINGS);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemTiles.length; i++) {
@@ -193,7 +189,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
             itemTiles[i] = new JRadioButtonMenuItem(itemText);
             itemTiles[i].addMouseListener(new MouseAdapter() {
                 @Override
-                public void mousePressed(MouseEvent e) {
+                public void mousePressed(MouseEvent event) {
                     settings.setTilesPerPlayer(numberOfTiles);
                 }
             });
@@ -205,7 +201,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private void buildViewMenu() {
         slider = new ZoomSlider(mainUI);
-        menuView = new JMenu(VIEW);
+        JMenu menuView = new JMenu(VIEW);
         menuView.add(slider.getZoomIn());
         menuView.add(slider);
         menuView.add(slider.getZoomOut());

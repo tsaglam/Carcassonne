@@ -41,7 +41,7 @@ import carcassonne.view.menubar.Scoreboard;
  * The main GUI class.
  * @author Timur Saglam
  */
-// TODO (HIGH) Custom classes for the two layers.
+// TODO (HIGH) Custom classes for the two layers, to avoid making this a god class.
 public class MainGUI extends JFrame implements Notifiable {
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
     private static final int SCROLL_SPEED = 15;
@@ -54,7 +54,7 @@ public class MainGUI extends JFrame implements Notifiable {
     private Player currentPlayer;
     private int gridHeight;
     private int gridWidth;
-    private JLayeredPane layeredPane;
+    private final JLayeredPane layeredPane;
     private List<MeepleDepictionPanel> meeplePanels;
     private JPanel meepleLayer;
     private MeepleDepictionPanel[][] meeplePanelGrid;
@@ -363,7 +363,7 @@ public class MainGUI extends JFrame implements Notifiable {
         meeplePanelGrid = new MeepleDepictionPanel[gridWidth][gridHeight]; // build array of labels.
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                meeplePanelGrid[x][y] = new MeepleDepictionPanel(zoomLevel, controller, this);
+                meeplePanelGrid[x][y] = new MeepleDepictionPanel(zoomLevel, controller);
                 meeplePanels.add(meeplePanelGrid[x][y]);
                 constraints.gridx = x;
                 constraints.gridy = y;

@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Semaphore;
@@ -28,7 +29,7 @@ public class TileImage {
     private static final int SHIFT_VALUE = 1000;
     private static final int SINGLE_PERMIT = 1;
     private static final ConcurrentMap<Integer, Semaphore> semaphores = new ConcurrentHashMap<>();
-    private final ArrayList<ImageIcon> images;
+    private final List<ImageIcon> images;
     private int rotation;
     private final TileType tileType;
 

@@ -44,7 +44,7 @@ public class TileDepiction {
              * @param e is the <code>MouseEvent</code> of the click.
              */
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent event) {
                 controller.requestTilePlacement(x, y);
             }
 
@@ -68,7 +68,7 @@ public class TileDepiction {
      * Shows a {@link Tile} image on this label.
      * @param tile is the {@link Tile} that provides the image.
      */
-    public void setTile(Tile tile) {
+    public final void setTile(Tile tile) {
         this.tile = tile;
         label.setIcon(tile.getScaledIcon(tileSize));
     }
@@ -101,7 +101,7 @@ public class TileDepiction {
     /**
      * Disables the colored mouseover highlight.
      */
-    public void reset() {
+    public final void reset() {
         if (tile != defaultTile) {
             setTile(defaultTile);
         }

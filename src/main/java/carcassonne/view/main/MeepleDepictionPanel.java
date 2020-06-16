@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,8 +23,8 @@ public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepic
 
     private static final int GRID_INDEX_OFFSET = 1;
     private static final long serialVersionUID = -1475325065701922699L;
-    private MainController controller;
-    private HashMap<GridDirection, MeepleDepiction> labels;
+    private final MainController controller;
+    private final Map<GridDirection, MeepleDepiction> labels;
     private Dimension size;
 
     /**
@@ -32,7 +33,7 @@ public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepic
      * @param controller is the responsible {@link MainController}.
      * @param frame is the responsible {@link JFrame}.
      */
-    public MeepleDepictionPanel(int scalingFactor, MainController controller, JFrame frame) {
+    public MeepleDepictionPanel(int scalingFactor, MainController controller) {
         this.controller = controller;
         labels = new HashMap<GridDirection, MeepleDepiction>(GridDirection.values().length);
         setOpaque(false);
@@ -43,7 +44,7 @@ public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepic
         constraints.weighty = 1;
         constraints.fill = GridBagConstraints.BOTH;
         for (GridDirection direction : GridDirection.values()) {
-            MeepleDepiction meepleLabel = new MeepleDepiction(scalingFactor, controller, direction, frame);
+            MeepleDepiction meepleLabel = new MeepleDepiction(controller, direction);
             constraints.gridx = direction.getX() + GRID_INDEX_OFFSET;
             constraints.gridy = direction.getY() + GRID_INDEX_OFFSET;
             labels.put(direction, meepleLabel);

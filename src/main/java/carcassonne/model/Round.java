@@ -85,7 +85,7 @@ public class Round {
      */
     public boolean isOver() {
         boolean handsAreEmpty = Arrays.stream(players).map(it -> it.hasEmptyHand()).reduce(true, (a, b) -> a && b);
-        return grid.isFull() || (tileStack.isEmpty() && handsAreEmpty);
+        return grid.isFull() || tileStack.isEmpty() && handsAreEmpty;
     }
 
     /**

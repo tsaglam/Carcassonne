@@ -79,7 +79,7 @@ public class TileDistributionGUI extends JDialog {
         JButton shuffleButton = new JButton("Shuffle");
         shuffleButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed(MouseEvent event) {
                 quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
                 distribution.shuffle();
                 quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
@@ -88,7 +88,7 @@ public class TileDistributionGUI extends JDialog {
         JButton resetButton = new JButton("Reset");
         resetButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed(MouseEvent event) {
                 distribution.reset();
                 quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
             }
@@ -96,7 +96,7 @@ public class TileDistributionGUI extends JDialog {
         JButton acceptButton = new JButton("Accept");
         acceptButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed(MouseEvent event) {
                 dispose();
                 quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
             }

@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import carcassonne.model.terrain.RotationDirection;
-import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 
 /**
@@ -48,7 +47,7 @@ public class FieldsPattern extends GridPattern {
 
     // adds a grid direction to a list if it has not castle terain at that diection on the tile.
     private void addIfNotCastle(List<GridDirection> results, Tile tile, GridDirection next) {
-        if (tile.getTerrain(next) != TerrainType.CASTLE) {
+        if (tile.getTerrain(next) != CASTLE) {
             results.add(next);
         }
     }
@@ -115,7 +114,7 @@ public class FieldsPattern extends GridPattern {
      */
     private List<GridDirection> getFieldConnections(GridDirection position, Tile tile) {
         List<GridDirection> results = new LinkedList<>();
-        if (tile.getTerrain(position) == TerrainType.FIELDS) {
+        if (tile.getTerrain(position) == FIELDS) {
             if (position.isSmallerOrEquals(WEST)) {
                 results.add(position); // for simple directions just return themselves.
             } else if (position.isSmallerOrEquals(NORTH_WEST)) {

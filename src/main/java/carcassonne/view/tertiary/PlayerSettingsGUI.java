@@ -78,7 +78,7 @@ public class PlayerSettingsGUI extends JDialog implements ChangeListener, Action
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent event) {
         if (nameTextField.getText().isEmpty()) {
             GameMessage.showMessage(EMPTY_NAME);
         } else {

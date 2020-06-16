@@ -23,7 +23,6 @@ import carcassonne.view.main.MainGUI;
 public class PlacementGUI extends SecondaryGUI {
     private static final long serialVersionUID = 1449264387665531286L;
     private PlacementButton[][] button;
-    private JButton buttonSkip;
     private Color defaultButtonColor;
     private Tile tile;
 
@@ -73,7 +72,7 @@ public class PlacementGUI extends SecondaryGUI {
     }
 
     private void buildButtonSkip() {
-        buttonSkip = new JButton(ImageLoadingUtil.SKIP.createImageIcon());
+        JButton buttonSkip = new JButton(ImageLoadingUtil.SKIP.createImageIcon());
         buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
         defaultButtonColor = buttonSkip.getBackground();
         GridBagConstraints constraints = new GridBagConstraints();
@@ -82,7 +81,7 @@ public class PlacementGUI extends SecondaryGUI {
         dialogPanel.add(buttonSkip, constraints);
         buttonSkip.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent event) {
                 controller.requestSkip();
             }
         });

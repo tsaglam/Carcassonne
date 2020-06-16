@@ -205,10 +205,8 @@ public class GridSpot {
     }
 
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
-        if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY) {
-            if (spot.hasNoTagConnectedTo(CENTER)) {
-                patternList.add(new MonasteryGridPattern(spot, grid));
-            }
+        if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY && spot.hasNoTagConnectedTo(CENTER)) {
+            patternList.add(new MonasteryGridPattern(spot, grid));
         }
     }
 
