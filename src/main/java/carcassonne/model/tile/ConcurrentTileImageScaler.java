@@ -36,17 +36,17 @@ public final class ConcurrentTileImageScaler {
     /**
      * Returns the scaled image icon of a tile. This method is thread safe and leverages caching.
      * @param tile is the tile whose image is required.
-     * @param edgeLength is the edge length of the (quadratic) image in pixels.
+     * @param size is the edge length of the (quadratic) image in pixels.
      * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the scaled {@link ImageIcon}.
      */
-    public static ImageIcon getScaledImage(Tile tile, int edgeLength, boolean fastScaling) {
-        int lockKey = createKey(tile, edgeLength);
+    public static ImageIcon getScaledImage(Tile tile, int size, boolean fastScaling) {
+        int lockKey = createKey(tile, size);
         semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
         Semaphore lock = semaphores.get(lockKey);
         try {
             lock.acquire();
-            return getScaledImageUnsafe(tile, edgeLength, fastScaling);
+            return getScaledImageUnsafe(tile, size, fastScaling);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         } finally {
@@ -59,30 +59,34 @@ public final class ConcurrentTileImageScaler {
      * Either scales the full resolution image to the required size or retrieves the cached scaled image. This method is not
      * thread safe.
      */
-    private static ImageIcon getScaledImageUnsafe(Tile tile, int edgeLength, boolean fastScaling) {
-        if (TileImageScalingCache.containsScaledImage(tile, edgeLength, fastScaling)) {
-            return TileImageScalingCache.getScaledImage(tile, edgeLength);
+    private static ImageIcon getScaledImageUnsafe(Tile tile, int size, boolean fastScaling) {
+        if (TileImageScalingCache.containsScaledImage(tile, size, fastScaling)) {
+            return TileImageScalingCache.getScaledImage(tile, size);
         }
-        ImageIcon original = getOriginalImage(tile);
-        ImageIcon scaledImage = new ImageIcon(scaleImage(original, edgeLength, fastScaling));
-        TileImageScalingCache.putScaledImage(scaledImage, tile, edgeLength, fastScaling);
+        ImageIcon original = getOriginalImage(tile, size);
+        ImageIcon scaledImage = new ImageIcon(scaleImage(original, size, fastScaling));
+        TileImageScalingCache.putScaledImage(scaledImage, tile, size, fastScaling);
         return scaledImage;
     }
 
     /**
      * Gets a full-size image for a specific tile. Uses caching to reuse image icons.
      */
-    private static ImageIcon getOriginalImage(Tile tile) {
+    private static ImageIcon getOriginalImage(Tile tile, int size) {
         int lockKey = createKey(tile, TILE_RESOLUTION);
         semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
         Semaphore lock = semaphores.get(lockKey);
         try {
-            lock.acquire();
+            if (size != TILE_RESOLUTION) {
+                lock.acquire();
+            }
             return getOriginalImageUnsafe(tile);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         } finally {
-            lock.release();
+            if (size != TILE_RESOLUTION) {
+                lock.release();
+            }
         }
         return new ImageIcon();
     }
@@ -123,17 +127,17 @@ public final class ConcurrentTileImageScaler {
      * Scales the full resolution image to the required size with either the fast or the smooth scaling algorithm. This
      * method is not thread safe.
      */
-    private static Image scaleImage(ImageIcon image, int edgeLength, boolean fastScaling) {
+    private static Image scaleImage(ImageIcon image, int size, boolean fastScaling) {
         if (fastScaling) {
-            return FastImageScaler.scaleImage(image.getImage(), edgeLength);
+            return FastImageScaler.scaleImage(image.getImage(), size);
         }
-        return image.getImage().getScaledInstance(edgeLength, edgeLength, Image.SCALE_SMOOTH);
+        return image.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
     }
 
     /**
      * Creates a primitive composite key for the tile depiction with a specific edge length.
      */
-    private static int createKey(Tile tile, int edgeLength) {
-        return edgeLength + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation() * SHIFT_VALUE * SHIFT_VALUE;
+    private static int createKey(Tile tile, int size) {
+        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation() * SHIFT_VALUE * SHIFT_VALUE;
     }
 }
