@@ -7,8 +7,6 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import carcassonne.control.MainController;
-import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileType;
 import carcassonne.view.GameMessage;
 
 /**
@@ -28,7 +26,6 @@ public final class Carcassonne {
      */
     public static void main(String[] args) {
         setLookAndFeel();
-        preloadImages();
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -47,7 +44,7 @@ public final class Carcassonne {
      * on Windows operating systems.
      */
     private static void setLookAndFeel() {
-        if (!System.getProperty(OS_NAME_KEY).startsWith(MAC)) { // TODO (MEDIUM) is this still needed?
+        if (!System.getProperty(OS_NAME_KEY).startsWith(MAC)) {
             for (LookAndFeelInfo lookAndFeel : UIManager.getInstalledLookAndFeels()) {
                 if (NIMBUS.equals(lookAndFeel.getName())) {
                     try {
@@ -58,20 +55,5 @@ public final class Carcassonne {
                 }
             }
         }
-    }
-
-    /**
-     * Loads images in another thread before the game starts. This removes the delay when starting the first round.
-     */
-    private static void preloadImages() {
-        Thread loader = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (TileType tileType : TileType.values()) {
-                    new Tile(tileType);
-                }
-            }
-        });
-        loader.start();
     }
 }

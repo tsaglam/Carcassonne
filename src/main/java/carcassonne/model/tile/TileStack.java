@@ -17,6 +17,7 @@ public class TileStack {
     /**
      * Simple constructor, creates the default fixed-amount stack.
      * @param players is the amount of player for which this tile stack is intended.
+     * @param distribution is the tile distribution according which the stack is filled.
      */
     public TileStack(int players, TileDistribution distribution) {
         multiplicator = 0.4 + players * 0.3;

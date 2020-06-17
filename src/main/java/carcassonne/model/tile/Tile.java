@@ -10,6 +10,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.terrain.TileTerrain;
+import carcassonne.settings.GameSettings;
 
 /**
  * The tile of a grid.
@@ -21,7 +22,7 @@ public class Tile {
     private Meeple meeple;
     private final TileTerrain terrain;
     private final TileType type;
-    private final TileImage tileImage;
+    private int rotation;
 
     /**
      * Simple constructor.
@@ -35,7 +36,6 @@ public class Tile {
         this.type = type;
         terrain = new TileTerrain(type);
         meeple = null;
-        tileImage = new TileImage(type, hasEmblem());
     }
 
     /**
@@ -62,7 +62,7 @@ public class Tile {
      * @return the image depicting the tile.
      */
     public ImageIcon getIcon() {
-        return tileImage.getImageIcon();
+        return getScaledIcon(GameSettings.TILE_RESOLUTION, false);
     }
 
     /**
@@ -71,7 +71,7 @@ public class Tile {
      * @return the image depicting the tile.
      */
     public ImageIcon getScaledIcon(int edgeLength) {
-        return tileImage.getScaledImageIcon(edgeLength, false);
+        return getScaledIcon(edgeLength, false);
     }
 
     /**
@@ -81,7 +81,7 @@ public class Tile {
      * @return the image depicting the tile.
      */
     public ImageIcon getScaledIcon(int edgeLength, boolean fastScaling) {
-        return tileImage.getScaledImageIcon(edgeLength, fastScaling);
+        return ConcurrentTileImageScaler.getScaledImage(this, edgeLength, fastScaling);
     }
 
     /**
@@ -107,6 +107,14 @@ public class Tile {
      */
     public TileType getType() {
         return type;
+    }
+
+    /**
+     * Getter for the rotation.
+     * @return the rotation.
+     */
+    public int getRotation() {
+        return rotation;
     }
 
     /**
@@ -209,7 +217,7 @@ public class Tile {
      */
     public void rotateLeft() {
         terrain.rotateLeft();
-        tileImage.rotateLeft();
+        rotation = rotation <= 0 ? 3 : rotation - 1; // update orientation indicator
     }
 
     /**
@@ -217,7 +225,7 @@ public class Tile {
      */
     public void rotateRight() {
         terrain.rotateRight();
-        tileImage.rotateRight();
+        rotation = rotation >= 3 ? 0 : rotation + 1; // update orientation indicator
     }
 
     /**

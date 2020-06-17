@@ -29,6 +29,7 @@ public class GameSettings {
     private static final String MEEPLE_PATH = "meeple/meeple_";
     private static final String PNG = ".png";
     private static final String TEMPLATE = "_template";
+    public static final int TILE_RESOLUTION = 300;
     private int amountOfPlayers;
     private final List<Notifiable> changeListeners;
     private final List<PlayerColor> colors;

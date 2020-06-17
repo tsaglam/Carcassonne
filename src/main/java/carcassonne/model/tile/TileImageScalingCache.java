@@ -21,15 +21,14 @@ public final class TileImageScalingCache {
     }
 
     /**
-     * Checks if there is an existing scaled image in this cache.
-     * @param tileType is the type of the tile that specifies the base image and its orientation.
-     * @param rotation is the rotation of the correlating tile.
+     * Checks if there is an existing scaled tile image in this cache.
+     * @param tile is the tile whose scaled image is requested.
      * @param resolution is the edge with of the (quadratic) image.
      * @param preview determines if the image should be a preview render or final render.
      * @return true if there is an existing image cached with the specified resolution.
      */
-    public static boolean containsScaledImage(TileType tileType, int rotation, int resolution, boolean preview) {
-        int key = createKey(tileType, rotation, resolution);
+    public static boolean containsScaledImage(Tile tile, int resolution, boolean preview) {
+        int key = createKey(tile, resolution);
         if (preview) {
             return cachedImageIcons.containsKey(key);
         }
@@ -38,25 +37,23 @@ public final class TileImageScalingCache {
 
     /**
      * Retrieves an existing scaled image in this cache.
-     * @param tileType is the type of the tile that specifies the base image and its orientation.
-     * @param rotation is the rotation of the correlating tile.
+     * @param tile is the tile whose scaled image is requested.
      * @param resolution is the edge with of the (quadratic) image.
      * @return the scaled image or null if there is none.
      */
-    public static ImageIcon getScaledImage(TileType tileType, int rotation, int resolution) {
-        return cachedImageIcons.get(createKey(tileType, rotation, resolution));
+    public static ImageIcon getScaledImage(Tile tile, int resolution) {
+        return cachedImageIcons.get(createKey(tile, resolution));
     }
 
     /**
      * Places an scaled image in this cache to enable its reuse.
      * @param image is the scaled image.
-     * @param tileType is the type of the tile for which the image was scaled for.
-     * @param rotation is the rotation of the correlating tile.
+     * @param tile is the tile whose scaled image is requested.
      * @param resolution is the edge with of the scaled image.
      * @param preview determines if the image is a preview render or final render.
      */
-    public static void putScaledImage(ImageIcon image, TileType tileType, int rotation, int resolution, boolean preview) {
-        int key = createKey(tileType, rotation, resolution);
+    public static void putScaledImage(ImageIcon image, Tile tile, int resolution, boolean preview) {
+        int key = createKey(tile, resolution);
         cachedImageIcons.put(key, image);
         cachedScalingInformation.put(key, preview);
         restoreConsistency();
@@ -91,7 +88,7 @@ public final class TileImageScalingCache {
     /**
      * Creates a primitive composite key for a tileType type, a resolution, and a orientation.
      */
-    private static int createKey(TileType tileType, int rotation, int resolution) {
-        return resolution + tileType.ordinal() * SHIFT_VALUE + rotation * SHIFT_VALUE * SHIFT_VALUE;
+    private static int createKey(Tile tile, int resolution) {
+        return resolution + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation() * SHIFT_VALUE * SHIFT_VALUE;
     }
 }
