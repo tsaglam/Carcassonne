@@ -6,16 +6,15 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 /**
- * Utility class for scaling quadratic images extremely fast. This class enable 5x faster scaling than
- * {@link Image#getScaledInstance(int, int, int)} with {@link Image#SCALE_FAST} and 10x faster scaling than
- * {@link Image#getScaledInstance(int, int, int)} with {@link Image#SCALE_SMOOTH}. Additionally, the resulting images
- * look better as images generated with {@link Image#SCALE_FAST}. This class is heavily based on an article by Dr. Franz
- * Graf.
+ * Utility class for scaling quadratic images extremely fast. This class enable faster scaling than
+ * {@link Image#getScaledInstance(int, int, int)} (5x faster with {@link Image#SCALE_FAST} and 10x faster with
+ * {@link Image#SCALE_SMOOTH}). Additionally, the resulting images look better as images generated with
+ * {@link Image#SCALE_FAST}. This class is heavily based on an article by Dr. Franz Graf.
  * @see <a href=" https://www.locked.de/fast-image-scaling-in-java/">locked.de/fast-image-scaling-in-java</a>
  * @author Timur Saglam
  */
 public final class FastImageScaler {
-    
+
     private FastImageScaler() {
         // private constructor ensures non-instantiability!
     }
@@ -27,6 +26,9 @@ public final class FastImageScaler {
      * @return the scaled image.
      */
     public static Image scaleImage(Image image, int resolution) {
+        if (image.getWidth(null) == resolution) {
+            return image; // TODO (HIGH) test if this makes a difference
+        }
         Image result = scaleByHalf(image, resolution);
         result = scaleExact(result, resolution);
         return result;
