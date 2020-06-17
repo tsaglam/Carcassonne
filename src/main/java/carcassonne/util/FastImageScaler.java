@@ -20,27 +20,27 @@ public final class FastImageScaler {
     }
 
     /**
-     * Scales a quadratic images to a image with a given resolution.
+     * Scales a quadratic images to a image with a given size.
      * @param image is the original image.
-     * @param resolution is the desired edge length of the scaled image.
+     * @param size is the desired edge length of the scaled image.
      * @return the scaled image.
      */
-    public static Image scaleImage(Image image, int resolution) {
-        if (image.getWidth(null) == resolution) {
-            return image; // TODO (HIGH) test if this makes a difference
+    public static Image scaleImage(Image image, int size) {
+        if (image.getWidth(null) == size) {
+            return image; // do not do anything if image already has target size.
         }
-        Image result = scaleByHalf(image, resolution);
-        result = scaleExact(result, resolution);
+        Image result = scaleByHalf(image, size);
+        result = scaleExact(result, size);
         return result;
     }
 
     /*
      * While the image is larger than 2x the target size: Scale image with factor 0.5 and nearest neighbor interpolation.
      */
-    private static BufferedImage scaleByHalf(Image image, int resolution) {
+    private static BufferedImage scaleByHalf(Image image, int size) {
         int width = image.getWidth(null);
         int height = image.getHeight(null);
-        float factor = getBinFactor(width, resolution);
+        float factor = getBinFactor(width, size);
         width *= factor;
         height *= factor;
         BufferedImage scaled = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -54,8 +54,8 @@ public final class FastImageScaler {
     /*
      * Scale to final target size with bilinear interpolation.
      */
-    private static BufferedImage scaleExact(Image image, int resolution) {
-        float factor = resolution / (float) image.getWidth(null);
+    private static BufferedImage scaleExact(Image image, int size) {
+        float factor = size / (float) image.getWidth(null);
         int width = (int) (image.getWidth(null) * factor);
         int height = (int) (image.getHeight(null) * factor);
         BufferedImage scaled = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -66,9 +66,9 @@ public final class FastImageScaler {
         return scaled;
     }
 
-    private static float getBinFactor(int width, int resolution) {
+    private static float getBinFactor(int width, int size) {
         float factor = 1;
-        float target = resolution / (float) width;
+        float target = size / (float) width;
         if (target <= 1) {
             while (factor / 2 > target) {
                 factor /= 2;
