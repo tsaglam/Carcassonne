@@ -5,17 +5,20 @@ package carcassonne.model.terrain;
  * @author Timur Saglam
  */
 public enum RotationDirection {
-    LEFT,
-    RIGHT;
+    LEFT(-1),
+    RIGHT(1);
+
+    int value;
+
+    private RotationDirection(int value) {
+        this.value = value;
+    }
 
     /**
-     * Returns an integer for the orientation direction.
-     * @return 1 for right and -1 for left.
+     * Returns the numeric value of the rotation direction.
+     * @return -1 or 1.
      */
-    public int toInt() {
-        if (this == RIGHT) {
-            return 1;
-        }
-        return -1;
+    public int getValue() {
+        return value;
     }
 }

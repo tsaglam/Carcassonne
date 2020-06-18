@@ -89,6 +89,6 @@ public final class TileImageScalingCache {
      * Creates a primitive composite key for a tileType type, a size, and a orientation.
      */
     private static int createKey(Tile tile, int size) {
-        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation() * SHIFT_VALUE * SHIFT_VALUE;
+        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation().ordinal() * SHIFT_VALUE * SHIFT_VALUE;
     }
 }
