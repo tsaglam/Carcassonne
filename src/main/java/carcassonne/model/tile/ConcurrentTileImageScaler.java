@@ -95,7 +95,7 @@ public final class ConcurrentTileImageScaler {
      * Loads an image for a specific tile. Uses caching to reuse image icons. This method is not thread safe.
      */
     private static ImageIcon getOriginalImageUnsafe(Tile tile) {
-        String imagePath = GameSettings.TILE_FOLDER_PATH + tile.getType().name() + tile.getRotation() + GameSettings.TILE_FILE_TYPE;
+        String imagePath = GameSettings.TILE_FOLDER_PATH + tile.getType().name() + tile.getRotation().ordinal() + GameSettings.TILE_FILE_TYPE;
         if (TileImageScalingCache.containsScaledImage(tile, TILE_RESOLUTION, false)) {
             return TileImageScalingCache.getScaledImage(tile, TILE_RESOLUTION);
         } else if (tile.hasEmblem()) {
@@ -138,6 +138,6 @@ public final class ConcurrentTileImageScaler {
      * Creates a primitive composite key for the tile depiction with a specific edge length.
      */
     private static int createKey(Tile tile, int size) {
-        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation() * SHIFT_VALUE * SHIFT_VALUE;
+        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation().ordinal() * SHIFT_VALUE * SHIFT_VALUE;
     }
 }

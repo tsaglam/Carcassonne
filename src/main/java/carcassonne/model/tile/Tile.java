@@ -8,6 +8,7 @@ import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
+import carcassonne.model.terrain.RotationDirection;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.terrain.TileTerrain;
 import carcassonne.settings.GameSettings;
@@ -22,7 +23,7 @@ public class Tile {
     private Meeple meeple;
     private final TileTerrain terrain;
     private final TileType type;
-    private int rotation;
+    private TileRotation rotation;
 
     /**
      * Simple constructor.
@@ -35,6 +36,7 @@ public class Tile {
         }
         this.type = type;
         terrain = new TileTerrain(type);
+        rotation = TileRotation.UP;
         meeple = null;
     }
 
@@ -113,7 +115,7 @@ public class Tile {
      * Getter for the rotation.
      * @return the rotation.
      */
-    public int getRotation() {
+    public TileRotation getRotation() {
         return rotation;
     }
 
@@ -217,7 +219,7 @@ public class Tile {
      */
     public void rotateLeft() {
         terrain.rotateLeft();
-        rotation = rotation <= 0 ? 3 : rotation - 1; // update orientation indicator
+        rotation = rotation.rotate(RotationDirection.LEFT);
     }
 
     /**
@@ -225,7 +227,7 @@ public class Tile {
      */
     public void rotateRight() {
         terrain.rotateRight();
-        rotation = rotation >= 3 ? 0 : rotation + 1; // update orientation indicator
+        rotation = rotation.rotate(RotationDirection.RIGHT);
     }
 
     /**
