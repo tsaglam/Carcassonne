@@ -1,4 +1,4 @@
-package carcassonne.model.tile;
+package carcassonne.util;
 
 import static carcassonne.settings.GameSettings.TILE_RESOLUTION;
 
@@ -12,9 +12,8 @@ import java.util.concurrent.Semaphore;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
-import carcassonne.util.FastImageScaler;
-import carcassonne.util.ImageLoadingUtil;
 import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
 

@@ -1,10 +1,10 @@
-package carcassonne.model.tile;
+package carcassonne.util;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.ImageIcon;
 
-import carcassonne.util.LRUHashMap;
+import carcassonne.model.tile.Tile;
 
 /**
  * Caches scaled images of tiles to improve the performance. When zooming in or out all static images are only rendered

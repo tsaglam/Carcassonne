@@ -9,23 +9,29 @@ import static carcassonne.model.grid.GridDirection.SHOUTH;
 import static carcassonne.model.grid.GridDirection.SOUTH_EAST;
 import static carcassonne.model.grid.GridDirection.SOUTH_WEST;
 import static carcassonne.model.grid.GridDirection.WEST;
+import static java.util.stream.Collectors.toList;
 
+import java.awt.Point;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TileType;
 
 /**
  * Represents the terrain information of a single tile. It consists out of nine different terrain types, one for each
- * grid direction. Every other property, such as the meeple spots, is computed from that information.
+ * grid direction. Every other property, such as the meeple spots and connections between positions, is computed from
+ * that information.
  * @author Timur Saglam
  */
 public class TileTerrain {
-    private List<GridDirection> meepleSpots;
+    private Set<GridDirection> meepleSpots;
     private final Map<GridDirection, TerrainType> terrain;
 
     /**
@@ -33,12 +39,7 @@ public class TileTerrain {
      * @param type is the tile type of the terrain.
      */
     public TileTerrain(TileType type) {
-        if (type == null) {
-            throw new IllegalArgumentException("Tile type can't be null");
-        } else if (type.getTerrain().length != GridDirection.values().length) {
-            throw new IllegalArgumentException("TileTerrain array is invalid: " + type);
-        }
-        terrain = new HashMap<>(5); // create terrain map.
+        terrain = new HashMap<>();
         for (int i = 0; i < GridDirection.values().length; i++) {
             terrain.put(GridDirection.values()[i], type.getTerrain()[i]);
         }
@@ -58,10 +59,10 @@ public class TileTerrain {
     }
 
     /**
-     * Returns a list of grid directions, where meeples can be placed on this terrain.
+     * Returns a set of grid directions, where meeples can be placed on this terrain.
      * @return the list of meeple spots.
      */
-    public List<GridDirection> getMeepleSpots() {
+    public Set<GridDirection> getMeepleSpots() {
         return meepleSpots;
     }
 
@@ -101,33 +102,34 @@ public class TileTerrain {
     /**
      * Creates the list of positions on the tile where a meeple can be placed.
      */
-    private void createMeepleSpots() { // TODO (HIGH) Improve code quality.
-        meepleSpots = new LinkedList<>();
-        meepleSpots.addAll(Arrays.asList(GridDirection.values()));
-        for (GridDirection spot : GridDirection.values()) { // for every spot
-            if (terrain.get(spot) != TerrainType.OTHER && meepleSpots.contains(spot)) { // if not checked
-                LinkedList<GridDirection> removalList = new LinkedList<>();
-                int x = 0;
-                int y = 0;
-                for (GridDirection other : GridDirection.values()) {
-                    if (isConnected(spot, other)) { // for every connected spot
-                        removalList.add(other); // mark as part of pattern
-                        x += other.getX();
-                        y += other.getY();
-                    }
-                }
-                x = (int) Math.round(x / 3.0); // calculate center of pattern
-                y = (int) Math.round(y / 3.0);
-                GridDirection center = GridDirection.values2D()[x + 1][y + 1];
-                if (isConnected(center, spot)) {
-                    removalList.remove(center); // keep result spot
-                    meepleSpots.removeAll(removalList); // remove the rest
-                }
+    private void createMeepleSpots() {
+        meepleSpots = new HashSet<>();
+        for (GridDirection position : GridDirection.values()) { // for every spot
+            if (terrain.get(position) != TerrainType.OTHER) { // if not checked
+                createMeepleSpot(position);
             }
         }
         removeRedundantSpots(GridDirection.directNeighbors(), false); // merge to top, right, bottom, and left
         removeRedundantSpots(GridDirection.indirectNeighbors(), true); // merge to the corners and add already removed anchors
         removeRedundantSpots(GridDirection.directNeighbors(), true); // merge one more time
+    }
+
+    /**
+     * Creates a single meeple spot.
+     */
+    private void createMeepleSpot(GridDirection position) {
+        List<GridDirection> connectedPositions = Stream.of(GridDirection.values()).filter(it -> isConnected(position, it)).collect(toList());
+        Point sum = new Point();
+        for (GridDirection connectedPosition : connectedPositions) {
+            sum.x += connectedPosition.getX(); // sum up coordinate weights to calculate the center
+            sum.y += connectedPosition.getY();
+        }
+        GridDirection center = GridDirection.values2D()[(int) Math.round(sum.x / 3.0) + 1][(int) Math.round(sum.y / 3.0) + 1];
+        if (isConnected(center, position)) {
+            meepleSpots.add(center); // add the geometrical pattern center
+        } else {
+            meepleSpots.add(position); // just add the original position
+        }
     }
 
     /**
