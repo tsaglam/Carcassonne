@@ -1,6 +1,6 @@
 package carcassonne.model.tile;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 
@@ -12,6 +12,7 @@ import carcassonne.model.terrain.RotationDirection;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.terrain.TileTerrain;
 import carcassonne.settings.GameSettings;
+import carcassonne.util.ConcurrentTileImageScaler;
 
 /**
  * The tile of a grid.
@@ -250,7 +251,7 @@ public class Tile {
      * Getter for the meeple spots.
      * @return the positions on the grid where placing a meeple is possible.
      */
-    protected List<GridDirection> getMeepleSpots() {
+    protected Set<GridDirection> getMeepleSpots() {
         return terrain.getMeepleSpots();
     }
 }

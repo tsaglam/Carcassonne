@@ -15,7 +15,7 @@ import carcassonne.model.terrain.TerrainType;
 
 /**
  * Enumeration for the specific type of tiles. It allows easy construction of tile objects. This enum show the entirety
- * of hardcoded data is this game. Everything else is algorithmically calculated from this date (e.g. tile placement,
+ * of hard-coded data in this game. Everything else is algorithmically calculated from this data (e.g. tile placement,
  * emblems, pattern completion). Values use lower case for easy image importing.
  * @author Timur
  */
