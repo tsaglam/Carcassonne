@@ -128,7 +128,7 @@ public final class ConcurrentTileImageScaler {
      */
     private static Image scaleImage(ImageIcon image, int size, boolean fastScaling) {
         if (fastScaling) {
-            return FastImageScaler.scaleImage(image.getImage(), size);
+            return FastImageScaler.scaleDown(image.getImage(), size);
         }
         return image.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
     }
