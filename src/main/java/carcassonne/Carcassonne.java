@@ -26,10 +26,10 @@ public final class Carcassonne {
      */
     public static void main(String[] args) {
         setLookAndFeel();
+        MainController controller = new MainController();
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MainController controller = new MainController();
                 controller.startGame();
             }
         });
