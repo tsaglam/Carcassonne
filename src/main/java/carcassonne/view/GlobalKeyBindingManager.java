@@ -37,9 +37,9 @@ public class GlobalKeyBindingManager {
      * @param mainUI is the main user interface.
      * @param previewUI is the user interface for rotating tiles.
      */
-    public GlobalKeyBindingManager(MainController controller, MainGUI mainUI, PreviewGUI rotationUI) {
+    public GlobalKeyBindingManager(MainController controller, MainGUI mainUI, PreviewGUI previewUI) {
         this.mainUI = mainUI;
-        this.previewUI = rotationUI;
+        this.previewUI = previewUI;
         this.controller = controller;
         actions = new HashMap<>();
         inputs = new HashMap<>();

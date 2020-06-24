@@ -10,7 +10,7 @@ public enum RotationDirection {
 
     int value;
 
-    private RotationDirection(int value) {
+    RotationDirection(int value) {
         this.value = value;
     }
 

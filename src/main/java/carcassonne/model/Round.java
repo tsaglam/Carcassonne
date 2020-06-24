@@ -24,6 +24,7 @@ public class Round {
     /**
      * Simple constructor that creates the grid, the tile stack and the players.
      * @param playerCount is the amount of players of the round.
+     * @param tileStack is the stack of tiles.
      * @param grid is the grid of the round.
      * @param settings are the {@link GameSettings}.
      */

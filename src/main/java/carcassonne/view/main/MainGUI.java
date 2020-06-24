@@ -3,24 +3,12 @@ package carcassonne.view.main;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.IntStream;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.OverlayLayout;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
@@ -28,8 +16,6 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileType;
-import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
 import carcassonne.util.LookAndFeelUtil;
 import carcassonne.view.GlobalKeyBindingManager;
@@ -41,29 +27,20 @@ import carcassonne.view.menubar.Scoreboard;
  * The main GUI class.
  * @author Timur Saglam
  */
-// TODO (HIGH) Custom classes for the two layers, to avoid making this a god class.
 public class MainGUI extends JFrame implements Notifiable {
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
-    private static final int SCROLL_SPEED = 15;
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 25;
     private static final int ZOOM_STEP_SIZE = 25;
     private static final Dimension MINIMAL_WINDOW_SIZE = new Dimension(640, 480);
-    private GridBagConstraints constraints;
     private final MainController controller;
     private Player currentPlayer;
     private int gridHeight;
     private int gridWidth;
-    private final JLayeredPane layeredPane;
-    private List<MeepleDepictionPanel> meeplePanels;
-    private JPanel meepleLayer;
-    private MeepleDepictionPanel[][] meeplePanelGrid;
+    private MeepleLayer meepleLayer;
+    private TileLayer tileLayer;
     private MainMenuBar menuBar;
-    private JScrollPane scrollPane;
-    private TileDepiction[][] tileLabelGrid;
-    private List<TileDepiction> tileLabels;
-    private JPanel tileLayer;
-    private final int tileSize;
+    private LayeredScrollPane scrollPane;
     private int zoomLevel;
 
     /**
@@ -72,13 +49,10 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public MainGUI(MainController controller) {
         this.controller = controller;
-        updateGridSize();
-        tileSize = GameSettings.TILE_SIZE;
+        gridWidth = controller.getSettings().getGridWidth();
+        gridHeight = controller.getSettings().getGridHeight();
         zoomLevel = 125;
-        JPanel tilePanel = buildTileLayer();
-        JPanel meeplePanel = buildMeepleLayer();
-        layeredPane = buildLayeredPane(meeplePanel, tilePanel);
-        buildFrame(layeredPane);
+        buildFrame();
     }
 
     /**
@@ -95,8 +69,8 @@ public class MainGUI extends JFrame implements Notifiable {
      * Resets the tile grid and the meeple grid to return to the initial state.
      */
     public void resetGrid() {
-        meeplePanels.forEach(it -> it.forEach(label -> label.reset()));
-        tileLabels.forEach(it -> it.reset());
+        meepleLayer.resetLayer();
+        tileLayer.resetLayer();
         revalidate();
     }
 
@@ -104,12 +78,14 @@ public class MainGUI extends JFrame implements Notifiable {
      * Rebuilds the grid to adapt it to a changed grid size. Therefore, the grid size is updated before rebuilding.
      */
     public void rebuildGrid() {
-        updateGridSize();
-        layeredPane.remove(tileLayer);
-        layeredPane.remove(meepleLayer);
-        layeredPane.add(buildTileLayer(), 1);
-        layeredPane.add(buildMeepleLayer(), 0);
-        centerScrollPaneView();
+        gridWidth = controller.getSettings().getGridWidth();
+        gridHeight = controller.getSettings().getGridHeight();
+        scrollPane.removeLayers(meepleLayer, tileLayer);
+        tileLayer = new TileLayer(controller, gridHeight, gridWidth, zoomLevel);
+        meepleLayer = new MeepleLayer(controller, gridWidth, gridHeight, zoomLevel);
+        scrollPane.addLayers(meepleLayer, tileLayer);
+        revalidate(); // IMPORTANT: required to prevent a shaking view!
+        scrollPane.centerScrollPaneView(gridWidth, gridHeight, zoomLevel);
     }
 
     /**
@@ -125,7 +101,7 @@ public class MainGUI extends JFrame implements Notifiable {
         int x = spot.getX();
         int y = spot.getY();
         checkCoordinates(x, y);
-        meeplePanelGrid[x][y].forEach(it -> it.reset());
+        meepleLayer.resetPanel(x, y);
     }
 
     /**
@@ -137,7 +113,7 @@ public class MainGUI extends JFrame implements Notifiable {
         int x = tile.getGridSpot().getX();
         int y = tile.getGridSpot().getY();
         checkCoordinates(x, y);
-        meeplePanelGrid[x][y].forEach(it -> it.reset());
+        meepleLayer.resetPanel(x, y);
     }
 
     /**
@@ -152,7 +128,8 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public void showUI() {
         setVisible(true);
-        centerScrollPaneView();
+        revalidate(); // IMPORTANT: required to prevent a shaking view!
+        scrollPane.centerScrollPaneView(gridWidth, gridHeight, zoomLevel);
     }
 
     /**
@@ -212,7 +189,7 @@ public class MainGUI extends JFrame implements Notifiable {
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
         ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
-        tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
+        tileLayer.refreshHighlight(newHighlight);
     }
 
     /**
@@ -222,7 +199,7 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public void setHighlight(int x, int y) {
         checkCoordinates(x, y);
-        tileLabelGrid[x][y].highlight();
+        tileLayer.highlightTile(x, y);
     }
 
     /**
@@ -236,7 +213,7 @@ public class MainGUI extends JFrame implements Notifiable {
         int x = tile.getGridSpot().getX();
         int y = tile.getGridSpot().getY();
         checkCoordinates(x, y);
-        meeplePanelGrid[x][y].getMeepleLabel(position).setIcon(tile.getTerrain(position), owner);
+        meepleLayer.placeMeeple(x, y, tile.getTerrain(position), position, owner);
     }
 
     /**
@@ -249,8 +226,8 @@ public class MainGUI extends JFrame implements Notifiable {
         int x = tile.getGridSpot().getX();
         int y = tile.getGridSpot().getY();
         checkCoordinates(x, y);
-        meeplePanelGrid[x][y].setMeeplePreview(tile, currentPlayer);
-        layeredPane.repaint(); // This is required! Removing this will paint black background.
+        meepleLayer.enableMeeplePreview(x, y, tile, currentPlayer);
+        scrollPane.repaintLayers(); // This is required! Removing this will paint black background.
     }
 
     /**
@@ -262,7 +239,7 @@ public class MainGUI extends JFrame implements Notifiable {
     public void setTile(Tile tile, int x, int y) {
         checkParameters(tile);
         checkCoordinates(x, y);
-        tileLabelGrid[x][y].setTile(tile);
+        tileLayer.placeTile(tile, x, y);
     }
 
     /**
@@ -270,24 +247,39 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     @Override
     public void notifyChange() {
-        meeplePanels.forEach(it -> it.forEach(label -> label.refresh()));
+        meepleLayer.refreshLayer();
         if (currentPlayer != null) {
             setCurrentPlayer(currentPlayer);
         }
     }
 
-    private void updateGridSize() {
-        gridWidth = controller.getSettings().getGridWidth();
-        gridHeight = controller.getSettings().getGridHeight();
+    private void updateToChangedZoomLevel(boolean preview) {
+        if (currentPlayer != null && !preview) { // only update highlights when there is an active round
+            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
+            tileLayer.refreshHighlight(newHighlight);
+        }
+        tileLayer.changeZoomLevel(zoomLevel, preview); // Executed in parallel for improved performance
+        meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
+        meepleLayer.changeZoomLevel(zoomLevel);
+        revalidate(); // IMPORTANT: required to prevent a shaking view!
+        scrollPane.centerScrollPaneView(gridWidth, gridHeight, zoomLevel); // TODO (HIGH) zoom based on view center and not grid center?
+        scrollPane.repaintLayers(); // IMPORTANT: Prevents meeples from disappearing.
     }
 
-    private void centerScrollPaneView() {
-        revalidate(); // IMPORTANT: required to prevent a shaking view!
-        Dimension size = new Dimension(gridWidth * zoomLevel, gridHeight * zoomLevel);
-        Rectangle bounds = scrollPane.getViewport().getViewRect();
-        int x = (int) (Math.round((size.width - bounds.width) / 2.0));
-        int y = (int) (Math.round((size.height - bounds.height) / 2.0));
-        scrollPane.getViewport().setViewPosition(new Point(x, y));
+    private void buildFrame() {
+        tileLayer = new TileLayer(controller, gridHeight, gridWidth, zoomLevel);
+        meepleLayer = new MeepleLayer(controller, gridWidth, gridHeight, zoomLevel);
+        menuBar = new MainMenuBar(controller, this);
+        setJMenuBar(menuBar);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+        scrollPane = LookAndFeelUtil.createModifiedScrollpane();
+        scrollPane.addLayers(meepleLayer, tileLayer);
+        add(scrollPane, BorderLayout.CENTER);
+        setMinimumSize(MINIMAL_WINDOW_SIZE);
+        setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
+        addWindowListener(new WindowMaximizationAdapter(this));
+        pack();
     }
 
     private void checkCoordinates(int x, int y) {
@@ -302,99 +294,5 @@ public class MainGUI extends JFrame implements Notifiable {
                 throw new IllegalArgumentException("Parameters such as Tile, Meeple, and Player cannot be null!");
             }
         }
-    }
-
-    private void updateToChangedZoomLevel(boolean preview) {
-        if (currentPlayer != null && !preview) { // only update highlights when there is an active round
-            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
-            tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
-        }
-        // Parallel stream for improved performance when grid is full:
-        Arrays.stream(tileLabelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
-                .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
-        synchronizeLayerSizes(); // IMPORTANT: Ensures that the meeples are on the tiles.
-        meeplePanels.forEach(it -> it.setSize(zoomLevel));
-        centerScrollPaneView(); // TODO (HIGH) zoom based on view center and not grid center?
-        layeredPane.repaint(); // IMPORTANT: Prevents meeples from disappearing.
-    }
-
-    private void synchronizeLayerSizes() {
-        Dimension layerSize = new Dimension(gridWidth * zoomLevel, gridHeight * zoomLevel);
-        meepleLayer.setMaximumSize(layerSize);
-        meepleLayer.setPreferredSize(layerSize);
-        meepleLayer.setMinimumSize(layerSize);
-    }
-
-    private void buildFrame(JLayeredPane layeredPane) {
-        menuBar = new MainMenuBar(controller, this);
-        setJMenuBar(menuBar);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-        scrollPane = LookAndFeelUtil.createModifiedScrollpane(layeredPane);
-        scrollPane.setPreferredSize(new Dimension(gridWidth * tileSize, gridHeight * tileSize));
-        scrollPane.getVerticalScrollBar().setUnitIncrement(SCROLL_SPEED);
-        scrollPane.getHorizontalScrollBar().setUnitIncrement(SCROLL_SPEED);
-        add(scrollPane, BorderLayout.CENTER);
-        setMinimumSize(MINIMAL_WINDOW_SIZE);
-        setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
-        addWindowListener(new WindowMaximizationAdapter(this));
-        pack();
-
-    }
-
-    private JLayeredPane buildLayeredPane(JPanel meeplePanel, JPanel tilePanel) {
-        JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setLayout(new OverlayLayout(layeredPane));
-        layeredPane.add(tilePanel, 1);
-        layeredPane.add(meeplePanel, 0);
-        return layeredPane;
-    }
-
-    private JPanel buildMeepleLayer() {
-        meepleLayer = new JPanel();
-        meepleLayer.setOpaque(false);
-        meepleLayer.setLayout(new GridBagLayout());
-        synchronizeLayerSizes();
-        constraints = new GridBagConstraints();
-        constraints.weightx = 1; // evenly distributes meeple grid
-        constraints.weighty = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        meeplePanels = new ArrayList<>();
-        meeplePanelGrid = new MeepleDepictionPanel[gridWidth][gridHeight]; // build array of labels.
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                meeplePanelGrid[x][y] = new MeepleDepictionPanel(zoomLevel, controller);
-                meeplePanels.add(meeplePanelGrid[x][y]);
-                constraints.gridx = x;
-                constraints.gridy = y;
-                meepleLayer.add(meeplePanelGrid[x][y], constraints); // add label with constraints
-            }
-        }
-        return meepleLayer;
-    }
-
-    /*
-     * Creates the grid of labels.
-     */
-    private JPanel buildTileLayer() {
-        tileLayer = new JPanel();
-        tileLayer.setBackground(GameSettings.GUI_COLOR);
-        tileLayer.setLayout(new GridBagLayout());
-        constraints = new GridBagConstraints();
-        tileLabels = new ArrayList<>();
-        tileLabelGrid = new TileDepiction[gridWidth][gridHeight]; // build array of labels.
-        Tile defaultTile = new Tile(TileType.Null);
-        Tile highlightTile = new Tile(TileType.Null);
-        defaultTile.rotateRight();
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                tileLabelGrid[x][y] = new TileDepiction(zoomLevel, defaultTile, highlightTile, controller, x, y);
-                tileLabels.add(tileLabelGrid[x][y]);
-                constraints.gridx = x;
-                constraints.gridy = y;
-                tileLayer.add(tileLabelGrid[x][y].getLabel(), constraints); // add label with constraints
-            }
-        }
-        return tileLayer;
     }
 }

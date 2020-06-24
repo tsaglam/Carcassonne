@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 
 /**
@@ -31,7 +31,6 @@ public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepic
      * Creates the meeple panel.
      * @param scalingFactor is the initial scaling factor.
      * @param controller is the responsible {@link MainController}.
-     * @param frame is the responsible {@link JFrame}.
      */
     public MeepleDepictionPanel(int scalingFactor, MainController controller) {
         this.controller = controller;
@@ -54,12 +53,13 @@ public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepic
     }
 
     /**
-     * Returns the {@link MeepleDepiction} for a specific position on the correlating tile.
-     * @param direction is the position on the tile.
-     * @return the {@link MeepleDepiction}.
+     * Places a meeple in a specific position on this panel.
+     * @param terrain specifies the meeple type.
+     * @param position is the specific position where the meeple is placed, correlating to the position on the tile.
+     * @param owner is the player that owns the meeple.
      */
-    public MeepleDepiction getMeepleLabel(GridDirection direction) {
-        return labels.get(direction);
+    public void placeMeeple(TerrainType terrain, GridDirection position, Player owner) {
+        labels.get(position).setIcon(terrain, owner);
     }
 
     @Override

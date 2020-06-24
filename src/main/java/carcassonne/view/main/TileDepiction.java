@@ -99,7 +99,7 @@ public class TileDepiction {
     }
 
     /**
-     * Disables the colored mouseover highlight.
+     * Disables the colored mouseover highlight and sets this tile to the default tile.
      */
     public final void reset() {
         if (tile != defaultTile) {

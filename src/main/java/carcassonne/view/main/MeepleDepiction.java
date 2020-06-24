@@ -3,7 +3,6 @@ package carcassonne.view.main;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -30,10 +29,8 @@ public class MeepleDepiction {
 
     /**
      * Creates a blank meeple label.
-     * @param scalingFactor is the initial scaling factor of the depiction.
      * @param controller is the {@link MainController} of the game.
      * @param direction is the {@link GridDirection} where the meeple label sits on the tile.
-     * @param frame is the main {@link JFrame} to repaint after setting icons.
      */
     public MeepleDepiction(MainController controller, GridDirection direction) {
         meepleSize = INITIAL_MEEPLE_SIZE;
