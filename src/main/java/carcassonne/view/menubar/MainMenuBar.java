@@ -1,8 +1,6 @@
 package carcassonne.view.menubar;
 
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -115,8 +113,8 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemNewRound = new JMenuItem(NEW_ROUND);
         itemAbortRound = new JMenuItem(ABORT);
         itemAbortRound.setEnabled(false);
-        itemNewRound.addMouseListener(new NewRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
-        itemAbortRound.addMouseListener(new AbortRoundMouseAdapter(controller, itemNewRound, itemAbortRound));
+        itemNewRound.addActionListener(new NewRoundListener(controller, itemNewRound, itemAbortRound));
+        itemAbortRound.addActionListener(new AbortRoundListener(controller, itemNewRound, itemAbortRound));
         JMenu menuGame = new JMenu(GAME);
         menuGame.add(itemNewRound);
         menuGame.add(itemAbortRound);
@@ -135,20 +133,10 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         menuOptions.addSeparator();
         JMenuItem itemGridSize = new JMenuItem(GRID_SIZE);
         GridSizeDialog dialog = new GridSizeDialog(settings);
-        itemGridSize.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                dialog.showDialog();
-            }
-        });
+        itemGridSize.addActionListener(event -> dialog.showDialog());
         menuOptions.add(itemGridSize);
         JMenuItem itemDistribution = new JMenuItem(DISTRIBUTION);
-        itemDistribution.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                new TileDistributionGUI(settings.getTileDistribution());
-            }
-        });
+        itemDistribution.addActionListener(event -> new TileDistributionGUI(settings.getTileDistribution()));
         menuOptions.add(itemDistribution);
         add(menuOptions);
     }
@@ -158,8 +146,9 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameSettings.MAXIMAL_PLAYERS - 1];
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
-            itemPlayerCount[i] = new JRadioButtonMenuItem(i + 2 + PLAYERS);
-            itemPlayerCount[i].addMouseListener(new MenuPlayersMouseAdapter(settings, i + 2));
+            int players = i + 2;
+            itemPlayerCount[i] = new JRadioButtonMenuItem(players + PLAYERS);
+            itemPlayerCount[i].addActionListener(event -> settings.setAmountOfPlayers(players));
             group.add(itemPlayerCount[i]);
             menuPlayers.add(itemPlayerCount[i]);
         }
@@ -171,7 +160,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         menuColor = new JMenu(COLOR_SETTINGS);
         for (int i = 0; i < itemSettings.length; i++) {
             itemSettings[i] = new JMenuItem();
-            itemSettings[i].addMouseListener(scoreboard.getSettingsMouseListener(i));
+            itemSettings[i].addActionListener(scoreboard.getSettingsListener(i));
             menuColor.add(itemSettings[i]);
         }
     }
@@ -187,12 +176,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
                 itemText += CLASSIC;
             }
             itemTiles[i] = new JRadioButtonMenuItem(itemText);
-            itemTiles[i].addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent event) {
-                    settings.setTilesPerPlayer(numberOfTiles);
-                }
-            });
+            itemTiles[i].addActionListener(event -> settings.setTilesPerPlayer(numberOfTiles));
             group.add(itemTiles[i]);
             menuHand.add(itemTiles[i]);
         }
