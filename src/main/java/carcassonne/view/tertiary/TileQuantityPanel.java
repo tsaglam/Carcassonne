@@ -3,8 +3,6 @@ package carcassonne.view.tertiary;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 
 import javax.swing.JFormattedTextField;
@@ -16,6 +14,7 @@ import javax.swing.text.NumberFormatter;
 
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
+import carcassonne.util.MouseClickListener;
 
 /**
  * Panel that depicts the quantity of a tile type. Shows a image of the tile and a text field for the quantity.
@@ -73,12 +72,9 @@ public class TileQuantityPanel extends JPanel {
         label.setToolTipText(CLICK_TO_ROTATE + type.readableRepresentation());
         Font font = label.getFont();
         label.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                tile.rotateRight();
-                label.setIcon(tile.getScaledIcon(TILE_SIZE));
-            }
+        label.addMouseListener((MouseClickListener) event -> {
+            tile.rotateRight();
+            label.setIcon(tile.getScaledIcon(TILE_SIZE));
         });
         add(label, BorderLayout.NORTH);
     }

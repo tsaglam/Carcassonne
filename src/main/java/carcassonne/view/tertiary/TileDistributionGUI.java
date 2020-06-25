@@ -3,8 +3,6 @@ package carcassonne.view.tertiary;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +13,7 @@ import javax.swing.JPanel;
 
 import carcassonne.model.tile.TileDistribution;
 import carcassonne.model.tile.TileType;
+import carcassonne.util.MouseClickListener;
 
 /**
  * User interface that shows all tiles and how often they are used in a standard game (two players, chaos mode
@@ -77,29 +76,20 @@ public class TileDistributionGUI extends JDialog {
 
     private void buildButtons(JPanel tilePanel, GridBagConstraints constraints) {
         JButton shuffleButton = new JButton("Shuffle");
-        shuffleButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
-                distribution.shuffle();
-                quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
-            }
+        shuffleButton.addMouseListener((MouseClickListener) event -> {
+            quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
+            distribution.shuffle();
+            quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
         });
         JButton resetButton = new JButton("Reset");
-        resetButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                distribution.reset();
-                quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
-            }
+        resetButton.addMouseListener((MouseClickListener) event -> {
+            distribution.reset();
+            quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
         });
         JButton acceptButton = new JButton("Accept");
-        acceptButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                dispose();
-                quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
-            }
+        acceptButton.addMouseListener((MouseClickListener) event -> {
+            dispose();
+            quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
         });
         constraints.gridx = 4;
         tilePanel.add(shuffleButton, constraints);

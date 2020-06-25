@@ -1,8 +1,6 @@
 package carcassonne.view.secondary;
 
 import java.awt.GridBagConstraints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +17,7 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
+import carcassonne.util.MouseClickListener;
 import carcassonne.view.main.MainGUI;
 
 /**
@@ -135,27 +134,6 @@ public class PreviewGUI extends SecondaryGUI {
         }
     }
 
-    private void addMouseAdapters() {
-        buttonSkip.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                controller.requestSkip();
-            }
-        });
-        buttonRotateLeft.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                rotateLeft();
-            }
-        });
-        buttonRotateRight.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                rotateRight();
-            }
-        });
-    }
-
     // build the GUI content
     private void buildContent() {
         // create buttons:
@@ -167,7 +145,9 @@ public class PreviewGUI extends SecondaryGUI {
         buttonRotateLeft.setToolTipText("Rotate left");
         buttonRotateRight.setToolTipText("Rotate right");
         // set listeners:
-        addMouseAdapters();
+        buttonSkip.addMouseListener((MouseClickListener) event -> controller.requestSkip());
+        buttonRotateLeft.addMouseListener((MouseClickListener) event -> rotateLeft());
+        buttonRotateRight.addMouseListener((MouseClickListener) event -> rotateRight());
         // set constraints:
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.NONE;
@@ -187,12 +167,7 @@ public class PreviewGUI extends SecondaryGUI {
             tileLabels.add(label);
             constraints.gridy++;
             final int index = i;
-            label.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent event) {
-                    selectTileLabel(index);
-                }
-            });
+            label.addMouseListener((MouseClickListener) event -> selectTileLabel(index));
             dialogPanel.add(label, constraints);
         }
         constraints.gridy++;

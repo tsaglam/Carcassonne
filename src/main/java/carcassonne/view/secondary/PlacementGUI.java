@@ -2,8 +2,6 @@ package carcassonne.view.secondary;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 
@@ -14,6 +12,7 @@ import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
+import carcassonne.util.MouseClickListener;
 import carcassonne.view.main.MainGUI;
 
 /**
@@ -79,12 +78,7 @@ public class PlacementGUI extends SecondaryGUI {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = 3;
         dialogPanel.add(buttonSkip, constraints);
-        buttonSkip.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                controller.requestSkip();
-            }
-        });
+        buttonSkip.addMouseListener((MouseClickListener) event -> controller.requestSkip());
     }
 
     /**
