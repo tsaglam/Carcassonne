@@ -3,8 +3,8 @@ package carcassonne.view.tertiary;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -17,6 +17,7 @@ import javax.swing.table.TableColumnModel;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Round;
+import carcassonne.util.MouseClickListener;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.main.MainGUI;
 
@@ -84,12 +85,9 @@ public class GameStatisticsGUI extends JDialog {
 
     private void buildButtonClose() {
         buttonClose = new JButton("Close");
-        buttonClose.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                setVisible(false);
-                controller.requestSkip();
-            }
+        buttonClose.addMouseListener((MouseClickListener) event -> {
+            setVisible(false);
+            controller.requestSkip();
         });
     }
 
@@ -103,9 +101,9 @@ public class GameStatisticsGUI extends JDialog {
         setVisible(true);
         setMinimumSize(new Dimension(getSize().width + ADDITIONAL_VERTICLE_SIZE, getSize().height));
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+            public void windowClosing(WindowEvent windowEvent) {
                 controller.requestSkip();
             }
         });
