@@ -1,42 +1,42 @@
 package carcassonne.view.menubar;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
 
 import carcassonne.control.MainController;
 
 /**
- * A simple mouse adapter for the new game button.
+ * A simple listener for the abort game button.
  * @author Timur Saglam
  */
-public class NewRoundMouseAdapter extends MouseAdapter {
+public class AbortRoundListener implements ActionListener {
     private final MainController controller;
     private final JMenuItem itemNewRound;
     private final JMenuItem itemAbortRound;
 
     /**
-     * Creates the mouse adapter.
+     * Creates the listener.
      * @param controller is the main controller to request actions.
      * @param itemNewRound is the menu item to start a new round.
      * @param itemAbortRound is the menu item to abort the current round.
      */
-    public NewRoundMouseAdapter(MainController controller, JMenuItem itemNewRound, JMenuItem itemAbortRound) {
+    public AbortRoundListener(MainController controller, JMenuItem itemNewRound, JMenuItem itemAbortRound) {
         this.controller = controller;
         this.itemNewRound = itemNewRound;
         this.itemAbortRound = itemAbortRound;
     }
 
     /**
-     * Calls method on main menu bar for a new game.
+     * Calls method on main menu bar for aborting the current game.
      */
     @Override
-    public void mousePressed(MouseEvent event) {
-        if (itemNewRound.isEnabled()) {
-            controller.requestNewRound();
-            itemAbortRound.setEnabled(true);
-            itemNewRound.setEnabled(false);
+    public void actionPerformed(ActionEvent event) {
+        if (itemAbortRound.isEnabled()) {
+            controller.requestAbortGame();
+            itemAbortRound.setEnabled(false);
+            itemNewRound.setEnabled(true);
         }
     }
 }

@@ -1,8 +1,5 @@
 package carcassonne.view.menubar;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.JMenuItem;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
@@ -37,18 +34,8 @@ public class ZoomSlider extends JSlider {
         addChangeListener(zoomListener);
         zoomIn = new JMenuItem("Zoom In (+)");
         zoomOut = new JMenuItem("Zoom Out (-)");
-        zoomIn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                setValue(getValue() + SLIDER_STEP_SIZE);
-            }
-        });
-        zoomOut.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                setValue(getValue() - SLIDER_STEP_SIZE);
-            }
-        });
+        zoomIn.addActionListener(event -> setValue(getValue() + SLIDER_STEP_SIZE));
+        zoomOut.addActionListener(event -> setValue(getValue() - SLIDER_STEP_SIZE));
     }
 
     /**
