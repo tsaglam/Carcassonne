@@ -1,6 +1,6 @@
 
 <p align="center"> 
-	<img alt="carcassonne logo" src="src/main/resources/splash.png?raw=true" width="550">
+	<img alt="carcassonne logo" src="src/main/resources/splash@200pct.png?raw=true" width="500">
 </p>
 
 This is a slightly adapted, digital version of the board game Carcassonne.
@@ -12,7 +12,7 @@ The official rules can be found here: [Part 1](https://images.zmangames.com/file
 This is my personal project I work on (infrequently) whenever I have time available.
 Development started in 2016, and since then, this computer game has been an ongoing project...
 
-<p align="center"> 
+<p align="center">
 	<img alt="a screenshot of the game" src="preview.jpg?raw=true" width="750">
 </p>
 
