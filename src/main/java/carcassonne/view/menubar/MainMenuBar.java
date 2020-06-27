@@ -155,7 +155,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemPlayerCount[0].setSelected(true);
     }
 
-    private void buildColorMenu() { // TODO (MEDIUM) reduce duplication
+    private void buildColorMenu() {
         itemSettings = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
         menuColor = new JMenu(COLOR_SETTINGS);
         for (int i = 0; i < itemSettings.length; i++) {

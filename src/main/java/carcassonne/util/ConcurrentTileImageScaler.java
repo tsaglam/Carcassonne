@@ -3,6 +3,7 @@ package carcassonne.util;
 import static carcassonne.settings.GameSettings.TILE_RESOLUTION;
 
 import java.awt.Image;
+import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,7 +11,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
@@ -33,13 +33,13 @@ public final class ConcurrentTileImageScaler {
     }
 
     /**
-     * Returns the scaled image icon of a tile. This method is thread safe and leverages caching.
+     * Returns the scaled image of a tile. This method is thread safe and leverages caching.
      * @param tile is the tile whose image is required.
      * @param size is the edge length of the (quadratic) image in pixels.
      * @param fastScaling specifies whether a fast scaling algorithm should be used.
-     * @return the scaled {@link ImageIcon}.
+     * @return the scaled {@link Image}.
      */
-    public static ImageIcon getScaledImage(Tile tile, int size, boolean fastScaling) {
+    public static Image getScaledImage(Tile tile, int size, boolean fastScaling) {
         int lockKey = createKey(tile, size);
         semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
         Semaphore lock = semaphores.get(lockKey);
@@ -51,19 +51,34 @@ public final class ConcurrentTileImageScaler {
         } finally {
             lock.release();
         }
-        return new ImageIcon();
+        return null;
+    }
+
+    /**
+     * Returns the scaled multi-resolution image of a tile. This image therefore supports HighDPI graphics such as Retina on
+     * Mac OS. This method is thread safe and leverages caching.
+     * @param tile is the tile whose image is required.
+     * @param size is the edge length of the (quadratic) image in pixels.
+     * @param fastScaling specifies whether a fast scaling algorithm should be used.
+     * @return the scaled multi-resolution {@link Image}.
+     */
+    public static Image getScaledMultiResolutionImage(Tile tile, int size, boolean fastScaling) {
+        int highDpiSize = Math.min(size * GameSettings.HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
+        Image defaultImage = getScaledImage(tile, size, fastScaling);
+        Image highDpiImage = getScaledImage(tile, highDpiSize, fastScaling);
+        return new BaseMultiResolutionImage(defaultImage, highDpiImage);
     }
 
     /**
      * Either scales the full resolution image to the required size or retrieves the cached scaled image. This method is not
      * thread safe.
      */
-    private static ImageIcon getScaledImageUnsafe(Tile tile, int size, boolean fastScaling) {
+    private static Image getScaledImageUnsafe(Tile tile, int size, boolean fastScaling) {
         if (TileImageScalingCache.containsScaledImage(tile, size, fastScaling)) {
             return TileImageScalingCache.getScaledImage(tile, size);
         }
-        ImageIcon original = getOriginalImage(tile, size);
-        ImageIcon scaledImage = new ImageIcon(scaleImage(original, size, fastScaling));
+        Image original = getOriginalImage(tile, size);
+        Image scaledImage = scaleImage(original, size, fastScaling);
         TileImageScalingCache.putScaledImage(scaledImage, tile, size, fastScaling);
         return scaledImage;
     }
@@ -71,7 +86,7 @@ public final class ConcurrentTileImageScaler {
     /**
      * Gets a full-size image for a specific tile. Uses caching to reuse image icons.
      */
-    private static ImageIcon getOriginalImage(Tile tile, int size) {
+    private static Image getOriginalImage(Tile tile, int size) {
         int lockKey = createKey(tile, TILE_RESOLUTION);
         semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
         Semaphore lock = semaphores.get(lockKey);
@@ -87,20 +102,20 @@ public final class ConcurrentTileImageScaler {
                 lock.release();
             }
         }
-        return new ImageIcon();
+        return null;
     }
 
     /**
      * Loads an image for a specific tile. Uses caching to reuse image icons. This method is not thread safe.
      */
-    private static ImageIcon getOriginalImageUnsafe(Tile tile) {
+    private static Image getOriginalImageUnsafe(Tile tile) {
         String imagePath = GameSettings.TILE_FOLDER_PATH + tile.getType().name() + tile.getRotation().ordinal() + GameSettings.TILE_FILE_TYPE;
         if (TileImageScalingCache.containsScaledImage(tile, TILE_RESOLUTION, false)) {
             return TileImageScalingCache.getScaledImage(tile, TILE_RESOLUTION);
         } else if (tile.hasEmblem()) {
             return loadImageAndPaintEmblem(tile, imagePath);
         } else {
-            ImageIcon image = ImageLoadingUtil.createImageIcon(imagePath);
+            Image image = ImageLoadingUtil.createBufferedImage(imagePath);
             TileImageScalingCache.putScaledImage(image, tile, TILE_RESOLUTION, false);
             return image;
         }
@@ -109,28 +124,28 @@ public final class ConcurrentTileImageScaler {
     /**
      * Loads a tile image for a tile with a certain rotation index and paints its emblem.
      */
-    private static ImageIcon loadImageAndPaintEmblem(Tile tile, String imagePath) {
+    private static Image loadImageAndPaintEmblem(Tile tile, String imagePath) {
         try {
             BufferedImage image = ImageIO.read(ConcurrentTileImageScaler.class.getClassLoader().getResourceAsStream(imagePath));
-            ImageIcon paintedImage = PaintShop.addEmblem(image);
+            Image paintedImage = PaintShop.addEmblem(image);
             TileImageScalingCache.putScaledImage(paintedImage, tile, TILE_RESOLUTION, false);
             return paintedImage;
         } catch (IOException exception) {
             exception.printStackTrace();
             GameMessage.showError("ERROR: Could not load image loacted at " + imagePath);
         }
-        return new ImageIcon();
+        return null;
     }
 
     /**
      * Scales the full resolution image to the required size with either the fast or the smooth scaling algorithm. This
      * method is not thread safe.
      */
-    private static Image scaleImage(ImageIcon image, int size, boolean fastScaling) {
+    private static Image scaleImage(Image image, int size, boolean fastScaling) {
         if (fastScaling) {
-            return FastImageScaler.scaleDown(image.getImage(), size);
+            return FastImageScaler.scaleDown(image, size);
         }
-        return image.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
+        return image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
     }
 
     /**

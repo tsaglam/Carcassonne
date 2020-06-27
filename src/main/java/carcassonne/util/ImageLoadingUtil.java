@@ -19,7 +19,8 @@ public enum ImageLoadingUtil {
     LEFT("icons/left.png"),
     NULL_TILE("tiles/Null0.png"),
     RIGHT("icons/right.png"),
-    SKIP("icons/skip.png");
+    SKIP("icons/skip.png"),
+    SPLASH("splash.png");
 
     private final String path;
 

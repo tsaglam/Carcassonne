@@ -78,13 +78,13 @@ public class Tile {
     }
 
     /**
-     * Getter for the scaled tile image. The image depends on the orientation of the tile.
+     * Getter for the scaled tile image with HiDPI support. The image depends on the orientation of the tile.
      * @param edgeLength specifies the edge length of the image in pixels.
      * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the image depicting the tile.
      */
     public ImageIcon getScaledIcon(int edgeLength, boolean fastScaling) {
-        return ConcurrentTileImageScaler.getScaledImage(this, edgeLength, fastScaling);
+        return new ImageIcon(ConcurrentTileImageScaler.getScaledMultiResolutionImage(this, edgeLength, fastScaling));
     }
 
     /**
