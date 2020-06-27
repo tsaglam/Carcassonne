@@ -2,6 +2,7 @@ package carcassonne.view;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -40,7 +41,7 @@ public final class PaintShop {
      * @param originalTile is the original tile image without the emblem.
      * @return a copy of the image with an emblem.
      */
-    public static ImageIcon addEmblem(BufferedImage originalTile) {
+    public static Image addEmblem(BufferedImage originalTile) {
         BufferedImage copy = deepCopy(originalTile);
         for (int x = 0; x < emblemImage.getWidth(); x++) {
             for (int y = 0; y < emblemImage.getHeight(); y++) {
@@ -50,7 +51,7 @@ public final class PaintShop {
                 copy.setRGB(x, y, blendedColor.getRGB());
             }
         }
-        return new ImageIcon(copy);
+        return copy;
     }
 
     /**
@@ -68,7 +69,12 @@ public final class PaintShop {
      */
     public static ImageIcon getColoredHighlight(Player player, int size) {
         ImageIcon coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
-        return new ImageIcon(coloredImage.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH));
+
+        Image small = coloredImage.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
+        int largeSize = Math.min(size * 2, GameSettings.TILE_RESOLUTION);
+        Image large = coloredImage.getImage().getScaledInstance(largeSize, largeSize, Image.SCALE_SMOOTH);
+
+        return new ImageIcon(new BaseMultiResolutionImage(small, large));
     }
 
     /**

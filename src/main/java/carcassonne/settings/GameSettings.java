@@ -30,6 +30,7 @@ public class GameSettings {
     private static final String PNG = ".png";
     private static final String TEMPLATE = "_template";
     public static final int TILE_RESOLUTION = 300;
+    public static final int HIGH_DPI_FACTOR = 2; // maximum supported DPI factor.
     private int amountOfPlayers;
     private final List<Notifiable> changeListeners;
     private final List<PlayerColor> colors;
