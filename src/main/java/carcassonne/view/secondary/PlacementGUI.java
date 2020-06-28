@@ -71,7 +71,7 @@ public class PlacementGUI extends SecondaryGUI {
     }
 
     private void buildButtonSkip() {
-        JButton buttonSkip = new JButton(ImageLoadingUtil.SKIP.createImageIcon());
+        JButton buttonSkip = new JButton(ImageLoadingUtil.SKIP.createHighDpiImageIcon());
         buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
         defaultButtonColor = buttonSkip.getBackground();
         GridBagConstraints constraints = new GridBagConstraints();

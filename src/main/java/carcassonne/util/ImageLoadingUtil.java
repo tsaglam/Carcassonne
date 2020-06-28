@@ -1,5 +1,7 @@
 package carcassonne.util;
 
+import java.awt.Image;
+import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -37,6 +39,22 @@ public enum ImageLoadingUtil {
     }
 
     /**
+     * Convenience method that creates a high-DPI image for the image enumeral.
+     * @return the image, which has half of the width and height of the original file.
+     */
+    public Image createHighDpiImage() {
+        return createHighDpiImage(path);
+    }
+
+    /**
+     * Convenience method that creates a high-DPI image icon for the image enumeral.
+     * @return the image icon, which has half of the width and height of the original file.
+     */
+    public ImageIcon createHighDpiImageIcon() {
+        return new ImageIcon(createHighDpiImage(path));
+    }
+
+    /**
      * Convenience method that creates an image icon for the image enumeral.
      * @return the image icon.
      */
@@ -57,6 +75,17 @@ public enum ImageLoadingUtil {
             GameMessage.showError("ERROR: Could not load image loacted at " + path);
             return null;
         }
+    }
+
+    /**
+     * Loads an image from a path and creates a high-DPI image.
+     * @param path is the relative file path, omitting the resource folder path.
+     * @return the image, which has half of the width and height of the original file.
+     */
+    public static Image createHighDpiImage(String path) {
+        BufferedImage fullSize = createBufferedImage(path);
+        Image base = fullSize.getScaledInstance(fullSize.getWidth() / 2, fullSize.getHeight() / 2, Image.SCALE_SMOOTH);
+        return new BaseMultiResolutionImage(base, fullSize);
     }
 
     /**
