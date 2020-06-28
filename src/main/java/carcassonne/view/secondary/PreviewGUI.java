@@ -137,9 +137,9 @@ public class PreviewGUI extends SecondaryGUI {
     // build the GUI content
     private void buildContent() {
         // create buttons:
-        buttonSkip = new JButton(ImageLoadingUtil.SKIP.createImageIcon());
-        buttonRotateLeft = new JButton(ImageLoadingUtil.LEFT.createImageIcon());
-        buttonRotateRight = new JButton(ImageLoadingUtil.RIGHT.createImageIcon());
+        buttonSkip = new JButton(ImageLoadingUtil.SKIP.createHighDpiImageIcon());
+        buttonRotateLeft = new JButton(ImageLoadingUtil.LEFT.createHighDpiImageIcon());
+        buttonRotateRight = new JButton(ImageLoadingUtil.RIGHT.createHighDpiImageIcon());
         // set tool tips:
         buttonSkip.setToolTipText("Don't place tile and skip turn");
         buttonRotateLeft.setToolTipText("Rotate left");
