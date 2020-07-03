@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -19,7 +18,7 @@ import carcassonne.model.tile.Tile;
  * {@link JPanel} encapsulates the the nine {@link MeepleDepiction}s of a specific {@link Tile}.
  * @author Timur Saglam
  */
-public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepiction> {
+public class MeepleDepictionPanel extends JPanel {
 
     private static final int GRID_INDEX_OFFSET = 1;
     private static final long serialVersionUID = -1475325065701922699L;
@@ -48,7 +47,6 @@ public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepic
             constraints.gridy = direction.getY() + GRID_INDEX_OFFSET;
             labels.put(direction, meepleLabel);
             add(meepleLabel.getLabel(), constraints);
-
         }
     }
 
@@ -60,31 +58,6 @@ public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepic
      */
     public void placeMeeple(TerrainType terrain, GridDirection position, Player owner) {
         labels.get(position).setIcon(terrain, owner);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return size;
-    }
-
-    @Override
-    public Dimension getMinimumSize() {
-        return size;
-    }
-
-    @Override
-    public Dimension getMaximumSize() {
-        return size;
-    }
-
-    @Override
-    public Dimension getSize() {
-        return size;
-    }
-
-    @Override
-    public Iterator<MeepleDepiction> iterator() {
-        return labels.values().iterator();
     }
 
     /**
@@ -105,7 +78,31 @@ public class MeepleDepictionPanel extends JPanel implements Iterable<MeepleDepic
      * @param scalingFactor is the scaling factor in pixels.
      */
     public void setSize(int scalingFactor) {
-        this.size = new Dimension(scalingFactor, scalingFactor);
-        forEach(it -> it.setMeepleSize(scalingFactor));
+        size = new Dimension(scalingFactor, scalingFactor);
+        labels.values().forEach(it -> it.setMeepleSize(scalingFactor));
+    }
+
+    /**
+     * Refreshes all meeple labels in this panel. This updates the images to color changes.
+     */
+    public void refreshAll() {
+        labels.values().forEach(MeepleDepiction::refresh);
+    }
+
+    /**
+     * Resets all meeples in this panel.
+     */
+    public void resetAll() {
+        labels.values().forEach(MeepleDepiction::reset);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return size;
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        return size;
     }
 }
