@@ -19,10 +19,11 @@ import carcassonne.view.main.MainGUI;
  */
 public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
 
-    private static final int SMOOTHING_FACTOR = 5; // only update zoom with this step size.
+    private static final double SMOOTHING_FACTOR = 5.0; // only update zoom with this step size.
     private final MainGUI mainUI;
     private final JSlider slider;
     private int previousValue;
+    private boolean blockingEvents;
 
     /**
      * Creates the listener.
@@ -42,10 +43,26 @@ public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
 
     @Override
     public void stateChanged(ChangeEvent event) {
-        int smoothedValue = slider.getValue() / SMOOTHING_FACTOR * SMOOTHING_FACTOR;
-        if (previousValue != smoothedValue) { // limit zoom updated when dragging.
+        int smoothedValue = (int) (Math.round(slider.getValue() / SMOOTHING_FACTOR) * SMOOTHING_FACTOR);
+        if (previousValue != smoothedValue && !blockingEvents) { // limit zoom updated when dragging.
             previousValue = smoothedValue;
             mainUI.setZoom(smoothedValue, true);
         }
+    }
+
+    /**
+     * Checks if events are blocked.
+     * @return the blockingEvents
+     */
+    public boolean isBlockingEvents() {
+        return blockingEvents;
+    }
+
+    /**
+     * Blocks or unblocks all events.
+     * @param blockingEvents specifies if events are blocked or not.
+     */
+    public void setBlockingEvents(boolean blockingEvents) {
+        this.blockingEvents = blockingEvents;
     }
 }

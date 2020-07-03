@@ -17,6 +17,7 @@ public class ZoomSlider extends JSlider {
     private static final int SLIDER_STEP_SIZE = 25;
     private final JMenuItem zoomOut;
     private final JMenuItem zoomIn;
+    private final ZoomSliderListener zoomListener;
 
     /**
      * Creates the slider.
@@ -29,13 +30,24 @@ public class ZoomSlider extends JSlider {
         setMinorTickSpacing(5);
         setMajorTickSpacing(50);
         setSnapToTicks(true);
-        ZoomSliderListener zoomListener = new ZoomSliderListener(mainUI, this);
+        zoomListener = new ZoomSliderListener(mainUI, this);
         addMouseListener(zoomListener);
         addChangeListener(zoomListener);
         zoomIn = new JMenuItem("Zoom In (+)");
         zoomOut = new JMenuItem("Zoom Out (-)");
         zoomIn.addActionListener(event -> setValue(getValue() + SLIDER_STEP_SIZE));
         zoomOut.addActionListener(event -> setValue(getValue() - SLIDER_STEP_SIZE));
+    }
+
+    /**
+     * Sets the slider value without triggering the zoom slider listener event.
+     * @param value is the value to set.
+     * @see JSlider#setValue(int)
+     */
+    public void setValueSneakily(int value) {
+        zoomListener.setBlockingEvents(true);
+        setValue(value);
+        zoomListener.setBlockingEvents(false);
     }
 
     /**
