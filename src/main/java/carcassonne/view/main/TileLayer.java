@@ -3,9 +3,7 @@ package carcassonne.view.main;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -57,8 +55,7 @@ public class TileLayer extends JPanel {
      * @param preview determines if the tiles are rendered in preview mode (fast but ugly).
      */
     public void changeZoomLevel(int zoomLevel, boolean preview) {
-        Arrays.stream(tileLabelGrid).parallel().forEach(column -> IntStream.range(0, column.length) // columns
-                .forEach(i -> column[i].setTileSize(zoomLevel, preview))); // rows
+        tileLabels.parallelStream().forEach(it -> it.setTileSize(zoomLevel, preview));
     }
 
     /**
@@ -85,13 +82,13 @@ public class TileLayer extends JPanel {
      * @param newHighlight is the new image.
      */
     public void refreshHighlight(ImageIcon newHighlight) {
-        tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
+        tileLabels.parallelStream().forEach(it -> it.setColoredHighlight(newHighlight));
     }
 
     /**
      * Resets every tile label in this layer.
      */
     public void resetLayer() {
-        tileLabels.forEach(it -> it.reset());
+        tileLabels.parallelStream().forEach(it -> it.reset());
     }
 }

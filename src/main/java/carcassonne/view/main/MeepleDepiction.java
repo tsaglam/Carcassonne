@@ -35,7 +35,8 @@ public class MeepleDepiction {
     public MeepleDepiction(MainController controller, GridDirection direction) {
         meepleSize = INITIAL_MEEPLE_SIZE;
         terrain = TerrainType.OTHER;
-        label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize), SwingConstants.CENTER);
+        label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize)); // new RigidLabel(meepleSize, meepleSize);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
         preview = false;
         mouseAdapter = new MouseAdapter() {
             @Override
@@ -127,7 +128,7 @@ public class MeepleDepiction {
     }
 
     private void setEmptyIcon() {
-        label.setIcon(PaintShop.getPreviewMeeple(terrain, meepleSize));
+        setPreviewIcon();
     }
 
     private void setMeepleIcon() {
@@ -135,6 +136,6 @@ public class MeepleDepiction {
     }
 
     private void setPreviewIcon() {
-        setEmptyIcon();
+        label.setIcon(PaintShop.getPreviewMeeple(terrain, meepleSize));
     }
 }
