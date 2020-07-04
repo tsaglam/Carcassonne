@@ -73,6 +73,7 @@ public abstract class SecondaryGUI extends JDialog implements Notifiable {
     protected void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
         dialogPanel.setBackground(currentPlayer.getColor().lightColor());
+        setBackground(currentPlayer.getColor().lightColor());
     }
 
     /**
