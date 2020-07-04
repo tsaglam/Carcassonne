@@ -48,6 +48,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private final GameSettings settings;
     private JMenu menuHand;
     private ZoomSlider slider;
+    private final TileDistributionGUI tileDistributionUI;
 
     /**
      * Simple constructor creating the menu bar.
@@ -61,6 +62,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         settings = controller.getSettings();
         settings.registerNotifiable(this);
         scoreboard = new Scoreboard(settings, mainUI);
+        tileDistributionUI = new TileDistributionGUI(settings.getTileDistribution());
         buildGameMenu();
         buildOptionsMenu();
         buildViewMenu();
@@ -136,7 +138,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         itemGridSize.addActionListener(event -> dialog.showDialog());
         menuOptions.add(itemGridSize);
         JMenuItem itemDistribution = new JMenuItem(DISTRIBUTION);
-        itemDistribution.addActionListener(event -> new TileDistributionGUI(settings.getTileDistribution()));
+        itemDistribution.addActionListener(event -> tileDistributionUI.setVisible(true));
         menuOptions.add(itemDistribution);
         add(menuOptions);
     }

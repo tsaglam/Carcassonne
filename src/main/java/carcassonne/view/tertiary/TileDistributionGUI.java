@@ -53,6 +53,7 @@ public class TileDistributionGUI extends JDialog {
     private void buildPanel() {
         JPanel tilePanel = new JPanel();
         tilePanel.setBackground(Color.GRAY);
+        setBackground(Color.GRAY);
         tilePanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.NONE;
@@ -104,10 +105,9 @@ public class TileDistributionGUI extends JDialog {
      */
     private void buildWindow() {
         setTitle(TITLE);
-        setVisible(true);
+        setResizable(false);
         pack();
         setSize(getWidth() + PADDING * GRID_WIDTH, getHeight() + PADDING * GRID_HEIGHT);
         setLocationRelativeTo(null);
-        setResizable(false);
     }
 }
