@@ -42,7 +42,7 @@ public class MeepleDepictionPanel extends JPanel {
         constraints.weighty = 1;
         constraints.fill = GridBagConstraints.BOTH;
         for (GridDirection direction : GridDirection.values()) {
-            MeepleDepiction meepleLabel = new MeepleDepiction(controller, direction);
+            MeepleDepiction meepleLabel = new MeepleDepiction(scalingFactor, controller, direction);
             constraints.gridx = direction.getX() + GRID_INDEX_OFFSET;
             constraints.gridy = direction.getY() + GRID_INDEX_OFFSET;
             labels.put(direction, meepleLabel);
