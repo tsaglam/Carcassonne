@@ -32,8 +32,8 @@ public class MeepleDepiction {
      * @param controller is the {@link MainController} of the game.
      * @param direction is the {@link GridDirection} where the meeple label sits on the tile.
      */
-    public MeepleDepiction(MainController controller, GridDirection direction) {
-        meepleSize = INITIAL_MEEPLE_SIZE;
+    public MeepleDepiction(int scalingFactor, MainController controller, GridDirection direction) {
+        updateMeepleSize(scalingFactor);
         terrain = TerrainType.OTHER;
         label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize)); // new RigidLabel(meepleSize, meepleSize);
         label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -72,7 +72,7 @@ public class MeepleDepiction {
      */
     public void reset() {
         terrain = TerrainType.OTHER;
-        setEmptyIcon();
+        setPreviewIcon();
         label.removeMouseListener(mouseAdapter);
     }
 
@@ -116,26 +116,25 @@ public class MeepleDepiction {
      * original size.
      */
     public void setMeepleSize(int scalingFactor) {
-        int limitedFactor = scalingFactor > MEEPLE_SCALING_THRESHOLD ? MEEPLE_SCALING_THRESHOLD : scalingFactor;
-        meepleSize = INITIAL_MEEPLE_SIZE * limitedFactor / 100;
-        if (terrain == TerrainType.OTHER) {
-            setEmptyIcon();
-        } else if (preview) {
+        updateMeepleSize(scalingFactor);
+        if (terrain == TerrainType.OTHER || preview) {
             setPreviewIcon();
         } else {
             setMeepleIcon();
         }
     }
 
-    private void setEmptyIcon() {
-        setPreviewIcon();
+    // calculates the meeple size from the scaling factor, which also represents the tile size.
+    private final void updateMeepleSize(int scalingFactor) {
+        int limitedFactor = scalingFactor > MEEPLE_SCALING_THRESHOLD ? MEEPLE_SCALING_THRESHOLD : scalingFactor;
+        meepleSize = INITIAL_MEEPLE_SIZE * limitedFactor / 100;
     }
 
     private void setMeepleIcon() {
         label.setIcon(PaintShop.getColoredMeeple(terrain, player, meepleSize));
     }
 
-    private void setPreviewIcon() {
+    private void setPreviewIcon() { // empty icon TileTerrain.OTHER
         label.setIcon(PaintShop.getPreviewMeeple(terrain, meepleSize));
     }
 }
