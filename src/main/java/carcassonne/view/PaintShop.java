@@ -22,6 +22,7 @@ import carcassonne.util.ImageLoadingUtil;
  * @author Timur Saglam
  */
 public final class PaintShop {
+    private static final int HIGH_DPI_FACTOR = 2;
     private static final BufferedImage emblemImage = ImageLoadingUtil.EMBLEM.createBufferedImage();
     private static final BufferedImage highlightBaseImage = ImageLoadingUtil.NULL_TILE.createBufferedImage();
     private static final BufferedImage highlightImage = ImageLoadingUtil.HIGHLIGHT.createBufferedImage();
@@ -71,7 +72,7 @@ public final class PaintShop {
         ImageIcon coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
 
         Image small = coloredImage.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
-        int largeSize = Math.min(size * 2, GameSettings.TILE_RESOLUTION);
+        int largeSize = Math.min(size * HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
         Image large = coloredImage.getImage().getScaledInstance(largeSize, largeSize, Image.SCALE_SMOOTH);
 
         return new ImageIcon(new BaseMultiResolutionImage(small, large));
@@ -89,9 +90,10 @@ public final class PaintShop {
         if (chachedMeepleImages.containsKey(key)) {
             return chachedMeepleImages.get(key);
         }
-        ImageIcon image = paintMeeple(meepleType, color.getRGB(), size);
-        chachedMeepleImages.put(key, image);
-        return image;
+        Image paintedMeeple = paintMeeple(meepleType, color.getRGB(), size * HIGH_DPI_FACTOR);
+        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(paintedMeeple));
+        chachedMeepleImages.put(key, icon);
+        return icon;
     }
 
     /**
@@ -116,9 +118,10 @@ public final class PaintShop {
         if (chachedMeepleImages.containsKey(key)) {
             return chachedMeepleImages.get(key);
         }
-        ImageIcon image = new ImageIcon(imageMap.get(meepleType).getScaledInstance(size, size, SCALING_STRATEGY));
-        chachedMeepleImages.put(key, image);
-        return image;
+        Image preview = imageMap.get(meepleType).getScaledInstance(size * HIGH_DPI_FACTOR, size * HIGH_DPI_FACTOR, SCALING_STRATEGY);
+        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(preview));
+        chachedMeepleImages.put(key, icon);
+        return icon;
     }
 
     /**
@@ -182,7 +185,7 @@ public final class PaintShop {
     }
 
     // Colors a meeple with RGB color.
-    private static ImageIcon paintMeeple(TerrainType meepleType, int color, int size) {
+    private static Image paintMeeple(TerrainType meepleType, int color, int size) {
         BufferedImage image = deepCopy(imageMap.get(meepleType));
         BufferedImage template = templateMap.get(meepleType);
         for (int x = 0; x < template.getWidth(); x++) {
@@ -192,6 +195,6 @@ public final class PaintShop {
                 }
             }
         }
-        return new ImageIcon(image.getScaledInstance(size, size, Image.SCALE_SMOOTH));
+        return image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
     }
 }
