@@ -42,8 +42,6 @@ public class MainGUI extends JFrame implements Notifiable {
     private MainMenuBar menuBar;
     private LayeredScrollPane scrollPane;
     private int zoomLevel;
-    private int oldZoomLevel;
-    private boolean validateNext; // determines if next zoom step needs extra validation
 
     /**
      * Constructor of the main GUI. creates the GUI with a scoreboard.
@@ -54,7 +52,6 @@ public class MainGUI extends JFrame implements Notifiable {
         gridWidth = controller.getSettings().getGridWidth();
         gridHeight = controller.getSettings().getGridHeight();
         zoomLevel = 125;
-        oldZoomLevel = zoomLevel;
         buildFrame();
     }
 
@@ -80,15 +77,14 @@ public class MainGUI extends JFrame implements Notifiable {
     /**
      * Rebuilds the grid to adapt it to a changed grid size. Therefore, the grid size is updated before rebuilding.
      */
-    public void rebuildGrid() { // TODO (MEDIUM) loading visualization if this call takes more than 150ms?
+    public void rebuildGrid() {
         gridWidth = controller.getSettings().getGridWidth();
         gridHeight = controller.getSettings().getGridHeight();
         scrollPane.removeLayers(meepleLayer, tileLayer);
         tileLayer = new TileLayer(controller, gridHeight, gridWidth, zoomLevel);
         meepleLayer = new MeepleLayer(controller, gridWidth, gridHeight, zoomLevel);
         scrollPane.addLayers(meepleLayer, tileLayer);
-        scrollPane.getViewport().validate(); // IMPORTANT: required to prevent a shaking view!
-        scrollPane.centerScrollPaneView(gridWidth, gridHeight, zoomLevel);
+        scrollPane.validateAndCenterView();
     }
 
     /**
@@ -131,8 +127,7 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public void showUI() {
         setVisible(true);
-        revalidate(); // IMPORTANT: required enable a centered view on startup!
-        scrollPane.centerScrollPaneView(gridWidth, gridHeight, zoomLevel);
+        scrollPane.validateAndCenterView();
     }
 
     /**
@@ -156,7 +151,6 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public void zoomIn() {
         if (zoomLevel < MAX_ZOOM_LEVEL) {
-            oldZoomLevel = zoomLevel;
             zoomLevel += ZOOM_STEP_SIZE;
             updateToChangedZoomLevel(false);
             menuBar.getZoomSlider().setValueSneakily(zoomLevel); // ensures the slider is updated when using key bindings.
@@ -168,7 +162,6 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public void zoomOut() {
         if (zoomLevel > MIN_ZOOM_LEVEL) {
-            oldZoomLevel = zoomLevel;
             zoomLevel -= ZOOM_STEP_SIZE;
             updateToChangedZoomLevel(false);
             menuBar.getZoomSlider().setValueSneakily(zoomLevel); // ensures the slider is updated when using key bindings.
@@ -182,7 +175,6 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public void setZoom(int level, boolean preview) {
         if (level <= MAX_ZOOM_LEVEL && level >= MIN_ZOOM_LEVEL) {
-            oldZoomLevel = zoomLevel;
             zoomLevel = level;
             updateToChangedZoomLevel(preview);
         }
@@ -267,21 +259,8 @@ public class MainGUI extends JFrame implements Notifiable {
         tileLayer.changeZoomLevel(zoomLevel, preview); // Executed in parallel for improved performance
         meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
         meepleLayer.changeZoomLevel(zoomLevel);
-        validateIfRequired();
-        scrollPane.centerScrollPaneView(gridWidth, gridHeight, zoomLevel);
+        scrollPane.centerView(gridWidth * zoomLevel, gridHeight * zoomLevel);
         scrollPane.repaintLayers(); // IMPORTANT: Prevents meeples from disappearing.
-    }
-
-    private void validateIfRequired() { // TODO (HIGH) this is a bit ugly
-        boolean gridWasInView = scrollPane.showsFullGrid(gridWidth, gridHeight, oldZoomLevel);
-        boolean gridIsInView = scrollPane.showsFullGrid(gridWidth, gridHeight, zoomLevel);
-        if (gridWasInView != gridIsInView) {
-            validate();
-            validateNext = true;
-        } else if (validateNext) {
-            validateNext = false;
-            validate();
-        }
     }
 
     private void buildFrame() {
