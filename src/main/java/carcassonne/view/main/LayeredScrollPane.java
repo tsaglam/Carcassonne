@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.util.stream.Stream;
 
 import javax.swing.JLayeredPane;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.OverlayLayout;
 
@@ -74,38 +73,32 @@ public class LayeredScrollPane extends JScrollPane {
      * @param width is the width of the tile grid in pixels.
      * @param height is the height of the tile grid in pixels.
      */
-    public void centerView(int width, int height) {
+    public void centerView(int width, int height) { // TODO (HIGH) fix remaining jitter
         if (width * height < PERFORMANCE_THRESHOLD || shouldValidate(width, height)) {
-            validateAndCenterView();
+            validateAndCenter();
         } else {
-            centerViewManually(width, height);
+            centerScrollBars(width, height);
         }
-    }
-
-    /**
-     * Centers the scroll pane view to show the center of the grid. Uses calculated grid information to avoid validation.
-     * @param width is the width of the tile grid in pixels.
-     * @param height is the height of the tile grid in pixels.
-     */
-    public void centerViewManually(int width, int height) {
-        Rectangle bounds = getViewport().getViewRect();
-        int horizontal = Math.max(0, (width - bounds.width) / 2);
-        int vertical = Math.max(0, (height - bounds.height) / 2);
-        getHorizontalScrollBar().setValue(horizontal);
-        getVerticalScrollBar().setValue(vertical);
     }
 
     /**
      * Centers the scroll pane view to show the center of the grid. Since this method revalidates the viewport it can be
      * expensive if the scroll pane contains complex content (e.g. a very large grid).
      */
-    public void validateAndCenterView() { // TODO (HIGH) zoom based on view center and not grid center?
-        getViewport().validate(); // IMPORTANT: required to allow proper centering
-        Rectangle bounds = getViewport().getViewRect();
-        JScrollBar horizontal = getHorizontalScrollBar();
-        horizontal.setValue((horizontal.getMaximum() - bounds.width) / 2);
-        JScrollBar vertical = getVerticalScrollBar();
-        vertical.setValue((vertical.getMaximum() - bounds.height) / 2);
+    public void validateAndCenter() { // TODO (HIGH) zoom based on view center and not grid center?
+        validate(); // IMPORTANT: required to allow proper centering
+        centerScrollBars(getHorizontalScrollBar().getMaximum(), getVerticalScrollBar().getMaximum());
+    }
+
+    /**
+     * Centers the scroll bars by using the grid dimensions.
+     * @param width is the width of the tile grid in pixels.
+     * @param height is the height of the tile grid in pixels.
+     */
+    private void centerScrollBars(int width, int height) {
+        Rectangle view = getViewport().getViewRect();
+        getHorizontalScrollBar().setValue(Math.max(0, (width - view.width) / 2));
+        getVerticalScrollBar().setValue(Math.max(0, (height - view.height) / 2));
     }
 
     /*

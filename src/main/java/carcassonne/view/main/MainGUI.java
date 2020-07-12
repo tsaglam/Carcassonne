@@ -84,7 +84,7 @@ public class MainGUI extends JFrame implements Notifiable {
         tileLayer = new TileLayer(controller, gridHeight, gridWidth, zoomLevel);
         meepleLayer = new MeepleLayer(controller, gridWidth, gridHeight, zoomLevel);
         scrollPane.addLayers(meepleLayer, tileLayer);
-        scrollPane.validateAndCenterView();
+        scrollPane.validateAndCenter();
     }
 
     /**
@@ -127,7 +127,7 @@ public class MainGUI extends JFrame implements Notifiable {
      */
     public void showUI() {
         setVisible(true);
-        scrollPane.validateAndCenterView();
+        scrollPane.validateAndCenter();
     }
 
     /**
@@ -149,7 +149,7 @@ public class MainGUI extends JFrame implements Notifiable {
     /**
      * Zooms in if the maximum zoom level has not been reached.
      */
-    public void zoomIn() {
+    public synchronized void zoomIn() {
         if (zoomLevel < MAX_ZOOM_LEVEL) {
             zoomLevel += ZOOM_STEP_SIZE;
             updateToChangedZoomLevel(false);
@@ -160,7 +160,7 @@ public class MainGUI extends JFrame implements Notifiable {
     /**
      * Zooms out if the minimum zoom level has not been reached.
      */
-    public void zoomOut() {
+    public synchronized void zoomOut() {
         if (zoomLevel > MIN_ZOOM_LEVEL) {
             zoomLevel -= ZOOM_STEP_SIZE;
             updateToChangedZoomLevel(false);
@@ -173,7 +173,7 @@ public class MainGUI extends JFrame implements Notifiable {
      * @param level is the zoom level.
      * @param preview specifies whether fast calculations for preview purposes should be used.
      */
-    public void setZoom(int level, boolean preview) {
+    public synchronized void setZoom(int level, boolean preview) {
         if (level <= MAX_ZOOM_LEVEL && level >= MIN_ZOOM_LEVEL) {
             zoomLevel = level;
             updateToChangedZoomLevel(preview);
@@ -259,7 +259,11 @@ public class MainGUI extends JFrame implements Notifiable {
         tileLayer.changeZoomLevel(zoomLevel, preview); // Executed in parallel for improved performance
         meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
         meepleLayer.changeZoomLevel(zoomLevel);
-        scrollPane.centerView(gridWidth * zoomLevel, gridHeight * zoomLevel);
+        if (preview) {
+            scrollPane.centerView(gridWidth * zoomLevel, gridHeight * zoomLevel);
+        } else {
+            scrollPane.validateAndCenter();
+        }
         scrollPane.repaintLayers(); // IMPORTANT: Prevents meeples from disappearing.
     }
 
