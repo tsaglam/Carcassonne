@@ -34,8 +34,8 @@ public class TileDepiction {
     public TileDepiction(int tileSize, Tile defaultTile, Tile highlightTile, MainController controller, int x, int y) {
         this.defaultTile = defaultTile;
         this.highlightTile = highlightTile;
-        label = new JLabel();
         this.tileSize = tileSize;
+        label = new JLabel();  
         reset();
         label.addMouseListener(new MouseAdapter() {
             /**
