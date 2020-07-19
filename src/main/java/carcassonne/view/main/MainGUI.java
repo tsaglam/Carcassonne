@@ -260,7 +260,7 @@ public class MainGUI extends JFrame implements Notifiable {
         meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
         meepleLayer.changeZoomLevel(zoomLevel);
         if (preview) {
-            scrollPane.centerView(gridWidth * zoomLevel, gridHeight * zoomLevel);
+            scrollPane.centerView(gridWidth, gridHeight, zoomLevel);
         } else {
             scrollPane.validateAndCenter();
         }

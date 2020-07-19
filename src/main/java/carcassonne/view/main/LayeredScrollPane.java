@@ -14,7 +14,7 @@ import javax.swing.OverlayLayout;
  * @author Timur Saglam
  */
 public class LayeredScrollPane extends JScrollPane {
-    private static final int PERFORMANCE_THRESHOLD = 2000; // if there are more tiles UI validation gets expensive
+    private static final int PERFORMANCE_THRESHOLD = 2500; // if there are more tiles UI validation gets expensive
     private static final double SIZE_FACTOR = 0.75; // affects validation, see shouldValidate()
     private static final long serialVersionUID = 7863596860273426396L;
     private static final int SCROLL_SPEED = 15;
@@ -70,14 +70,14 @@ public class LayeredScrollPane extends JScrollPane {
 
     /**
      * Centers the scroll pane view to show the center of the grid. Uses calculated grid information to avoid validation.
-     * @param width is the width of the tile grid in pixels.
-     * @param height is the height of the tile grid in pixels.
+     * @param width is the width of the tile grid.
+     * @param height is the height of the tile grid.
      */
-    public void centerView(int width, int height) { // TODO (HIGH) fix remaining jitter
+    public void centerView(int width, int height, int zoomLevel) { // TODO (HIGH) fix remaining jitter
         if (width * height < PERFORMANCE_THRESHOLD || shouldValidate(width, height)) {
             validateAndCenter();
         } else {
-            centerScrollBars(width, height);
+            centerScrollBars(width * zoomLevel, height * zoomLevel);
         }
     }
 
