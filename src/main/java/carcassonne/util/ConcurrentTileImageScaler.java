@@ -62,7 +62,7 @@ public final class ConcurrentTileImageScaler {
      * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the scaled multi-resolution {@link Image}.
      */
-    public static Image getScaledMultiResolutionImage(Tile tile, int size, boolean fastScaling) {
+    public static Image getScaledMultiResolutionImage(Tile tile, int size, boolean fastScaling) { // TODO (HIGH) check locking etc.
         int highDpiSize = Math.min(size * GameSettings.HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
         Image defaultImage = getScaledImage(tile, size, fastScaling);
         Image highDpiImage = getScaledImage(tile, highDpiSize, fastScaling);
@@ -109,7 +109,7 @@ public final class ConcurrentTileImageScaler {
      * Loads an image for a specific tile. Uses caching to reuse image icons. This method is not thread safe.
      */
     private static Image getOriginalImageUnsafe(Tile tile) {
-        String imagePath = GameSettings.TILE_FOLDER_PATH + tile.getType().name() + tile.getRotation().ordinal() + GameSettings.TILE_FILE_TYPE;
+        String imagePath = GameSettings.TILE_FOLDER_PATH + tile.getType().name() + tile.getImageIndex() + GameSettings.TILE_FILE_TYPE;
         if (TileImageScalingCache.containsScaledImage(tile, TILE_RESOLUTION, false)) {
             return TileImageScalingCache.getScaledImage(tile, TILE_RESOLUTION);
         } else if (tile.hasEmblem()) {
@@ -152,6 +152,6 @@ public final class ConcurrentTileImageScaler {
      * Creates a primitive composite key for the tile depiction with a specific edge length.
      */
     private static int createKey(Tile tile, int size) {
-        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation().ordinal() * SHIFT_VALUE * SHIFT_VALUE;
+        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getImageIndex() * SHIFT_VALUE * SHIFT_VALUE;
     }
 }
