@@ -37,6 +37,7 @@ public class GameSettings {
     private int gridHeight;
     private boolean gridSizeChanged;
     private int tilesPerPlayer;
+    private int stackSizeMultiplier;
     private int gridWidth;
     private final List<String> names;
     private final TileDistribution tileDistribution;
@@ -44,12 +45,13 @@ public class GameSettings {
     /**
      * Creates a settings instance. Instances hold different setting values when one is changed.
      */
-    public GameSettings() { // TODO (HIGH) add settings for stack size/multipliers
+    public GameSettings() {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
         tileDistribution = new TileDistribution();
         amountOfPlayers = 2;
         tilesPerPlayer = 1;
+        stackSizeMultiplier = 1;
         gridWidth = 25;
         gridHeight = 15;
         gridSizeChanged = false;
@@ -96,6 +98,15 @@ public class GameSettings {
      */
     public String getPlayerName(int playerNumber) {
         return names.get(playerNumber);
+    }
+
+    /**
+     * Returns the multiplier for the tile amounts in a tile stack. When a tile amount is 2 and the stack multiplier is 2
+     * the tile stack contains for tiles of this type.
+     * @return the stack size multiplier.
+     */
+    public int getStackSizeMultiplier() {
+        return stackSizeMultiplier;
     }
 
     /**
@@ -182,6 +193,15 @@ public class GameSettings {
     public void setPlayerName(String name, int playerNumber) {
         names.set(playerNumber, name);
         notifyListeners();
+    }
+
+    /**
+     * Sets the multiplier for the tile amounts in a tile stack. When a tile amount is 2 and the stack multiplier is 2 the
+     * tile stack contains for tiles of this type.
+     * @param stackSizeMultiplier is the new stack size multiplier.
+     */
+    public void setStackSizeMultiplier(int stackSizeMultiplier) {
+        this.stackSizeMultiplier = stackSizeMultiplier;
     }
 
     /**
