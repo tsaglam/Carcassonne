@@ -52,8 +52,8 @@ public class GameSettings {
         amountOfPlayers = 2;
         tilesPerPlayer = 1;
         stackSizeMultiplier = 1;
-        gridWidth = 25;
-        gridHeight = 15;
+        gridWidth = 29;
+        gridHeight = 19;
         gridSizeChanged = false;
         changeListeners = new ArrayList<Notifiable>();
     }

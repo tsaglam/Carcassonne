@@ -119,7 +119,7 @@ public abstract class AbstractControllerState {
     protected void startNewRound(int playerCount) {
         GameSettings settings = controller.getSettings();
         Grid newGrid = new Grid(settings.getGridWidth(), settings.getGridHeight());
-        TileStack tileStack = new TileStack(playerCount, settings.getTileDistribution());
+        TileStack tileStack = new TileStack(playerCount, settings.getTileDistribution(), settings.getStackSizeMultiplier());
         Round newRound = new Round(playerCount, tileStack, newGrid, controller.getSettings());
         controller.updateStates(newRound, tileStack, newGrid);
         updateScores();

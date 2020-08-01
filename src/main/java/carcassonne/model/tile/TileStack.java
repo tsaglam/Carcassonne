@@ -12,15 +12,16 @@ import java.util.Stack;
 public class TileStack {
     private final Stack<Tile> tiles;
     private final Queue<Tile> returnedTiles;
-    private final double multiplicator;
+    private final int multiplicator;
 
     /**
      * Simple constructor, creates the default fixed-amount stack.
      * @param players is the amount of player for which this tile stack is intended.
      * @param distribution is the tile distribution according which the stack is filled.
+     * @param multiplicator is the tile stack multiplier, meaning how often the distribution is added to the stack.
      */
-    public TileStack(int players, TileDistribution distribution) {
-        multiplicator = 0.4 + players * 0.3;
+    public TileStack(int players, TileDistribution distribution, int multiplicator) {
+        this.multiplicator = multiplicator;
         tiles = new Stack<>();
         returnedTiles = new LinkedList<>();
         fillStack(distribution);
@@ -74,7 +75,7 @@ public class TileStack {
 
     private void fillStack(TileDistribution distribution) {
         for (TileType tileType : TileType.validTiles()) {
-            int amount = (int) (distribution.getQuantity(tileType) * multiplicator);
+            int amount = distribution.getQuantity(tileType) * multiplicator;
             for (int i = 0; i < amount; i++) {
                 tiles.add(new Tile(tileType));
             }
