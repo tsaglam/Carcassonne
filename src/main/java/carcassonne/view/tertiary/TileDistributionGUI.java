@@ -4,15 +4,21 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.border.LineBorder;
 
 import carcassonne.model.tile.TileDistribution;
 import carcassonne.model.tile.TileType;
+import carcassonne.settings.GameSettings;
 import carcassonne.util.MouseClickListener;
 
 /**
@@ -22,27 +28,37 @@ import carcassonne.util.MouseClickListener;
  */
 public class TileDistributionGUI extends JDialog {
     private static final long serialVersionUID = 1805511300999150753L;
-    private static final String TITLE = "Standard Two-Player Game Tile Distribution";
+    private static final String TITLE = "Tile Distribution";
     private static final int GRID_WIDTH = 11;
     private static final int GRID_HEIGHT = 3;
     private static final int PADDING = 5;
     private final TileDistribution distribution;
     private final List<TileQuantityPanel> quantityPanels;
+    private final GameSettings settings;
+    private int stackSizeMultiplier;
 
     /**
      * Creates the UI and shows it.
      * @param distribution is the {@link TileDistribution} to show in the UI.
      */
-    public TileDistributionGUI(TileDistribution distribution) {
-        this.distribution = distribution;
+    public TileDistributionGUI(GameSettings settings) {
+        this.settings = settings;
+        distribution = settings.getTileDistribution();
         distribution.createBackup();
         quantityPanels = new ArrayList<>();
+        stackSizeMultiplier = settings.getStackSizeMultiplier();
         buildPanel();
         buildWindow();
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+            public void windowClosing(WindowEvent event) {
                 distribution.restoreLastBackup();
+            }
+
+            @Override
+            public void windowActivated(WindowEvent event) {
+                distribution.createBackup();
+                updateFromDistribution();
             }
         });
     }
@@ -71,33 +87,65 @@ public class TileDistributionGUI extends JDialog {
                 constraints.gridy++;
             }
         }
-        buildButtons(tilePanel, constraints);
+        constraints.gridwidth = GRID_WIDTH;
+        JPanel multiplierPanel = new JPanel();
+        multiplierPanel.setBorder(new LineBorder(Color.DARK_GRAY, 2));
+        multiplierPanel.setBackground(Color.LIGHT_GRAY);
+        multiplierPanel.add(new JLabel("Tile Stack Size Multiplier: "));
+        ButtonGroup group = new ButtonGroup();
+        for (int i = 1; i <= 4; i++) {
+            createMultiplierButton(i, multiplierPanel, group);
+        }
+        tilePanel.add(multiplierPanel, constraints);
+        constraints.gridy++;
+        tilePanel.add(createButtonPanel(), constraints);
         getContentPane().add(tilePanel);
     }
 
-    private void buildButtons(JPanel tilePanel, GridBagConstraints constraints) {
+    private void createMultiplierButton(int multiplier, JPanel multiplierPanel, ButtonGroup buttonGroup) {
+        JRadioButton button = new JRadioButton(multiplier + "x");
+        button.setSelected(settings.getStackSizeMultiplier() == multiplier);
+        button.addMouseListener((MouseClickListener) event -> stackSizeMultiplier = multiplier);
+        buttonGroup.add(button);
+        multiplierPanel.add(button);
+    }
+
+    private JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
         JButton shuffleButton = new JButton("Shuffle");
         shuffleButton.addMouseListener((MouseClickListener) event -> {
-            quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
+            applyChangesToDistribution();
             distribution.shuffle();
-            quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
+            updateFromDistribution();
         });
-        JButton resetButton = new JButton("Reset");
+        JButton resetButton = new JButton("Reset Distribution");
         resetButton.addMouseListener((MouseClickListener) event -> {
             distribution.reset();
-            quantityPanels.forEach(it -> it.setQuantity(distribution.getQuantity(it.getTileType())));
+            updateFromDistribution();
         });
         JButton acceptButton = new JButton("Accept");
         acceptButton.addMouseListener((MouseClickListener) event -> {
             dispose();
-            quantityPanels.forEach(it -> distribution.setQuantity(it.getTileType(), it.getQuantity()));
+            settings.setStackSizeMultiplier(stackSizeMultiplier);
+            applyChangesToDistribution();
         });
-        constraints.gridx = 4;
-        tilePanel.add(shuffleButton, constraints);
-        constraints.gridx = 5;
-        tilePanel.add(resetButton, constraints);
-        constraints.gridx = 6;
-        tilePanel.add(acceptButton, constraints);
+        buttonPanel.add(shuffleButton);
+        buttonPanel.add(resetButton);
+        buttonPanel.add(acceptButton);
+        return buttonPanel;
+    }
+
+    private void applyChangesToDistribution() {
+        for (TileQuantityPanel panel : quantityPanels) {
+            distribution.setQuantity(panel.getTileType(), panel.getQuantity());
+        }
+    }
+
+    private void updateFromDistribution() {
+        for (TileQuantityPanel panel : quantityPanels) {
+            panel.setQuantity(distribution.getQuantity(panel.getTileType()));
+        }
     }
 
     /*

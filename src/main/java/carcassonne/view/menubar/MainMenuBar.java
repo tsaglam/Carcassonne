@@ -62,7 +62,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
         settings = controller.getSettings();
         settings.registerNotifiable(this);
         scoreboard = new Scoreboard(settings, mainUI);
-        tileDistributionUI = new TileDistributionGUI(settings.getTileDistribution());
+        tileDistributionUI = new TileDistributionGUI(settings);
         buildGameMenu();
         buildOptionsMenu();
         buildViewMenu();
