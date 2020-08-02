@@ -12,6 +12,7 @@ import javax.swing.JRadioButtonMenuItem;
 import carcassonne.control.MainController;
 import carcassonne.settings.GameSettings;
 import carcassonne.settings.Notifiable;
+import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.tertiary.GridSizeDialog;
 import carcassonne.view.tertiary.TileDistributionGUI;
@@ -37,6 +38,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private static final String COLOR_SETTINGS = "Color Settings";
     private static final String SETTINGS_OF = "Settings of ";
     private static final String VIEW = "View";
+    private static final String ABOUT = "About";
     private final MainController controller;
     private JMenuItem itemAbortRound;
     private JMenuItem itemNewRound;
@@ -114,12 +116,16 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private void buildGameMenu() {
         itemNewRound = new JMenuItem(NEW_ROUND);
         itemAbortRound = new JMenuItem(ABORT);
+        JMenuItem itemAbout = new JMenuItem(ABOUT);
         itemAbortRound.setEnabled(false);
+        itemAbout.addActionListener(event -> GameMessage.showGameInfo());
         itemNewRound.addActionListener(new NewRoundListener(controller, itemNewRound, itemAbortRound));
         itemAbortRound.addActionListener(new AbortRoundListener(controller, itemNewRound, itemAbortRound));
         JMenu menuGame = new JMenu(GAME);
         menuGame.add(itemNewRound);
         menuGame.add(itemAbortRound);
+        menuGame.addSeparator();
+        menuGame.add(itemAbout);
         add(menuGame);
     }
 
