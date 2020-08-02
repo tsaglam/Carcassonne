@@ -21,21 +21,21 @@ import carcassonne.view.GameMessage;
  */
 public class GridSizeDialog extends JPanel {
 
-    private static final int GAP = 5;
-    private static final String BRACKET = ")";
-    private static final String TOTAL_TILES = "(Total tiles: ";
-    private static final String INVALID_SIZE = "Invalid grid size!";
-    private static final int SPACE = 100;
-    private static final String CROSS = " x ";
-    private static final String HEIGHT = "Height:";
-    private static final int MAX_VALUE = 99;
-    private static final String MESSAGE = "Changes to the grid size will affect the next game. Choose values between 3 and 99.";
-    private static final int MIN_VALUE = 3;
-    private static final String NOT_CORRECT = " is not a valid grid sizes!";
     private static final long serialVersionUID = 6533357898928866596L;
-    private static final int TEXT_FIELD_COLUMNS = 3;
+    private static final String BRACKET = ")";
+    private static final String TOTAL_TILES = "(spots to place tiles: ";
+    private static final String INVALID_SIZE = "Invalid grid size!";
+    private static final String CROSS = " x ";
     private static final String TITLE = "Carcassonne";
     private static final String WIDTH = "Width:";
+    private static final String HEIGHT = "Height:";
+    private static final String NOT_CORRECT = " is not a valid grid sizes!";
+    private static final String MESSAGE = "Changes to the grid size will affect the next game. Choose values between 3 and 99.";
+    private static final int MIN_VALUE = 3;
+    private static final int GAP = 5;
+    private static final int SPACE = 100;
+    private static final int MAX_VALUE = 99;
+    private static final int TEXT_FIELD_COLUMNS = 3;
     private final GameSettings settings;
     private final JFormattedTextField heightInput;
     private final JFormattedTextField widthInput;
