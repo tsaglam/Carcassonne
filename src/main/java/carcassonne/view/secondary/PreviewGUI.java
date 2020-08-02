@@ -49,7 +49,7 @@ public class PreviewGUI extends SecondaryGUI {
         super(controller, ui);
         buildContent();
         pack();
-        selectionSize = buttonSkip.getWidth() + buttonRotateLeft.getWidth() + buttonRotateRight.getWidth() - VERTICAL_SPACE;
+        selectionSize = dialogPanel.getWidth() - VERTICAL_SPACE;
         defaultSize = (int) (selectionSize * SELECTION_FACTOR);
     }
 
@@ -150,13 +150,13 @@ public class PreviewGUI extends SecondaryGUI {
         buttonRotateRight.addMouseListener((MouseClickListener) event -> rotateRight());
         // set constraints:
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.NONE;
+        constraints.fill = GridBagConstraints.VERTICAL;
+        constraints.weightx = 1; // keeps buttons evenly positioned.
         // add buttons:
         dialogPanel.add(buttonRotateLeft, constraints);
         dialogPanel.add(buttonSkip, constraints);
         dialogPanel.add(buttonRotateRight, constraints);
         // change constraints and add label:
-        constraints.fill = GridBagConstraints.VERTICAL;
         constraints.gridy = 1;
         constraints.gridwidth = 3;
         ImageIcon defaultImage = new Tile(TileType.Null).getScaledIcon(50);
