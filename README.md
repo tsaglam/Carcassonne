@@ -17,10 +17,10 @@ Development started in 2016, and since then, this computer game has been an ongo
 </p>
 
 ### Latest Release:
-The latest release is [version 1.5](https://github.com/tsaglam/Carcassonne/releases/tag/v1.5), all release notes can be found [here](https://github.com/tsaglam/Carcassonne/releases).
+The latest release is [version 1.6](https://github.com/tsaglam/Carcassonne/releases/tag/v1.6), all release notes can be found [here](https://github.com/tsaglam/Carcassonne/releases).
 
 ### Download:
-Download the latest executable [here](https://github.com/tsaglam/Carcassonne/releases/download/v1.5/Carcassonne.v1.5.jar). It requires Java 11 or any newer version. If you do not know how to run a JAR file, read [this guide](https://www.wikihow.com/Run-a-.Jar-Java-File).
+Download the latest executable [here](https://github.com/tsaglam/Carcassonne/releases/download/v1.6/Carcassonne.v1.6.jar). It requires Java 11 or any newer version. If you do not know how to run a JAR file, read [this guide](https://www.wikihow.com/Run-a-.Jar-Java-File).
 
 ### Feedback & Suggestions:
 If you have any feedback on the game or if you have suggestions for new features just let me know (or open up a new issue)!
