@@ -5,12 +5,14 @@ import javax.swing.JOptionPane;
 
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
+import carcassonne.util.ImageLoadingUtil;
 
 /**
  * Message class for showing the user small messages.
  * @author Timur Saglam
  */
 public final class GameMessage {
+    private static final String ABOUT = "The board game Carcassonne is created by Klaus-Jürgen Wrede and published by Hans im Glück.\nThis computer game based on the board game is developed by Timur Sağlam.";
     private static final int GAME_ICON_SIZE = 75;
     private static final String TITLE = "Carcassonne";
 
@@ -57,6 +59,10 @@ public final class GameMessage {
      */
     public static Icon getGameIcon() {
         return new Tile(TileType.Null).getScaledIcon(GAME_ICON_SIZE);
+    }
+
+    public static void showGameInfo() {
+        JOptionPane.showMessageDialog(null, ABOUT, TITLE, JOptionPane.DEFAULT_OPTION, ImageLoadingUtil.SPLASH.createHighDpiImageIcon());
     }
 
     private static void show(String messageText, int type) {
