@@ -17,7 +17,7 @@ public interface MouseClickListener extends MouseListener {
     }
 
     @Override
-    public default void mouseReleased(MouseEvent event) {
+    public default void mouseClicked(MouseEvent event) {
         // do nothing as only clicks are listened to.
     }
 
