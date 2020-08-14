@@ -13,7 +13,7 @@ This is my personal project I work on (infrequently) whenever I have time availa
 Development started in 2016, and since then, this computer game has been an ongoing project...
 
 <p align="center">
-	<img alt="a screenshot of the game" src="preview.jpg?raw=true" width="750">
+	<img alt="a screenshot of the game" src="preview.jpg?raw=true" width="850">
 </p>
 
 ### Latest Release:
