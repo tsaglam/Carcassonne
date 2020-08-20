@@ -65,7 +65,7 @@ public class PreviewGUI extends SecondaryGUI {
      * If the UI is active, rotates the tile to the left.
      */
     public void rotateLeft() {
-        if (isVisible()) {
+        if (isVisible() && selectionIndex < tiles.size()) {
             tiles.get(selectionIndex).rotateLeft();
             updateTileLabel(selectionIndex);
         }
@@ -75,7 +75,7 @@ public class PreviewGUI extends SecondaryGUI {
      * If the UI is active, rotates the tile to the right.
      */
     public void rotateRight() {
-        if (isVisible()) {
+        if (isVisible() && selectionIndex < tiles.size()) {
             tiles.get(selectionIndex).rotateRight();
             updateTileLabel(selectionIndex);
         }
