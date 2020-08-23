@@ -35,17 +35,17 @@ public final class ConcurrentTileImageScaler {
     /**
      * Returns the scaled image of a tile. This method is thread safe and leverages caching.
      * @param tile is the tile whose image is required.
-     * @param size is the edge length of the (quadratic) image in pixels.
+     * @param targetSize is the edge length of the (quadratic) image in pixels.
      * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the scaled {@link Image}.
      */
-    public static Image getScaledImage(Tile tile, int size, boolean fastScaling) {
-        int lockKey = createKey(tile, size);
+    public static Image getScaledImage(Tile tile, int targetSize, boolean fastScaling) {
+        int lockKey = createKey(tile, targetSize);
         semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
         Semaphore lock = semaphores.get(lockKey);
         try {
             lock.acquire();
-            return getScaledImageUnsafe(tile, size, fastScaling);
+            return getScaledImageUnsafe(tile, targetSize, fastScaling);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         } finally {
@@ -58,14 +58,14 @@ public final class ConcurrentTileImageScaler {
      * Returns the scaled multi-resolution image of a tile. This image therefore supports HighDPI graphics such as Retina on
      * Mac OS. This method is thread safe and leverages caching.
      * @param tile is the tile whose image is required.
-     * @param size is the edge length of the (quadratic) image in pixels.
+     * @param targetSize is the edge length of the (quadratic) image in pixels.
      * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the scaled multi-resolution {@link Image}.
      */
-    public static Image getScaledMultiResolutionImage(Tile tile, int size, boolean fastScaling) { // TODO (HIGH) check locking etc.
-        int highDpiSize = Math.min(size * GameSettings.HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
-        Image defaultImage = getScaledImage(tile, size, fastScaling);
+    public static Image getScaledMultiResolutionImage(Tile tile, int targetSize, boolean fastScaling) { // TODO (HIGH) check locking etc.
+        int highDpiSize = Math.min(targetSize * GameSettings.HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
         Image highDpiImage = getScaledImage(tile, highDpiSize, fastScaling);
+        Image defaultImage = getScaledImage(tile, targetSize, fastScaling);
         return new BaseMultiResolutionImage(defaultImage, highDpiImage);
     }
 
@@ -73,32 +73,32 @@ public final class ConcurrentTileImageScaler {
      * Either scales the full resolution image to the required size or retrieves the cached scaled image. This method is not
      * thread safe.
      */
-    private static Image getScaledImageUnsafe(Tile tile, int size, boolean fastScaling) {
-        if (TileImageScalingCache.containsScaledImage(tile, size, fastScaling)) {
-            return TileImageScalingCache.getScaledImage(tile, size);
+    private static Image getScaledImageUnsafe(Tile tile, int targetSize, boolean fastScaling) {
+        if (TileImageScalingCache.containsScaledImage(tile, targetSize, fastScaling)) {
+            return TileImageScalingCache.getScaledImage(tile, targetSize);
         }
-        Image original = getOriginalImage(tile, size);
-        Image scaledImage = scaleImage(original, size, fastScaling);
-        TileImageScalingCache.putScaledImage(scaledImage, tile, size, fastScaling);
+        Image largerImage = getOriginalImage(tile, targetSize);
+        Image scaledImage = scaleImage(largerImage, targetSize, fastScaling);
+        TileImageScalingCache.putScaledImage(scaledImage, tile, targetSize, fastScaling);
         return scaledImage;
     }
 
     /**
      * Gets a full-size image for a specific tile. Uses caching to reuse image icons.
      */
-    private static Image getOriginalImage(Tile tile, int size) {
+    private static Image getOriginalImage(Tile tile, int targetSize) {
         int lockKey = createKey(tile, TILE_RESOLUTION);
         semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
         Semaphore lock = semaphores.get(lockKey);
         try {
-            if (size != TILE_RESOLUTION) {
+            if (targetSize != TILE_RESOLUTION) {
                 lock.acquire();
             }
             return getOriginalImageUnsafe(tile);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         } finally {
-            if (size != TILE_RESOLUTION) {
+            if (targetSize != TILE_RESOLUTION) {
                 lock.release();
             }
         }
