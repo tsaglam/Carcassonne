@@ -10,7 +10,7 @@ import java.awt.event.MouseWheelListener;
  * @author Timur Saglam
  */
 public class MouseWheelZoomListener implements MouseWheelListener {
-    private static final int ZOOM_IN_THRESHOLD = -3;
+    private static final int ZOOM_IN_THRESHOLD = -1;
     private static final int ZOOM_OUT_THRESHOLD = 1;
     private final Runnable zoomIn;
     private final Runnable zoomOut;
@@ -31,20 +31,18 @@ public class MouseWheelZoomListener implements MouseWheelListener {
     }
 
     @Override
-    public void mouseWheelMoved(MouseWheelEvent event) { // TODO (HIGH) this is now optimized for a mac touchpads and not for mouse wheels
+    public void mouseWheelMoved(MouseWheelEvent event) {
         if (event.isControlDown() || event.isMetaDown()) {
-            scrollProgress += event.getPreciseWheelRotation();
-            System.err.println(scrollProgress + " " + event.getPreciseWheelRotation() + " " + event.getScrollAmount() + " " + event.getUnitsToScroll()
-                    + " " + event.getScrollType());
-            if (scrollProgress > ZOOM_OUT_THRESHOLD) {
+            scrollProgress += event.getPreciseWheelRotation() * event.getScrollAmount(); // works for touchpads and mouse wheels
+            if (scrollProgress >= ZOOM_OUT_THRESHOLD) {
                 zoomOut.run();
                 scrollProgress = 0;
-            } else if (scrollProgress < ZOOM_IN_THRESHOLD) {
+            } else if (scrollProgress <= ZOOM_IN_THRESHOLD) {
                 zoomIn.run();
                 scrollProgress = 0;
             }
         } else {
-            parent.dispatchEvent(event);
+            parent.dispatchEvent(event); // delegate event to parent to prevent normal scroll actions.
         }
     }
 }

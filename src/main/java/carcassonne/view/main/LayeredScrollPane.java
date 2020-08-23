@@ -42,6 +42,15 @@ public class LayeredScrollPane extends JScrollPane {
     }
 
     /**
+     * Adds a zoom listener that listens to the mouse wheel and then calls one of two zoom functions.
+     * @param zoomIn the function to zoom in.
+     * @param zoomOut the function to zoom out.
+     */
+    public void addZoomListener(Runnable zoomIn, Runnable zoomOut) {
+        layeredPane.addMouseWheelListener(new MouseWheelZoomListener(zoomIn, zoomOut, layeredPane.getParent()));
+    }
+
+    /**
      * Removes any number of layers if they are part of this scroll pane.
      * @param components are the components and therefore layers to remove.
      */
