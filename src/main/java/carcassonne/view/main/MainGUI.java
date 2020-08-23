@@ -276,6 +276,7 @@ public class MainGUI extends JFrame implements Notifiable {
         setLayout(new BorderLayout());
         scrollPane = LookAndFeelUtil.createModifiedScrollpane();
         scrollPane.addLayers(meepleLayer, tileLayer);
+        scrollPane.addZoomListener(() -> zoomIn(), () -> zoomOut());
         add(scrollPane, BorderLayout.CENTER);
         setMinimumSize(MINIMAL_WINDOW_SIZE);
         setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
