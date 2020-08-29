@@ -23,6 +23,8 @@ import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
 
+import static carcassonne.view.main.ZoomMode.*;
+
 /**
  * The main GUI class.
  * @author Timur Saglam
@@ -148,22 +150,25 @@ public class MainGUI extends JFrame implements Notifiable {
 
     /**
      * Zooms in if the maximum zoom level has not been reached.
+     * @param mode determines the zoom mode, which affects image quality and performance.
+     * @param updateHightlights determines if the highlight tiles are also scaled.
      */
-    public synchronized void zoomIn() {
+    public synchronized void zoomIn(ZoomMode mode) {
         if (zoomLevel < MAX_ZOOM_LEVEL) {
             zoomLevel += ZOOM_STEP_SIZE;
-            updateToChangedZoomLevel(false);
+            updateToChangedZoomLevel(mode);
             menuBar.getZoomSlider().setValueSneakily(zoomLevel); // ensures the slider is updated when using key bindings.
         }
     }
 
     /**
      * Zooms out if the minimum zoom level has not been reached.
+     * @param updateHightlights determines if the highlight tiles are also scaled.
      */
-    public synchronized void zoomOut() {
+    public synchronized void zoomOut(ZoomMode mode) {
         if (zoomLevel > MIN_ZOOM_LEVEL) {
             zoomLevel -= ZOOM_STEP_SIZE;
-            updateToChangedZoomLevel(false);
+            updateToChangedZoomLevel(mode);
             menuBar.getZoomSlider().setValueSneakily(zoomLevel); // ensures the slider is updated when using key bindings.
         }
     }
@@ -171,13 +176,33 @@ public class MainGUI extends JFrame implements Notifiable {
     /**
      * Updates the zoom level if it is in the valid range.
      * @param level is the zoom level.
-     * @param preview specifies whether fast calculations for preview purposes should be used.
+     * @param mode determines the zoom mode, which affects image quality and performance.
      */
-    public synchronized void setZoom(int level, boolean preview) {
+    public synchronized void setZoom(int level, ZoomMode mode) {
         if (level <= MAX_ZOOM_LEVEL && level >= MIN_ZOOM_LEVEL) {
             zoomLevel = level;
-            updateToChangedZoomLevel(preview);
+            updateToChangedZoomLevel(mode);
         }
+    }
+
+    /**
+     * Updates the view to a changed zoom level. Centers the view.
+     * @param mode determines the zoom mode, which affects image quality and performance.
+     */
+    public void updateToChangedZoomLevel(ZoomMode mode) {
+        if (mode != FAST && currentPlayer != null) { // only update highlights when there is an active round
+            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
+            tileLayer.refreshHighlight(newHighlight);
+        }
+        tileLayer.changeZoomLevel(zoomLevel, mode != SMOOTH); // Executed in parallel for improved performance
+        meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
+        meepleLayer.changeZoomLevel(zoomLevel);
+        if (mode == SMOOTH) {
+            scrollPane.validateAndCenter();
+        } else {
+            scrollPane.centerView(gridWidth, gridHeight, zoomLevel);
+        }
+        scrollPane.repaintLayers(); // IMPORTANT: Prevents meeples from disappearing.
     }
 
     /**
@@ -251,22 +276,6 @@ public class MainGUI extends JFrame implements Notifiable {
         }
     }
 
-    private void updateToChangedZoomLevel(boolean preview) {
-        if (currentPlayer != null && !preview) { // only update highlights when there is an active round
-            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
-            tileLayer.refreshHighlight(newHighlight);
-        }
-        tileLayer.changeZoomLevel(zoomLevel, preview); // Executed in parallel for improved performance
-        meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
-        meepleLayer.changeZoomLevel(zoomLevel);
-        if (preview) {
-            scrollPane.centerView(gridWidth, gridHeight, zoomLevel);
-        } else {
-            scrollPane.validateAndCenter();
-        }
-        scrollPane.repaintLayers(); // IMPORTANT: Prevents meeples from disappearing.
-    }
-
     private void buildFrame() {
         tileLayer = new TileLayer(controller, gridHeight, gridWidth, zoomLevel);
         meepleLayer = new MeepleLayer(controller, gridWidth, gridHeight, zoomLevel);
@@ -276,7 +285,7 @@ public class MainGUI extends JFrame implements Notifiable {
         setLayout(new BorderLayout());
         scrollPane = LookAndFeelUtil.createModifiedScrollpane();
         scrollPane.addLayers(meepleLayer, tileLayer);
-        scrollPane.addZoomListener(() -> zoomIn(), () -> zoomOut());
+        scrollPane.addZoomListener(() -> zoomIn(SEMI_FAST), () -> zoomOut(SEMI_FAST));
         add(scrollPane, BorderLayout.CENTER);
         setMinimumSize(MINIMAL_WINDOW_SIZE);
         setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);

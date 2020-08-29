@@ -15,6 +15,7 @@ import javax.swing.KeyStroke;
 
 import carcassonne.control.MainController;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.ZoomMode;
 import carcassonne.view.secondary.PreviewGUI;
 
 /**
@@ -139,26 +140,48 @@ public class GlobalKeyBindingManager {
 
     private void addZoomKeyBindings() {
         // ZOOM IN:
-        KeyStroke plusStroke = KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, NO_MODIFIER);
+        KeyStroke plusStroke = KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, NO_MODIFIER, true);
         Action zoomInAction = new AbstractAction() {
             private static final long serialVersionUID = -4507116452291965942L;
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                mainUI.zoomIn();
+                mainUI.zoomIn(ZoomMode.SMOOTH);
             }
         };
         addKeyBinding("plus", plusStroke, zoomInAction);
         // ZOOM OUT:
-        KeyStroke minusStroke = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, NO_MODIFIER);
+        KeyStroke minusStroke = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, NO_MODIFIER, true);
         Action zoomOutAction = new AbstractAction() {
             private static final long serialVersionUID = 6989306054283945118L;
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                mainUI.zoomOut();
+                mainUI.zoomOut(ZoomMode.SMOOTH);
             }
         };
         addKeyBinding("minus", minusStroke, zoomOutAction);
+        // META RELEASED:
+        KeyStroke metaReleased = KeyStroke.getKeyStroke(KeyEvent.VK_META, NO_MODIFIER, true);
+        Action metaReleasedAction = new AbstractAction() {
+            private static final long serialVersionUID = 7691032728389757637L;
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                mainUI.updateToChangedZoomLevel(ZoomMode.SMOOTH);
+            }
+        };
+        addKeyBinding("meta", metaReleased, metaReleasedAction);
+        // CTRL RELEASED:
+        KeyStroke controlReleased = KeyStroke.getKeyStroke(KeyEvent.VK_CONTROL, NO_MODIFIER, true);
+        Action controlReleasedAction = new AbstractAction() {
+            private static final long serialVersionUID = -6876264975601522997L;
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                mainUI.updateToChangedZoomLevel(ZoomMode.SMOOTH);
+            }
+        };
+        addKeyBinding("control", controlReleased, controlReleasedAction);
     }
 }
