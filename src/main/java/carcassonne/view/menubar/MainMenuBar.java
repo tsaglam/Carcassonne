@@ -35,7 +35,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
     private static final String NEW_ROUND = "Start New Round";
     private static final String OPTIONS = "Options";
     private static final String PLAYERS = " Players";
-    private static final String COLOR_SETTINGS = "Color Settings";
+    private static final String PLAYER_SETTINGS = "Player Settings";
     private static final String SETTINGS_OF = "Settings of ";
     private static final String VIEW = "View";
     private static final String ABOUT = "About";
@@ -165,7 +165,7 @@ public class MainMenuBar extends JMenuBar implements Notifiable {
 
     private void buildColorMenu() {
         itemSettings = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
-        menuColor = new JMenu(COLOR_SETTINGS);
+        menuColor = new JMenu(PLAYER_SETTINGS);
         for (int i = 0; i < itemSettings.length; i++) {
             itemSettings[i] = new JMenuItem();
             itemSettings[i].addActionListener(scoreboard.getSettingsListener(i));
