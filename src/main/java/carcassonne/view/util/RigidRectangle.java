@@ -1,4 +1,4 @@
-package carcassonne.view;
+package carcassonne.view.util;
 
 import java.awt.Dimension;
 

@@ -10,14 +10,14 @@ import javax.swing.JLabel;
 
 import carcassonne.model.Player;
 import carcassonne.settings.GameSettings;
-import carcassonne.settings.Notifiable;
+import carcassonne.view.NotifiableUI;
 import carcassonne.view.main.MainGUI;
 
 /**
  * Is the scoreboard class of the game. Manages a score label for each player.
  * @author Timur Saglam
  */
-public class Scoreboard implements Notifiable {
+public class Scoreboard implements NotifiableUI {
     private static final String FONT_TYPE = "Helvetica";
     private static final String TOOL_TIP = "Settings for player ";
     private final JLabel[] scoreLabels;

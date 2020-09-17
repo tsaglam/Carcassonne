@@ -1,4 +1,4 @@
-package carcassonne.util;
+package carcassonne.view.util;
 
 import javax.swing.JScrollPane;
 import javax.swing.LookAndFeel;

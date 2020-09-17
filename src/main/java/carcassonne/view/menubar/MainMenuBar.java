@@ -11,17 +11,17 @@ import javax.swing.JRadioButtonMenuItem;
 
 import carcassonne.control.MainController;
 import carcassonne.settings.GameSettings;
-import carcassonne.settings.Notifiable;
-import carcassonne.view.GameMessage;
+import carcassonne.view.NotifiableUI;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.tertiary.GridSizeDialog;
 import carcassonne.view.tertiary.TileDistributionGUI;
+import carcassonne.view.util.GameMessage;
 
 /**
  * The menu bar for the main GUI.
  * @author Timur Saglam
  */
-public class MainMenuBar extends JMenuBar implements Notifiable {
+public class MainMenuBar extends JMenuBar implements NotifiableUI {
     private static final long serialVersionUID = -599734693130415390L;
     private static final String DISTRIBUTION = "Change Tile Distribution";
     private static final String CLASSIC = " (Classic)";

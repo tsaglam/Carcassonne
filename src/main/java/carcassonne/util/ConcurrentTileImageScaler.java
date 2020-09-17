@@ -14,8 +14,8 @@ import javax.imageio.ImageIO;
 
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
+import carcassonne.view.util.GameMessage;
 
 /**
  * Tile scaling utility class that is optimized for concurrent use. It uses a sophisticated locking mechanism and

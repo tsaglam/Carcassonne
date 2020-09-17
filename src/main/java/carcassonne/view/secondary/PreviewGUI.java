@@ -17,8 +17,8 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
-import carcassonne.util.MouseClickListener;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.util.MouseClickListener;
 
 /**
  * GUI class for the tile orientation. It lets the user look at the tile to place and rotate it both right and left.

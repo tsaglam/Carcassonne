@@ -19,9 +19,9 @@ import javax.swing.event.ChangeListener;
 
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.util.GameMessage;
 
 /**
  * Custom UI for the play settings. Allows changing the name and the color of a player.

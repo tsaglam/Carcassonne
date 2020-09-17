@@ -3,11 +3,11 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
-import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.PreviewGUI;
 import carcassonne.view.tertiary.GameStatisticsGUI;
+import carcassonne.view.util.GameMessage;
 
 /**
  * The specific state where the statistics are shown can be placed.

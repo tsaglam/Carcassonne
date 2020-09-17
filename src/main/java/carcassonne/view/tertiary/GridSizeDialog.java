@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.text.NumberFormatter;
 
 import carcassonne.settings.GameSettings;
-import carcassonne.view.GameMessage;
+import carcassonne.view.util.GameMessage;
 
 /**
  * Custom dialog for changing the grid size.

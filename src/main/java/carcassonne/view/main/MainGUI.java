@@ -16,12 +16,12 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
-import carcassonne.settings.Notifiable;
-import carcassonne.util.LookAndFeelUtil;
 import carcassonne.view.GlobalKeyBindingManager;
+import carcassonne.view.NotifiableUI;
 import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
+import carcassonne.view.util.LookAndFeelUtil;
 
 import static carcassonne.view.main.ZoomMode.*;
 
@@ -29,7 +29,7 @@ import static carcassonne.view.main.ZoomMode.*;
  * The main GUI class.
  * @author Timur Saglam
  */
-public class MainGUI extends JFrame implements Notifiable {
+public class MainGUI extends JFrame implements NotifiableUI {
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 25;

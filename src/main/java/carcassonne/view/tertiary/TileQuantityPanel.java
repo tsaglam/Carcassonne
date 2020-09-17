@@ -14,7 +14,7 @@ import javax.swing.text.NumberFormatter;
 
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
-import carcassonne.util.MouseClickListener;
+import carcassonne.view.util.MouseClickListener;
 
 /**
  * Panel that depicts the quantity of a tile type. Shows a image of the tile and a text field for the quantity.
