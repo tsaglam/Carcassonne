@@ -14,7 +14,7 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
-import carcassonne.view.RigidRectangle;
+import carcassonne.view.util.RigidRectangle;
 
 /**
  * A UI component that contains multiple meeple depiction panels.

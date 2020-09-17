@@ -10,10 +10,10 @@ import carcassonne.model.grid.GridPattern;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.PreviewGUI;
+import carcassonne.view.util.GameMessage;
 
 /**
  * The specific state when a Meeple can be placed.

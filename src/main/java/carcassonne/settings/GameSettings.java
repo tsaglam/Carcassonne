@@ -9,6 +9,7 @@ import java.util.Locale;
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileDistribution;
+import carcassonne.view.NotifiableUI;
 import carcassonne.view.PaintShop;
 
 /**
@@ -32,7 +33,7 @@ public class GameSettings {
     public static final int TILE_RESOLUTION = 600;
     public static final int HIGH_DPI_FACTOR = 2; // maximum supported DPI factor.
     private int amountOfPlayers;
-    private final List<Notifiable> changeListeners;
+    private final List<NotifiableUI> changeListeners;
     private final List<PlayerColor> colors;
     private int gridHeight;
     private boolean gridSizeChanged;
@@ -55,7 +56,7 @@ public class GameSettings {
         gridWidth = 29;
         gridHeight = 19;
         gridSizeChanged = false;
-        changeListeners = new ArrayList<Notifiable>();
+        changeListeners = new ArrayList<NotifiableUI>();
     }
 
     /**
@@ -137,7 +138,7 @@ public class GameSettings {
      * Registers a UI element that wants to listen to changes.
      * @param notifiable is the UI element.
      */
-    public void registerNotifiable(Notifiable notifiable) {
+    public void registerNotifiable(NotifiableUI notifiable) {
         changeListeners.add(notifiable);
     }
 
@@ -214,7 +215,7 @@ public class GameSettings {
 
     private void notifyListeners() {
         PaintShop.clearCachedImages();
-        for (Notifiable notifiable : changeListeners) {
+        for (NotifiableUI notifiable : changeListeners) {
             notifiable.notifyChange();
         }
     }

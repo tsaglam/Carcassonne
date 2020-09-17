@@ -11,15 +11,15 @@ import javax.swing.WindowConstants;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
-import carcassonne.settings.Notifiable;
 import carcassonne.view.GlobalKeyBindingManager;
+import carcassonne.view.NotifiableUI;
 import carcassonne.view.main.MainGUI;
 
 /**
  * Super class for all other smaller GUI beneath the main GUI.
  * @author Timur Saglam
  */
-public abstract class SecondaryGUI extends JDialog implements Notifiable {
+public abstract class SecondaryGUI extends JDialog implements NotifiableUI {
     private static final int INITIAL_X = 100;
     private static final int INITIAL_Y = 150;
     private static final long serialVersionUID = 4056347951568551115L;

@@ -12,8 +12,8 @@ import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
-import carcassonne.util.MouseClickListener;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.util.MouseClickListener;
 
 /**
  * A GUI for the placement of Meeples on the Tile that was placed previously.

@@ -1,4 +1,4 @@
-package carcassonne.view;
+package carcassonne.view.util;
 
 import javax.swing.Icon;
 import javax.swing.JOptionPane;

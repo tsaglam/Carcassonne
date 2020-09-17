@@ -17,9 +17,9 @@ import javax.swing.table.TableColumnModel;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Round;
-import carcassonne.util.MouseClickListener;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.main.MainGUI;
+import carcassonne.view.util.MouseClickListener;
 
 /**
  * A class for the game statistics GUI that shows the final scores of a round.

@@ -19,7 +19,7 @@ import javax.swing.border.LineBorder;
 import carcassonne.model.tile.TileDistribution;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
-import carcassonne.util.MouseClickListener;
+import carcassonne.view.util.MouseClickListener;
 
 /**
  * User interface that shows all tiles and how often they are used in a standard game (two players, chaos mode

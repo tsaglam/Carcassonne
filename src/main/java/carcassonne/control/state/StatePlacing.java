@@ -5,10 +5,10 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
-import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.PreviewGUI;
+import carcassonne.view.util.GameMessage;
 
 /**
  * The specific state when a Tile can be placed.

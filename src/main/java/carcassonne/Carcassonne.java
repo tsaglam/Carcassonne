@@ -7,7 +7,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import carcassonne.control.MainController;
-import carcassonne.view.GameMessage;
+import carcassonne.view.util.GameMessage;
 
 /**
  * Carcassonne main class.

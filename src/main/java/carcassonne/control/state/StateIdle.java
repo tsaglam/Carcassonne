@@ -2,10 +2,10 @@ package carcassonne.control.state;
 
 import carcassonne.control.MainController;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.view.GameMessage;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.PreviewGUI;
+import carcassonne.view.util.GameMessage;
 
 /**
  * The specific state if no game is running.

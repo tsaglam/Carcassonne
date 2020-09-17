@@ -8,8 +8,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import carcassonne.view.GameMessage;
 import carcassonne.view.PaintShop;
+import carcassonne.view.util.GameMessage;
 
 /**
  * Utility class for loading image files and creating image icons and buffered images.
