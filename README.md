@@ -16,6 +16,9 @@ Development started in 2016, and since then, this computer game has been an ongo
 	<img alt="a screenshot of the game" src="preview.jpg?raw=true" width="850">
 </p>
 
+### More Information:
+For more information about the board game, this computer game implementation or the technical details behind this projeckt check out the [wiki page](https://github.com/tsaglam/Carcassonne/wiki).
+
 ### Latest Release:
 The latest release is [version 1.6](https://github.com/tsaglam/Carcassonne/releases/tag/v1.6), all release notes can be found [here](https://github.com/tsaglam/Carcassonne/releases).
 
