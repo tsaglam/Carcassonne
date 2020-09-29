@@ -25,5 +25,5 @@ The latest release is [version 1.6](https://github.com/tsaglam/Carcassonne/relea
 ### Download:
 Download the latest executable [here](https://github.com/tsaglam/Carcassonne/releases/download/v1.6/Carcassonne.v1.6.jar). Running it requires Java SE 11 or a newer version, so make sure you [download and install a current version](https://www.oracle.com/de/java/technologies/javase-downloads.html).
 
-### Feedback & Suggestions:https://www.oracle.com/de/java/technologies/javase-downloads.html
+### Feedback & Suggestions:
 If you have any feedback on the game or if you have suggestions for new features just let me know (or open up a new issue)!
