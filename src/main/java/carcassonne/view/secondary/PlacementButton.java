@@ -22,12 +22,11 @@ public class PlacementButton extends JButton {
     /**
      * Simple constructor calling the <codeJButton>JButton()</code> constructor.
      * @param controller is the controller of the GUI.
-     * @param x sets the x coordinate.
-     * @param y sets the y coordinate.
+     * @param direction is the direction of the correlating meeple of the button on the tile.
      */
-    public PlacementButton(MainController controller, int x, int y) {
+    public PlacementButton(MainController controller, GridDirection direction) {
         super();
-        setup(controller, x, y);
+        addMouseListener(new PlacementButtonMouseAdapter(direction, controller, this));
     }
 
     /**
@@ -60,9 +59,5 @@ public class PlacementButton extends JButton {
             enabled = value; // set own enabled variable.
             repaint();
         }
-    }
-
-    private void setup(MainController controller, int x, int y) {
-        addMouseListener(new PlacementButtonMouseAdapter(GridDirection.values2D()[x][y], controller, this));
     }
 }

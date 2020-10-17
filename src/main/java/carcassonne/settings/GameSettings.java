@@ -3,8 +3,10 @@ package carcassonne.settings;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
@@ -35,6 +37,7 @@ public class GameSettings {
     private int amountOfPlayers;
     private final List<NotifiableUI> changeListeners;
     private final List<PlayerColor> colors;
+    private final Map<TerrainType, Boolean> meepleRules;
     private int gridHeight;
     private boolean gridSizeChanged;
     private int tilesPerPlayer;
@@ -49,6 +52,8 @@ public class GameSettings {
     public GameSettings() {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
+        meepleRules = new HashMap<TerrainType, Boolean>();
+        TerrainType.basicTerrain().forEach(it -> meepleRules.put(it, true));
         tileDistribution = new TileDistribution();
         amountOfPlayers = 2;
         tilesPerPlayer = 1;
@@ -57,6 +62,23 @@ public class GameSettings {
         gridHeight = 19;
         gridSizeChanged = false;
         changeListeners = new ArrayList<NotifiableUI>();
+    }
+
+    /**
+     * Returns for a specific meeple type if meeple placement is enabled or disabled.
+     * @param type it the specific meeple type to query.
+     * @return true if placement is enabled.
+     */
+    public boolean getMeepleRule(TerrainType type) {
+        return meepleRules.getOrDefault(type, false);
+    }
+
+    /**
+     * Toggles whether for a specific meeple type if meeple placement is enabled or disabled.
+     * @param type it the specific meeple type.
+     */
+    public void toggleMeepleRule(TerrainType type) {
+        meepleRules.computeIfPresent(type, (key, enabled) -> !enabled);
     }
 
     /**

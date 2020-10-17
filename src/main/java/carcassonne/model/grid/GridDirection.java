@@ -155,6 +155,14 @@ public enum GridDirection {
     }
 
     /**
+     * Generates a list of the GridDirections by row.
+     * @return a list of NORTH_WEST, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SHOUTH, SOUTH_EAST in that order.
+     */
+    public static List<GridDirection> byRow() {
+        return List.of(NORTH_WEST, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SHOUTH, SOUTH_EAST);
+    }
+
+    /**
      * Generates a two dimensional list of the GridDirections for their orientation on a tile.
      * @return a 2D list of of NORTH_WEST, WEST, SOUTH_WEST, NORTH, CENTER, SHOUTH, NORTH_EAST, EAST and SOUTH_EAST.
      */

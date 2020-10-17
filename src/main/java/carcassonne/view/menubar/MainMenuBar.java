@@ -3,6 +3,7 @@ package carcassonne.view.menubar;
 import java.awt.Color;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -10,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
 import carcassonne.control.MainController;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.NotifiableUI;
 import carcassonne.view.main.MainGUI;
@@ -22,6 +24,8 @@ import carcassonne.view.util.GameMessage;
  * @author Timur Saglam
  */
 public class MainMenuBar extends JMenuBar implements NotifiableUI {
+    private static final String MEEPLE_RULE_PREFIX = "Allow placing meeples on ";
+    private static final String MEEPLE_RULES = "Allowed Meeple Types";
     private static final long serialVersionUID = -599734693130415390L;
     private static final String DISTRIBUTION = "Change Tile Distribution";
     private static final String CLASSIC = " (Classic)";
@@ -44,11 +48,8 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
     private JMenuItem itemNewRound;
     private JMenuItem[] itemSettings;
     private final MainGUI mainUI;
-    private JMenu menuPlayers;
-    private JMenu menuColor;
     private final Scoreboard scoreboard;
     private final GameSettings settings;
-    private JMenu menuHand;
     private ZoomSlider slider;
     private final TileDistributionGUI tileDistributionUI;
 
@@ -130,14 +131,12 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
     }
 
     private void buildOptionsMenu() {
-        buildPlayerMenu();
-        buildHandMenu();
-        buildColorMenu();
-        notifyChange(); // set colors
         JMenu menuOptions = new JMenu(OPTIONS);
-        menuOptions.add(menuPlayers);
-        menuOptions.add(menuHand);
-        menuOptions.add(menuColor);
+        menuOptions.add(buildPlayerMenu());
+        menuOptions.add(buildHandMenu());
+        menuOptions.add(buildMeepleRuleMenu());
+        menuOptions.add(buildColorMenu());
+        notifyChange(); // set colors
         menuOptions.addSeparator();
         JMenuItem itemGridSize = new JMenuItem(GRID_SIZE);
         GridSizeDialog dialog = new GridSizeDialog(settings);
@@ -149,8 +148,8 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
         add(menuOptions);
     }
 
-    private void buildPlayerMenu() {
-        menuPlayers = new JMenu(AMOUNT);
+    private JMenu buildPlayerMenu() {
+        JMenu menu = new JMenu(AMOUNT);
         JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameSettings.MAXIMAL_PLAYERS - 1];
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemPlayerCount.length; i++) {
@@ -158,24 +157,26 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
             itemPlayerCount[i] = new JRadioButtonMenuItem(players + PLAYERS);
             itemPlayerCount[i].addActionListener(event -> settings.setAmountOfPlayers(players));
             group.add(itemPlayerCount[i]);
-            menuPlayers.add(itemPlayerCount[i]);
+            menu.add(itemPlayerCount[i]);
         }
         itemPlayerCount[0].setSelected(true);
+        return menu;
     }
 
-    private void buildColorMenu() {
+    private JMenu buildColorMenu() {
         itemSettings = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
-        menuColor = new JMenu(PLAYER_SETTINGS);
+        JMenu menu = new JMenu(PLAYER_SETTINGS);
         for (int i = 0; i < itemSettings.length; i++) {
             itemSettings[i] = new JMenuItem();
             itemSettings[i].addActionListener(scoreboard.getSettingsListener(i));
-            menuColor.add(itemSettings[i]);
+            menu.add(itemSettings[i]);
         }
+        return menu;
     }
 
-    private void buildHandMenu() {
+    private JMenu buildHandMenu() {
         JMenuItem[] itemTiles = new JRadioButtonMenuItem[GameSettings.MAXIMAL_TILES_ON_HAND];
-        menuHand = new JMenu(HAND_SETTINGS);
+        JMenu menu = new JMenu(HAND_SETTINGS);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < itemTiles.length; i++) {
             int numberOfTiles = i + 1;
@@ -186,9 +187,21 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
             itemTiles[i] = new JRadioButtonMenuItem(itemText);
             itemTiles[i].addActionListener(event -> settings.setTilesPerPlayer(numberOfTiles));
             group.add(itemTiles[i]);
-            menuHand.add(itemTiles[i]);
+            menu.add(itemTiles[i]);
         }
         itemTiles[settings.getTilesPerPlayer() - 1].setSelected(true);
+        return menu;
+    }
+
+    private JMenu buildMeepleRuleMenu() {
+        JMenu menu = new JMenu(MEEPLE_RULES);
+        for (TerrainType type : TerrainType.basicTerrain()) {
+            JCheckBoxMenuItem item = new JCheckBoxMenuItem(MEEPLE_RULE_PREFIX + type.toString().toLowerCase());
+            item.setSelected(settings.getMeepleRule(type));
+            item.addActionListener(event -> settings.toggleMeepleRule(type));
+            menu.add(item);
+        }
+        return menu;
     }
 
     private void buildViewMenu() {

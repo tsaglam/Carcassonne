@@ -2,6 +2,8 @@ package carcassonne.view.secondary;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 
@@ -21,7 +23,7 @@ import carcassonne.view.util.MouseClickListener;
  */
 public class PlacementGUI extends SecondaryGUI {
     private static final long serialVersionUID = 1449264387665531286L;
-    private PlacementButton[][] button;
+    private Map<GridDirection, JButton> meepleButtons;
     private Color defaultButtonColor;
     private Tile tile;
 
@@ -58,15 +60,16 @@ public class PlacementGUI extends SecondaryGUI {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = 1;
-        button = new PlacementButton[3][3];
-        for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 3; x++) {
-                button[x][y] = new PlacementButton(controller, x, y);
-                button[x][y].setToolTipText("Place Meeple on the " + GridDirection.values2D()[x][y].toReadableString() + " of the tile.");
-                constraints.gridx = x;
-                constraints.gridy = y + 1;
-                dialogPanel.add(button[x][y], constraints);
-            }
+        meepleButtons = new HashMap<>();
+        int index = 0;
+        for (GridDirection direction : GridDirection.byRow()) {
+            JButton button = new PlacementButton(controller, direction);
+            button.setToolTipText("Place Meeple on the " + direction.toReadableString() + " of the tile.");
+            constraints.gridx = index % 3; // from 0 to 2
+            constraints.gridy = index / 3 + 1; // from 1 to 3
+            dialogPanel.add(button, constraints);
+            meepleButtons.put(direction, button);
+            index++;
         }
     }
 
@@ -82,25 +85,24 @@ public class PlacementGUI extends SecondaryGUI {
     }
 
     /**
-     * Updates the buttons to reflect the current placement options.
+     * Updates the meepleButtons to reflect the current placement options.
      */
     private void updatePlacementButtons() {
-        GridDirection[][] directions = GridDirection.values2D();
-        for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 3; x++) {
-                TerrainType terrain = tile.getTerrain(directions[x][y]);
-                if (tile.hasMeepleSpot(directions[x][y])) {
-                    button[x][y].setIcon(ImageLoadingUtil.createHighDpiImageIcon(GameSettings.getMeeplePath(terrain, false)));
-                } else {
-                    button[x][y].setIcon(ImageLoadingUtil.createHighDpiImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false)));
-                }
-                if (controller.requestPlacementStatus(directions[x][y]) && tile.hasMeepleSpot(directions[x][y])) {
-                    button[x][y].setEnabled(true);
-                    button[x][y].setBackground(defaultButtonColor);
-                } else {
-                    button[x][y].setEnabled(false);
-                    button[x][y].setBackground(currentPlayer.getColor().lightColor());
-                }
+        for (GridDirection direction : GridDirection.values()) {
+            TerrainType terrain = tile.getTerrain(direction);
+            Boolean placeable = tile.hasMeepleSpot(direction) && controller.getSettings().getMeepleRule(terrain);
+            JButton button = meepleButtons.get(direction);
+            if (placeable) {
+                button.setIcon(ImageLoadingUtil.createHighDpiImageIcon(GameSettings.getMeeplePath(terrain, false)));
+            } else {
+                button.setIcon(ImageLoadingUtil.createHighDpiImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false)));
+            }
+            if (placeable && controller.requestPlacementStatus(direction)) {
+                button.setEnabled(true);
+                button.setBackground(defaultButtonColor);
+            } else {
+                button.setEnabled(false);
+                button.setBackground(currentPlayer.getColor().lightColor());
             }
         }
     }
