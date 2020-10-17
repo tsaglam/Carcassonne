@@ -67,7 +67,8 @@ public class MeepleDepictionPanel extends JPanel {
      */
     public void setMeeplePreview(Tile tile, Player currentPlayer) {
         for (GridDirection direction : GridDirection.values()) {
-            if (tile.hasMeepleSpot(direction) && controller.requestPlacementStatus(direction)) {
+            TerrainType terrain = tile.getTerrain(direction);       
+            if (tile.hasMeepleSpot(direction) && controller.requestPlacementStatus(direction) && controller.getSettings().getMeepleRule(terrain)) {
                 labels.get(direction).setPreview(tile.getTerrain(direction), currentPlayer);
             }
         }
