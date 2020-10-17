@@ -24,12 +24,12 @@ import carcassonne.view.util.GameMessage;
  * @author Timur Saglam
  */
 public class MainMenuBar extends JMenuBar implements NotifiableUI {
-    private static final String MEEPLE_RULE_PREFIX = "Allow placing meeples on ";
+    private static final String MEEPLE_RULE_SUFFIX = " Meeples";
     private static final String MEEPLE_RULES = "Allowed Meeple Types";
     private static final long serialVersionUID = -599734693130415390L;
     private static final String DISTRIBUTION = "Change Tile Distribution";
     private static final String CLASSIC = " (Classic)";
-    private static final String TILES_PER_PLAYER = " Tiles on the Hand";
+    private static final String TILES_PER_PLAYER = " Tiles";
     private static final String HAND_SETTINGS = "Hand of Tiles";
     private static final String GRID_SIZE = "Change Grid Size";
     private static final String ABORT = "Abort Current Game";
@@ -196,7 +196,7 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
     private JMenu buildMeepleRuleMenu() {
         JMenu menu = new JMenu(MEEPLE_RULES);
         for (TerrainType type : TerrainType.basicTerrain()) {
-            JCheckBoxMenuItem item = new JCheckBoxMenuItem(MEEPLE_RULE_PREFIX + type.toString().toLowerCase());
+            JCheckBoxMenuItem item = new JCheckBoxMenuItem(type.toReadableString() + MEEPLE_RULE_SUFFIX);
             item.setSelected(settings.getMeepleRule(type));
             item.addActionListener(event -> settings.toggleMeepleRule(type));
             menu.add(item);
