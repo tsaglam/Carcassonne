@@ -22,4 +22,8 @@ public enum TerrainType {
     public static List<TerrainType> basicTerrain() {
         return List.of(CASTLE, ROAD, MONASTERY, FIELDS);
     }
+
+    public String toReadableString() {
+        return toString().charAt(0) + toString().substring(1).toLowerCase();
+    }
 }
