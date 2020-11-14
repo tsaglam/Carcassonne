@@ -16,7 +16,7 @@ public enum ZoomMode {
     SEMI_FAST,
 
     /**
-     * Fast image scaling, look not as good.
+     * Fast image scaling, looks not as good.
      */
-    FAST;
+    FAST; // TODO (HIGH) technically no longer needed.
 }

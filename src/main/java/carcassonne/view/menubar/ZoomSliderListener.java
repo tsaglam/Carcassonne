@@ -47,7 +47,7 @@ public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
         int smoothedValue = (int) (Math.round(slider.getValue() / SMOOTHING_FACTOR) * SMOOTHING_FACTOR);
         if (previousValue != smoothedValue && !blockingEvents) { // limit zoom updated when dragging.
             previousValue = smoothedValue;
-            mainUI.setZoom(smoothedValue, ZoomMode.FAST);
+            mainUI.setZoom(smoothedValue, ZoomMode.SEMI_FAST);
         }
     }
 
