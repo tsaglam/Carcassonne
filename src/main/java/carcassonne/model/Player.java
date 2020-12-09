@@ -40,11 +40,11 @@ public class Player {
     }
 
     /**
-     * Adds score to the players score value and keeps track of the type of score.
+     * Adds points to the players score value and keeps track of the type of score.
      * @param amount is the amount of points the player gets.
-     * @param scoreType determines the score multiplier.
+     * @param scoreType is the pattern type responsible for the points.
      */
-    public void addScore(int amount, TerrainType scoreType) {
+    public void addToScore(int amount, TerrainType scoreType) {
         terrainSpecificScores.put(scoreType, terrainSpecificScores.get(scoreType) + amount);
         overallScore += amount;
     }

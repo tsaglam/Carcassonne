@@ -62,7 +62,7 @@ public class GridPattern {
             }
             int baseValue = (getSize() + emblems) * scoreMultiplier; // needs to call get size for field calculation
             for (Player player : involvedPlayers.keySet()) { // dominant players split the pot
-                player.addScore((int) Math.ceil(baseValue / involvedPlayers.size()), patternType);
+                player.addToScore((int) Math.ceil(baseValue / involvedPlayers.size()), patternType);
             }
             meepleList.forEach(it -> it.removePlacement()); // remove meeples from tiles.
             disbursed = true;
