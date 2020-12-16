@@ -44,7 +44,7 @@ public class Player {
      * @param amount is the amount of points the player gets.
      * @param scoreType is the pattern type responsible for the points.
      */
-    public void addToScore(int amount, TerrainType scoreType) {
+    public void addPoints(int amount, TerrainType scoreType) {
         terrainSpecificScores.put(scoreType, terrainSpecificScores.get(scoreType) + amount);
         overallScore += amount;
     }

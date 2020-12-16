@@ -13,7 +13,7 @@ import carcassonne.model.terrain.RotationDirection;
 public enum GridDirection {
     NORTH,
     EAST,
-    SHOUTH,
+    SOUTH,
     WEST,
     NORTH_EAST,
     SOUTH_EAST,
@@ -39,7 +39,7 @@ public enum GridDirection {
      * @return either -1, 0, or 1.
      */
     public int getY() {
-        if (this == SOUTH_WEST || this == SHOUTH || this == SOUTH_EAST) {
+        if (this == SOUTH_WEST || this == SOUTH || this == SOUTH_EAST) {
             return 1;
         } else if (this == NORTH_WEST || this == NORTH || this == NORTH_EAST) {
             return -1;
@@ -83,7 +83,7 @@ public enum GridDirection {
         if (this == CENTER) {
             return this;
         }
-        GridDirection[] cycle = { NORTH, NORTH_EAST, EAST, SOUTH_EAST, SHOUTH, SOUTH_WEST, WEST, NORTH_WEST };
+        GridDirection[] cycle = { NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST };
         int position = -2; // error case, sum with parameter side is negative
         for (int i = 0; i < cycle.length; i++) {
             if (cycle[i] == this) { // find in cycle
@@ -98,7 +98,7 @@ public enum GridDirection {
      * @return the opposite <code>GridDirection</code>.
      */
     public GridDirection opposite() {
-        if (ordinal() <= 3) { // for NORTH, EAST, SHOUTH and WEST:
+        if (ordinal() <= 3) { // for NORTH, EAST, SOUTH and WEST:
             return values()[smallOpposite(ordinal())];
         } else if (ordinal() <= 7) { // for NORTH_EAST, SOUTH_EAST, SOUTH_WEST and NORTH_WEST:
             return values()[bigOpposite(ordinal())];
@@ -124,10 +124,10 @@ public enum GridDirection {
 
     /**
      * Generates a list of the GridDirections for a direct neighbor on the grid.
-     * @return a list of NORTH, EAST, SHOUTH and WEST.
+     * @return a list of NORTH, EAST, SOUTH and WEST.
      */
     public static List<GridDirection> directNeighbors() {
-        return List.of(NORTH, EAST, SHOUTH, WEST);
+        return List.of(NORTH, EAST, SOUTH, WEST);
     }
 
     /**
@@ -143,30 +143,30 @@ public enum GridDirection {
      * @return a list of all directions except CENTER.
      */
     public static List<GridDirection> neighbors() {
-        return List.of(NORTH, EAST, SHOUTH, WEST, NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST);
+        return List.of(NORTH, EAST, SOUTH, WEST, NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST);
     }
 
     /**
      * Generates a list of the GridDirections for all positions on a tile.
-     * @return a list of NORTH, EAST, SHOUTH, WEST and CENTER.
+     * @return a list of NORTH, EAST, SOUTH, WEST and CENTER.
      */
     public static List<GridDirection> tilePositions() {
-        return List.of(NORTH, EAST, SHOUTH, WEST, CENTER);
+        return List.of(NORTH, EAST, SOUTH, WEST, CENTER);
     }
 
     /**
      * Generates a list of the GridDirections by row.
-     * @return a list of NORTH_WEST, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SHOUTH, SOUTH_EAST in that order.
+     * @return a list of NORTH_WEST, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST in that order.
      */
     public static List<GridDirection> byRow() {
-        return List.of(NORTH_WEST, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SHOUTH, SOUTH_EAST);
+        return List.of(NORTH_WEST, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST);
     }
 
     /**
      * Generates a two dimensional list of the GridDirections for their orientation on a tile.
-     * @return a 2D list of of NORTH_WEST, WEST, SOUTH_WEST, NORTH, CENTER, SHOUTH, NORTH_EAST, EAST and SOUTH_EAST.
+     * @return a 2D list of of NORTH_WEST, WEST, SOUTH_WEST, NORTH, CENTER, SOUTH, NORTH_EAST, EAST and SOUTH_EAST.
      */
     public static GridDirection[][] values2D() {
-        return new GridDirection[][] { { NORTH_WEST, WEST, SOUTH_WEST }, { NORTH, CENTER, SHOUTH }, { NORTH_EAST, EAST, SOUTH_EAST } };
+        return new GridDirection[][] { { NORTH_WEST, WEST, SOUTH_WEST }, { NORTH, CENTER, SOUTH }, { NORTH_EAST, EAST, SOUTH_EAST } };
     }
 }

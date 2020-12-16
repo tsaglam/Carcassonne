@@ -5,7 +5,7 @@ import static carcassonne.model.grid.GridDirection.EAST;
 import static carcassonne.model.grid.GridDirection.NORTH;
 import static carcassonne.model.grid.GridDirection.NORTH_EAST;
 import static carcassonne.model.grid.GridDirection.NORTH_WEST;
-import static carcassonne.model.grid.GridDirection.SHOUTH;
+import static carcassonne.model.grid.GridDirection.SOUTH;
 import static carcassonne.model.grid.GridDirection.SOUTH_EAST;
 import static carcassonne.model.grid.GridDirection.SOUTH_WEST;
 import static carcassonne.model.grid.GridDirection.WEST;
@@ -87,7 +87,7 @@ public class TileTerrain {
      * Turns a tile 90 degree to the left.
      */
     public void rotateLeft() {
-        rotate(List.of(NORTH, WEST, SHOUTH, EAST));
+        rotate(List.of(NORTH, WEST, SOUTH, EAST));
         rotate(List.of(NORTH_EAST, NORTH_WEST, SOUTH_WEST, SOUTH_EAST));
     }
 

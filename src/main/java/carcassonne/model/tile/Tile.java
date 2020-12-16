@@ -209,7 +209,7 @@ public class Tile {
     public void placeMeeple(Player player, GridDirection position) {
         if (meeple == null) {
             meeple = player.getMeeple();
-            meeple.setLocation(this);
+            meeple.setLocation(gridSpot);
             meeple.setPosition(position);
         } else {
             throw new IllegalArgumentException("Tile can not have already a meeple placed on it: " + toString());

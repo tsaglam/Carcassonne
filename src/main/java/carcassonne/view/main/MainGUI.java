@@ -95,7 +95,7 @@ public class MainGUI extends JFrame implements NotifiableUI {
      */
     public void removeMeeple(Meeple meeple) {
         checkParameters(meeple);
-        GridSpot spot = meeple.getLocation().getGridSpot();
+        GridSpot spot = meeple.getLocation();
         if (spot == null) { // make sure meeple is placed
             throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI: " + meeple);
         }

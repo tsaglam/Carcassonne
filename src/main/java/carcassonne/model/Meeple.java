@@ -1,14 +1,14 @@
 package carcassonne.model;
 
 import carcassonne.model.grid.GridDirection;
-import carcassonne.model.tile.Tile;
+import carcassonne.model.grid.GridSpot;
 
 /**
  * Meeples are the token that a player places on the grid.
  * @author Timur Saglam
  */
 public class Meeple {
-    private Tile location;
+    private GridSpot location;
     private final Player owner;
     private GridDirection position;
 
@@ -24,7 +24,7 @@ public class Meeple {
      * Getter for the placement location.
      * @return the tile where the meeple is placed.
      */
-    public Tile getLocation() {
+    public GridSpot getLocation() {
         return location;
     }
 
@@ -66,7 +66,7 @@ public class Meeple {
      * Sets the placement location, which is the tile where the meeple is placed.
      * @param placementLocation is the placement location.
      */
-    public void setLocation(Tile placementLocation) {
+    public void setLocation(GridSpot placementLocation) {
         this.location = placementLocation;
     }
 
@@ -80,10 +80,12 @@ public class Meeple {
 
     @Override
     public String toString() {
-        String locationString = "null";
+        String placement = "";
+        String type = "Unplaced";
         if (isPlaced()) {
-            locationString = location.getGridSpot().toString();
+            type = location.getTile().getTerrain(position).toReadableString();
+            placement = "placed on (" + location.getX() + "|" + location.getY() + ")" + " at " + position;
         }
-        return "Meeple[placed: " + isPlaced() + ", location: " + locationString + ", position: " + position + ", owner: " + owner + "]";
+        return type + " Meeple by Player " + owner.getNumber() + " " + placement;
     }
 }
