@@ -1,5 +1,7 @@
 package carcassonne.model.grid;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -55,14 +57,13 @@ public class GridPattern {
      */
     public void disburse() {
         if (!disbursed && complete && !involvedPlayers.isEmpty()) {
-            determineDominantPlayers();
             int emblems = 0;
             if (patternType == TerrainType.CASTLE) {
                 emblems = (int) containedSpots.stream().filter(it -> it.getTile().hasEmblem()).count(); // count emblems
             }
             int baseValue = (getSize() + emblems) * scoreMultiplier; // needs to call get size for field calculation
-            for (Player player : involvedPlayers.keySet()) { // dominant players split the pot
-                player.addToScore((int) Math.ceil(baseValue / involvedPlayers.size()), patternType);
+            for (Player player : determineDominantPlayers()) { // dominant players split the pot
+                player.addPoints((int) Math.ceil(baseValue / involvedPlayers.size()), patternType);
             }
             meepleList.forEach(it -> it.removePlacement()); // remove meeples from tiles.
             disbursed = true;
@@ -143,6 +144,7 @@ public class GridPattern {
 
     // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
     private void addMeepleFrom(GridSpot spot) {
+        assert !disbursed;
         Meeple meeple = spot.getTile().getMeeple(); // Meeple on the tile.
         if (!meepleList.contains(meeple) && isPartOfPattern(spot, meeple.getPosition())) {
             Player player = meeple.getOwner(); // owner of the meeple.
@@ -156,17 +158,11 @@ public class GridPattern {
     }
 
     /**
-     * Removes all players from the list of involved players which have not the maximum amount of meeples on this pattern.
+     * Determines the dominant players, which are the involved players with maximum amount of meeples on this pattern.
      */
-    private void determineDominantPlayers() {
-        List<Player> removalList = new LinkedList<>();
+    private List<Player> determineDominantPlayers() {
         int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
-        for (Player player : involvedPlayers.keySet()) { // for all involved players
-            if (involvedPlayers.get(player) != maximum) { // if has not enough meeples
-                removalList.add(player); // add to removal list (remove later)
-            }
-        }
-        removalList.forEach(it -> involvedPlayers.remove(it)); // remove players who don't get points
+        return involvedPlayers.keySet().stream().filter(player -> involvedPlayers.get(player) == maximum).collect(toList());
     }
 
     private boolean isPartOfPattern(GridSpot spot, GridDirection position) {
