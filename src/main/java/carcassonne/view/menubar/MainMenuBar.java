@@ -9,6 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSeparator;
 
 import carcassonne.control.MainController;
 import carcassonne.model.terrain.TerrainType;
@@ -25,8 +26,9 @@ import carcassonne.view.util.GameMessage;
  */
 public class MainMenuBar extends JMenuBar implements NotifiableUI {
     private static final long serialVersionUID = -599734693130415390L;
+    private static final String ALLOW_FORTIFYING = "Allow direct meeple placement on own patterns";
     private static final String MEEPLE_RULE_SUFFIX = " Meeples";
-    private static final String MEEPLE_RULES = "Allowed Meeple Types";
+    private static final String MEEPLE_RULES = "Meeple Placement Rules";
     private static final String DISTRIBUTION = "Change Tile Distribution";
     private static final String CLASSIC = " (Classic)";
     private static final String TILES_PER_PLAYER = " Tiles";
@@ -201,6 +203,11 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
             item.addActionListener(event -> settings.toggleMeepleRule(type));
             menu.add(item);
         }
+        menu.add(new JSeparator());
+        JCheckBoxMenuItem fortifyingItem = new JCheckBoxMenuItem(ALLOW_FORTIFYING);
+        fortifyingItem.setSelected(settings.isAllowingFortifying());
+        fortifyingItem.addActionListener(event -> settings.setAllowFortifying(fortifyingItem.isSelected()));
+        menu.add(fortifyingItem);
         return menu;
     }
 
