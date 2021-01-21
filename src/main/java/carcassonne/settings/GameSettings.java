@@ -19,32 +19,46 @@ import carcassonne.view.PaintShop;
  * @author Timur Saglam
  */
 public class GameSettings {
-    public static final Color GUI_COLOR = new Color(190, 190, 190);
+    // THRESHOLD CONSTANTS:
     public static final int MAXIMAL_PLAYERS = 5;
     public static final int MAXIMAL_TILES_ON_HAND = 5;
+    public static final int TILE_SIZE = 100;
+    public static final int TILE_RESOLUTION = 600;
+    public static final int HIGH_DPI_FACTOR = 2; // maximum supported DPI factor.
+
+    // STRING CONSTANTS
     public static final String TILE_FILE_TYPE = ".png";
     public static final String TILE_FOLDER_PATH = "tiles/";
-    public static final int TILE_SIZE = 100;
-    private static final PlayerColor[] DEFAULT_COLORS = { new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
-            new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147) };
-    private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };
     private static final String EMPTY = "";
     private static final String MEEPLE_PATH = "meeple/meeple_";
     private static final String PNG = ".png";
     private static final String TEMPLATE = "_template";
-    public static final int TILE_RESOLUTION = 600;
-    public static final int HIGH_DPI_FACTOR = 2; // maximum supported DPI factor.
-    private int amountOfPlayers;
-    private final List<NotifiableUI> changeListeners;
+    private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };
+
+    // COLOR CONSTANTS:
+    public static final Color GUI_COLOR = new Color(190, 190, 190);
+    private static final PlayerColor[] DEFAULT_COLORS = { new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
+            new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147) };
+
+    // COSMETIC:
     private final List<PlayerColor> colors;
-    private final Map<TerrainType, Boolean> meepleRules;
-    private int gridHeight;
-    private boolean gridSizeChanged;
-    private int tilesPerPlayer;
-    private int stackSizeMultiplier;
-    private int gridWidth;
     private final List<String> names;
+
+    // GAME SETUP:
+    private int gridWidth;
+    private int gridHeight;
+    private int amountOfPlayers;
+    private int stackSizeMultiplier;
     private final TileDistribution tileDistribution;
+
+    // GAME RULES:
+    private boolean allowFortifying;
+    private int tilesPerPlayer;
+    private final Map<TerrainType, Boolean> meepleRules;
+
+    // OTHER/INTERNAL
+    private boolean gridSizeChanged;
+    private final List<NotifiableUI> changeListeners;
 
     /**
      * Creates a settings instance. Instances hold different setting values when one is changed.
@@ -62,23 +76,6 @@ public class GameSettings {
         gridHeight = 19;
         gridSizeChanged = false;
         changeListeners = new ArrayList<NotifiableUI>();
-    }
-
-    /**
-     * Returns for a specific meeple type if meeple placement is enabled or disabled.
-     * @param type it the specific meeple type to query.
-     * @return true if placement is enabled.
-     */
-    public boolean getMeepleRule(TerrainType type) {
-        return meepleRules.getOrDefault(type, false);
-    }
-
-    /**
-     * Toggles whether for a specific meeple type if meeple placement is enabled or disabled.
-     * @param type it the specific meeple type.
-     */
-    public void toggleMeepleRule(TerrainType type) {
-        meepleRules.computeIfPresent(type, (key, enabled) -> !enabled);
     }
 
     /**
@@ -103,6 +100,15 @@ public class GameSettings {
      */
     public int getGridWidth() {
         return gridWidth;
+    }
+
+    /**
+     * Returns for a specific meeple type if meeple placement is enabled or disabled.
+     * @param type it the specific meeple type to query.
+     * @return true if placement is enabled.
+     */
+    public boolean getMeepleRule(TerrainType type) {
+        return meepleRules.getOrDefault(type, false);
     }
 
     /**
@@ -133,6 +139,14 @@ public class GameSettings {
     }
 
     /**
+     * Getter for the current tile distribution.
+     * @return the tile distribution.
+     */
+    public TileDistribution getTileDistribution() {
+        return tileDistribution;
+    }
+
+    /**
      * Specifies the tiles that each player can hold on his hand.
      * @return the tiles per player.
      */
@@ -141,11 +155,11 @@ public class GameSettings {
     }
 
     /**
-     * Getter for the current tile distribution.
-     * @return the tile distribution.
+     * Determines if players are allowed to directly place meeples on patterns they already own.
+     * @return true if it is allowed.
      */
-    public TileDistribution getTileDistribution() {
-        return tileDistribution;
+    public boolean isAllowingFortifying() {
+        return allowFortifying;
     }
 
     /**
@@ -162,6 +176,14 @@ public class GameSettings {
      */
     public void registerNotifiable(NotifiableUI notifiable) {
         changeListeners.add(notifiable);
+    }
+
+    /**
+     * Changes whether players are allowed to directly place meeples on patterns they already own.
+     * @param allowFortifying forbids or allows fortifying.
+     */
+    public void setAllowFortifying(boolean allowFortifying) {
+        this.allowFortifying = allowFortifying;
     }
 
     /**
@@ -233,6 +255,14 @@ public class GameSettings {
      */
     public void setTilesPerPlayer(int tilesPerPlayer) {
         this.tilesPerPlayer = tilesPerPlayer;
+    }
+
+    /**
+     * Toggles whether for a specific meeple type if meeple placement is enabled or disabled.
+     * @param type it the specific meeple type.
+     */
+    public void toggleMeepleRule(TerrainType type) {
+        meepleRules.computeIfPresent(type, (key, enabled) -> !enabled);
     }
 
     private void notifyListeners() {

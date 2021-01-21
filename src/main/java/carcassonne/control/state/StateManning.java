@@ -46,7 +46,8 @@ public class StateManning extends AbstractControllerState {
      * @see carcassonne.control.state.AbstractControllerState#isPlaceable()
      */
     @Override
-    public boolean isPlaceable(GridDirection position) {
+    public boolean isPlaceable(GridDirection position) { // TODO (HIGH) move model logic into the model, maybe into the grid?
+        GameSettings settings = controller.getSettings();
         Tile tile = previewGUI.getSelectedTile();
         TerrainType terrain = tile.getTerrain(position);
         boolean placeable = false;
@@ -61,7 +62,7 @@ public class StateManning extends AbstractControllerState {
             } else { // castle or road:
                 pattern = new CastleAndRoadPattern(tile.getGridSpot(), position, terrain, grid);
             }
-            if (pattern.isNotOccupied() || pattern.isOccupiedBy(round.getActivePlayer())) {
+            if (pattern.isNotOccupied() || (pattern.isOccupiedBy(round.getActivePlayer()) && settings.isAllowingFortifying())) {
                 placeable = true; // can place meeple
             }
             pattern.removeTileTags();
