@@ -1,6 +1,7 @@
 package carcassonne.model.grid;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -90,12 +91,12 @@ public class Grid {
      * @param spot is the spot of the last placed tile.
      * @return the list of the modified patterns.
      */
-    public List<GridPattern> getModifiedPatterns(GridSpot spot) {
+    public Collection<GridPattern> getModifiedPatterns(GridSpot spot) {
         checkParameters(spot);
         if (spot.isFree()) {
             throw new IllegalArgumentException("Can't check for patterns on an free grid space");
         }
-        List<GridPattern> modifiedPatterns = spot.createPatternList();
+        Collection<GridPattern> modifiedPatterns = spot.createPatternList();
         modifiedPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
         return modifiedPatterns; // get patterns.
     }

@@ -2,6 +2,7 @@ package carcassonne.model.grid;
 
 import static carcassonne.model.grid.GridDirection.CENTER;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class GridSpot {
      * Creates list of all patterns that are affected by this spot.
      * @return the list of patterns.
      */
-    public List<GridPattern> createPatternList() {
+    public Collection<GridPattern> createPatternList() {
         if (isFree()) {
             throw new IllegalStateException("GridSpot is free, cannot create patterns");
         }
