@@ -3,7 +3,7 @@ package carcassonne.control;
 import java.util.HashMap;
 import java.util.Map;
 
-import carcassonne.control.state.AbstractControllerState;
+import carcassonne.control.state.AbstractGameState;
 import carcassonne.control.state.StateGameOver;
 import carcassonne.control.state.StateIdle;
 import carcassonne.control.state.StateManning;
@@ -29,8 +29,8 @@ import carcassonne.view.secondary.PreviewGUI;
  */
 public class MainController {
     private final MainGUI mainGUI;
-    private final Map<Class<? extends AbstractControllerState>, AbstractControllerState> stateMap;
-    private AbstractControllerState currentState;
+    private final Map<Class<? extends AbstractGameState>, AbstractGameState> stateMap;
+    private AbstractGameState currentState;
     private final GameSettings settings;
     private final GlobalKeyBindingManager keyBindings;
 
@@ -70,7 +70,7 @@ public class MainController {
      * @param stateType specifies which state is the new state.
      * @return the new state.
      */
-    public AbstractControllerState changeState(Class<? extends AbstractControllerState> stateType) {
+    public AbstractGameState changeState(Class<? extends AbstractGameState> stateType) {
         currentState = stateMap.get(stateType);
         if (currentState == null) {
             throw new IllegalStateException("State is not registered: " + stateType);
@@ -132,7 +132,7 @@ public class MainController {
      */
     public void updateStates(Round newRound, TileStack tileStack, Grid newGrid) {
         mainGUI.getScoreboard().rebuild(newRound.getPlayerCount());
-        for (AbstractControllerState state : stateMap.values()) {
+        for (AbstractGameState state : stateMap.values()) {
             state.updateState(newRound, tileStack, newGrid);
         }
     }
@@ -157,7 +157,7 @@ public class MainController {
      * Registers a specific state at the controller.
      * @param state is the specific state.
      */
-    private void registerState(AbstractControllerState state) {
+    private void registerState(AbstractGameState state) {
         if (stateMap.put(state.getClass(), state) != null) {
             throw new IllegalArgumentException("Can't register two states of a kind.");
         }

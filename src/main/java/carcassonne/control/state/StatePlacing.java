@@ -14,7 +14,7 @@ import carcassonne.view.util.GameMessage;
  * The specific state when a Tile can be placed.
  * @author Timur Saglam
  */
-public class StatePlacing extends AbstractControllerState {
+public class StatePlacing extends AbstractGameState {
 
     /**
      * Constructor of the state.
@@ -28,7 +28,7 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#abortGame()
+     * @see carcassonne.control.state.AbstractGameState#abortGame()
      */
     @Override
     public void abortGame() {
@@ -36,7 +36,7 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#isPlaceable()
+     * @see carcassonne.control.state.AbstractGameState#isPlaceable()
      */
     @Override
     public boolean isPlaceable(GridDirection position) {
@@ -44,7 +44,7 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#newRound()
+     * @see carcassonne.control.state.AbstractGameState#newRound()
      */
     @Override
     public void newRound(int playerCount) {
@@ -53,7 +53,7 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#placeMeeple()
+     * @see carcassonne.control.state.AbstractGameState#placeMeeple()
      */
     @Override
     public void placeMeeple(GridDirection position) {
@@ -61,7 +61,7 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#placeTile()
+     * @see carcassonne.control.state.AbstractGameState#placeTile()
      */
     @Override
     public void placeTile(int x, int y) {
@@ -76,7 +76,7 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#skip()
+     * @see carcassonne.control.state.AbstractGameState#skip()
      */
     @Override
     public void skip() {
@@ -93,7 +93,7 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#entry()
+     * @see carcassonne.control.state.AbstractGameState#entry()
      */
     @Override
     protected void entry() {
@@ -106,7 +106,7 @@ public class StatePlacing extends AbstractControllerState {
     }
 
     /**
-     * @see carcassonne.control.state.AbstractControllerState#exit()
+     * @see carcassonne.control.state.AbstractGameState#exit()
      */
     @Override
     protected void exit() {

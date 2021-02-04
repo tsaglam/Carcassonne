@@ -17,7 +17,7 @@ import carcassonne.view.secondary.PreviewGUI;
  * Is the abstract state of the state machine.
  * @author Timur Saglam
  */
-public abstract class AbstractControllerState {
+public abstract class AbstractGameState {
 
     protected MainController controller;
     protected MainGUI mainGUI;
@@ -36,7 +36,7 @@ public abstract class AbstractControllerState {
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public AbstractControllerState(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
+    public AbstractGameState(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
         this.controller = controller;
         this.mainGUI = mainGUI;
         this.previewGUI = previewGUI;
@@ -96,9 +96,9 @@ public abstract class AbstractControllerState {
      * Changes the state to a new state.
      * @param stateType is the type of the new state.
      */
-    protected void changeState(Class<? extends AbstractControllerState> stateType) {
+    protected void changeState(Class<? extends AbstractGameState> stateType) {
         exit();
-        AbstractControllerState newState = controller.changeState(stateType);
+        AbstractGameState newState = controller.changeState(stateType);
         newState.entry();
     }
 
