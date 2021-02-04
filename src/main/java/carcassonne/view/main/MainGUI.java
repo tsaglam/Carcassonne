@@ -2,7 +2,6 @@ package carcassonne.view.main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Frame;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -210,6 +209,9 @@ public class MainGUI extends JFrame implements NotifiableUI {
      * @param currentPlayer is the current {@link Player}.
      */
     public void setCurrentPlayer(Player currentPlayer) {
+        if (this.currentPlayer == null) {
+            scrollPane.validateAndCenter(); // ensures centered view on game start for heterogenous multi-monitor setups
+        }
         this.currentPlayer = currentPlayer;
         ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
         tileLayer.refreshHighlight(newHighlight);
@@ -288,7 +290,6 @@ public class MainGUI extends JFrame implements NotifiableUI {
         scrollPane.addZoomListener(() -> zoomIn(SEMI_FAST), () -> zoomOut(SEMI_FAST));
         add(scrollPane, BorderLayout.CENTER);
         setMinimumSize(MINIMAL_WINDOW_SIZE);
-        setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
         addWindowListener(new WindowMaximizationAdapter(this));
         pack();
     }
