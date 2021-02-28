@@ -3,5 +3,4 @@ Application-Name: Carcassonne
 SplashScreen-Image: splash.png
 Main-Class: carcassonne.Carcassonne
 Codebase: https://github.com/tsaglam/Carcassonne
-Permissions: sandbox
-Trusted-Only: true
+Permissions: all-permissions

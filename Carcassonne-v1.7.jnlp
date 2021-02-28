@@ -3,13 +3,13 @@
  
      <information>
           <title>Carcassonne v1.7</title>
-          <vendor>Timur Saglam</vendor>
+          <vendor>Timur Sağlam</vendor>
           <homepage href="https://github.com/tsaglam/" />
           <description>A digital version of the board game Carcassonne</description>
      </information>
  
      <security>
-          <sandbox/>
+          <all-permissions/>
      </security>
  
      <resources>
