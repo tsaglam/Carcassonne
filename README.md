@@ -27,10 +27,10 @@ There are two options how to download and run Carcassonne:
 
 **Via Web Start** (manages the required Java version for you):
  1. Download [OpenWebStart](https://openwebstart.com/download/) or any other web start implementation.
- 2. Download and run the Carcassonne Web Start File (https://github.com/tsaglam/Carcassonne/releases/download/v1.7/Carcassonne-v1.7.jnlp).
+ 2. Download and run the [web start file](https://github.com/tsaglam/Carcassonne/releases/download/v1.7/Carcassonne-v1.7.jnlp).
 
 **Via the Jar file** (requires Java SE 11 or newer):
- 1. [Download](https://www.oracle.com/de/java/technologies/javase-downloads.html) and install Java SE 11 or a newer version.
+ 1. Download and install [Java SE 11](https://www.oracle.com/de/java/technologies/javase-downloads.html) or a newer version.
  2. Download and run the [latest executable](https://github.com/tsaglam/Carcassonne/releases/download/v1.7/Carcassonne-v1.7.jar).
 
 ### Feedback & Suggestions
