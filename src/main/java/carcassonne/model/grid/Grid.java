@@ -5,8 +5,11 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileRotation;
 import carcassonne.model.tile.TileType;
+import carcassonne.settings.GameSettings;
 
 /**
  * The playing grid class.
@@ -218,6 +221,31 @@ public class Grid {
         checkParameters(x, y);
         checkParameters(tile);
         return spots[x][y].set(tile);
+    }
+
+    public void getPossibleMoves(Tile tile, Player player, GameSettings settings) { // TODO (HIGH) Maybe this should only check tiles and not
+                                                                                    // positions?
+        checkParameters(tile);
+        List<CarcassonneMove> possibleMoves = new ArrayList<>();
+        List<Tile> rotatedTiles = new ArrayList<>();
+        for (TileRotation rotation : TileRotation.values()) {
+            Tile copiedTile = new Tile(tile.getType()); // TODO (HIGH) Subclass for Tile: Hypothetically placed tile? might interfere with patterns.
+            while (copiedTile.getRotation() != rotation) {
+                copiedTile.rotateRight();
+            }
+            rotatedTiles.add(copiedTile);
+        }
+        for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
+            for (int y = 0; y < height; y++) {
+                for (Tile copiedTile : rotatedTiles) {
+                    for (GridDirection position : GridDirection.values()) { // TODO (HIGH) Tile not played => meeples can never be placed:
+                        if (spots[x][y].isPlaceable(copiedTile) && copiedTile.allowsPlacingMeeple(position, player, settings)) {
+                            possibleMoves.add(new CarcassonneMove(tile, position));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void checkParameters(GridSpot spot) {
