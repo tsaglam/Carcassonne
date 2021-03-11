@@ -28,11 +28,11 @@ public class FieldsPattern extends GridPattern {
      * @param startingDirection is the position on the spot where the pattern starts.
      * @param grid is the correlating {@link Grid}.
      */
-    public FieldsPattern(GridSpot startingSpot, GridDirection startingDirection, Grid grid) {
+    public FieldsPattern(GridSpot startingSpot, GridDirection startingDirection) {
         super(FIELDS, POINTS_PER_CASTLE);
-        this.grid = grid;
+        grid = startingSpot.getGrid();
         adjacentCastles = new LinkedList<>();
-        checkArgs(startingSpot, startingDirection, grid);
+        checkArgs(startingSpot, startingDirection);
         startingSpot.setTag(startingDirection, this); // initial tag, is needed for adding meeples!
         add(startingSpot); // initial tile
         buildPattern(startingSpot, startingDirection);
@@ -77,7 +77,7 @@ public class FieldsPattern extends GridPattern {
     private void countAdjacentCastles(GridSpot spot, GridDirection position) {
         for (GridDirection neighbor : getAdjacentPositions(position)) {
             if (spot.getTile().getTerrain(neighbor) == CASTLE && isUntagged(spot, neighbor)) { // if is unvisited castle
-                CastleAndRoadPattern castle = new CastleAndRoadPattern(spot, neighbor, CASTLE, grid);
+                CastleAndRoadPattern castle = new CastleAndRoadPattern(spot, neighbor, CASTLE);
                 if (castle.isComplete()) { // if castle is closed (pattern check)
                     adjacentCastles.add(castle); // remember pattern to count points
                 } else {

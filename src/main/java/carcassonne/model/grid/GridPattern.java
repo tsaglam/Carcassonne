@@ -188,8 +188,8 @@ public class GridPattern {
      * @param direction is any grid direction.
      * @param grid is any grid.
      */
-    protected void checkArgs(GridSpot spot, GridDirection direction, Grid grid) {
-        if (spot == null || direction == null || grid == null) {
+    protected void checkArgs(GridSpot spot, GridDirection direction) {
+        if (spot == null || direction == null) {
             throw new IllegalArgumentException("Arguments can't be null");
         }
     }

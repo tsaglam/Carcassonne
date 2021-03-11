@@ -3,11 +3,8 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
-import carcassonne.model.grid.CastleAndRoadPattern;
-import carcassonne.model.grid.FieldsPattern;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
-import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.main.MainGUI;
@@ -46,28 +43,8 @@ public class StateManning extends AbstractGameState {
      * @see carcassonne.control.state.AbstractGameState#isPlaceable()
      */
     @Override
-    public boolean isPlaceable(GridDirection position) { // TODO (HIGH) move model logic into the model, maybe into the grid?
-        GameSettings settings = controller.getSettings();
-        Tile tile = previewGUI.getSelectedTile();
-        TerrainType terrain = tile.getTerrain(position);
-        boolean placeable = false;
-        if (terrain == TerrainType.OTHER) {
-            placeable = false; // you can never place on terrain other
-        } else if (terrain == TerrainType.MONASTERY) {
-            placeable = true; // you can always place on a monastery
-        } else {
-            GridPattern pattern;
-            if (terrain == TerrainType.FIELDS) {
-                pattern = new FieldsPattern(tile.getGridSpot(), position, grid);
-            } else { // castle or road:
-                pattern = new CastleAndRoadPattern(tile.getGridSpot(), position, terrain, grid);
-            }
-            if (pattern.isNotOccupied() || (pattern.isOccupiedBy(round.getActivePlayer()) && settings.isAllowingFortifying())) {
-                placeable = true; // can place meeple
-            }
-            pattern.removeTileTags();
-        }
-        return placeable;
+    public boolean isPlaceable(GridDirection position) {
+        return previewGUI.getSelectedTile().allowsPlacingMeeple(position, round.getActivePlayer(), controller.getSettings());
     }
 
     /**
@@ -87,7 +64,7 @@ public class StateManning extends AbstractGameState {
         Player player = round.getActivePlayer();
         if (player.hasFreeMeeples() && isPlaceable(position)) {
             mainGUI.resetMeeplePreview(tile);
-            tile.placeMeeple(player, position);
+            tile.placeMeeple(player, position, controller.getSettings());
             mainGUI.setMeeple(tile, position, player);
             updateScores();
             processGridPatterns();
