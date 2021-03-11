@@ -52,14 +52,14 @@ public class GridSpot {
         for (GridDirection direction : GridDirection.tilePositions()) {
             TerrainType terrain = tile.getTerrain(direction); // get terrain type.
             if ((terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) && hasNoTagConnectedTo(direction)) {
-                results.add(new CastleAndRoadPattern(this, direction, terrain, grid));
+                results.add(new CastleAndRoadPattern(this, direction, terrain));
             }
         }
         // then, check fields:
         for (GridDirection direction : GridDirection.values()) {
             TerrainType terrain = tile.getTerrain(direction); // get terrain type.
             if (terrain == TerrainType.FIELDS && hasNoTagConnectedTo(direction)) {
-                results.add(new FieldsPattern(this, direction, grid));
+                results.add(new FieldsPattern(this, direction));
             }
         }
         // then check for monastery patterns:
@@ -83,6 +83,14 @@ public class GridSpot {
      */
     public Tile getTile() {
         return tile;
+    }
+    
+    /**
+     * Getter for the grid of which this grid spot is part of.
+     * @return the containing grid.
+     */
+    public Grid getGrid() {
+        return grid;
     }
 
     /**
@@ -157,6 +165,28 @@ public class GridSpot {
         return !containsKey(tilePosition);
     }
 
+    public boolean isPlaceable(Tile tile) {
+        if (isOccupied()) {
+            return false; // can't be placed if spot is occupied.
+        }
+        int neighborCount = 0;
+        for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
+            GridSpot neighbor = grid.getNeighbor(this, direction);
+            if (neighbor == null) { // free space
+                if (grid.isClosingFreeSpotsOff(this, direction)) {
+                    return false; // you can't close off free spaces
+                }
+            } else { // if there is a neighbor in the direction.
+                neighborCount++;
+                if (!tile.canConnectTo(direction, neighbor.getTile())) {
+                    return false; // if it does not fit to terrain, it can't be placed.
+                }
+            }
+        }
+        return neighborCount > 0; // can be placed beneath another tile.
+    }
+    
+
     /**
      * Removes all the tags from the tile.
      */
@@ -202,32 +232,11 @@ public class GridSpot {
 
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
         if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY && spot.hasNoTagConnectedTo(CENTER)) {
-            patternList.add(new MonasteryGridPattern(spot, grid));
+            patternList.add(new MonasteryGridPattern(spot));
         }
     }
 
     private boolean containsKey(GridDirection direction) {
         return !tagMap.get(direction).isEmpty();
-    }
-
-    private boolean isPlaceable(Tile tile) {
-        if (isOccupied()) {
-            return false; // can't be placed if spot is occupied.
-        }
-        int neighborCount = 0;
-        for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
-            GridSpot neighbor = grid.getNeighbor(this, direction);
-            if (neighbor == null) { // free space
-                if (grid.isClosingFreeSpotsOff(this, direction)) {
-                    return false; // you can't close off free spaces
-                }
-            } else { // if there is a neighbor in the direction.
-                neighborCount++;
-                if (!tile.canConnectTo(direction, neighbor.getTile())) {
-                    return false; // if it does not fit to terrain, it can't be placed.
-                }
-            }
-        }
-        return neighborCount > 0; // can be placed beneath another tile.
     }
 }

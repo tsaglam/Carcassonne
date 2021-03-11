@@ -7,7 +7,10 @@ import javax.swing.ImageIcon;
 
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
+import carcassonne.model.grid.CastleAndRoadPattern;
+import carcassonne.model.grid.FieldsPattern;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.grid.GridPattern;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.terrain.RotationDirection;
 import carcassonne.model.terrain.TerrainType;
@@ -202,12 +205,43 @@ public class Tile {
     }
 
     /**
+     * Checks whether a meeple of a specific player can be placed on a specific position on this tile.
+     * @param position is the specific position on the tile.
+     * @param player is the player in question.
+     * @param settings are the game settings to determine if fortifying is allowed.
+     * @return true if a meeple can be placed.
+     */
+    public boolean allowsPlacingMeeple(GridDirection position, Player player, GameSettings settings) {
+        TerrainType terrain = getTerrain(position);
+        boolean placeable = false;
+        if (isPlaced()) { // placing meeples on tiles that are not placed is not possible
+            if (terrain == TerrainType.OTHER) {
+                placeable = false; // you can never place on terrain other
+            } else if (terrain == TerrainType.MONASTERY) {
+                placeable = true; // you can always place on a monastery
+            } else {
+                GridPattern pattern;
+                if (terrain == TerrainType.FIELDS) {
+                    pattern = new FieldsPattern(getGridSpot(), position);
+                } else { // castle or road:
+                    pattern = new CastleAndRoadPattern(getGridSpot(), position, terrain);
+                }
+                if (pattern.isNotOccupied() || (pattern.isOccupiedBy(player)) && settings.isAllowingFortifying()) {
+                    placeable = true; // can place meeple
+                }
+                pattern.removeTileTags();
+            }
+        }
+        return placeable;
+    }
+
+    /**
      * Places a meeple on the tile, if the tile has not already one placed.
      * @param player is the player whose meeple is going to be set.
      * @param position is the position of the meeple on the tile.
      */
-    public void placeMeeple(Player player, GridDirection position) {
-        if (meeple == null) {
+    public void placeMeeple(Player player, GridDirection position, GameSettings settings) {
+        if (meeple == null && allowsPlacingMeeple(position, player, settings)) {
             meeple = player.getMeeple();
             meeple.setLocation(gridSpot);
             meeple.setPosition(position);
