@@ -2,10 +2,14 @@ package carcassonne.model.grid;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import carcassonne.model.Player;
+import carcassonne.model.ai.CarcassonneMove;
+import carcassonne.model.ai.ImmediateValueMove;
+import carcassonne.model.ai.TemporaryTile;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileRotation;
 import carcassonne.model.tile.TileType;
@@ -90,7 +94,7 @@ public class Grid {
     }
 
     /**
-     * Method checks for modified patterns on the grid. As a basis it uses the coordinates of the last placed tile.
+     * Method checks for potentially modified patterns on the grid.
      * @param spot is the spot of the last placed tile.
      * @return the list of the modified patterns.
      */
@@ -102,6 +106,24 @@ public class Grid {
         Collection<GridPattern> modifiedPatterns = spot.createPatternList();
         modifiedPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
         return modifiedPatterns; // get patterns.
+    }
+
+    /**
+     * Method checks for patterns on a specific grid spot if it is occupied and additionally the direct neighbors.
+     * neighboring tiles.
+     * @param spot is the spot to be checked.
+     * @return the list of the patterns.
+     */
+    public Collection<GridPattern> getLocalPatterns(GridSpot spot) {
+        Collection<GridPattern> gridPatterns = new ArrayList<>();
+        if (spot.isOccupied()) {
+            gridPatterns.addAll(spot.createPatternList());
+        }
+        for (GridSpot neighbor : getNeighbors(foundation, false, GridDirection.directNeighbors())) {
+            gridPatterns.addAll(neighbor.createPatternList()); // FIXME (HIGH) does not check whether patterns are already discovered by neighbor.
+        }
+        gridPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
+        return gridPatterns; // get patterns.
     }
 
     /**
@@ -220,16 +242,22 @@ public class Grid {
     public boolean place(int x, int y, Tile tile) {
         checkParameters(x, y);
         checkParameters(tile);
-        return spots[x][y].set(tile);
+        return spots[x][y].place(tile);
     }
 
-    public void getPossibleMoves(Tile tile, Player player, GameSettings settings) { // TODO (HIGH) Maybe this should only check tiles and not
-                                                                                    // positions?
+    /**
+     * Returns a collection all possible and legal moves.
+     * @param tile is the tile that is placed during the move.
+     * @param player is the player that conducts the move.
+     * @param settings are the game settings.
+     * @return the collection of all moves.
+     */
+    public Collection<? extends CarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
         checkParameters(tile);
-        List<CarcassonneMove> possibleMoves = new ArrayList<>();
-        List<Tile> rotatedTiles = new ArrayList<>();
+        List<ImmediateValueMove> possibleMoves = new ArrayList<>();
+        List<TemporaryTile> rotatedTiles = new ArrayList<>();
         for (TileRotation rotation : TileRotation.values()) {
-            Tile copiedTile = new Tile(tile.getType()); // TODO (HIGH) Subclass for Tile: Hypothetically placed tile? might interfere with patterns.
+            TemporaryTile copiedTile = new TemporaryTile(tile.getType());
             while (copiedTile.getRotation() != rotation) {
                 copiedTile.rotateRight();
             }
@@ -237,15 +265,25 @@ public class Grid {
         }
         for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
             for (int y = 0; y < height; y++) {
-                for (Tile copiedTile : rotatedTiles) {
-                    for (GridDirection position : GridDirection.values()) { // TODO (HIGH) Tile not played => meeples can never be placed:
-                        if (spots[x][y].isPlaceable(copiedTile) && copiedTile.allowsPlacingMeeple(position, player, settings)) {
-                            possibleMoves.add(new CarcassonneMove(tile, position));
+                for (TemporaryTile copiedTile : rotatedTiles) {
+                    GridSpot spot = spots[x][y];
+                    if (spot.place(copiedTile)) {
+                        // TODO (HIGH) consider moves without meeples
+                        // TODO (HIGH) only allows moves with meeples if a player has meeples
+                        for (GridDirection position : GridDirection.values()) {
+                            if (copiedTile.allowsPlacingMeeple(position, player, settings)) {
+                                possibleMoves.add(new ImmediateValueMove(copiedTile, position, player, spot, settings));
+                                System.out.println(x + " " + y + " " + copiedTile.getRotation() + " " + position);
+                                copiedTile.removeMeeple();
+                            }
                         }
+                        spot.removeTile();
                     }
                 }
             }
         }
+        Collections.sort(possibleMoves);
+        return possibleMoves;
     }
 
     private void checkParameters(GridSpot spot) {
