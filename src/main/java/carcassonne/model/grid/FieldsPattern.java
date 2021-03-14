@@ -3,10 +3,10 @@ package carcassonne.model.grid;
 import static carcassonne.model.grid.GridDirection.CENTER;
 import static carcassonne.model.grid.GridDirection.NORTH_WEST;
 import static carcassonne.model.grid.GridDirection.WEST;
-import static carcassonne.model.terrain.TerrainType.CASTLE;
-import static carcassonne.model.terrain.TerrainType.FIELDS;
 import static carcassonne.model.terrain.RotationDirection.LEFT;
 import static carcassonne.model.terrain.RotationDirection.RIGHT;
+import static carcassonne.model.terrain.TerrainType.CASTLE;
+import static carcassonne.model.terrain.TerrainType.FIELDS;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,6 +30,7 @@ public class FieldsPattern extends GridPattern {
      */
     public FieldsPattern(GridSpot startingSpot, GridDirection startingDirection) {
         super(FIELDS, POINTS_PER_CASTLE);
+        checkArgs(startingSpot, startingDirection);
         grid = startingSpot.getGrid();
         adjacentCastles = new LinkedList<>();
         checkArgs(startingSpot, startingDirection);

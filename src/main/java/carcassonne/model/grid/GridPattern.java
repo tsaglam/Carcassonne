@@ -57,14 +57,10 @@ public class GridPattern {
      */
     public void disburse() {
         if (!disbursed && complete && !involvedPlayers.isEmpty()) {
-            int emblems = 0;
-            if (patternType == TerrainType.CASTLE) {
-                emblems = (int) containedSpots.stream().filter(it -> it.getTile().hasEmblem()).count(); // count emblems
-            }
-            int baseValue = (getSize() + emblems) * scoreMultiplier; // needs to call get size for field calculation
-            List<Player> dominantPlayers = determineDominantPlayers();
+            List<Player> dominantPlayers = getDominantPlayers();
             for (Player player : dominantPlayers) { // dominant players split the pot
-                player.addPoints((int) Math.ceil(baseValue / dominantPlayers.size()), patternType);
+                int stake = divideScore(getPatternScore(), dominantPlayers);
+                player.addPoints(stake, patternType);
             }
             meepleList.forEach(it -> it.removePlacement()); // remove meeples from tiles.
             disbursed = true;
@@ -83,11 +79,38 @@ public class GridPattern {
     }
 
     /**
+     * Determines the dominant players, which are the involved players with maximum amount of meeples on this pattern.
+     */
+    public List<Player> getDominantPlayers() {
+        if (involvedPlayers.isEmpty()) {
+            return Collections.emptyList();
+        }
+        int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
+        return involvedPlayers.keySet().stream().filter(player -> involvedPlayers.get(player) == maximum).collect(toList());
+    }
+
+    /**
      * Getter for the meeple list.
      * @return the meeple list.
      */
     public List<Meeple> getMeepleList() {
         return meepleList;
+    }
+
+    public int getPatternScore() {
+        int emblems = 0;
+        if (patternType == TerrainType.CASTLE) {
+            emblems = (int) containedSpots.stream().filter(it -> it.getTile().hasEmblem()).count(); // count emblems
+        }
+        return (getSize() + emblems) * scoreMultiplier; // needs to call get size for field calculation
+    }
+
+    public int getScoreFor(Player player) {
+        List<Player> dominantPlayers = getDominantPlayers();
+        if (dominantPlayers.contains(player)) {
+            return divideScore(getPatternScore(), dominantPlayers);
+        }
+        return 0;
     }
 
     /**
@@ -158,12 +181,8 @@ public class GridPattern {
         }
     }
 
-    /**
-     * Determines the dominant players, which are the involved players with maximum amount of meeples on this pattern.
-     */
-    private List<Player> determineDominantPlayers() {
-        int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
-        return involvedPlayers.keySet().stream().filter(player -> involvedPlayers.get(player) == maximum).collect(toList());
+    private int divideScore(int score, List<Player> dominantPlayers) {
+        return (int) Math.ceil(getPatternScore() / dominantPlayers.size());
     }
 
     private boolean isPartOfPattern(GridSpot spot, GridDirection position) {
