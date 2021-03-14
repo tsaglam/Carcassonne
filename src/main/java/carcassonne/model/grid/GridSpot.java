@@ -84,7 +84,7 @@ public class GridSpot {
     public Tile getTile() {
         return tile;
     }
-    
+
     /**
      * Getter for the grid of which this grid spot is part of.
      * @return the containing grid.
@@ -185,7 +185,6 @@ public class GridSpot {
         }
         return neighborCount > 0; // can be placed beneath another tile.
     }
-    
 
     /**
      * Removes all the tags from the tile.
@@ -207,13 +206,23 @@ public class GridSpot {
      * @param tile is the tile to set.
      * @return true if the tile could be placed.
      */
-    public boolean set(Tile tile) {
+    public boolean place(Tile tile) {
         if (isPlaceable(tile)) {
             tile.setPosition(this);
             this.tile = tile;
             return true; // tile was successfully placed.
         }
         return false; // tile can't be placed, spot is occupied.
+    }
+
+    /**
+     * Removes any placed tile from the grid spot, updates the position of the tile.
+     */
+    public void removeTile() { // TODO (HIGH) this is only allowed for temporary tiles.
+        if (tile != null) {
+            tile.setPosition(null);
+            tile = null;
+        }
     }
 
     /**
@@ -232,7 +241,7 @@ public class GridSpot {
 
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
         if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY && spot.hasNoTagConnectedTo(CENTER)) {
-            patternList.add(new MonasteryGridPattern(spot));
+            patternList.add(new MonasteryPattern(spot));
         }
     }
 

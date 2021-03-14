@@ -24,8 +24,8 @@ import carcassonne.util.ConcurrentTileImageScaler;
  */
 public class Tile {
     private static final int CASTLE_THRESHOLD = 6; // size required for a castle to have an emblem
-    private GridSpot gridSpot;
-    private Meeple meeple;
+    protected GridSpot gridSpot;
+    protected Meeple meeple;
     private final TileTerrain terrain;
     private final TileType type;
     private TileRotation rotation;
@@ -241,8 +241,12 @@ public class Tile {
      * @param position is the position of the meeple on the tile.
      */
     public void placeMeeple(Player player, GridDirection position, GameSettings settings) {
-        if (meeple == null && allowsPlacingMeeple(position, player, settings)) {
-            meeple = player.getMeeple();
+        placeMeeple(player, position, player.getMeeple(), settings);
+    }
+
+    public void placeMeeple(Player player, GridDirection position, Meeple meeple, GameSettings settings) {
+        if (this.meeple == null && allowsPlacingMeeple(position, player, settings)) {
+            this.meeple = meeple;
             meeple.setLocation(gridSpot);
             meeple.setPosition(position);
         } else {
@@ -283,7 +287,7 @@ public class Tile {
      */
     public void setPosition(GridSpot spot) {
         if (spot == null) {
-            throw new IllegalArgumentException("Position can't be null");
+            throw new IllegalArgumentException("Position can't be null, tile cannot be removed.");
         }
         gridSpot = spot;
     }

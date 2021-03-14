@@ -12,14 +12,14 @@ import java.util.List;
  * This class represents a specific kind of grid pattern, the grid patterns for the terrain type MONASTERY.
  * @author Timur Saglam
  */
-public class MonasteryGridPattern extends GridPattern {
+public class MonasteryPattern extends GridPattern {
 
     /**
      * Simple constructor that creates the pattern.
      * @param spot is the starting spot of the pattern, containing a monastery tile.
      * @param grid is the grid the pattern is created from.
      */
-    public MonasteryGridPattern(GridSpot spot) {
+    public MonasteryPattern(GridSpot spot) {
         super(MONASTERY, 1);
         if (spot.getTile().getTerrain(CENTER) != MONASTERY) {
             throw new IllegalArgumentException("Can't create monastery pattern from non monastery tile");

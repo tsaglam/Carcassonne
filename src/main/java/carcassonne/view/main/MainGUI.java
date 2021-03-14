@@ -1,5 +1,9 @@
 package carcassonne.view.main;
 
+import static carcassonne.view.main.ZoomMode.FAST;
+import static carcassonne.view.main.ZoomMode.SEMI_FAST;
+import static carcassonne.view.main.ZoomMode.SMOOTH;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -21,8 +25,6 @@ import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.util.LookAndFeelUtil;
-
-import static carcassonne.view.main.ZoomMode.*;
 
 /**
  * The main GUI class.
