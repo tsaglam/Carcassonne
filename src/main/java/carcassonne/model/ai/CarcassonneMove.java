@@ -9,7 +9,7 @@ import carcassonne.model.tile.Tile;
  * that tile.
  * @author Timur Saglam
  */
-public interface CarcassonneMove extends Comparable<ImmediateValueMove> {
+public interface CarcassonneMove extends Comparable<CarcassonneMove> {
 
     /**
      * Getter for the tile placed in this move.
@@ -36,7 +36,7 @@ public interface CarcassonneMove extends Comparable<ImmediateValueMove> {
     public Player getPlayer();
 
     @Override
-    public default int compareTo(ImmediateValueMove other) {
+    public default int compareTo(CarcassonneMove other) {
         return Double.valueOf(getValue()).compareTo(other.getValue());
     }
 
