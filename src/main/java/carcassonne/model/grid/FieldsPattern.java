@@ -41,8 +41,8 @@ public class FieldsPattern extends GridPattern {
     }
 
     @Override
-    public int getSize() {
-        return adjacentCastles.size(); // the amount of adjacentCastles is the size of this pattern
+    public int getPatternScore() {
+        return adjacentCastles.size() * scoreMultiplier;
     }
 
     // adds a grid direction to a list if it has not castle terain at that diection on the tile.

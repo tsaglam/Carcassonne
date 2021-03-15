@@ -51,30 +51,23 @@ public class GridPattern {
     }
 
     /**
-     * Disburses complete patterns. Gives every involved player points if he is one of the players with the maximal amount
-     * of meeples on the pattern. Removes the meeple placement and returns them to the players. Can only be called once in
-     * the lifetime of a GridPttern object.
+     * Disburses complete patterns. Distributes the score among all dominant players on the pattern. Removes the meeple
+     * placement and returns them to the players. Can only be called once in the lifetime of a pattern.
      */
     public void disburse() {
-        if (!disbursed && complete && !involvedPlayers.isEmpty()) {
-            List<Player> dominantPlayers = getDominantPlayers();
-            for (Player player : dominantPlayers) { // dominant players split the pot
-                int stake = divideScore(getPatternScore(), dominantPlayers);
-                player.addPoints(stake, patternType);
-            }
+        if (complete) {
+            distributePatternScore();
             meepleList.forEach(it -> it.removePlacement()); // remove meeples from tiles.
-            disbursed = true;
         }
     }
 
     /**
-     * Disburses pattern if it is incomplete. This should be used at the end of the round and does not disburse complete
-     * patterns.
+     * Disburses incomplete patterns. Distributes the score among all dominant players on the pattern. This should be used
+     * at the end of the round.
      */
     public void forceDisburse() {
         if (!complete) {
-            complete = true;
-            disburse();
+            distributePatternScore();
         }
     }
 
@@ -97,17 +90,20 @@ public class GridPattern {
         return meepleList;
     }
 
+    /**
+     * Returns the score of the pattern, independent of which player is dominant.
+     * @return the full score.
+     */
     public int getPatternScore() {
-        int emblems = 0;
-        if (patternType == TerrainType.CASTLE) {
-            emblems = (int) containedSpots.stream().filter(it -> it.getTile().hasEmblem()).count(); // count emblems
-        }
-        return (getSize() + emblems) * scoreMultiplier; // needs to call get size for field calculation
+        return containedSpots.size() * scoreMultiplier;
     }
 
     public int getScoreFor(Player player) {
         List<Player> dominantPlayers = getDominantPlayers();
         if (dominantPlayers.contains(player)) {
+            if (patternType == TerrainType.CASTLE) {
+                System.out.println();
+            }
             return divideScore(getPatternScore(), dominantPlayers);
         }
         return 0;
@@ -166,6 +162,17 @@ public class GridPattern {
         return "GridPattern[type: " + patternType + ", size: " + getSize() + ", complete: " + complete + ", meeples: " + meepleList;
     }
 
+    private void distributePatternScore() {
+        if (!disbursed && !involvedPlayers.isEmpty()) {
+            List<Player> dominantPlayers = getDominantPlayers();
+            int stake = divideScore(getPatternScore(), dominantPlayers);
+            for (Player player : dominantPlayers) { // dominant players split the pot
+                player.addPoints(stake, patternType);
+            }
+            disbursed = true;
+        }
+    }
+
     // adds meeple from tile to involvedPlayers map if the meeple is involved in the pattern.
     private void addMeepleFrom(GridSpot spot) {
         assert !disbursed;
@@ -182,7 +189,7 @@ public class GridPattern {
     }
 
     private int divideScore(int score, List<Player> dominantPlayers) {
-        return (int) Math.ceil(getPatternScore() / dominantPlayers.size());
+        return (int) Math.ceil(score / dominantPlayers.size());
     }
 
     private boolean isPartOfPattern(GridSpot spot, GridDirection position) {
