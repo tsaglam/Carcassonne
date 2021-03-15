@@ -7,10 +7,11 @@ import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 
 /**
- * Represents a single move of a player whch is valued according to the immediate value that moves brings.
+ * Represents a single move of a player which is valued mostly according to the immediate value that moves brings in
+ * addition to some very simple rules.
  * @author Timur Saglam
  */
-public class ImmediateValueMove implements CarcassonneMove {
+public class RuleBasedMove implements CarcassonneMove {
     private final GridSpot gridSpot;
     private final Player player;
     private final GridDirection position;
@@ -26,7 +27,7 @@ public class ImmediateValueMove implements CarcassonneMove {
      * @param gridSpot is the spot the tile is placed on.
      * @param settings are the game settings.
      */
-    public ImmediateValueMove(TemporaryTile tile, GridDirection position, Player player, GridSpot gridSpot, GameSettings settings) {
+    public RuleBasedMove(TemporaryTile tile, GridDirection position, Player player, GridSpot gridSpot, GameSettings settings) {
         this.tile = tile;
         this.position = position;
         this.player = player;
@@ -43,7 +44,7 @@ public class ImmediateValueMove implements CarcassonneMove {
      * @param gridSpot is the spot the tile is placed on.
      * @param settings are the game settings.
      */
-    public ImmediateValueMove(TemporaryTile tile, Player player, GridSpot gridSpot, GameSettings settings) {
+    public RuleBasedMove(TemporaryTile tile, Player player, GridSpot gridSpot, GameSettings settings) {
         this(tile, null, player, gridSpot, settings);
     }
 
@@ -69,7 +70,8 @@ public class ImmediateValueMove implements CarcassonneMove {
 
     @Override
     public String toString() {
-        return "Move for " + player.getName() + " with value " + value + ": " + tile.getType() + " " + position + " " + gridSpot;
+        return "Move for " + player.getName() + " with value " + value + ": " + tile.getType() + " " + tile.getTerrain(position) + " on " + position
+                + " " + gridSpot;
     }
 
     private int calculateScoreSnapshot() {
@@ -78,11 +80,13 @@ public class ImmediateValueMove implements CarcassonneMove {
 
     private double calculateValue() {
         int scoreBeforeMove = calculateScoreSnapshot();
-        gridSpot.place(tile);
+        if (!tile.isPlaced()) {
+            gridSpot.place(tile);
+        }
         tile.placeMeeple(player, position, new TemporaryMeeple(player), settings);
         int scoreAfterMove = calculateScoreSnapshot();
         tile.removeMeeple();
-        gridSpot.removeTile();
+        // System.err.println("score: " + scoreBeforeMove + " --> " + scoreAfterMove);
         return scoreAfterMove - scoreBeforeMove;
     }
 }

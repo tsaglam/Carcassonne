@@ -8,7 +8,7 @@ import java.util.List;
 
 import carcassonne.model.Player;
 import carcassonne.model.ai.CarcassonneMove;
-import carcassonne.model.ai.ImmediateValueMove;
+import carcassonne.model.ai.RuleBasedMove;
 import carcassonne.model.ai.TemporaryTile;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileRotation;
@@ -56,8 +56,8 @@ public class Grid {
                 }
             }
         }
-        patterns.forEach(it -> it.removeTileTags()); // IMPORTANT
-        return patterns; // get patterns.
+        patterns.forEach(it -> it.removeTileTags());  // IMPORTANT
+        return patterns;
     }
 
     /**
@@ -120,7 +120,7 @@ public class Grid {
             gridPatterns.addAll(spot.createPatternList());
         }
         for (GridSpot neighbor : getNeighbors(foundation, false, GridDirection.directNeighbors())) {
-            gridPatterns.addAll(neighbor.createPatternList()); // FIXME (HIGH) does not check whether patterns are already discovered by neighbor.
+            gridPatterns.addAll(neighbor.createPatternList()); // FIXME (HIGH) does not check whether patterns are already discovered by neighbor?
         }
         gridPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
         return gridPatterns; // get patterns.
@@ -254,14 +254,14 @@ public class Grid {
      */
     public Collection<? extends CarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
         checkParameters(tile);
-        List<ImmediateValueMove> possibleMoves = new ArrayList<>();
+        List<RuleBasedMove> possibleMoves = new ArrayList<>();
         List<TemporaryTile> rotatedTiles = new ArrayList<>();
         for (TileRotation rotation : TileRotation.values()) {
-            TemporaryTile copiedTile = new TemporaryTile(tile.getType());
-            while (copiedTile.getRotation() != rotation) {
-                copiedTile.rotateRight();
+            TemporaryTile rotatedTile = new TemporaryTile(tile.getType());
+            while (rotatedTile.getRotation() != rotation) {
+                rotatedTile.rotateRight();
             }
-            rotatedTiles.add(copiedTile);
+            rotatedTiles.add(rotatedTile);
         }
         for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
             for (int y = 0; y < height; y++) {
@@ -271,10 +271,10 @@ public class Grid {
                         // TODO (HIGH) consider moves without meeples
                         // TODO (HIGH) only allows moves with meeples if a player has meeples
                         for (GridDirection position : GridDirection.values()) {
-                            if (copiedTile.allowsPlacingMeeple(position, player, settings)) {
-                                possibleMoves.add(new ImmediateValueMove(copiedTile, position, player, spot, settings));
-                                System.out.println(x + " " + y + " " + copiedTile.getRotation() + " " + position);
-                                copiedTile.removeMeeple();
+                            if (copiedTile.hasMeepleSpot(position) && settings.getMeepleRule(copiedTile.getTerrain(position))) {
+                                if (copiedTile.allowsPlacingMeeple(position, player, settings)) {
+                                    possibleMoves.add(new RuleBasedMove(copiedTile, position, player, spot, settings));
+                                }
                             }
                         }
                         spot.removeTile();
