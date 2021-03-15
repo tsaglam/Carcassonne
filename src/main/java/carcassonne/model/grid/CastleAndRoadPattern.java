@@ -6,6 +6,7 @@ import carcassonne.model.terrain.TerrainType;
  * @author Timur Saglam
  */
 public class CastleAndRoadPattern extends GridPattern { // TODO (MEDIUM) use subclasses to make constructors generic (factory?)
+    private static final double UNFINISHED_CASTLE_MULTIPLIER = 0.5;
 
     /**
      * Public constructor for creating road and monastery patterns.
@@ -23,9 +24,16 @@ public class CastleAndRoadPattern extends GridPattern { // TODO (MEDIUM) use sub
     }
 
     @Override
-    public void forceDisburse() {
-        scoreMultiplier = 1; // reduce score multiplier
-        super.forceDisburse();
+    public int getPatternScore() {
+        int baseScore = super.getPatternScore();
+        if (patternType == TerrainType.CASTLE) {
+            int emblems = (int) containedSpots.stream().filter(it -> it.getTile().hasEmblem()).count(); // count emblems
+            baseScore += emblems * scoreMultiplier;
+            if (!complete) {
+                baseScore *= UNFINISHED_CASTLE_MULTIPLIER;
+            }
+        }
+        return baseScore;
     }
 
     private boolean buildPattern(GridSpot spot, GridDirection startingPoint) {
