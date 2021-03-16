@@ -4,6 +4,7 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileRotation;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 
@@ -17,6 +18,13 @@ public class TemporaryTile extends Tile {
         super(type);
     }
 
+    public TemporaryTile(TileType type, TileRotation rotation) {
+        this(type);
+        while (getRotation() != rotation) {
+            rotateRight();
+        }
+    }
+
     @Override
     public void placeMeeple(Player player, GridDirection position, GameSettings settings) {
         super.placeMeeple(player, position, new TemporaryMeeple(player), settings);
@@ -26,11 +34,6 @@ public class TemporaryTile extends Tile {
     public void setPosition(GridSpot spot) {
         gridSpot = spot; // no null check, allows removing spot
     }
-
-    // @Override
-    // public boolean isPlaced() {
-    // return true;
-    // }
 
     @Override
     public void removeMeeple() {

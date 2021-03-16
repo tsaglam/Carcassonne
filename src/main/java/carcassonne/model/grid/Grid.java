@@ -1,8 +1,11 @@
 package carcassonne.model.grid;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -255,35 +258,36 @@ public class Grid {
     public Collection<? extends CarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
         checkParameters(tile);
         List<RuleBasedMove> possibleMoves = new ArrayList<>();
-        List<TemporaryTile> rotatedTiles = new ArrayList<>();
-        for (TileRotation rotation : TileRotation.values()) {
-            TemporaryTile rotatedTile = new TemporaryTile(tile.getType());
-            while (rotatedTile.getRotation() != rotation) {
-                rotatedTile.rotateRight();
-            }
-            rotatedTiles.add(rotatedTile);
-        }
         for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
             for (int y = 0; y < height; y++) {
-                for (TemporaryTile copiedTile : rotatedTiles) {
-                    GridSpot spot = spots[x][y];
-                    if (spot.place(copiedTile)) {
-                        // TODO (HIGH) consider moves without meeples
-                        // TODO (HIGH) only allows moves with meeples if a player has meeples
-                        for (GridDirection position : GridDirection.values()) {
-                            if (copiedTile.hasMeepleSpot(position) && settings.getMeepleRule(copiedTile.getTerrain(position))) {
-                                if (copiedTile.allowsPlacingMeeple(position, player, settings)) {
-                                    possibleMoves.add(new RuleBasedMove(copiedTile, position, player, spot, settings));
-                                }
-                            }
-                        }
-                        spot.removeTile();
-                    }
+                for (TemporaryTile copiedTile : possibleRotations(tile)) {
+                    possibleMoves.addAll(movesForGridSpot(player, spots[x][y], copiedTile, settings));
                 }
             }
         }
         Collections.sort(possibleMoves);
         return possibleMoves;
+    }
+
+    private List<RuleBasedMove> movesForGridSpot(Player player, GridSpot spot, TemporaryTile tile, GameSettings settings) {
+        List<RuleBasedMove> possibleMoves = new ArrayList<>();
+        if (spot.place(tile)) {
+            possibleMoves.add(new RuleBasedMove(tile, player, settings));
+            if (player.hasFreeMeeples()) {
+                for (GridDirection position : GridDirection.values()) {
+                    if (tile.hasMeepleSpot(position) && settings.getMeepleRule(tile.getTerrain(position))
+                            && tile.allowsPlacingMeeple(position, player, settings)) {
+                        possibleMoves.add(new RuleBasedMove(tile, position, player, settings));
+                    }
+                }
+            }
+            spot.removeTile();
+        }
+        return possibleMoves;
+    }
+
+    private List<TemporaryTile> possibleRotations(Tile tile) {
+        return EnumSet.allOf(TileRotation.class).stream().map(it -> new TemporaryTile(tile.getType(), it)).collect(toList());
     }
 
     private void checkParameters(GridSpot spot) {

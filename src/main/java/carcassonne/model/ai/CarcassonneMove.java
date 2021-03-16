@@ -35,6 +35,12 @@ public interface CarcassonneMove extends Comparable<CarcassonneMove> {
      */
     public Player getPlayer();
 
+    /**
+     * Determines if a meeple is placed as part of this move.
+     * @return true if it does.
+     */
+    public boolean involvesMeeplePlacement();
+
     @Override
     public default int compareTo(CarcassonneMove other) {
         return Double.valueOf(getValue()).compareTo(other.getValue());
