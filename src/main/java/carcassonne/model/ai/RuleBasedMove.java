@@ -21,31 +21,31 @@ public class RuleBasedMove implements CarcassonneMove {
 
     /**
      * Creates the move. Does not check if the move is legal.
-     * @param tile is the tile placed in the move.
+     * @param tile is the tile placed in the move. Needs to be assigned to a {@link GridSpot}.
      * @param position is the position on which the meeple is placed on the tile.
      * @param player is the responsible player.
      * @param gridSpot is the spot the tile is placed on.
      * @param settings are the game settings.
      */
-    public RuleBasedMove(TemporaryTile tile, GridDirection position, Player player, GridSpot gridSpot, GameSettings settings) {
+    public RuleBasedMove(TemporaryTile tile, GridDirection position, Player player, GameSettings settings) {
         this.tile = tile;
         this.position = position;
         this.player = player;
-        this.gridSpot = gridSpot;
+        this.gridSpot = tile.getGridSpot();
         this.settings = settings;
         value = calculateValue();
     }
 
     /**
      * Creates the move without a meeple placement. Does not check if the move is legal.
-     * @param tile is the tile placed in the move.
+     * @param tile is the tile placed in the move. Needs to be assigned to a {@link GridSpot}.
      * @param position is the position on which the meeple is placed on the tile.
      * @param player is the responsible player.
      * @param gridSpot is the spot the tile is placed on.
      * @param settings are the game settings.
      */
-    public RuleBasedMove(TemporaryTile tile, Player player, GridSpot gridSpot, GameSettings settings) {
-        this(tile, null, player, gridSpot, settings);
+    public RuleBasedMove(TemporaryTile tile, Player player, GameSettings settings) {
+        this(tile, null, player, settings);
     }
 
     @Override
@@ -74,6 +74,11 @@ public class RuleBasedMove implements CarcassonneMove {
                 + " " + gridSpot;
     }
 
+    @Override
+    public boolean involvesMeeplePlacement() {
+        return position != null;
+    }
+
     private int calculateScoreSnapshot() {
         return gridSpot.getGrid().getLocalPatterns(gridSpot).stream().mapToInt(it -> it.getScoreFor(player)).sum();
     }
@@ -83,7 +88,9 @@ public class RuleBasedMove implements CarcassonneMove {
         if (!tile.isPlaced()) {
             gridSpot.place(tile);
         }
-        tile.placeMeeple(player, position, new TemporaryMeeple(player), settings);
+        if (involvesMeeplePlacement()) {
+            tile.placeMeeple(player, position, new TemporaryMeeple(player), settings);
+        }
         int scoreAfterMove = calculateScoreSnapshot();
         tile.removeMeeple();
         // System.err.println("score: " + scoreBeforeMove + " --> " + scoreAfterMove);
