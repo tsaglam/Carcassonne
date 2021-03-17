@@ -57,7 +57,8 @@ public class GridPattern {
     public void disburse() {
         if (complete) {
             distributePatternScore();
-            meepleList.forEach(it -> it.removePlacement()); // remove meeples from tiles.
+            meepleList.forEach(it -> it.getLocation().getTile().removeMeeple()); // remove meeples from tiles.
+            involvedPlayers.clear();
         }
     }
 
@@ -101,9 +102,6 @@ public class GridPattern {
     public int getScoreFor(Player player) {
         List<Player> dominantPlayers = getDominantPlayers();
         if (dominantPlayers.contains(player)) {
-            if (patternType == TerrainType.CASTLE) {
-                System.out.println();
-            }
             return divideScore(getPatternScore(), dominantPlayers);
         }
         return 0;
@@ -159,7 +157,10 @@ public class GridPattern {
 
     @Override
     public String toString() {
-        return "GridPattern[type: " + patternType + ", size: " + getSize() + ", complete: " + complete + ", meeples: " + meepleList;
+        StringBuilder builder = new StringBuilder("GridPattern[type: ");
+        builder.append(patternType).append(", size: ").append(getSize()).append(", complete: ").append(complete);
+        builder.append(", disbursed: ").append(disbursed).append(", meeples: ").append(meepleList);
+        return builder.toString();
     }
 
     private void distributePatternScore() {
