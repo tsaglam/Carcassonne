@@ -2,6 +2,7 @@ package carcassonne.model.ai;
 
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.grid.GridPattern;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
@@ -70,8 +71,8 @@ public class RuleBasedMove implements CarcassonneMove {
 
     @Override
     public String toString() {
-        return "Move for " + player.getName() + " with value " + value + ": " + tile.getType() + " " + tile.getTerrain(position) + " on " + position
-                + " " + gridSpot;
+        String meeple = involvesMeeplePlacement() ? tile.getTerrain(position) + " on " + position : "without meeple";
+        return "Move for " + player.getName() + " with value " + value + ": " + tile.getType() + " " + meeple + " " + gridSpot;
     }
 
     @Override
@@ -80,14 +81,21 @@ public class RuleBasedMove implements CarcassonneMove {
     }
 
     private int calculateScoreSnapshot() {
-        return gridSpot.getGrid().getLocalPatterns(gridSpot).stream().mapToInt(it -> it.getScoreFor(player)).sum();
+        return gridSpot.getGrid().getLocalPatterns(gridSpot).stream().mapToInt(this::zeroSumScore).sum();
+    }
+
+    private int zeroSumScore(GridPattern pattern) {
+        int score = 2 * pattern.getScoreFor(player);
+        for (Player dominantPlayer : pattern.getDominantPlayers()) {
+            score -= pattern.getScoreFor(dominantPlayer);
+        }
+        return score;
     }
 
     private double calculateValue() {
+        gridSpot.removeTile();
         int scoreBeforeMove = calculateScoreSnapshot();
-        if (!tile.isPlaced()) {
-            gridSpot.place(tile);
-        }
+        gridSpot.place(tile);
         if (involvesMeeplePlacement()) {
             tile.placeMeeple(player, position, new TemporaryMeeple(player), settings);
         }
