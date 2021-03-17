@@ -81,11 +81,11 @@ public class Meeple {
     @Override
     public String toString() {
         String placement = "";
-        String type = "Unplaced";
+        String type = "Unplaced ";
         if (isPlaced()) {
             type = location.getTile().getTerrain(position).toReadableString();
-            placement = "placed on (" + location.getX() + "|" + location.getY() + ")" + " at " + position;
+            placement = "placed on (" + location.getX() + "|" + location.getY() + ")" + " at " + position + " ";
         }
-        return type + " Meeple by Player " + owner.getNumber() + " " + placement;
+        return type + getClass().getSimpleName() + " by Player " + owner.getNumber() + " " + placement;
     }
 }
