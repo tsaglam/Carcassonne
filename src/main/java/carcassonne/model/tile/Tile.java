@@ -1,6 +1,5 @@
 package carcassonne.model.tile;
 
-import java.io.InputStream;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -44,7 +43,7 @@ public class Tile {
         terrain = new TileTerrain(type);
         rotation = TileRotation.UP;
         meeple = null;
-        rotationLimit = determineRotationLimit();
+        rotationLimit = TileUtil.rotationLimitFor(type);
     }
 
     /**
@@ -303,23 +302,5 @@ public class Tile {
      */
     protected Set<GridDirection> getMeepleSpots() {
         return terrain.getMeepleSpots();
-    }
-
-    /**
-     * Checks how many image files are available for this tile.
-     */
-    private final int determineRotationLimit() {
-        int rotations = 0;
-        for (int rotation = 0; rotation < TileRotation.values().length; rotation++) {
-            String path = GameSettings.TILE_FOLDER_PATH + type.name() + rotation + GameSettings.TILE_FILE_TYPE;
-            InputStream file = getClass().getClassLoader().getResourceAsStream(path);
-            if (file != null) {
-                rotations++;
-            }
-        }
-        if (rotations == 0) {
-            throw new IllegalStateException(type + " tile needs at least one image file!");
-        }
-        return rotations;
     }
 }
