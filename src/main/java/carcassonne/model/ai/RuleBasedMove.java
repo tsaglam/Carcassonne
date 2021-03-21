@@ -5,6 +5,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileRotation;
 import carcassonne.settings.GameSettings;
 
 /**
@@ -12,37 +13,37 @@ import carcassonne.settings.GameSettings;
  * addition to some very simple rules.
  * @author Timur Saglam
  */
-public class RuleBasedMove implements CarcassonneMove {
+public class RuleBasedMove implements CarcassonneMove { // TODO (HIGH) rename to ZeroSumMove
     private final GridSpot gridSpot;
     private final Player player;
     private final GridDirection position;
     private final GameSettings settings;
-    private final TemporaryTile tile;
+    private final TemporaryTile temporaryTile;
     private final double value;
 
     /**
      * Creates the move. Does not check if the move is legal.
-     * @param tile is the tile placed in the move. Needs to be assigned to a {@link GridSpot}.
-     * @param position is the position on which the meeple is placed on the tile.
+     * @param temporaryTile is the temporaryTile placed in the move. Needs to be assigned to a {@link GridSpot}.
+     * @param position is the position on which the meeple is placed on the temporaryTile.
      * @param player is the responsible player.
-     * @param gridSpot is the spot the tile is placed on.
+     * @param gridSpot is the spot the temporaryTile is placed on.
      * @param settings are the game settings.
      */
-    public RuleBasedMove(TemporaryTile tile, GridDirection position, Player player, GameSettings settings) {
-        this.tile = tile;
+    public RuleBasedMove(TemporaryTile temporaryTile, GridDirection position, Player player, GameSettings settings) {
+        this.temporaryTile = temporaryTile;
         this.position = position;
         this.player = player;
-        this.gridSpot = tile.getGridSpot();
+        this.gridSpot = temporaryTile.getGridSpot();
         this.settings = settings;
         value = calculateValue();
     }
 
     /**
      * Creates the move without a meeple placement. Does not check if the move is legal.
-     * @param tile is the tile placed in the move. Needs to be assigned to a {@link GridSpot}.
-     * @param position is the position on which the meeple is placed on the tile.
+     * @param temporaryTile is the temporaryTile placed in the move. Needs to be assigned to a {@link GridSpot}.
+     * @param position is the position on which the meeple is placed on the temporaryTile.
      * @param player is the responsible player.
-     * @param gridSpot is the spot the tile is placed on.
+     * @param gridSpot is the spot the temporaryTile is placed on.
      * @param settings are the game settings.
      */
     public RuleBasedMove(TemporaryTile tile, Player player, GameSettings settings) {
@@ -61,7 +62,7 @@ public class RuleBasedMove implements CarcassonneMove {
 
     @Override
     public Tile getTile() {
-        return tile;
+        return temporaryTile.getOriginal();
     }
 
     @Override
@@ -71,8 +72,8 @@ public class RuleBasedMove implements CarcassonneMove {
 
     @Override
     public String toString() {
-        String meeple = involvesMeeplePlacement() ? tile.getTerrain(position) + " on " + position : "without meeple";
-        return "Move for " + player.getName() + " with value " + value + ": " + tile.getType() + " " + meeple + " " + gridSpot;
+        String meeple = involvesMeeplePlacement() ? temporaryTile.getTerrain(position) + " on " + position : "without meeple";
+        return "Move for " + player.getName() + " with value " + value + ": " + temporaryTile.getType() + " " + meeple + " " + gridSpot;
     }
 
     @Override
@@ -92,16 +93,30 @@ public class RuleBasedMove implements CarcassonneMove {
         return score;
     }
 
-    private double calculateValue() {
+    private double calculateValue() { // TODO (VERY HIGH) still not 100% correct!
         gridSpot.removeTile();
         int scoreBeforeMove = calculateScoreSnapshot();
-        gridSpot.place(tile);
+        gridSpot.place(temporaryTile);
         if (involvesMeeplePlacement()) {
-            tile.placeMeeple(player, position, new TemporaryMeeple(player), settings);
+            temporaryTile.placeMeeple(player, position, new TemporaryMeeple(player), settings);
         }
         int scoreAfterMove = calculateScoreSnapshot();
-        tile.removeMeeple();
-        // System.err.println("score: " + scoreBeforeMove + " --> " + scoreAfterMove);
+        temporaryTile.removeMeeple();
         return scoreAfterMove - scoreBeforeMove;
+    }
+
+    @Override
+    public int getX() {
+        return gridSpot.getX();
+    }
+
+    @Override
+    public int getY() {
+        return gridSpot.getY();
+    }
+
+    @Override
+    public TileRotation getRotation() {
+        return temporaryTile.getRotation();
     }
 }

@@ -3,6 +3,8 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
+import carcassonne.model.ai.ArtificialIntelligence;
+import carcassonne.model.ai.CarcassonneMove;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.tile.Tile;
@@ -26,8 +28,9 @@ public class StateManning extends AbstractGameState {
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StateManning(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
-        super(controller, mainGUI, previewGUI, placementGUI);
+    public StateManning(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI,
+            ArtificialIntelligence playerAI) {
+        super(controller, mainGUI, previewGUI, placementGUI, playerAI);
         noMeeplesNotification = new boolean[GameSettings.MAXIMAL_PLAYERS]; // stores whether a player was already notified about a lack of meeples
     }
 
@@ -44,7 +47,7 @@ public class StateManning extends AbstractGameState {
      */
     @Override
     public boolean isPlaceable(GridDirection position) {
-        return previewGUI.getSelectedTile().allowsPlacingMeeple(position, round.getActivePlayer(), controller.getSettings());
+        return getSelectedTile().allowsPlacingMeeple(position, round.getActivePlayer(), controller.getSettings());
     }
 
     /**
@@ -61,9 +64,13 @@ public class StateManning extends AbstractGameState {
     @Override
     public void placeMeeple(GridDirection position) {
         Tile tile = previewGUI.getSelectedTile();
+        mainGUI.resetMeeplePreview(tile);
+        placeMeeple(position, tile);
+    }
+
+    private void placeMeeple(GridDirection position, Tile tile) {
         Player player = round.getActivePlayer();
         if (player.hasFreeMeeples() && isPlaceable(position)) {
-            mainGUI.resetMeeplePreview(tile);
             tile.placeMeeple(player, position, controller.getSettings());
             mainGUI.setMeeple(tile, position, player);
             updateScores();
@@ -94,7 +101,7 @@ public class StateManning extends AbstractGameState {
 
     // gives the players the points they earned.
     private void processGridPatterns() {
-        Tile tile = previewGUI.getSelectedTile();
+        Tile tile = getSelectedTile();
         for (GridPattern pattern : grid.getModifiedPatterns(tile.getGridSpot())) {
             if (pattern.isComplete()) {
                 for (Meeple meeple : pattern.getMeepleList()) {
@@ -117,18 +124,32 @@ public class StateManning extends AbstractGameState {
         }
     }
 
+    private void placeMeepleWithAI() {
+        CarcassonneMove move = playerAI.getCurrentMove().orElseThrow(() -> new IllegalStateException(NO_MOVE));
+        if (move.involvesMeeplePlacement()) {
+            placeMeeple(move.getPosition(), move.getTile());
+        } else {
+            skip();
+        }
+    }
+
     /**
      * @see carcassonne.control.state.AbstractGameState#entry()
      */
     @Override
     protected void entry() {
         Player player = round.getActivePlayer();
+        Tile selectedTile = getSelectedTile();
         if (player.hasFreeMeeples()) {
             noMeeplesNotification[player.getNumber()] = false; // resets out of meeple message!
-            mainGUI.setMeeplePreview(previewGUI.getSelectedTile(), player);
-            placementGUI.setTile(previewGUI.getSelectedTile(), player);
+            if (player.isComputerControlled()) {
+                placeMeepleWithAI();
+            } else {
+                mainGUI.setMeeplePreview(selectedTile, player);
+                placementGUI.setTile(selectedTile, player);
+            }
         } else {
-            if (!noMeeplesNotification[player.getNumber()]) { // Only warn player once until he regains meeples
+            if (!noMeeplesNotification[player.getNumber()] && !player.isComputerControlled()) { // Only warn player once until he regains meeples
                 GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meepeles again.");
                 noMeeplesNotification[player.getNumber()] = true;
             }

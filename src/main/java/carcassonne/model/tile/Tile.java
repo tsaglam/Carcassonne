@@ -281,6 +281,15 @@ public class Tile {
     }
 
     /**
+     * Turns a tile 90 degree to the right.
+     */
+    public void rotateTo(TileRotation targetRotation) {
+        while (rotation != targetRotation) {
+            rotateRight();
+        }
+    }
+
+    /**
      * Gives the tile the position where it has been placed.
      * @param spot is the {@link GridSpot} where the tile was placed.
      */

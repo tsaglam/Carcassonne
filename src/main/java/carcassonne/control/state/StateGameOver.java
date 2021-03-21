@@ -1,6 +1,7 @@
 package carcassonne.control.state;
 
 import carcassonne.control.MainController;
+import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.view.main.MainGUI;
@@ -25,8 +26,9 @@ public class StateGameOver extends AbstractGameState {
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StateGameOver(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
-        super(controller, mainGUI, previewGUI, placementGUI);
+    public StateGameOver(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI,
+            ArtificialIntelligence playerAI) {
+        super(controller, mainGUI, previewGUI, placementGUI, playerAI);
     }
 
     /**

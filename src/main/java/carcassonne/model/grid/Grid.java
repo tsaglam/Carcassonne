@@ -123,7 +123,7 @@ public class Grid {
             gridPatterns.addAll(spot.createPatternList());
         }
         for (GridSpot neighbor : getNeighbors(foundation, false, GridDirection.directNeighbors())) {
-            gridPatterns.addAll(neighbor.createPatternList()); // FIXME (HIGH) does not check whether patterns are already discovered by neighbor?
+            gridPatterns.addAll(neighbor.createPatternList());
         }
         gridPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
         return gridPatterns; // get patterns.
@@ -266,6 +266,7 @@ public class Grid {
             }
         }
         Collections.sort(possibleMoves);
+        Collections.reverse(possibleMoves);
         return possibleMoves;
     }
 
@@ -287,7 +288,7 @@ public class Grid {
     }
 
     private List<TemporaryTile> possibleRotations(Tile tile) {
-        return EnumSet.allOf(TileRotation.class).stream().map(it -> new TemporaryTile(tile.getType(), it)).collect(toList());
+        return EnumSet.allOf(TileRotation.class).stream().map(it -> new TemporaryTile(tile, it)).collect(toList());
     }
 
     private void checkParameters(GridSpot spot) {

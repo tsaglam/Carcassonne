@@ -1,7 +1,11 @@
 package carcassonne.control.state;
 
+import java.util.Optional;
+
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
+import carcassonne.model.ai.ArtificialIntelligence;
+import carcassonne.model.ai.CarcassonneMove;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
@@ -23,8 +27,9 @@ public class StatePlacing extends AbstractGameState {
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StatePlacing(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
-        super(controller, mainGUI, previewGUI, placementGUI);
+    public StatePlacing(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI,
+            ArtificialIntelligence playerAI) {
+        super(controller, mainGUI, previewGUI, placementGUI, playerAI);
     }
 
     /**
@@ -66,13 +71,7 @@ public class StatePlacing extends AbstractGameState {
     @Override
     public void placeTile(int x, int y) {
         Tile tile = previewGUI.getSelectedTile();
-        if (grid.place(x, y, tile)) {
-            round.getActivePlayer().dropTile(tile);
-            mainGUI.setTile(tile, x, y);
-            GridSpot spot = grid.getSpot(x, y);
-            highlightSurroundings(spot);
-            changeState(StateManning.class);
-        }
+        placeTile(tile, x, y);
     }
 
     /**
@@ -83,13 +82,44 @@ public class StatePlacing extends AbstractGameState {
         if (round.isOver()) {
             changeState(StateGameOver.class);
         } else {
-            Tile tile = previewGUI.getSelectedTile();
+            Tile tile = getTileToDrop(); // TODO (HIGH) AI players cannot drop tiles right now, which one to skip?
             tileStack.putBack(tile);
-            round.getActivePlayer().dropTile(tile);
+            if (!round.getActivePlayer().dropTile(tile)) {
+                throw new IllegalStateException("Cannot drop tile " + tile + "from player " + round.getActivePlayer());
+            }
             round.nextTurn();
             mainGUI.setCurrentPlayer(round.getActivePlayer());
             entry();
         }
+    }
+
+    private void placeTile(Tile tile, int x, int y) {
+        if (grid.place(x, y, tile)) {
+            round.getActivePlayer().dropTile(tile);
+            mainGUI.setTile(tile, x, y);
+            GridSpot spot = grid.getSpot(x, y);
+            highlightSurroundings(spot);
+            changeState(StateManning.class);
+        }
+    }
+
+    private void placeTileWithAI(Player player) {
+        Optional<CarcassonneMove> bestMove = playerAI.calculateBestMoveFor(player.getHandOfTiles(), player, grid);
+        if (bestMove.isEmpty() || bestMove.get().getValue() < 0) {
+            skip();
+        }
+        bestMove.ifPresent(it -> {
+            Tile tile = it.getTile();
+            tile.rotateTo(it.getRotation());
+            placeTile(tile, it.getX(), it.getY());
+        });
+    }
+
+    private Tile getTileToDrop() {
+        if (round.getActivePlayer().isComputerControlled()) {
+            return playerAI.chooseTileToDrop(round.getActivePlayer().getHandOfTiles());
+        }
+        return previewGUI.getSelectedTile();
     }
 
     /**
@@ -101,8 +131,15 @@ public class StatePlacing extends AbstractGameState {
         if (!player.hasFullHand() && !tileStack.isEmpty()) {
             player.addTile(tileStack.drawTile());
         }
-        previewGUI.setTiles(player);
+        // player.getHandOfTiles().stream().map(it -> grid.getPossibleMoves(it, player,
+        // controller.getSettings())).flatMap(Collection::stream)
+        // .forEach(it -> System.out.println(it)); // TODO (HIGH) remove debug output!
         updateStackSize();
+        if (player.isComputerControlled()) {
+            placeTileWithAI(player);
+        } else {
+            previewGUI.setTiles(player);
+        }
     }
 
     /**

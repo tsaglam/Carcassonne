@@ -3,9 +3,11 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.Round;
+import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
+import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.main.MainGUI;
@@ -17,7 +19,7 @@ import carcassonne.view.secondary.PreviewGUI;
  * Is the abstract state of the state machine.
  * @author Timur Saglam
  */
-public abstract class AbstractGameState {
+public abstract class AbstractGameState { // TODO (HIGH) separate human move states from AI moves.
 
     protected MainController controller;
     protected MainGUI mainGUI;
@@ -27,6 +29,8 @@ public abstract class AbstractGameState {
     protected TileStack tileStack;
     protected Grid grid;
     protected Scoreboard scoreboard;
+    protected ArtificialIntelligence playerAI;
+    protected static final String NO_MOVE = "No AI move is available!";
 
     /**
      * Constructor of the abstract state, sets the controller from the parameter, registers the state at the controller and
@@ -36,12 +40,14 @@ public abstract class AbstractGameState {
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public AbstractGameState(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
+    public AbstractGameState(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI,
+            ArtificialIntelligence playerAI) {
         this.controller = controller;
-        this.mainGUI = mainGUI;
+        this.mainGUI = mainGUI; // TODO (MEDIUM) implement UI container class
         this.previewGUI = previewGUI;
         this.placementGUI = placementGUI;
-        scoreboard = mainGUI.getScoreboard();
+        this.playerAI = playerAI;
+        this.scoreboard = mainGUI.getScoreboard();
     }
 
     /**
@@ -150,6 +156,17 @@ public abstract class AbstractGameState {
             player = round.getPlayer(playerNumber);
             scoreboard.update(player);
         }
+    }
+
+    /**
+     * Returns the selected tile of the player. It does not matter if the player is a computer player or not.
+     * @return the selected tile, either by a human player or the AI.
+     */
+    protected Tile getSelectedTile() {
+        if (round.getActivePlayer().isComputerControlled()) {
+            return playerAI.getCurrentMove().orElseThrow(() -> new IllegalStateException(NO_MOVE)).getTile();
+        }
+        return previewGUI.getSelectedTile();
     }
 
     /**

@@ -218,7 +218,7 @@ public class GridSpot {
     /**
      * Removes any placed tile from the grid spot, updates the position of the tile.
      */
-    public void removeTile() { // TODO (HIGH) this is only allowed for temporary tiles.
+    public void removeTile() { // TODO (HIGH) this should be only allowed for temporary tiles.
         if (tile != null) {
             tile.setPosition(null);
             tile = null;
