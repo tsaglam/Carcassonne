@@ -241,6 +241,7 @@ public class MainGUI extends JFrame implements NotifiableUI {
         int y = tile.getGridSpot().getY();
         checkCoordinates(x, y);
         meepleLayer.placeMeeple(x, y, tile.getTerrain(position), position, owner);
+        scrollPane.repaintLayers(); // This is required! TODO (MEDIUM) Is there a better way for AI moves than this?
     }
 
     /**
