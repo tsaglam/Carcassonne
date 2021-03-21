@@ -9,6 +9,8 @@ import carcassonne.control.state.StateIdle;
 import carcassonne.control.state.StateManning;
 import carcassonne.control.state.StatePlacing;
 import carcassonne.model.Round;
+import carcassonne.model.ai.ArtificialIntelligence;
+import carcassonne.model.ai.RuleBasedAI;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TileStack;
@@ -51,11 +53,12 @@ public class MainController {
         settings.registerNotifiable(placementGUI);
         settings.registerNotifiable(previewGUI);
         stateMap = new HashMap<>();
-        currentState = new StateIdle(this, mainGUI, previewGUI, placementGUI);
+        ArtificialIntelligence playerAI = new RuleBasedAI(settings);
+        currentState = new StateIdle(this, mainGUI, previewGUI, placementGUI, playerAI);
         registerState(currentState);
-        registerState(new StateManning(this, mainGUI, previewGUI, placementGUI));
-        registerState(new StatePlacing(this, mainGUI, previewGUI, placementGUI));
-        registerState(new StateGameOver(this, mainGUI, previewGUI, placementGUI));
+        registerState(new StateManning(this, mainGUI, previewGUI, placementGUI, playerAI));
+        registerState(new StatePlacing(this, mainGUI, previewGUI, placementGUI, playerAI));
+        registerState(new StateGameOver(this, mainGUI, previewGUI, placementGUI, playerAI));
     }
 
     /**

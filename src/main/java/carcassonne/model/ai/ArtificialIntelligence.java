@@ -23,4 +23,11 @@ public interface ArtificialIntelligence {
      */
     public Optional<CarcassonneMove> calculateBestMoveFor(Collection<Tile> tiles, Player player, Grid grid);
 
+    /**
+     * Determines which tile to drop when the AI is skipping a turn.
+     * @param tiles is a list of tiles to drop.
+     * @return the best tile to drop.
+     */
+    public Tile chooseTileToDrop(Collection<Tile> tiles);
+
 }

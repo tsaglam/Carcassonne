@@ -1,6 +1,7 @@
 package carcassonne.control.state;
 
 import carcassonne.control.MainController;
+import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
@@ -20,8 +21,8 @@ public class StateIdle extends AbstractGameState {
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StateIdle(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI) {
-        super(controller, mainGUI, previewGUI, placementGUI);
+    public StateIdle(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI, ArtificialIntelligence playerAI) {
+        super(controller, mainGUI, previewGUI, placementGUI, playerAI);
     }
 
     /**

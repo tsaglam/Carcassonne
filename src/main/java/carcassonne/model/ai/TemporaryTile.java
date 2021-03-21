@@ -5,7 +5,6 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileRotation;
-import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 
 /**
@@ -14,15 +13,24 @@ import carcassonne.settings.GameSettings;
  */
 public class TemporaryTile extends Tile {
 
-    public TemporaryTile(TileType type) {
-        super(type);
+    final Tile original;
+
+    public TemporaryTile(Tile original) {
+        super(original.getType());
+        this.original = original;
     }
 
-    public TemporaryTile(TileType type, TileRotation rotation) {
-        this(type);
-        while (getRotation() != rotation) {
-            rotateRight();
-        }
+    public TemporaryTile(Tile original, TileRotation rotation) {
+        this(original);
+        rotateTo(rotation);
+    }
+
+    /**
+     * Returns the original tile from which this tile is copied from.
+     * @return the original tile.
+     */
+    public Tile getOriginal() {
+        return original;
     }
 
     @Override

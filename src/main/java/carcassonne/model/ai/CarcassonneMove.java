@@ -3,6 +3,7 @@ package carcassonne.model.ai;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileRotation;
 
 /**
  * Represents a single move of a player, consisting of a placement of a tile and optinally a placement of a meeple on
@@ -10,6 +11,10 @@ import carcassonne.model.tile.Tile;
  * @author Timur Saglam
  */
 public interface CarcassonneMove extends Comparable<CarcassonneMove> {
+
+    /*
+     * TODO (HIGH) always gets the same tile TODO (HIGH) endless meeples
+     */
 
     /**
      * Getter for the tile placed in this move.
@@ -40,6 +45,12 @@ public interface CarcassonneMove extends Comparable<CarcassonneMove> {
      * @return true if it does.
      */
     public boolean involvesMeeplePlacement();
+
+    public TileRotation getRotation(); // TODO (HIGH) add comment
+
+    public int getX(); // TODO (HIGH) add comment
+
+    public int getY(); // TODO (HIGH) add comment
 
     @Override
     public default int compareTo(CarcassonneMove other) {

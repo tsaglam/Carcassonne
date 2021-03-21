@@ -24,6 +24,7 @@ public class Player {
     private Map<TerrainType, Integer> terrainSpecificScores;
     private final GameSettings settings;
     private final List<Tile> handOfTiles;
+    private boolean computerControlled;
 
     /**
      * Simple constructor.
@@ -184,5 +185,21 @@ public class Player {
         for (int i = 0; i < TerrainType.values().length - 1; i++) {
             terrainSpecificScores.put(TerrainType.values()[i], 0); // initial scores are zero
         }
+    }
+
+    /**
+     * Checks whether the player is a human player or an AI player.
+     * @return true if it is an AI player.
+     */
+    public boolean isComputerControlled() {
+        return computerControlled;
+    }
+
+    /**
+     * Specifies whether the player is a human player or an AI player.
+     * @param computerControlled set true for AI players.
+     */
+    public void setComputerControlled(boolean computerControlled) {
+        this.computerControlled = computerControlled;
     }
 }
