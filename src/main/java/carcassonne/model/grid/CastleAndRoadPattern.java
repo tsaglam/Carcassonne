@@ -60,7 +60,7 @@ public class CastleAndRoadPattern extends GridPattern { // TODO (MEDIUM) use sub
 
     private boolean checkNeighbor(GridSpot startingTile, GridSpot neighbor, GridDirection direction) {
         GridDirection oppositeDirection = direction.opposite();
-        if (!neighbor.hasTagConnectedTo(oppositeDirection, this)) { // if neighbor not visited yet
+        if (!neighbor.isIndirectlyTaggedBy(oppositeDirection, this)) { // if neighbor not visited yet
             startingTile.setTag(direction, this);
             neighbor.setTag(oppositeDirection, this); // mark as visited
             add(neighbor); // add to pattern
