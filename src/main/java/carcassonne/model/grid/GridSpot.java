@@ -164,7 +164,7 @@ public class GridSpot {
      * @return true if it was tagged.
      */
     public Boolean isTagged(GridDirection direction) {
-        return tagMap.get(direction).isEmpty();
+        return !tagMap.get(direction).isEmpty();
     }
 
     public boolean isPlaceable(Tile tile) {
