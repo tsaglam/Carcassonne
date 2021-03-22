@@ -11,8 +11,8 @@ import java.util.List;
 
 import carcassonne.model.Player;
 import carcassonne.model.ai.CarcassonneMove;
-import carcassonne.model.ai.ZeroSumMove;
 import carcassonne.model.ai.TemporaryTile;
+import carcassonne.model.ai.ZeroSumMove;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileRotation;
 import carcassonne.model.tile.TileType;

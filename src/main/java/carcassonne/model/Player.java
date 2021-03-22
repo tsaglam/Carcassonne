@@ -37,7 +37,7 @@ public class Player {
         freeMeeples = MAX_MEEPLES;
         maximalTiles = settings.getTilesPerPlayer();
         handOfTiles = new ArrayList<>();
-        initializeScores();
+        initializeScores();  
     }
 
     /**

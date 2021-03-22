@@ -53,14 +53,14 @@ public class GridSpot {
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.tilePositions()) {
             TerrainType terrain = tile.getTerrain(direction); // get terrain type.
-            if ((terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) && hasNoTagConnectedTo(direction)) {
+            if ((terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) && !isIndirectlyTagged(direction)) {
                 results.add(new CastleAndRoadPattern(this, direction, terrain));
             }
         }
         // then, check fields:
         for (GridDirection direction : GridDirection.values()) {
             TerrainType terrain = tile.getTerrain(direction); // get terrain type.
-            if (terrain == TerrainType.FIELDS && hasNoTagConnectedTo(direction)) {
+            if (terrain == TerrainType.FIELDS && !isIndirectlyTagged(direction)) {
                 results.add(new FieldsPattern(this, direction));
             }
         }
@@ -112,30 +112,30 @@ public class GridSpot {
     }
 
     /**
-     * Method determines if tile recently was tagged by any grid pattern checks on a specific position or a position
-     * connected to the specific position.
+     * Determines if this grid spot was recently tagged by any grid pattern on a specified position or a position connected
+     * to the specified position.
      * @param tilePosition is the specific position.
-     * @return true if not tagged.
+     * @return true if not directly or indirectly tagged.
      */
-    public Boolean hasNoTagConnectedTo(GridDirection tilePosition) {
+    public Boolean isIndirectlyTagged(GridDirection tilePosition) {
         for (GridDirection otherPosition : GridDirection.values()) {
             if (isTagged(otherPosition) && tile.hasConnection(tilePosition, otherPosition)) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
-     * Method determines if tile recently was tagged by a specific grid pattern on a specific position or a position
-     * connected to the specific position.
+     * Determines if this grid spot was recently tagged by a specific grid pattern on a specified position or a position
+     * connected to the specified position.
      * @param tilePosition is the specific position.
-     * @param taggedBy is the {@link GridPattern} that tagged this spot.
-     * @return true if tagged.
+     * @param tagger is the specific grid pattern.
+     * @return true if not directly or indirectly tagged by the grid pattern.
      */
-    public Boolean hasTagConnectedTo(GridDirection tilePosition, GridPattern taggedBy) {
+    public Boolean isIndirectlyTaggedBy(GridDirection tilePosition, GridPattern tagger) {
         for (GridDirection otherPosition : GridDirection.values()) {
-            if (tile.hasConnection(tilePosition, otherPosition) && tagMap.get(otherPosition).contains(taggedBy)) {
+            if (tile.hasConnection(tilePosition, otherPosition) && tagMap.get(otherPosition).contains(tagger)) {
                 return true;
             }
         }
@@ -230,7 +230,7 @@ public class GridSpot {
     /**
      * tag the tile as recently checked by grid pattern checks for a specific direction.
      * @param direction is the tag direction.
-     * @param taggedBy is the {@link GridPattern} that tagged the spot.
+     * @param tagger is the {@link GridPattern} that tagged the spot.
      */
     public void setTag(GridDirection direction, GridPattern tagger) {
         tagMap.get(direction).add(tagger);
@@ -242,7 +242,7 @@ public class GridSpot {
     }
 
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
-        if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY && spot.hasNoTagConnectedTo(CENTER)) {
+        if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY && !spot.isIndirectlyTagged(CENTER)) {
             patternList.add(new MonasteryPattern(spot));
         }
     }
