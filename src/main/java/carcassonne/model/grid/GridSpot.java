@@ -4,9 +4,11 @@ import static carcassonne.model.grid.GridDirection.CENTER;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
@@ -18,7 +20,7 @@ import carcassonne.model.tile.Tile;
 public class GridSpot {
 
     private final Grid grid;
-    private final Map<GridDirection, List<GridPattern>> tagMap; // maps tagged location to the patterns.
+    private final Map<GridDirection, Set<GridPattern>> tagMap; // maps tagged location to the patterns.
     private Tile tile;
     private final int x;
     private final int y;
@@ -35,7 +37,7 @@ public class GridSpot {
         this.y = y;
         tagMap = new HashMap<>();
         for (GridDirection direction : GridDirection.values()) {
-            tagMap.put(direction, new LinkedList<>());
+            tagMap.put(direction, new HashSet<>());
         }
     }
 
@@ -117,7 +119,7 @@ public class GridSpot {
      */
     public Boolean hasNoTagConnectedTo(GridDirection tilePosition) {
         for (GridDirection otherPosition : GridDirection.values()) {
-            if (tile.hasConnection(tilePosition, otherPosition) && containsKey(otherPosition)) {
+            if (isTagged(otherPosition) && tile.hasConnection(tilePosition, otherPosition)) {
                 return false;
             }
         }
@@ -159,10 +161,10 @@ public class GridSpot {
     /**
      * Method determines if tile recently was tagged by grid pattern checks on a specific position or not.
      * @param tilePosition is the specific position.
-     * @return true if it was not tagged.
+     * @return true if it was tagged.
      */
-    public Boolean isUntagged(GridDirection tilePosition) {
-        return !containsKey(tilePosition);
+    public Boolean isTagged(GridDirection direction) {
+        return tagMap.get(direction).isEmpty();
     }
 
     public boolean isPlaceable(Tile tile) {
@@ -230,8 +232,8 @@ public class GridSpot {
      * @param direction is the tag direction.
      * @param taggedBy is the {@link GridPattern} that tagged the spot.
      */
-    public void setTag(GridDirection direction, GridPattern taggedBy) {
-        tagMap.get(direction).add(taggedBy);
+    public void setTag(GridDirection direction, GridPattern tagger) {
+        tagMap.get(direction).add(tagger);
     }
 
     @Override
@@ -243,9 +245,5 @@ public class GridSpot {
         if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY && spot.hasNoTagConnectedTo(CENTER)) {
             patternList.add(new MonasteryPattern(spot));
         }
-    }
-
-    private boolean containsKey(GridDirection direction) {
-        return !tagMap.get(direction).isEmpty();
     }
 }
