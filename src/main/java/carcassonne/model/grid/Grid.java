@@ -11,7 +11,7 @@ import java.util.List;
 
 import carcassonne.model.Player;
 import carcassonne.model.ai.CarcassonneMove;
-import carcassonne.model.ai.RuleBasedMove;
+import carcassonne.model.ai.ZeroSumMove;
 import carcassonne.model.ai.TemporaryTile;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileRotation;
@@ -257,7 +257,7 @@ public class Grid {
      */
     public Collection<? extends CarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
         checkParameters(tile);
-        List<RuleBasedMove> possibleMoves = new ArrayList<>();
+        List<ZeroSumMove> possibleMoves = new ArrayList<>();
         for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
             for (int y = 0; y < height; y++) {
                 for (TemporaryTile copiedTile : possibleRotations(tile)) {
@@ -270,15 +270,15 @@ public class Grid {
         return possibleMoves;
     }
 
-    private List<RuleBasedMove> movesForGridSpot(Player player, GridSpot spot, TemporaryTile tile, GameSettings settings) {
-        List<RuleBasedMove> possibleMoves = new ArrayList<>();
+    private List<ZeroSumMove> movesForGridSpot(Player player, GridSpot spot, TemporaryTile tile, GameSettings settings) {
+        List<ZeroSumMove> possibleMoves = new ArrayList<>();
         if (spot.place(tile)) {
-            possibleMoves.add(new RuleBasedMove(tile, player, settings));
+            possibleMoves.add(new ZeroSumMove(tile, player, settings));
             if (player.hasFreeMeeples()) {
                 for (GridDirection position : GridDirection.values()) {
                     if (tile.hasMeepleSpot(position) && settings.getMeepleRule(tile.getTerrain(position))
                             && tile.allowsPlacingMeeple(position, player, settings)) {
-                        possibleMoves.add(new RuleBasedMove(tile, position, player, settings));
+                        possibleMoves.add(new ZeroSumMove(tile, position, player, settings));
                     }
                 }
             }

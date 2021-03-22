@@ -13,7 +13,7 @@ import carcassonne.settings.GameSettings;
  * addition to some very simple rules.
  * @author Timur Saglam
  */
-public class RuleBasedMove implements CarcassonneMove { // TODO (HIGH) rename to ZeroSumMove
+public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate move from zero sum move
     private final GridSpot gridSpot;
     private final Player player;
     private final GridDirection position;
@@ -29,7 +29,7 @@ public class RuleBasedMove implements CarcassonneMove { // TODO (HIGH) rename to
      * @param gridSpot is the spot the temporaryTile is placed on.
      * @param settings are the game settings.
      */
-    public RuleBasedMove(TemporaryTile temporaryTile, GridDirection position, Player player, GameSettings settings) {
+    public ZeroSumMove(TemporaryTile temporaryTile, GridDirection position, Player player, GameSettings settings) {
         this.temporaryTile = temporaryTile;
         this.position = position;
         this.player = player;
@@ -46,7 +46,7 @@ public class RuleBasedMove implements CarcassonneMove { // TODO (HIGH) rename to
      * @param gridSpot is the spot the temporaryTile is placed on.
      * @param settings are the game settings.
      */
-    public RuleBasedMove(TemporaryTile tile, Player player, GameSettings settings) {
+    public ZeroSumMove(TemporaryTile tile, Player player, GameSettings settings) {
         this(tile, null, player, settings);
     }
 
@@ -93,7 +93,7 @@ public class RuleBasedMove implements CarcassonneMove { // TODO (HIGH) rename to
         return score;
     }
 
-    private double calculateValue() { // TODO (VERY HIGH) still not 100% correct!
+    private double calculateValue() {
         gridSpot.removeTile();
         int scoreBeforeMove = calculateScoreSnapshot();
         gridSpot.place(temporaryTile);
