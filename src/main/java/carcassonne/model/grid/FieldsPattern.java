@@ -45,7 +45,7 @@ public class FieldsPattern extends GridPattern {
         return adjacentCastles.size() * scoreMultiplier;
     }
 
-    // adds a grid direction to a list if it has not castle terain at that diection on the tile.
+    // adds a grid direction to a list if it has not castle terrain at that direction on the tile.
     private void addIfNotCastle(List<GridDirection> results, Tile tile, GridDirection next) {
         if (tile.getTerrain(next) != CASTLE) {
             results.add(next);
