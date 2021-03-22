@@ -32,6 +32,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
         for (Tile tile : tiles) {
             possibleMoves.addAll(grid.getPossibleMoves(tile, player, settings));
         }
+        possibleMoves.forEach(System.err::println); // TODO (HIGH remove debug output)
         List<CarcassonneMove> consideredMoves = possibleMoves.stream().filter(it -> it.getValue() >= 0).collect(toList());
         if (consideredMoves.size() == 0) {
             currentMove = Optional.empty();
@@ -40,6 +41,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
             // TODO (HIGH) Count retrieved meeples in move
             // TODO (HIGH) Maybe include using and retrieving meeples in score
             // TODO (HIGH) Think about where to consider something like: don't place field when meeples <= 1
+            // TODO (HIGH) If there are multiple best options pick randomly (after monastery > castle > field > road)
             currentMove = consideredMoves.stream().filter(it -> it.getValue() == maximumValue).findAny();
         }
         System.out.println("Best: " + currentMove); // TODO (HIGH remove debug output)
