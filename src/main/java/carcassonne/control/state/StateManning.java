@@ -94,7 +94,9 @@ public class StateManning extends AbstractGameState {
      */
     @Override
     public void skip() {
-        mainGUI.resetMeeplePreview(previewGUI.getSelectedTile());
+        if (!round.getActivePlayer().isComputerControlled()) {
+            mainGUI.resetMeeplePreview(previewGUI.getSelectedTile());
+        }
         processGridPatterns();
         startNextTurn();
     }
