@@ -122,7 +122,7 @@ public class Grid {
         if (spot.isOccupied()) {
             gridPatterns.addAll(spot.createPatternList());
         }
-        for (GridSpot neighbor : getNeighbors(foundation, false, GridDirection.directNeighbors())) {
+        for (GridSpot neighbor : getNeighbors(spot, false, GridDirection.directNeighbors())) {
             gridPatterns.addAll(neighbor.createPatternList());
         }
         gridPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
