@@ -1,5 +1,9 @@
 package carcassonne.model.ai;
 
+import java.util.Collection;
+import java.util.stream.Stream;
+
+import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
@@ -20,6 +24,7 @@ public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate mo
     private final GameSettings settings;
     private final TemporaryTile temporaryTile;
     private final double value;
+    private int meeplesGained;
 
     /**
      * Creates the move. Does not check if the move is legal.
@@ -61,6 +66,11 @@ public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate mo
     }
 
     @Override
+    public TileRotation getRotation() { // TODO (VERY HIGH) own class, separate zero sum from base calculations
+        return temporaryTile.getRotation();
+    }
+
+    @Override
     public Tile getTile() {
         return temporaryTile.getOriginal();
     }
@@ -68,41 +78,6 @@ public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate mo
     @Override
     public double getValue() {
         return value;
-    }
-
-    @Override
-    public String toString() {
-        String meeple = involvesMeeplePlacement() ? temporaryTile.getTerrain(position) + " on " + position : "without meeple";
-        return "Move for " + player.getName() + " with value " + value + ": " + temporaryTile.getType() + " " + meeple + " " + gridSpot;
-    }
-
-    @Override
-    public boolean involvesMeeplePlacement() {
-        return position != null;
-    }
-
-    private int calculateScoreSnapshot() {
-        return gridSpot.getGrid().getLocalPatterns(gridSpot).stream().mapToInt(this::zeroSumScore).sum();
-    }
-
-    private int zeroSumScore(GridPattern pattern) {
-        int score = 2 * pattern.getScoreFor(player);
-        for (Player dominantPlayer : pattern.getDominantPlayers()) {
-            score -= pattern.getScoreFor(dominantPlayer);
-        }
-        return score;
-    }
-
-    private double calculateValue() {
-        gridSpot.removeTile();
-        int scoreBeforeMove = calculateScoreSnapshot();
-        gridSpot.place(temporaryTile);
-        if (involvesMeeplePlacement()) {
-            temporaryTile.placeMeeple(player, position, new TemporaryMeeple(player), settings);
-        }
-        int scoreAfterMove = calculateScoreSnapshot();
-        temporaryTile.removeMeeple();
-        return scoreAfterMove - scoreBeforeMove;
     }
 
     @Override
@@ -116,7 +91,53 @@ public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate mo
     }
 
     @Override
-    public TileRotation getRotation() {
-        return temporaryTile.getRotation();
+    public boolean involvesMeeplePlacement() {
+        return position != null;
+    }
+
+    @Override
+    public String toString() {
+        String meeple = involvesMeeplePlacement() ? temporaryTile.getTerrain(position) + " on " + position : "without meeple";
+        return "Move for " + player.getName() + " with value " + value + ": " + temporaryTile.getType() + " " + meeple + " " + gridSpot;
+    }
+
+    private int calculateEmployedMeeples(Collection<GridPattern> localPatterns) {
+        Stream<Meeple> localMeeples = localPatterns.stream().flatMap(it -> it.getMeepleList().stream());
+        return Math.toIntExact(localMeeples.filter(it -> it.getOwner() == player).count());
+    }
+
+    private double calculateScoreSnapshot(Collection<GridPattern> localPatterns) {
+        return localPatterns.stream().mapToInt(this::zeroSumScore).sum();
+    }
+
+    private double calculateValue() {
+        gridSpot.removeTile();
+        Collection<GridPattern> localPatterns = gridSpot.getGrid().getLocalPatterns(gridSpot);
+        double scoreBefore = calculateScoreSnapshot(localPatterns);
+        meeplesGained = calculateEmployedMeeples(localPatterns);
+        gridSpot.place(temporaryTile);
+        if (involvesMeeplePlacement()) {
+            temporaryTile.placeMeeple(player, position, new TemporaryMeeple(player), settings);
+        }
+        localPatterns = gridSpot.getGrid().getLocalPatterns(gridSpot);
+        double scoreAfter = calculateScoreSnapshot(localPatterns);
+        int meeplesAfter = calculateEmployedMeeples(localPatterns);
+        temporaryTile.removeMeeple();
+        meeplesGained -= meeplesAfter;
+        double zeroSumScore = scoreAfter - scoreBefore;
+        return zeroSumScore + 0.5 * meeplesGained; // TODO (HIGH) Implement variable meeple value
+    }
+
+    private int zeroSumScore(GridPattern pattern) {
+        int score = 2 * pattern.getScoreFor(player);
+        for (Player dominantPlayer : pattern.getDominantPlayers()) {
+            score -= pattern.getScoreFor(dominantPlayer);
+        }
+        return score;
+    }
+
+    @Override
+    public int getMeeplesGained() {
+        return meeplesGained;
     }
 }
