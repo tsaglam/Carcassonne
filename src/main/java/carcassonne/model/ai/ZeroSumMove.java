@@ -8,6 +8,7 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.grid.GridSpot;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileRotation;
 import carcassonne.settings.GameSettings;
@@ -19,12 +20,12 @@ import carcassonne.settings.GameSettings;
  */
 public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate move from zero sum move
     private final GridSpot gridSpot;
+    private int meeplesGained;
     private final Player player;
     private final GridDirection position;
     private final GameSettings settings;
     private final TemporaryTile temporaryTile;
     private final double value;
-    private int meeplesGained;
 
     /**
      * Creates the move. Does not check if the move is legal.
@@ -56,6 +57,11 @@ public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate mo
     }
 
     @Override
+    public int getMeeplesGained() {
+        return meeplesGained;
+    }
+
+    @Override
     public Player getPlayer() {
         return player;
     }
@@ -68,6 +74,14 @@ public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate mo
     @Override
     public TileRotation getRotation() { // TODO (VERY HIGH) own class, separate zero sum from base calculations
         return temporaryTile.getRotation();
+    }
+
+    @Override
+    public TerrainType getTerrainType() {
+        if (position == null) {
+            return null;
+        }
+        return temporaryTile.getTerrain(position);
     }
 
     @Override
@@ -93,6 +107,11 @@ public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate mo
     @Override
     public boolean involvesMeeplePlacement() {
         return position != null;
+    }
+
+    @Override
+    public boolean isFieldMove() {
+        return involvesMeeplePlacement() && temporaryTile.getTerrain(position) == TerrainType.FIELDS;
     }
 
     @Override
@@ -134,10 +153,5 @@ public class ZeroSumMove implements CarcassonneMove { // TODO (HIGH) separate mo
             score -= pattern.getScoreFor(dominantPlayer);
         }
         return score;
-    }
-
-    @Override
-    public int getMeeplesGained() {
-        return meeplesGained;
     }
 }
