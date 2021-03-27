@@ -13,27 +13,10 @@ import carcassonne.model.tile.TileRotation;
  */
 public interface CarcassonneMove extends Comparable<CarcassonneMove> {
 
-    /*
-     * TODO (HIGH) always gets the same tile TODO (HIGH) endless meeples
-     */
-
-    /**
-     * Getter for the tile placed in this move.
-     * @return the tile with the correct rotation.
-     */
-    public Tile getTile();
-
-    /**
-     * Getter for the position of the meeple placement.
-     * @return the position or null if no meeple is placed.
-     */
-    public GridDirection getPosition();
-
-    /**
-     * Getter for the potential value of the move.
-     * @return the potential value.
-     */
-    public double getValue();
+    @Override
+    public default int compareTo(CarcassonneMove other) {
+        return Double.valueOf(getValue()).compareTo(other.getValue());
+    }
 
     /**
      * Getter for the difference in placed meeples.
@@ -48,28 +31,45 @@ public interface CarcassonneMove extends Comparable<CarcassonneMove> {
     public Player getPlayer();
 
     /**
-     * Determines if a meeple is placed as part of this move.
-     * @return true if it does.
+     * Getter for the position of the meeple placement.
+     * @return the position or null if no meeple is placed.
      */
-    public boolean involvesMeeplePlacement();
+    public GridDirection getPosition();
 
     public TileRotation getRotation(); // TODO (HIGH) add comment
+
+    /**
+     * Getter for the terrain type where the meeple is placed.
+     * @return the terrain type.
+     */
+    public TerrainType getTerrainType();
+
+    /**
+     * Getter for the tile placed in this move.
+     * @return the tile with the correct rotation.
+     */
+    public Tile getTile();
+
+    /**
+     * Getter for the potential value of the move.
+     * @return the potential value.
+     */
+    public double getValue();
 
     public int getX(); // TODO (HIGH) add comment
 
     public int getY(); // TODO (HIGH) add comment
 
-    @Override
-    public default int compareTo(CarcassonneMove other) {
-        return Double.valueOf(getValue()).compareTo(other.getValue());
-    }
+    /**
+     * Determines if a meeple is placed as part of this move.
+     * @return true if it does.
+     */
+    public boolean involvesMeeplePlacement();
 
     /**
      * Checks whether this move involves placing a meeple on a field.
      * @return true if it is a fields move.
      */
-    public default boolean isFieldMove() {
-        return involvesMeeplePlacement() && getTile().getTerrain(getPosition()) == TerrainType.FIELDS;
-    }
+    public boolean isFieldMove();
 
 }

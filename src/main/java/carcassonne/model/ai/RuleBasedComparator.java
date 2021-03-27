@@ -23,7 +23,7 @@ public class RuleBasedComparator implements Comparator<CarcassonneMove> {
 
     private int rateMoveType(CarcassonneMove move) {
         if (move.involvesMeeplePlacement()) {
-            switch (move.getTile().getTerrain(move.getPosition())) {
+            switch (move.getTerrainType()) {
             case CASTLE:
                 return 3;
             case MONASTERY:
