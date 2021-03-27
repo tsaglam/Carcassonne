@@ -1,11 +1,8 @@
 package carcassonne.model.grid;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +11,6 @@ import carcassonne.model.ai.CarcassonneMove;
 import carcassonne.model.ai.TemporaryTile;
 import carcassonne.model.ai.ZeroSumMove;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileRotation;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 
@@ -260,7 +256,7 @@ public class Grid {
         List<ZeroSumMove> possibleMoves = new ArrayList<>();
         for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
             for (int y = 0; y < height; y++) {
-                for (TemporaryTile copiedTile : possibleRotations(tile)) {
+                for (TemporaryTile copiedTile : TemporaryTile.possibleRotationsOf(tile)) {
                     possibleMoves.addAll(movesForGridSpot(player, spots[x][y], copiedTile, settings));
                 }
             }
@@ -285,10 +281,6 @@ public class Grid {
             spot.removeTile();
         }
         return possibleMoves;
-    }
-
-    private List<TemporaryTile> possibleRotations(Tile tile) {
-        return EnumSet.allOf(TileRotation.class).stream().map(it -> new TemporaryTile(tile, it)).collect(toList());
     }
 
     private void checkParameters(GridSpot spot) {
