@@ -159,7 +159,8 @@ public class GridPattern {
     public String toString() {
         StringBuilder builder = new StringBuilder("GridPattern[type: ");
         builder.append(patternType).append(", size: ").append(getSize()).append(", complete: ").append(complete);
-        builder.append(", disbursed: ").append(disbursed).append(", meeples: ").append(meepleList);
+        builder.append(", disbursed: ").append(disbursed).append(", meeples: ").append(meepleList).append(", on: ");
+        builder.append(containedSpots.stream().map(it -> "(" + it.getX() + "|" + it.getY() + ")").collect(toList()));
         return builder.toString();
     }
 
