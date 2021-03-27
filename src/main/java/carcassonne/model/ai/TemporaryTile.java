@@ -1,5 +1,8 @@
 package carcassonne.model.ai;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
@@ -39,13 +42,21 @@ public class TemporaryTile extends Tile {
     }
 
     @Override
+    public void removeMeeple() {
+        meeple = null;
+    }
+
+    @Override
     public void setPosition(GridSpot spot) {
         gridSpot = spot; // no null check, allows removing spot
     }
 
-    @Override
-    public void removeMeeple() {
-        meeple = null;
+    public static List<TemporaryTile> possibleRotationsOf(Tile tile) {
+        List<TemporaryTile> rotatedTiles = new ArrayList<>();
+        for (TileRotation rotation : tile.getPossibleRotations()) {
+            rotatedTiles.add(new TemporaryTile(tile, rotation));
+        }
+        return rotatedTiles;
     }
 
 }
