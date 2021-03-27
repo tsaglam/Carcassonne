@@ -104,7 +104,7 @@ public class StatePlacing extends AbstractGameState {
     }
 
     private void placeTileWithAI(Player player) {
-        Optional<CarcassonneMove> bestMove = playerAI.calculateBestMoveFor(player.getHandOfTiles(), player, grid);
+        Optional<CarcassonneMove> bestMove = playerAI.calculateBestMoveFor(player.getHandOfTiles(), player, grid, tileStack);
         if (bestMove.isEmpty() || bestMove.get().getValue() < 0) {
             skip();
         }
@@ -131,9 +131,6 @@ public class StatePlacing extends AbstractGameState {
         if (!player.hasFullHand() && !tileStack.isEmpty()) {
             player.addTile(tileStack.drawTile());
         }
-        // player.getHandOfTiles().stream().map(it -> grid.getPossibleMoves(it, player,
-        // controller.getSettings())).flatMap(Collection::stream)
-        // .forEach(it -> System.out.println(it)); // TODO (HIGH) remove debug output!
         updateStackSize();
         if (player.isComputerControlled()) {
             placeTileWithAI(player);

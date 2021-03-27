@@ -6,6 +6,7 @@ import java.util.Optional;
 import carcassonne.model.Player;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileStack;
 
 public interface ArtificialIntelligence {
     /**
@@ -21,7 +22,7 @@ public interface ArtificialIntelligence {
      * @param player is the player who places the tile.
      * @param grid is the grid on which the tile should be placed.
      */
-    public Optional<CarcassonneMove> calculateBestMoveFor(Collection<Tile> tiles, Player player, Grid grid);
+    public Optional<CarcassonneMove> calculateBestMoveFor(Collection<Tile> tiles, Player player, Grid grid, TileStack stack);
 
     /**
      * Determines which tile to drop when the AI is skipping a turn.
