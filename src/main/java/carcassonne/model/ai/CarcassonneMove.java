@@ -2,6 +2,7 @@ package carcassonne.model.ai;
 
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileRotation;
 
@@ -35,6 +36,12 @@ public interface CarcassonneMove extends Comparable<CarcassonneMove> {
     public double getValue();
 
     /**
+     * Getter for the difference in placed meeples.
+     * @return how many more meeples where retrieved than placed.
+     */
+    public int getMeeplesGained();
+
+    /**
      * Getter for the player making the move.
      * @return the player.
      */
@@ -55,6 +62,14 @@ public interface CarcassonneMove extends Comparable<CarcassonneMove> {
     @Override
     public default int compareTo(CarcassonneMove other) {
         return Double.valueOf(getValue()).compareTo(other.getValue());
+    }
+
+    /**
+     * Checks whether this move involves placing a meeple on a field.
+     * @return true if it is a fields move.
+     */
+    public default boolean isFieldMove() {
+        return involvesMeeplePlacement() && getTile().getTerrain(getPosition()) == TerrainType.FIELDS;
     }
 
 }
