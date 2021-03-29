@@ -6,13 +6,13 @@ import java.util.Comparator;
  * Comparator to compare moves with an equal value based on simple heuristic rules.
  * @author Timur Saglam
  */
-public class RuleBasedComparator implements Comparator<CarcassonneMove> {
+public class RuleBasedComparator implements Comparator<AbstractCarcassonneMove> {
 
     @Override
-    public int compare(CarcassonneMove firstMove, CarcassonneMove secondMove) {
-        if (firstMove.getMeeplesGained() != secondMove.getMeeplesGained()) {
+    public int compare(AbstractCarcassonneMove firstMove, AbstractCarcassonneMove secondMove) {
+        if (firstMove.getGainedMeeples() != secondMove.getGainedMeeples()) {
             // Rule 1: Prefer move with a maximal meeple gain
-            return firstMove.getMeeplesGained() - secondMove.getMeeplesGained();
+            return firstMove.getGainedMeeples() - secondMove.getGainedMeeples();
         } else if (firstMove.involvesMeeplePlacement() != secondMove.involvesMeeplePlacement()) {
             // Rule 2: prefer move without meeple placement
             return preferFalse(firstMove.involvesMeeplePlacement(), secondMove.involvesMeeplePlacement());
@@ -21,9 +21,9 @@ public class RuleBasedComparator implements Comparator<CarcassonneMove> {
         return rateMoveType(firstMove) - rateMoveType(secondMove);
     }
 
-    private int rateMoveType(CarcassonneMove move) {
+    private int rateMoveType(AbstractCarcassonneMove move) {
         if (move.involvesMeeplePlacement()) {
-            switch (move.getTerrainType()) {
+            switch (move.getMeepleType()) {
             case CASTLE:
                 return 3;
             case MONASTERY:

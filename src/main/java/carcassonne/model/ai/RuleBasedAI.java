@@ -18,30 +18,27 @@ import carcassonne.settings.GameSettings;
 
 public class RuleBasedAI implements ArtificialIntelligence {
     private static final int VALUE_THRESHOLD = 0;
-    private static final int FIELD_VALUE_THRESHOLD = 6;
     private static final String EMPTY_COLLECTION = "Cannot choose random element from empty collection!";
     private final GameSettings settings;
-    private Optional<CarcassonneMove> currentMove;
+    private Optional<AbstractCarcassonneMove> currentMove;
 
     public RuleBasedAI(GameSettings settings) {
         this.settings = settings;
     }
 
     @Override
-    public Optional<CarcassonneMove> calculateBestMoveFor(Collection<Tile> tiles, Player player, Grid grid, TileStack stack) {
+    public Optional<AbstractCarcassonneMove> calculateBestMoveFor(Collection<Tile> tiles, Player player, Grid grid, TileStack stack) {
         currentMove = Optional.empty();
-        Collection<CarcassonneMove> possibleMoves = new ArrayList<>();
+        Collection<AbstractCarcassonneMove> possibleMoves = new ArrayList<>();
         for (Tile tile : tiles) {
             possibleMoves.addAll(grid.getPossibleMoves(tile, player, settings));
         }
         // RULE 1: Only consider move with a positive value:
-        List<CarcassonneMove> consideredMoves = possibleMoves.stream().filter(it -> it.getValue() >= VALUE_THRESHOLD).collect(toList());
+        List<AbstractCarcassonneMove> consideredMoves = possibleMoves.stream().filter(it -> it.getPureValue() >= VALUE_THRESHOLD).collect(toList());
         // RULE 2: Do not place last meeple on fields
         if (player.getFreeMeeples() == 1 && stack.getSize() > settings.getAmountOfPlayers()) {
             consideredMoves = consideredMoves.stream().filter(it -> !it.isFieldMove()).collect(toList());
         }
-        // RULE 3: Do not place low value fields
-        consideredMoves = consideredMoves.stream().filter(it -> !isLowValueFieldMove(it)).collect(toList());
         if (!consideredMoves.isEmpty()) {
             currentMove = chooseBestMove(consideredMoves);
         }
@@ -55,31 +52,27 @@ public class RuleBasedAI implements ArtificialIntelligence {
     }
 
     @Override
-    public Optional<CarcassonneMove> getCurrentMove() {
+    public Optional<AbstractCarcassonneMove> getCurrentMove() {
         return currentMove;
     }
 
-    private Optional<CarcassonneMove> chooseBestMove(List<CarcassonneMove> consideredMoves) {
+    private Optional<AbstractCarcassonneMove> chooseBestMove(List<AbstractCarcassonneMove> consideredMoves) {
         double maximumValue = consideredMoves.stream().mapToDouble(it -> it.getValue()).max().getAsDouble();
-        Stream<CarcassonneMove> bestMoves = consideredMoves.stream().filter(it -> it.getValue() == maximumValue);
+        Stream<AbstractCarcassonneMove> bestMoves = consideredMoves.stream().filter(it -> it.getValue() == maximumValue);
         return chooseAmongBestMoves(bestMoves);
     }
 
-    private Optional<CarcassonneMove> chooseAmongBestMoves(Stream<CarcassonneMove> bestMoves) {
+    private Optional<AbstractCarcassonneMove> chooseAmongBestMoves(Stream<AbstractCarcassonneMove> bestMoves) {
         RuleBasedComparator comparator = new RuleBasedComparator();
-        List<CarcassonneMove> listOfMoves = bestMoves.collect(toList());
+        List<AbstractCarcassonneMove> listOfMoves = bestMoves.collect(toList());
         Collections.sort(listOfMoves, comparator.reversed());
-        CarcassonneMove first = listOfMoves.get(0);
+        AbstractCarcassonneMove first = listOfMoves.get(0);
         return Optional.of(chooseRandom(listOfMoves.stream().filter(it -> comparator.compare(it, first) == 0).collect(toList())));
     }
 
     private <T> T chooseRandom(Collection<T> elements) {
         Optional<T> randomElement = elements.stream().skip(new Random().nextInt(elements.size())).findFirst();
         return randomElement.orElseThrow(() -> new IllegalArgumentException(EMPTY_COLLECTION));
-    }
-
-    private boolean isLowValueFieldMove(CarcassonneMove move) {
-        return move.isFieldMove() && move.getValue() < FIELD_VALUE_THRESHOLD;
     }
 
 }

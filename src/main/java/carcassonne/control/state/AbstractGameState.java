@@ -164,7 +164,7 @@ public abstract class AbstractGameState { // TODO (HIGH) separate human move sta
      */
     protected Tile getSelectedTile() {
         if (round.getActivePlayer().isComputerControlled()) {
-            return playerAI.getCurrentMove().orElseThrow(() -> new IllegalStateException(NO_MOVE)).getTile();
+            return playerAI.getCurrentMove().orElseThrow(() -> new IllegalStateException(NO_MOVE)).getOriginalTile();
         }
         return previewGUI.getSelectedTile();
     }

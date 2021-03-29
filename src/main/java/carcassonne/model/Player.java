@@ -16,7 +16,6 @@ import carcassonne.settings.PlayerColor;
  * @author Timur Saglam
  */
 public class Player {
-    private static final int MAX_MEEPLES = 7;
     private final int maximalTiles;
     private int freeMeeples;
     private final int number;
@@ -34,7 +33,7 @@ public class Player {
     public Player(int number, GameSettings settings) {
         this.number = number;
         this.settings = settings;
-        freeMeeples = MAX_MEEPLES;
+        freeMeeples = GameSettings.MAXIMAL_MEEPLES;
         maximalTiles = settings.getTilesPerPlayer();
         handOfTiles = new ArrayList<>();
         initializeScores();  

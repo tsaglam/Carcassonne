@@ -13,7 +13,7 @@ public interface ArtificialIntelligence {
      * Returns the last calculated best move without recomputing it.
      * @return
      */
-    public Optional<CarcassonneMove> getCurrentMove();
+    public Optional<AbstractCarcassonneMove> getCurrentMove();
 
     /**
      * Calculates a new best move for a player who places a tile on a grid. This move can be retrieved without recomputing
@@ -22,7 +22,7 @@ public interface ArtificialIntelligence {
      * @param player is the player who places the tile.
      * @param grid is the grid on which the tile should be placed.
      */
-    public Optional<CarcassonneMove> calculateBestMoveFor(Collection<Tile> tiles, Player player, Grid grid, TileStack stack);
+    public Optional<AbstractCarcassonneMove> calculateBestMoveFor(Collection<Tile> tiles, Player player, Grid grid, TileStack stack);
 
     /**
      * Determines which tile to drop when the AI is skipping a turn.
