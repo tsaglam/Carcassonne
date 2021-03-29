@@ -5,7 +5,7 @@ import java.util.Optional;
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.ai.ArtificialIntelligence;
-import carcassonne.model.ai.CarcassonneMove;
+import carcassonne.model.ai.AbstractCarcassonneMove;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
@@ -82,7 +82,7 @@ public class StatePlacing extends AbstractGameState {
         if (round.isOver()) {
             changeState(StateGameOver.class);
         } else {
-            Tile tile = getTileToDrop(); // TODO (HIGH) AI players cannot drop tiles right now, which one to skip?
+            Tile tile = getTileToDrop();
             tileStack.putBack(tile);
             if (!round.getActivePlayer().dropTile(tile)) {
                 throw new IllegalStateException("Cannot drop tile " + tile + "from player " + round.getActivePlayer());
@@ -104,13 +104,13 @@ public class StatePlacing extends AbstractGameState {
     }
 
     private void placeTileWithAI(Player player) {
-        Optional<CarcassonneMove> bestMove = playerAI.calculateBestMoveFor(player.getHandOfTiles(), player, grid, tileStack);
+        Optional<AbstractCarcassonneMove> bestMove = playerAI.calculateBestMoveFor(player.getHandOfTiles(), player, grid, tileStack);
         if (bestMove.isEmpty() || bestMove.get().getValue() < 0) {
             skip();
         }
         bestMove.ifPresent(it -> {
-            Tile tile = it.getTile();
-            tile.rotateTo(it.getRotation());
+            Tile tile = it.getOriginalTile();
+            tile.rotateTo(it.getRequiredTileRotation());
             placeTile(tile, it.getX(), it.getY());
         });
     }

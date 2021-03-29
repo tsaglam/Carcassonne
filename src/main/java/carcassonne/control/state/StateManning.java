@@ -4,7 +4,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.ai.ArtificialIntelligence;
-import carcassonne.model.ai.CarcassonneMove;
+import carcassonne.model.ai.AbstractCarcassonneMove;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.tile.Tile;
@@ -127,9 +127,9 @@ public class StateManning extends AbstractGameState {
     }
 
     private void placeMeepleWithAI() {
-        CarcassonneMove move = playerAI.getCurrentMove().orElseThrow(() -> new IllegalStateException(NO_MOVE));
+        AbstractCarcassonneMove move = playerAI.getCurrentMove().orElseThrow(() -> new IllegalStateException(NO_MOVE));
         if (move.involvesMeeplePlacement()) {
-            placeMeeple(move.getPosition(), move.getTile());
+            placeMeeple(move.getMeeplePosition(), move.getOriginalTile());
         } else {
             skip();
         }

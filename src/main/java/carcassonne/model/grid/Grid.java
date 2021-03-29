@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import carcassonne.model.Player;
-import carcassonne.model.ai.CarcassonneMove;
+import carcassonne.model.ai.AbstractCarcassonneMove;
 import carcassonne.model.ai.TemporaryTile;
 import carcassonne.model.ai.ZeroSumMove;
 import carcassonne.model.tile.Tile;
@@ -251,7 +251,7 @@ public class Grid {
      * @param settings are the game settings.
      * @return the collection of all moves.
      */
-    public Collection<? extends CarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
+    public Collection<? extends AbstractCarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
         checkParameters(tile);
         List<ZeroSumMove> possibleMoves = new ArrayList<>();
         for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
