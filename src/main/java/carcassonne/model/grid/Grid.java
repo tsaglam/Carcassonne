@@ -11,6 +11,7 @@ import carcassonne.model.ai.AbstractCarcassonneMove;
 import carcassonne.model.ai.TemporaryTile;
 import carcassonne.model.ai.ZeroSumMove;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileRotation;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 
@@ -254,10 +255,11 @@ public class Grid {
     public Collection<? extends AbstractCarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
         checkParameters(tile);
         List<ZeroSumMove> possibleMoves = new ArrayList<>();
-        for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
-            for (int y = 0; y < height; y++) {
-                for (TemporaryTile copiedTile : TemporaryTile.possibleRotationsOf(tile)) {
-                    possibleMoves.addAll(movesForGridSpot(player, spots[x][y], copiedTile, settings));
+        for (TileRotation rotation : tile.getPossibleRotations()) {
+            tile.rotateTo(rotation);
+            for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
+                for (int y = 0; y < height; y++) {
+                    possibleMoves.addAll(movesForGridSpot(player, spots[x][y], tile, settings));
                 }
             }
         }
@@ -266,9 +268,11 @@ public class Grid {
         return possibleMoves;
     }
 
-    private List<ZeroSumMove> movesForGridSpot(Player player, GridSpot spot, TemporaryTile tile, GameSettings settings) {
+    private List<ZeroSumMove> movesForGridSpot(Player player, GridSpot spot, Tile originalTile, GameSettings settings) {
         List<ZeroSumMove> possibleMoves = new ArrayList<>();
-        if (spot.place(tile)) {
+        if (spot.isPlaceable(originalTile)) {
+            TemporaryTile tile = new TemporaryTile(originalTile, originalTile.getRotation());
+            spot.place(tile);
             possibleMoves.add(new ZeroSumMove(tile, player, settings));
             if (player.hasFreeMeeples()) {
                 for (GridDirection position : GridDirection.values()) {
