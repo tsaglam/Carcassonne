@@ -36,7 +36,7 @@ public final class ThreadingUtil {
      * @param task is the task to be executed.
      * @param callback is the callback with the result on completion.
      */
-    public static <T> void runAndCallback2(Callable<T> task, Consumer<T> callback) {
+    public static <T> void runAndCallback(Callable<T> task, Consumer<T> callback) {
         SwingWorker<T, ?> worker = new SwingWorker<T, Object>() {
             @Override
             protected T doInBackground() throws Exception {
@@ -55,4 +55,15 @@ public final class ThreadingUtil {
         worker.execute();
     }
 
+    /**
+     * Helps view classes to execute a task in the background and call-back on completion.
+     * @param task is the task to be executed.
+     * @param callback is the callback on completion.
+     */
+    public static void runAndCallback(Runnable task, Runnable callback) {
+        runAndCallback(() -> {
+            task.run();
+            return true; // no return value required, true as default
+        }, it -> callback.run());
+    }
 }
