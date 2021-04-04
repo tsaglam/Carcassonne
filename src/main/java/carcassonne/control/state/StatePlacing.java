@@ -18,6 +18,8 @@ import carcassonne.view.util.GameMessage;
  */
 public class StatePlacing extends AbstractGameState {
 
+    private static final int SLEEP_DURATION = 10;
+
     /**
      * Constructor of the state.
      * @param controller is the game controller.
@@ -110,6 +112,16 @@ public class StatePlacing extends AbstractGameState {
         return views.getSelectedTile();
     }
 
+    private void waitForUI() {
+        while (views.isBusy()) {
+            try {
+                Thread.sleep(SLEEP_DURATION);
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
     /**
      * @see carcassonne.control.state.AbstractGameState#entry()
      */
@@ -121,6 +133,7 @@ public class StatePlacing extends AbstractGameState {
         }
         updateStackSize();
         if (player.isComputerControlled()) { // TODO (HIGH) [AI] Slow with timer between two AI players.
+            waitForUI();
             placeTileWithAI(player);
         } else {
             views.onTileView(it -> it.setTiles(player));
