@@ -33,7 +33,7 @@ public class TileQuantityPanel extends JPanel {
      * @param type is the tile type.
      * @param initialQuantity is the initial quantity depicted in the text field.
      */
-    public TileQuantityPanel(TileType type, int initialQuantity, TileDistributionGUI ui) {
+    public TileQuantityPanel(TileType type, int initialQuantity, TileDistributionView ui) {
         this.type = type;
         setLayout(new BorderLayout());
         setBorder(new LineBorder(Color.DARK_GRAY, BORDER_SIZE));
@@ -79,7 +79,7 @@ public class TileQuantityPanel extends JPanel {
         add(label, BorderLayout.NORTH);
     }
 
-    private void createTextField(int initialQuantity, TileDistributionGUI ui) {
+    private void createTextField(int initialQuantity, TileDistributionView ui) {
         NumberFormatter formatter = new NumberFormatter(NumberFormat.getIntegerInstance());
         formatter.setMinimum(0);
         formatter.setMaximum(99);

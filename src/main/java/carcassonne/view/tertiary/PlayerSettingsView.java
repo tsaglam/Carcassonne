@@ -20,14 +20,14 @@ import javax.swing.event.ChangeListener;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.PaintShop;
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.MainView;
 import carcassonne.view.util.GameMessage;
 
 /**
  * Custom UI for the play settings. Allows changing the name and the color of a player.
  * @author Timur Saglam
  */
-public class PlayerSettingsGUI extends JDialog implements ChangeListener, ActionListener {
+public class PlayerSettingsView extends JDialog implements ChangeListener, ActionListener {
     private static final int MEEPLE_PREVIEW_SIZE = 30;
     private static final long serialVersionUID = 1293883978626527260L; // generated serial UID
     private static final String CHANGE_COLOR = "Choose Meeple Color:";
@@ -44,10 +44,10 @@ public class PlayerSettingsGUI extends JDialog implements ChangeListener, Action
      * Creates a new player settings UI for a specific player.
      * @param playerNumber is the number of the player.
      * @param settings are the game settings which are modified based on the user interaction with this UI.
-     * @param mainUI is the main user interface.
+     * @param mainView is the main user interface.
      */
-    public PlayerSettingsGUI(int playerNumber, GameSettings settings, MainGUI mainUI) {
-        super(mainUI);
+    public PlayerSettingsView(int playerNumber, GameSettings settings, MainView mainView) {
+        super(mainView);
         this.playerNumber = playerNumber;
         this.settings = settings;
         setLayout(new BorderLayout());

@@ -32,8 +32,8 @@ public final class Carcassonne {
     }
 
     /**
-     * Tries to set a custom look and feel if the operating system is not Mac OS. This ensures a at least somewhat decent UI
-     * on Windows operating systems.
+     * Tries to set a custom look and feel if the operating system is not Mac OS. This ensures a at least somewhat decent
+     * user interface on Windows operating systems.
      */
     private static void setLookAndFeel() {
         if (!System.getProperty(OS_NAME_KEY).startsWith(MAC)) {

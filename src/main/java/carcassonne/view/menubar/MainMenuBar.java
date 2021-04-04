@@ -14,17 +14,17 @@ import javax.swing.JSeparator;
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.NotifiableUI;
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.NotifiableView;
+import carcassonne.view.main.MainView;
 import carcassonne.view.tertiary.GridSizeDialog;
-import carcassonne.view.tertiary.TileDistributionGUI;
+import carcassonne.view.tertiary.TileDistributionView;
 import carcassonne.view.util.GameMessage;
 
 /**
- * The menu bar for the main GUI.
+ * The menu bar for the main view.
  * @author Timur Saglam
  */
-public class MainMenuBar extends JMenuBar implements NotifiableUI {
+public class MainMenuBar extends JMenuBar implements NotifiableView {
     private static final long serialVersionUID = -599734693130415390L;
     private static final String ALLOW_FORTIFYING = "Allow direct meeple placement on own patterns";
     private static final String MEEPLE_RULE_SUFFIX = " Meeples";
@@ -49,25 +49,25 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
     private JMenuItem itemAbortRound;
     private JMenuItem itemNewRound;
     private JMenuItem[] itemSettings;
-    private final MainGUI mainUI;
+    private final MainView mainView;
     private final Scoreboard scoreboard;
     private final GameSettings settings;
     private ZoomSlider slider;
-    private final TileDistributionGUI tileDistributionUI;
+    private final TileDistributionView tileDistributionUI;
 
     /**
      * Simple constructor creating the menu bar.
      * @param controller sets the connection to game the controller.
-     * @param mainUI is the main GUI instance.
+     * @param mainView is the main view instance.
      */
-    public MainMenuBar(ControllerFacade controller, MainGUI mainUI) {
+    public MainMenuBar(ControllerFacade controller, MainView mainView) {
         super();
         this.controller = controller;
-        this.mainUI = mainUI;
+        this.mainView = mainView;
         settings = controller.getSettings();
         settings.registerNotifiable(this);
-        scoreboard = new Scoreboard(settings, mainUI);
-        tileDistributionUI = new TileDistributionGUI(settings);
+        scoreboard = new Scoreboard(settings, mainView);
+        tileDistributionUI = new TileDistributionView(settings);
         buildGameMenu();
         buildOptionsMenu();
         buildViewMenu();
@@ -212,7 +212,7 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
     }
 
     private void buildViewMenu() {
-        slider = new ZoomSlider(mainUI);
+        slider = new ZoomSlider(mainView);
         JMenu menuView = new JMenu(VIEW);
         menuView.add(slider.getZoomIn());
         menuView.add(slider);

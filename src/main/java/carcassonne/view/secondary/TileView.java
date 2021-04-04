@@ -17,14 +17,14 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.MainView;
 import carcassonne.view.util.MouseClickListener;
 
 /**
- * GUI class for the tile orientation. It lets the user look at the tile to place and rotate it both right and left.
+ * view class for the tile orientation. It lets the user look at the tile to place and rotate it both right and left.
  * @author Timur Saglam
  */
-public class PreviewGUI extends SecondaryGUI {
+public class TileView extends SecondaryView {
     private static final long serialVersionUID = -5179683977081970564L;
     private static final int BOTTOM_SPACE = 5;
     private static final int VERTICAL_SPACE = 10;
@@ -41,11 +41,11 @@ public class PreviewGUI extends SecondaryGUI {
     private int selectionIndex;
 
     /**
-     * Simple constructor which uses the constructor of the <code>SmallGUI</code>.
+     * Simple constructor which uses the constructor of the <code>Smallview</code>.
      * @param controller is the game controller.
-     * @param ui is the main GUI.
+     * @param ui is the main view.
      */
-    public PreviewGUI(ControllerFacade controller, MainGUI ui) {
+    public TileView(ControllerFacade controller, MainView ui) {
         super(controller, ui);
         buildContent();
         pack();
@@ -101,8 +101,8 @@ public class PreviewGUI extends SecondaryGUI {
     }
 
     /**
-     * Sets the tiles of the GUI to the tiles of the current player, updates the GUI and then makes it visible. Should be
-     * called to show the GUI.
+     * Sets the tiles of the view to the tiles of the current player, updates the view and then makes it visible. Should be
+     * called to show the view.
      * @param currentPlayer is the active player.
      */
     public void setTiles(Player currentPlayer) {
@@ -134,7 +134,7 @@ public class PreviewGUI extends SecondaryGUI {
         }
     }
 
-    // build the GUI content
+    // build the view content
     private void buildContent() {
         // create buttons:
         buttonSkip = new JButton(ImageLoadingUtil.SKIP.createHighDpiImageIcon());

@@ -14,25 +14,25 @@ import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.MainView;
 import carcassonne.view.util.MouseClickListener;
 
 /**
- * A GUI for the placement of Meeples on the Tile that was placed previously.
+ * A view for the placement of Meeples on the Tile that was placed previously.
  * @author Timur Saglam
  */
-public class PlacementGUI extends SecondaryGUI {
+public class MeepleView extends SecondaryView {
     private static final long serialVersionUID = 1449264387665531286L;
     private Map<GridDirection, JButton> meepleButtons;
     private Color defaultButtonColor;
     private Tile tile;
 
     /**
-     * Simple constructor which uses the constructor of the <code>SmallGUI</code>.
+     * Creates the view.
      * @param controller is the game controller.
-     * @param ui is the main GUI.
+     * @param ui is the main view.
      */
-    public PlacementGUI(ControllerFacade controller, MainGUI ui) {
+    public MeepleView(ControllerFacade controller, MainView ui) {
         super(controller, ui);
         buildButtonSkip();
         buildButtonGrid();
@@ -40,7 +40,7 @@ public class PlacementGUI extends SecondaryGUI {
     }
 
     /**
-     * Sets the tile of the GUI, updates the GUI and then makes it visible. Should be called to show the GUI. The method
+     * Sets the tile of the view, updates the view and then makes it visible. Should be called to show the view. The method
      * implements the template method pattern using the method <code>update()</code>.
      * @param tile sets the tile.
      * @param currentPlayer sets the color scheme according to the player.

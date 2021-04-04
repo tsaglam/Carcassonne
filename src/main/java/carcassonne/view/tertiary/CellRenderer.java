@@ -33,11 +33,11 @@ public class CellRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        if (column == GameStatisticsGUI.SCORE_COLUMN) {
+        if (column == GameStatisticsView.SCORE_COLUMN) {
             component.setFont(component.getFont().deriveFont(Font.BOLD));
         }
         component.setForeground(round.getPlayer(row).getColor().textColor());
-        component.setBackground(column == 0 ? GameStatisticsGUI.HEADER_COLOR : GameStatisticsGUI.BODY_COLOR);
+        component.setBackground(column == 0 ? GameStatisticsView.HEADER_COLOR : GameStatisticsView.BODY_COLOR);
         return component;
     }
 }

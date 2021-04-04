@@ -4,7 +4,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.view.ViewContainer;
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.MainView;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -15,10 +15,9 @@ public class StateIdle extends AbstractGameState {
 
     /**
      * Constructor of the state.
-     * @param controller sets the ControllerFacade
-     * @param mainGUI sets the MainGUI
-     * @param previewGUI sets the PreviewGUI
-     * @param placementGUI sets the PlacementGUI
+     * @param controller is the game controller.
+     * @param views contains the user interfaces.
+     * @param playerAI is the current AI strategy.
      */
     public StateIdle(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
         super(controller, views, playerAI);
@@ -69,7 +68,7 @@ public class StateIdle extends AbstractGameState {
      */
     @Override
     protected void entry() {
-        views.onMainView(MainGUI::resetGrid);
+        views.onMainView(MainView::resetGrid);
     }
 
     /**

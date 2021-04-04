@@ -28,9 +28,9 @@ public class HeaderRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        component.setBackground(GameStatisticsGUI.HEADER_COLOR);
+        component.setBackground(GameStatisticsView.HEADER_COLOR);
         Font font = component.getFont();
-        if (column == GameStatisticsGUI.SCORE_COLUMN) {
+        if (column == GameStatisticsView.SCORE_COLUMN) {
             font = font.deriveFont(Font.BOLD);
         }
         component.setFont(font.deriveFont((float) font.getSize() + 1));

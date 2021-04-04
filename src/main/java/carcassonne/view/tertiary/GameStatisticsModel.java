@@ -6,8 +6,8 @@ import carcassonne.model.Round;
 import carcassonne.model.terrain.TerrainType;
 
 /**
- * Model class for the game statistics GUI. Acts as an adapter that offers the data of the round to the game statistics
- * GUI.
+ * Model class for the game statistics view. Acts as an adapter that offers the data of the round to the game statistics
+ * view.
  * @author Timur Saglam
  */
 public class GameStatisticsModel extends AbstractTableModel {

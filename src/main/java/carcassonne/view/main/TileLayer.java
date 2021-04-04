@@ -30,7 +30,7 @@ public class TileLayer extends JPanel {
      * @param zoomLevel is the zoom level, and therefore the tile size.
      */
     public TileLayer(ControllerFacade controller, int gridHeight, int gridWidth, int zoomLevel) {
-        setBackground(GameSettings.GUI_COLOR);
+        setBackground(GameSettings.UI_COLOR);
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         tileLabels = new ArrayList<>();

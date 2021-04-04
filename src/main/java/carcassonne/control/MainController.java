@@ -19,9 +19,9 @@ import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.ViewContainer;
-import carcassonne.view.main.MainGUI;
-import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.PreviewGUI;
+import carcassonne.view.main.MainView;
+import carcassonne.view.secondary.MeepleView;
+import carcassonne.view.secondary.TileView;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -30,13 +30,13 @@ import carcassonne.view.util.GameMessage;
  * @author Timur Saglam
  */
 public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN] separate main controller from state machine?
-    private MainGUI mainGUI;
+    private MainView mainView;
     private Map<Class<? extends AbstractGameState>, AbstractGameState> stateMap;
     private AbstractGameState currentState;
     private final GameSettings settings;
     private GlobalKeyBindingManager keyBindings;
-    private PreviewGUI previewGUI;
-    private PlacementGUI placementGUI;
+    private TileView tileView;
+    private MeepleView meepleView;
 
     /**
      * Basic constructor. Creates the view and the model of the game.
@@ -48,10 +48,10 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
     }
 
     /**
-     * Shows the main GUI.
+     * Shows the main user interface.
      */
     public void startGame() {
-        EventQueue.invokeLater(() -> mainGUI.showUI());
+        EventQueue.invokeLater(() -> mainView.showUI());
     }
 
     /**
@@ -116,7 +116,7 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
      * @param newGrid sets the new grid.
      */
     public void updateStates(Round newRound, TileStack tileStack, Grid newGrid) {
-        mainGUI.getScoreboard().rebuild(newRound.getPlayerCount());
+        mainView.getScoreboard().rebuild(newRound.getPlayerCount());
         for (AbstractGameState state : stateMap.values()) {
             state.updateState(newRound, tileStack, newGrid);
         }
@@ -146,7 +146,7 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
     private void createStateMachine() {
         stateMap = new HashMap<>();
         ArtificialIntelligence playerAI = new RuleBasedAI(settings);
-        ViewContainer views = new ViewContainer(mainGUI, previewGUI, placementGUI);
+        ViewContainer views = new ViewContainer(mainView, tileView, meepleView);
         currentState = new StateIdle(this, views, playerAI);
         registerState(currentState);
         registerState(new StateManning(this, views, playerAI));
@@ -155,26 +155,26 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
     }
 
     /**
-     * Creates the UI and waits on the completion of the creation.
+     * Creates the views and waits on the completion of the creation.
      */
     private final void createUserInterface() {
         try {
             EventQueue.invokeAndWait(() -> {
                 ControllerAdapter adapter = new ControllerAdapter(this);
-                mainGUI = new MainGUI(adapter);
-                previewGUI = new PreviewGUI(adapter, mainGUI);
-                placementGUI = new PlacementGUI(adapter, mainGUI);
-                keyBindings = new GlobalKeyBindingManager(adapter, mainGUI, previewGUI);
-                mainGUI.addKeyBindings(keyBindings);
-                previewGUI.addKeyBindings(keyBindings);
-                placementGUI.addKeyBindings(keyBindings);
-                settings.registerNotifiable(mainGUI.getScoreboard());
-                settings.registerNotifiable(mainGUI);
-                settings.registerNotifiable(placementGUI);
-                settings.registerNotifiable(previewGUI);
+                mainView = new MainView(adapter);
+                tileView = new TileView(adapter, mainView);
+                meepleView = new MeepleView(adapter, mainView);
+                keyBindings = new GlobalKeyBindingManager(adapter, mainView, tileView);
+                mainView.addKeyBindings(keyBindings);
+                tileView.addKeyBindings(keyBindings);
+                meepleView.addKeyBindings(keyBindings);
+                settings.registerNotifiable(mainView.getScoreboard());
+                settings.registerNotifiable(mainView);
+                settings.registerNotifiable(meepleView);
+                settings.registerNotifiable(tileView);
             });
         } catch (InvocationTargetException | InterruptedException exception) {
-            GameMessage.showError("Could not create UI: " + exception.getMessage());
+            GameMessage.showError("Could not create user interface: " + exception.getMessage());
         }
     }
 

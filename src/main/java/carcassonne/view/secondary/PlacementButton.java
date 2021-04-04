@@ -7,7 +7,7 @@ import carcassonne.model.grid.GridDirection;
 
 /**
  * This is a simple class derived form JButton, which stores (additionally to the JButton functions) the coordinates of
- * the button on the button grid. It also uses a little hack to allow the GUI to set the background color of a
+ * the button on the button grid. It also uses a little hack to allow the view to set the background color of a
  * placementButton (while using Nimbus LookAndFeel), even if it is disabled. Without the hack it's not so easy to
  * accomplish that functionality.
  * @author Timur Saglam
@@ -21,7 +21,7 @@ public class PlacementButton extends JButton {
 
     /**
      * Simple constructor calling the <codeJButton>JButton()</code> constructor.
-     * @param controller is the controller of the GUI.
+     * @param controller is the controller of the view.
      * @param direction is the direction of the correlating meeple of the button on the tile.
      */
     public PlacementButton(ControllerFacade controller, GridDirection direction) {

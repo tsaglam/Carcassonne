@@ -27,7 +27,7 @@ public class TileDepiction {
      * @param tileSize is the initial edge length of the tile according to the zoom level.
      * @param defaultTile is the tile that determines the default look.
      * @param highlightTile is the tile that determines the highlight look.
-     * @param controller is the controller of the GUI.
+     * @param controller is the controller of the view.
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
