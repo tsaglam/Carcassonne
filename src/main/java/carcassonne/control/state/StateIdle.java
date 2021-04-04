@@ -3,7 +3,7 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.view.ViewContainer;
+import carcassonne.view.ViewFacade;
 import carcassonne.view.main.MainView;
 import carcassonne.view.util.GameMessage;
 
@@ -19,7 +19,7 @@ public class StateIdle extends AbstractGameState {
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public StateIdle(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
+    public StateIdle(MainController controller, ViewFacade views, ArtificialIntelligence playerAI) {
         super(controller, views, playerAI);
     }
 

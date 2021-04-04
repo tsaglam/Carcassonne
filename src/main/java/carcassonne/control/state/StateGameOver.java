@@ -4,7 +4,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
-import carcassonne.view.ViewContainer;
+import carcassonne.view.ViewFacade;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -21,7 +21,7 @@ public class StateGameOver extends AbstractGameState {
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public StateGameOver(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
+    public StateGameOver(MainController controller, ViewFacade views, ArtificialIntelligence playerAI) {
         super(controller, views, playerAI);
     }
 

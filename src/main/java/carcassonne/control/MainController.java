@@ -18,7 +18,7 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
-import carcassonne.view.ViewContainer;
+import carcassonne.view.ViewFacade;
 import carcassonne.view.main.MainView;
 import carcassonne.view.secondary.MeepleView;
 import carcassonne.view.secondary.TileView;
@@ -146,7 +146,7 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
     private void createStateMachine() {
         stateMap = new HashMap<>();
         ArtificialIntelligence playerAI = new RuleBasedAI(settings);
-        ViewContainer views = new ViewContainer(mainView, tileView, meepleView);
+        ViewFacade views = new ViewFacade(mainView, tileView, meepleView);
         currentState = new StateIdle(this, views, playerAI);
         registerState(currentState);
         registerState(new StateManning(this, views, playerAI));
