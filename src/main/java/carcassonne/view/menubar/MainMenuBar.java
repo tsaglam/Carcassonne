@@ -11,7 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.NotifiableUI;
@@ -45,7 +45,7 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
     private static final String SETTINGS_OF = "Settings of ";
     private static final String VIEW = "View";
     private static final String ABOUT = "About";
-    private final MainController controller;
+    private final ControllerFacade controller;
     private JMenuItem itemAbortRound;
     private JMenuItem itemNewRound;
     private JMenuItem[] itemSettings;
@@ -60,7 +60,7 @@ public class MainMenuBar extends JMenuBar implements NotifiableUI {
      * @param controller sets the connection to game the controller.
      * @param mainUI is the main GUI instance.
      */
-    public MainMenuBar(MainController controller, MainGUI mainUI) {
+    public MainMenuBar(ControllerFacade controller, MainGUI mainUI) {
         super();
         this.controller = controller;
         this.mainUI = mainUI;

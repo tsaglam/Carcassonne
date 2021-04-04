@@ -10,57 +10,38 @@ import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.main.MainGUI;
-import carcassonne.view.menubar.Scoreboard;
-import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.PreviewGUI;
+import carcassonne.view.ViewContainer;
 
 /**
  * Is the abstract state of the state machine.
  * @author Timur Saglam
  */
-public abstract class AbstractGameState { // TODO (HIGH) separate human move states from AI moves.
+public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human move states from AI moves?
 
     protected MainController controller;
-    protected MainGUI mainGUI;
-    protected PreviewGUI previewGUI;
-    protected PlacementGUI placementGUI;
+    protected ViewContainer views;
     protected Round round;
     protected TileStack tileStack;
     protected Grid grid;
-    protected Scoreboard scoreboard;
     protected ArtificialIntelligence playerAI;
     protected static final String NO_MOVE = "No AI move is available!";
 
     /**
      * Constructor of the abstract state, sets the controller from the parameter, registers the state at the controller and
      * calls the <code>entry()</code> method.
-     * @param controller sets the Controller
-     * @param mainGUI sets the MainGUI
-     * @param previewGUI sets the PreviewGUI
+     * @param views contains the user interfaces.
      * @param placementGUI sets the PlacementGUI
      */
-    public AbstractGameState(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI,
-            ArtificialIntelligence playerAI) {
+    public AbstractGameState(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
         this.controller = controller;
-        this.mainGUI = mainGUI; // TODO (MEDIUM) implement UI container class
-        this.previewGUI = previewGUI;
-        this.placementGUI = placementGUI;
         this.playerAI = playerAI;
-        this.scoreboard = mainGUI.getScoreboard();
+        this.views = views;
     }
 
     /**
      * Starts new round with a specific amount of players.
      */
     public abstract void abortGame();
-
-    /**
-     * Method for the view to see whether a meeple is placeable on a specific tile.
-     * @param position is the specific position on the tile.
-     * @return true if a meeple can be placed on the position on the current tile.
-     */
-    public abstract boolean isPlaceable(GridDirection position);
 
     /**
      * Starts new round with a specific amount of players.
@@ -132,10 +113,10 @@ public abstract class AbstractGameState { // TODO (HIGH) separate human move sta
         updateStackSize();
         if (settings.isGridSizeChanged()) {
             settings.setGridSizeChanged(false);
-            mainGUI.rebuildGrid();
+            views.onMainView(it -> it.rebuildGrid());
         }
         GridSpot spot = grid.getFoundation(); // starting spot.
-        mainGUI.setTile(spot.getTile(), spot.getX(), spot.getY());
+        views.onMainView(it -> it.setTile(spot.getTile(), spot.getX(), spot.getY()));
         highlightSurroundings(spot);
         for (int i = 0; i < round.getPlayerCount(); i++) {
             Player player = round.getPlayer(i);
@@ -143,7 +124,7 @@ public abstract class AbstractGameState { // TODO (HIGH) separate human move sta
                 player.addTile(tileStack.drawTile());
             }
         }
-        mainGUI.setCurrentPlayer(round.getActivePlayer());
+        views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
         changeState(StatePlacing.class);
     }
 
@@ -151,10 +132,9 @@ public abstract class AbstractGameState { // TODO (HIGH) separate human move sta
      * Updates the round and the grid of every state after a new round has been started.
      */
     protected void updateScores() {
-        Player player;
         for (int playerNumber = 0; playerNumber < round.getPlayerCount(); playerNumber++) {
-            player = round.getPlayer(playerNumber);
-            scoreboard.update(player);
+            Player player = round.getPlayer(playerNumber);
+            views.onScoreboard(it -> it.update(player));
         }
     }
 
@@ -166,14 +146,14 @@ public abstract class AbstractGameState { // TODO (HIGH) separate human move sta
         if (round.getActivePlayer().isComputerControlled()) {
             return playerAI.getCurrentMove().orElseThrow(() -> new IllegalStateException(NO_MOVE)).getOriginalTile();
         }
-        return previewGUI.getSelectedTile();
+        return views.getSelectedTile();
     }
 
     /**
      * Updates the label which displays the current stack size.
      */
     protected void updateStackSize() {
-        scoreboard.updateStackSize(tileStack.getSize());
+        views.onScoreboard(it -> it.updateStackSize(tileStack.getSize()));
     }
 
     /**
@@ -183,7 +163,7 @@ public abstract class AbstractGameState { // TODO (HIGH) separate human move sta
     protected void highlightSurroundings(GridSpot spot) {
         for (GridSpot neighbor : grid.getNeighbors(spot, true, GridDirection.directNeighbors())) {
             if (neighbor != null && neighbor.isFree()) {
-                mainGUI.setHighlight(neighbor.getX(), neighbor.getY());
+                views.onMainView(it -> it.setHighlight(neighbor.getX(), neighbor.getY()));
             }
         }
     }

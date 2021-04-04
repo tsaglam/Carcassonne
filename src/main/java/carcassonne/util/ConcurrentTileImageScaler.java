@@ -62,7 +62,7 @@ public final class ConcurrentTileImageScaler {
      * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the scaled multi-resolution {@link Image}.
      */
-    public static Image getScaledMultiResolutionImage(Tile tile, int targetSize, boolean fastScaling) { // TODO (HIGH) check locking etc.
+    public static Image getScaledMultiResolutionImage(Tile tile, int targetSize, boolean fastScaling) {
         int highDpiSize = Math.min(targetSize * GameSettings.HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
         Image highDpiImage = getScaledImage(tile, highDpiSize, fastScaling);
         Image defaultImage = getScaledImage(tile, targetSize, fastScaling);

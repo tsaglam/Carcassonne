@@ -9,6 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import carcassonne.control.ControllerFacade;
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.view.GlobalKeyBindingManager;
@@ -23,7 +24,7 @@ public abstract class SecondaryGUI extends JDialog implements NotifiableUI {
     private static final int INITIAL_X = 100;
     private static final int INITIAL_Y = 150;
     private static final long serialVersionUID = 4056347951568551115L;
-    protected MainController controller;
+    protected ControllerFacade controller;
     protected Player currentPlayer;
     protected JPanel dialogPanel;
 
@@ -32,7 +33,7 @@ public abstract class SecondaryGUI extends JDialog implements NotifiableUI {
      * @param controller sets the {@link MainController}.
      * @param ui is the main graphical user interface.
      */
-    public SecondaryGUI(MainController controller, MainGUI ui) {
+    public SecondaryGUI(ControllerFacade controller, MainGUI ui) {
         super(ui);
         dialogPanel = new JPanel(new GridBagLayout());
         this.controller = controller;

@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
@@ -29,7 +29,7 @@ public class TileLayer extends JPanel {
      * @param gridHeight is the height of the grid in tile.
      * @param zoomLevel is the zoom level, and therefore the tile size.
      */
-    public TileLayer(MainController controller, int gridHeight, int gridWidth, int zoomLevel) {
+    public TileLayer(ControllerFacade controller, int gridHeight, int gridWidth, int zoomLevel) {
         setBackground(GameSettings.GUI_COLOR);
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -55,7 +55,7 @@ public class TileLayer extends JPanel {
      * @param preview determines if the tiles are rendered in preview mode (fast but ugly).
      */
     public void changeZoomLevel(int zoomLevel, boolean preview) {
-        tileLabels.parallelStream().forEach(it -> it.setTileSize(zoomLevel, preview));
+        tileLabels.stream().forEach(it -> it.setTileSize(zoomLevel, preview));
     }
 
     /**
@@ -82,13 +82,13 @@ public class TileLayer extends JPanel {
      * @param newHighlight is the new image.
      */
     public void refreshHighlight(ImageIcon newHighlight) {
-        tileLabels.parallelStream().forEach(it -> it.setColoredHighlight(newHighlight));
+        tileLabels.stream().forEach(it -> it.setColoredHighlight(newHighlight));
     }
 
     /**
      * Resets every tile label in this layer.
      */
     public void resetLayer() {
-        tileLabels.parallelStream().forEach(it -> it.reset());
+        tileLabels.stream().forEach(it -> it.reset());
     }
 }

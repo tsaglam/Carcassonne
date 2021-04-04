@@ -9,7 +9,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
@@ -27,7 +27,7 @@ public class MeepleLayer extends JPanel {
     private JComponent[][] placeholderGrid;
     private final List<RigidRectangle> placeholders;
     private int zoomLevel;
-    private MainController controller;
+    private ControllerFacade controller;
 
     /**
      * Creates the meeple layer.
@@ -36,7 +36,7 @@ public class MeepleLayer extends JPanel {
      * @param gridHeight is the height of the grid in tile.
      * @param zoomLevel is the zoom level, and therefore the tile size.
      */
-    public MeepleLayer(MainController controller, int gridWidth, int gridHeight, int zoomLevel) {
+    public MeepleLayer(ControllerFacade controller, int gridWidth, int gridHeight, int zoomLevel) {
         this.controller = controller;
         this.zoomLevel = zoomLevel;
         setOpaque(false);
@@ -84,7 +84,7 @@ public class MeepleLayer extends JPanel {
      */
     public void changeZoomLevel(int zoomLevel) {
         this.zoomLevel = zoomLevel;
-        placeholders.parallelStream().forEach(it -> it.changeShape(zoomLevel));
+        placeholders.stream().forEach(it -> it.changeShape(zoomLevel));
         meeplePanels.forEach(it -> it.setSize(zoomLevel));
     }
 
@@ -117,14 +117,14 @@ public class MeepleLayer extends JPanel {
      * Refreshes all meeple labels in this layer. This updates the images to color changes.
      */
     public void refreshLayer() {
-        meeplePanels.parallelStream().forEach(it -> it.refreshAll());
+        meeplePanels.stream().forEach(it -> it.refreshAll());
     }
 
     /**
      * Resets all meeples in the layer.
      */
     public void resetLayer() {
-        meeplePanels.parallelStream().forEach(it -> it.resetAll());
+        meeplePanels.stream().forEach(it -> it.resetAll());
     }
 
     /**

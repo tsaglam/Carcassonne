@@ -13,11 +13,9 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import carcassonne.control.MainController;
-import carcassonne.model.Meeple;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.NotifiableUI;
@@ -36,7 +34,7 @@ public class MainGUI extends JFrame implements NotifiableUI {
     private static final int MIN_ZOOM_LEVEL = 25;
     private static final int ZOOM_STEP_SIZE = 25;
     private static final Dimension MINIMAL_WINDOW_SIZE = new Dimension(640, 480);
-    private final MainController controller;
+    private final ControllerFacade controller;
     private Player currentPlayer;
     private int gridHeight;
     private int gridWidth;
@@ -50,7 +48,7 @@ public class MainGUI extends JFrame implements NotifiableUI {
      * Constructor of the main GUI. creates the GUI with a scoreboard.
      * @param controller sets the connection to the game controller.
      */
-    public MainGUI(MainController controller) {
+    public MainGUI(ControllerFacade controller) {
         this.controller = controller;
         gridWidth = controller.getSettings().getGridWidth();
         gridHeight = controller.getSettings().getGridHeight();
@@ -92,16 +90,8 @@ public class MainGUI extends JFrame implements NotifiableUI {
 
     /**
      * Removes meeple on a tile on the grid.
-     * @param meeple is the meeple that should be removed.
      */
-    public void removeMeeple(Meeple meeple) {
-        checkParameters(meeple);
-        GridSpot spot = meeple.getLocation();
-        if (spot == null) { // make sure meeple is placed
-            throw new IllegalArgumentException("Meeple has to be placed to be removed from GUI: " + meeple);
-        }
-        int x = spot.getX();
-        int y = spot.getY();
+    public void removeMeeple(int x, int y) {
         checkCoordinates(x, y);
         meepleLayer.resetPanel(x, y);
     }
@@ -131,6 +121,14 @@ public class MainGUI extends JFrame implements NotifiableUI {
     public void showUI() {
         setVisible(true);
         scrollPane.validateAndCenter();
+    }
+
+    /**
+     * Returns the controller with which this UI is communicating.
+     * @return the controller instance.
+     */
+    public ControllerFacade getController() {
+        return controller;
     }
 
     /**
@@ -192,12 +190,11 @@ public class MainGUI extends JFrame implements NotifiableUI {
      */
     public void updateToChangedZoomLevel(ZoomMode mode) {
         if (mode != FAST && currentPlayer != null) { // only update highlights when there is an active round
-            ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
-            tileLayer.refreshHighlight(newHighlight);
+            tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel)); // TODO (HIGH) [THREADING] Swing threading here
         }
         tileLayer.changeZoomLevel(zoomLevel, mode != SMOOTH); // Executed in parallel for improved performance
         meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
-        meepleLayer.changeZoomLevel(zoomLevel);
+        meepleLayer.changeZoomLevel(zoomLevel); // TODO (HIGH) [THREADING] Swing threading here
         if (mode == SMOOTH) {
             scrollPane.validateAndCenter();
         } else {

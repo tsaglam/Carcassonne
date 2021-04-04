@@ -4,14 +4,12 @@ import java.util.Optional;
 
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
-import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.ai.AbstractCarcassonneMove;
+import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
-import carcassonne.view.main.MainGUI;
-import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.PreviewGUI;
+import carcassonne.view.ViewContainer;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -27,9 +25,8 @@ public class StatePlacing extends AbstractGameState {
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StatePlacing(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI,
-            ArtificialIntelligence playerAI) {
-        super(controller, mainGUI, previewGUI, placementGUI, playerAI);
+    public StatePlacing(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
+        super(controller, views, playerAI);
     }
 
     /**
@@ -38,14 +35,6 @@ public class StatePlacing extends AbstractGameState {
     @Override
     public void abortGame() {
         changeState(StateGameOver.class);
-    }
-
-    /**
-     * @see carcassonne.control.state.AbstractGameState#isPlaceable()
-     */
-    @Override
-    public boolean isPlaceable(GridDirection position) {
-        return false; // can never place meeple in this state.
     }
 
     /**
@@ -70,7 +59,7 @@ public class StatePlacing extends AbstractGameState {
      */
     @Override
     public void placeTile(int x, int y) {
-        Tile tile = previewGUI.getSelectedTile();
+        Tile tile = views.getSelectedTile();
         placeTile(tile, x, y);
     }
 
@@ -88,7 +77,7 @@ public class StatePlacing extends AbstractGameState {
                 throw new IllegalStateException("Cannot drop tile " + tile + "from player " + round.getActivePlayer());
             }
             round.nextTurn();
-            mainGUI.setCurrentPlayer(round.getActivePlayer());
+            views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
             entry();
         }
     }
@@ -96,7 +85,7 @@ public class StatePlacing extends AbstractGameState {
     private void placeTile(Tile tile, int x, int y) {
         if (grid.place(x, y, tile)) {
             round.getActivePlayer().dropTile(tile);
-            mainGUI.setTile(tile, x, y);
+            views.onMainView(it -> it.setTile(tile, x, y));
             GridSpot spot = grid.getSpot(x, y);
             highlightSurroundings(spot);
             changeState(StateManning.class);
@@ -119,7 +108,7 @@ public class StatePlacing extends AbstractGameState {
         if (round.getActivePlayer().isComputerControlled()) {
             return playerAI.chooseTileToDrop(round.getActivePlayer().getHandOfTiles());
         }
-        return previewGUI.getSelectedTile();
+        return views.getSelectedTile();
     }
 
     /**
@@ -132,10 +121,10 @@ public class StatePlacing extends AbstractGameState {
             player.addTile(tileStack.drawTile());
         }
         updateStackSize();
-        if (player.isComputerControlled()) {
+        if (player.isComputerControlled()) { // TODO (HIGH) [AI] Slow with timer between two AI players.
             placeTileWithAI(player);
         } else {
-            previewGUI.setTiles(player);
+            views.onTileView(it -> it.setTiles(player));
         }
     }
 
@@ -144,7 +133,7 @@ public class StatePlacing extends AbstractGameState {
      */
     @Override
     protected void exit() {
-        previewGUI.setVisible(false);
+        views.onTileView(it -> it.setVisible(false));
     }
 
 }

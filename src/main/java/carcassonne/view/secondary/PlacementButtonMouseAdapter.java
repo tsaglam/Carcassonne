@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.SwingUtilities;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.grid.GridDirection;
 
 /**
@@ -16,7 +16,7 @@ import carcassonne.model.grid.GridDirection;
 public class PlacementButtonMouseAdapter extends MouseAdapter {
 
     private final GridDirection direction;
-    private final MainController controller;
+    private final ControllerFacade controller;
     private final PlacementButton button;
 
     /**
@@ -25,7 +25,7 @@ public class PlacementButtonMouseAdapter extends MouseAdapter {
      * @param controller sets the controller that is notified.
      * @param button is the button which uses the adapter.
      */
-    public PlacementButtonMouseAdapter(GridDirection direction, MainController controller, PlacementButton button) {
+    public PlacementButtonMouseAdapter(GridDirection direction, ControllerFacade controller, PlacementButton button) {
         super();
         this.direction = direction;
         this.controller = controller;

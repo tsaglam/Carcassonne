@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
@@ -45,7 +45,7 @@ public class PreviewGUI extends SecondaryGUI {
      * @param controller is the game controller.
      * @param ui is the main GUI.
      */
-    public PreviewGUI(MainController controller, MainGUI ui) {
+    public PreviewGUI(ControllerFacade controller, MainGUI ui) {
         super(controller, ui);
         buildContent();
         pack();

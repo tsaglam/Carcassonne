@@ -15,7 +15,7 @@ import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.Round;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.main.MainGUI;
@@ -31,48 +31,23 @@ public class GameStatisticsGUI extends JDialog {
     static final int SCORE_COLUMN = 5;
     static final Color HEADER_COLOR = new Color(220, 220, 220);
     static final Color BODY_COLOR = new Color(237, 237, 237);
-    private final MainController controller;
+    private final ControllerFacade controller;
     private JButton buttonClose;
     private JTable table;
 
     /**
      * Creates the GUI and extracts the data from the current round.
      * @param mainUI is the main user interface.
-     * @param controller is the game controller.
      * @param round is the current round.
      * @mainUI is the main user interface.
      */
-    public GameStatisticsGUI(MainGUI mainUI, MainController controller, Round round) {
+    public GameStatisticsGUI(MainGUI mainUI, Round round) {
         super(mainUI);
-        this.controller = controller;
+        controller = mainUI.getController();
         buildTable(round);
         buildButtonClose();
         buildFrame();
-    }
-
-    private void buildTable(Round round) {
-        table = new JTable(new GameStatisticsModel(round));
-        // Columns:
-        TableColumnModel model = table.getColumnModel();
-        CellRenderer renderer = new CellRenderer(round);
-        for (int i = 0; i < model.getColumnCount(); i++) {
-            model.getColumn(i).setCellRenderer(renderer);
-        }
-        // Header:
-        JTableHeader header = table.getTableHeader();
-        header.setDefaultRenderer(new HeaderRenderer());
-        header.setReorderingAllowed(false);
-        table.setBackground(BODY_COLOR);
-    }
-
-    /**
-     * Adds the global key bindings to this UI.
-     * @param keyBindings are the global key bindings.
-     */
-    public void addKeyBindings(GlobalKeyBindingManager keyBindings) {
-        InputMap inputMap = table.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = table.getActionMap();
-        keyBindings.addKeyBindingsToMaps(inputMap, actionMap);
+        addKeyBindings(controller.getKeyBindings());
     }
 
     /**
@@ -81,6 +56,16 @@ public class GameStatisticsGUI extends JDialog {
     public void closeGUI() {
         setVisible(false);
         dispose();
+    }
+
+    /**
+     * Adds the global key bindings to this UI.
+     * @param keyBindings are the global key bindings.
+     */
+    private void addKeyBindings(GlobalKeyBindingManager keyBindings) {
+        InputMap inputMap = table.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = table.getActionMap();
+        keyBindings.addKeyBindingsToMaps(inputMap, actionMap);
     }
 
     private void buildButtonClose() {
@@ -107,5 +92,20 @@ public class GameStatisticsGUI extends JDialog {
                 controller.requestSkip();
             }
         });
+    }
+
+    private void buildTable(Round round) {
+        table = new JTable(new GameStatisticsModel(round));
+        // Columns:
+        TableColumnModel model = table.getColumnModel();
+        CellRenderer renderer = new CellRenderer(round);
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            model.getColumn(i).setCellRenderer(renderer);
+        }
+        // Header:
+        JTableHeader header = table.getTableHeader();
+        header.setDefaultRenderer(new HeaderRenderer());
+        header.setReorderingAllowed(false);
+        table.setBackground(BODY_COLOR);
     }
 }

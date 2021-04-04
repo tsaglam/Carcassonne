@@ -3,15 +3,14 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
-import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.ai.AbstractCarcassonneMove;
+import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
+import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.main.MainGUI;
-import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.PreviewGUI;
+import carcassonne.view.ViewContainer;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -28,9 +27,8 @@ public class StateManning extends AbstractGameState {
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StateManning(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI,
-            ArtificialIntelligence playerAI) {
-        super(controller, mainGUI, previewGUI, placementGUI, playerAI);
+    public StateManning(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
+        super(controller, views, playerAI);
         noMeeplesNotification = new boolean[GameSettings.MAXIMAL_PLAYERS]; // stores whether a player was already notified about a lack of meeples
     }
 
@@ -40,14 +38,6 @@ public class StateManning extends AbstractGameState {
     @Override
     public void abortGame() {
         changeState(StateGameOver.class);
-    }
-
-    /**
-     * @see carcassonne.control.state.AbstractGameState#isPlaceable()
-     */
-    @Override
-    public boolean isPlaceable(GridDirection position) {
-        return getSelectedTile().allowsPlacingMeeple(position, round.getActivePlayer(), controller.getSettings());
     }
 
     /**
@@ -63,16 +53,16 @@ public class StateManning extends AbstractGameState {
      */
     @Override
     public void placeMeeple(GridDirection position) {
-        Tile tile = previewGUI.getSelectedTile();
-        mainGUI.resetMeeplePreview(tile);
+        Tile tile = views.getSelectedTile();
+        views.onMainView(it -> it.resetMeeplePreview(tile));
         placeMeeple(position, tile);
     }
 
     private void placeMeeple(GridDirection position, Tile tile) {
         Player player = round.getActivePlayer();
-        if (player.hasFreeMeeples() && isPlaceable(position)) {
+        if (player.hasFreeMeeples() && tile.allowsPlacingMeeple(position, player, controller.getSettings())) {
             tile.placeMeeple(player, position, controller.getSettings());
-            mainGUI.setMeeple(tile, position, player);
+            views.onMainView(it -> it.setMeeple(tile, position, player));
             updateScores();
             processGridPatterns();
             startNextTurn();
@@ -95,7 +85,8 @@ public class StateManning extends AbstractGameState {
     @Override
     public void skip() {
         if (!round.getActivePlayer().isComputerControlled()) {
-            mainGUI.resetMeeplePreview(previewGUI.getSelectedTile());
+            Tile tile = views.getSelectedTile();
+            views.onMainView(it -> it.resetMeeplePreview(tile));
         }
         processGridPatterns();
         startNextTurn();
@@ -107,7 +98,8 @@ public class StateManning extends AbstractGameState {
         for (GridPattern pattern : grid.getModifiedPatterns(tile.getGridSpot())) {
             if (pattern.isComplete()) {
                 for (Meeple meeple : pattern.getMeepleList()) {
-                    mainGUI.removeMeeple(meeple);
+                    GridSpot spot = meeple.getLocation();
+                    views.onMainView(it -> it.removeMeeple(spot.getX(), spot.getY()));
                 }
                 pattern.disburse();
                 updateScores();
@@ -121,7 +113,7 @@ public class StateManning extends AbstractGameState {
             changeState(StateGameOver.class);
         } else {
             round.nextTurn();
-            mainGUI.setCurrentPlayer(round.getActivePlayer());
+            views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
             changeState(StatePlacing.class);
         }
     }
@@ -147,8 +139,8 @@ public class StateManning extends AbstractGameState {
             if (player.isComputerControlled()) {
                 placeMeepleWithAI();
             } else {
-                mainGUI.setMeeplePreview(selectedTile, player);
-                placementGUI.setTile(selectedTile, player);
+                views.onMainView(it -> it.setMeeplePreview(selectedTile, player));
+                views.onPlacementView(it -> it.setTile(selectedTile, player));
             }
         } else {
             if (!noMeeplesNotification[player.getNumber()] && !player.isComputerControlled()) { // Only warn player once until he regains meeples
@@ -165,6 +157,6 @@ public class StateManning extends AbstractGameState {
      */
     @Override
     protected void exit() {
-        placementGUI.setVisible(false);
+        views.onPlacementView(it -> it.setVisible(false));
     }
 }

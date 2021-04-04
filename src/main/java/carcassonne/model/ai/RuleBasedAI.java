@@ -42,13 +42,13 @@ public class RuleBasedAI implements ArtificialIntelligence {
         if (!consideredMoves.isEmpty()) {
             currentMove = chooseBestMove(consideredMoves);
         }
-        System.out.println(currentMove); // TODO (HIGH) remove debug output
+        System.out.println(currentMove); // TODO (HIGH) [AI] remove debug output
         return currentMove;
     }
 
     @Override
     public Tile chooseTileToDrop(Collection<Tile> tiles) {
-        return chooseRandom(tiles); // TODO (HIGH) find a meaningful heuristic
+        return chooseRandom(tiles); // TODO (HIGH) [AI] find a meaningful heuristic
     }
 
     @Override

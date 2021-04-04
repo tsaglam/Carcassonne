@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.swing.JButton;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.terrain.TerrainType;
@@ -32,7 +32,7 @@ public class PlacementGUI extends SecondaryGUI {
      * @param controller is the game controller.
      * @param ui is the main GUI.
      */
-    public PlacementGUI(MainController controller, MainGUI ui) {
+    public PlacementGUI(ControllerFacade controller, MainGUI ui) {
         super(controller, ui);
         buildButtonSkip();
         buildButtonGrid();
@@ -97,7 +97,7 @@ public class PlacementGUI extends SecondaryGUI {
             } else {
                 button.setIcon(ImageLoadingUtil.createHighDpiImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false)));
             }
-            if (placeable && controller.requestPlacementStatus(direction)) {
+            if (placeable && tile.allowsPlacingMeeple(direction, currentPlayer, controller.getSettings())) {
                 button.setEnabled(true);
                 button.setBackground(defaultButtonColor);
             } else {
