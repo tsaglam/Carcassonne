@@ -3,9 +3,8 @@ package carcassonne.control.state;
 import carcassonne.control.MainController;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.view.ViewContainer;
 import carcassonne.view.main.MainGUI;
-import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.PreviewGUI;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -16,13 +15,13 @@ public class StateIdle extends AbstractGameState {
 
     /**
      * Constructor of the state.
-     * @param controller sets the Controller
+     * @param controller sets the ControllerFacade
      * @param mainGUI sets the MainGUI
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StateIdle(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI, ArtificialIntelligence playerAI) {
-        super(controller, mainGUI, previewGUI, placementGUI, playerAI);
+    public StateIdle(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
+        super(controller, views, playerAI);
     }
 
     /**
@@ -31,14 +30,6 @@ public class StateIdle extends AbstractGameState {
     @Override
     public void abortGame() {
         GameMessage.showMessage("There is currently no game running.");
-    }
-
-    /**
-     * @see carcassonne.control.state.AbstractGameState#isPlaceable()
-     */
-    @Override
-    public boolean isPlaceable(GridDirection position) {
-        return false; // can never place meeple in this state.
     }
 
     /**
@@ -78,7 +69,7 @@ public class StateIdle extends AbstractGameState {
      */
     @Override
     protected void entry() {
-        mainGUI.resetGrid();
+        views.onMainView(MainGUI::resetGrid);
     }
 
     /**

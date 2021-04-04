@@ -1,6 +1,7 @@
 package carcassonne.settings;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -269,7 +270,7 @@ public class GameSettings {
     private void notifyListeners() {
         PaintShop.clearCachedImages();
         for (NotifiableUI notifiable : changeListeners) {
-            notifiable.notifyChange();
+            EventQueue.invokeLater(() -> notifiable.notifyChange());
         }
     }
 

@@ -284,7 +284,7 @@ public class Tile {
      * Turns a tile 90 degree to the right.
      */
     public void rotateRight() {
-        terrain.rotateRight();
+        terrain.rotateRight(); // TODO (MEDIUM) can get fairly expensive when executed often.
         rotation = rotation.rotate(RotationDirection.RIGHT);
     }
 

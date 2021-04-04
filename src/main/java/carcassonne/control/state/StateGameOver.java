@@ -4,10 +4,7 @@ import carcassonne.control.MainController;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
-import carcassonne.view.main.MainGUI;
-import carcassonne.view.secondary.PlacementGUI;
-import carcassonne.view.secondary.PreviewGUI;
-import carcassonne.view.tertiary.GameStatisticsGUI;
+import carcassonne.view.ViewContainer;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -17,18 +14,16 @@ import carcassonne.view.util.GameMessage;
 public class StateGameOver extends AbstractGameState {
 
     private static final String GAME_OVER_MESSAGE = "The game is over. Winning player(s): ";
-    private GameStatisticsGUI gameStatistics;
 
     /**
      * Constructor of the state.
-     * @param controller sets the Controller
+     * @param controller sets the ControllerFacade
      * @param mainGUI sets the MainGUI
      * @param previewGUI sets the PreviewGUI
      * @param placementGUI sets the PlacementGUI
      */
-    public StateGameOver(MainController controller, MainGUI mainGUI, PreviewGUI previewGUI, PlacementGUI placementGUI,
-            ArtificialIntelligence playerAI) {
-        super(controller, mainGUI, previewGUI, placementGUI, playerAI);
+    public StateGameOver(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
+        super(controller, views, playerAI);
     }
 
     /**
@@ -37,14 +32,6 @@ public class StateGameOver extends AbstractGameState {
     @Override
     public void abortGame() {
         GameMessage.showWarning("You already aborted the current game. Close the game statistics to start a new game.");
-    }
-
-    /**
-     * @see carcassonne.control.state.AbstractGameState#isPlaceable()
-     */
-    @Override
-    public boolean isPlaceable(GridDirection position) {
-        return false; // can never place meeple in this state.
     }
 
     /**
@@ -78,7 +65,7 @@ public class StateGameOver extends AbstractGameState {
      */
     @Override
     public void skip() {
-        scoreboard.disable();
+        views.onScoreboard(it -> it.disable());
         exit();
         changeState(StateIdle.class);
     }
@@ -95,10 +82,9 @@ public class StateGameOver extends AbstractGameState {
         }
         updateScores();
         updateStackSize();
-        mainGUI.resetMenuState();
+        views.onMainView(it -> it.resetMenuState());
         GameMessage.showMessage(GAME_OVER_MESSAGE + round.getWinningPlayers());
-        gameStatistics = new GameStatisticsGUI(mainGUI, controller, round);
-        gameStatistics.addKeyBindings(controller.getKeyBindings());
+        views.showGameStatistics(round);
     }
 
     /**
@@ -106,6 +92,6 @@ public class StateGameOver extends AbstractGameState {
      */
     @Override
     protected void exit() {
-        gameStatistics.closeGUI();
+        views.closeGameStatistics();
     }
 }

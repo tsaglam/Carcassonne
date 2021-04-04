@@ -5,14 +5,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 
 /**
  * A simple listener for the new game button.
  * @author Timur Saglam
  */
 public class NewRoundListener implements ActionListener {
-    private final MainController controller;
+    private final ControllerFacade controller;
     private final JMenuItem itemNewRound;
     private final JMenuItem itemAbortRound;
 
@@ -22,7 +22,7 @@ public class NewRoundListener implements ActionListener {
      * @param itemNewRound is the menu item to start a new round.
      * @param itemAbortRound is the menu item to abort the current round.
      */
-    public NewRoundListener(MainController controller, JMenuItem itemNewRound, JMenuItem itemAbortRound) {
+    public NewRoundListener(ControllerFacade controller, JMenuItem itemNewRound, JMenuItem itemAbortRound) {
         this.controller = controller;
         this.itemNewRound = itemNewRound;
         this.itemAbortRound = itemAbortRound;

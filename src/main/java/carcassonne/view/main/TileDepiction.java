@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.tile.Tile;
 
 /**
@@ -31,11 +31,11 @@ public class TileDepiction {
      * @param x sets the x coordinate.
      * @param y sets the y coordinate.
      */
-    public TileDepiction(int tileSize, Tile defaultTile, Tile highlightTile, MainController controller, int x, int y) {
+    public TileDepiction(int tileSize, Tile defaultTile, Tile highlightTile, ControllerFacade controller, int x, int y) {
         this.defaultTile = defaultTile;
         this.highlightTile = highlightTile;
         this.tileSize = tileSize;
-        label = new JLabel();  
+        label = new JLabel();
         reset();
         label.addMouseListener(new MouseAdapter() {
             /**
@@ -80,7 +80,7 @@ public class TileDepiction {
      */
     public void setTileSize(int tileSize, boolean preview) {
         this.tileSize = tileSize;
-        label.setIcon(tile.getScaledIcon(tileSize, preview));
+        label.setIcon(tile.getScaledIcon(tileSize, preview)); // TODO (HIGH) [THREADING] Swing threading here
     }
 
     /**

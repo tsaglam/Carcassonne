@@ -1,5 +1,7 @@
 package carcassonne.control;
 
+import java.awt.EventQueue;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,56 +18,40 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
+import carcassonne.view.ViewContainer;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.secondary.PlacementGUI;
 import carcassonne.view.secondary.PreviewGUI;
+import carcassonne.view.util.GameMessage;
 
 /**
- * The MainController is the central class of the game. The game is started with the instantiation of this class. The
- * class gets the user input from the <code>MouseAdapter</code> in the <code>view package</code>, and controls both the
- * <code>view</code> and the <code>model</code>. The <code>controller</code> package also contains the state machine,
- * which consists out of the <code>MainController</code> class and the state classes. This system implements the
- * model/view/controller architecture, which is not 100% formally implemented. The reason for this is that in the user
- * input is made in Swing through the <code>MouseAdapters</code>, which belong to the <code>view</code> package.
+ * Central class of the game, creates all requires components, receives user input from the user interface in the
+ * <code>view package</code>, and controls both the <code>view</code> and the <code>model</code>.
  * @author Timur Saglam
  */
-public class MainController {
-    private final MainGUI mainGUI;
-    private final Map<Class<? extends AbstractGameState>, AbstractGameState> stateMap;
+public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN] separate main controller from state machine?
+    private MainGUI mainGUI;
+    private Map<Class<? extends AbstractGameState>, AbstractGameState> stateMap;
     private AbstractGameState currentState;
     private final GameSettings settings;
-    private final GlobalKeyBindingManager keyBindings;
+    private GlobalKeyBindingManager keyBindings;
+    private PreviewGUI previewGUI;
+    private PlacementGUI placementGUI;
 
     /**
      * Basic constructor. Creates the view and the model of the game.
      */
     public MainController() {
         settings = new GameSettings();
-        mainGUI = new MainGUI(this);
-        PreviewGUI previewGUI = new PreviewGUI(this, mainGUI);
-        PlacementGUI placementGUI = new PlacementGUI(this, mainGUI);
-        keyBindings = new GlobalKeyBindingManager(this, mainGUI, previewGUI);
-        mainGUI.addKeyBindings(keyBindings);
-        previewGUI.addKeyBindings(keyBindings);
-        placementGUI.addKeyBindings(keyBindings);
-        settings.registerNotifiable(mainGUI.getScoreboard());
-        settings.registerNotifiable(mainGUI);
-        settings.registerNotifiable(placementGUI);
-        settings.registerNotifiable(previewGUI);
-        stateMap = new HashMap<>();
-        ArtificialIntelligence playerAI = new RuleBasedAI(settings);
-        currentState = new StateIdle(this, mainGUI, previewGUI, placementGUI, playerAI);
-        registerState(currentState);
-        registerState(new StateManning(this, mainGUI, previewGUI, placementGUI, playerAI));
-        registerState(new StatePlacing(this, mainGUI, previewGUI, placementGUI, playerAI));
-        registerState(new StateGameOver(this, mainGUI, previewGUI, placementGUI, playerAI));
+        createUserInterface();
+        createStateMachine();
     }
 
     /**
      * Shows the main GUI.
      */
     public void startGame() {
-        mainGUI.showUI();
+        EventQueue.invokeLater(() -> mainGUI.showUI());
     }
 
     /**
@@ -84,23 +70,16 @@ public class MainController {
     /**
      * Requests to abort the round.
      */
+    @Override
     public void requestAbortGame() {
         currentState.abortGame();
-    }
-
-    /**
-     * Method for the view to see whether a meeple is placeable on a specific tile.
-     * @param position is the specific position on the tile.
-     * @return true if a meeple can be placed on the position on the current tile.
-     */
-    public boolean requestPlacementStatus(GridDirection position) {
-        return currentState.isPlaceable(position);
     }
 
     /**
      * Method for the view to call if a user mans a tile with a meeple.
      * @param position is the position the user wants to place on.
      */
+    @Override
     public void requestMeeplePlacement(GridDirection position) {
         currentState.placeMeeple(position);
     }
@@ -108,6 +87,7 @@ public class MainController {
     /**
      * Requests to start a new round with a specific amount of players.
      */
+    @Override
     public void requestNewRound() {
         currentState.newRound(settings.getAmountOfPlayers());
     }
@@ -115,6 +95,7 @@ public class MainController {
     /**
      * Method for the view to call if the user wants to skip a round.
      */
+    @Override
     public void requestSkip() {
         currentState.skip();
     }
@@ -124,6 +105,7 @@ public class MainController {
      * @param x is the x coordinate.
      * @param y is the y coordinate.
      */
+    @Override
     public void requestTilePlacement(int x, int y) {
         currentState.placeTile(x, y);
     }
@@ -144,6 +126,7 @@ public class MainController {
      * Getter for the global key binding manager.
      * @return the global key bindings.
      */
+    @Override
     public GlobalKeyBindingManager getKeyBindings() {
         return keyBindings;
     }
@@ -152,8 +135,47 @@ public class MainController {
      * Getter for the {@link GameSettings}, which grants access to the games settings.
      * @return the {@link GameSettings} instance.
      */
+    @Override
     public GameSettings getSettings() {
         return settings;
+    }
+
+    /**
+     * Creates the state machine.
+     */
+    private void createStateMachine() {
+        stateMap = new HashMap<>();
+        ArtificialIntelligence playerAI = new RuleBasedAI(settings);
+        ViewContainer views = new ViewContainer(mainGUI, previewGUI, placementGUI);
+        currentState = new StateIdle(this, views, playerAI);
+        registerState(currentState);
+        registerState(new StateManning(this, views, playerAI));
+        registerState(new StatePlacing(this, views, playerAI));
+        registerState(new StateGameOver(this, views, playerAI));
+    }
+
+    /**
+     * Creates the UI and waits on the completion of the creation.
+     */
+    private final void createUserInterface() {
+        try {
+            EventQueue.invokeAndWait(() -> {
+                ControllerAdapter adapter = new ControllerAdapter(this);
+                mainGUI = new MainGUI(adapter);
+                previewGUI = new PreviewGUI(adapter, mainGUI);
+                placementGUI = new PlacementGUI(adapter, mainGUI);
+                keyBindings = new GlobalKeyBindingManager(adapter, mainGUI, previewGUI);
+                mainGUI.addKeyBindings(keyBindings);
+                previewGUI.addKeyBindings(keyBindings);
+                placementGUI.addKeyBindings(keyBindings);
+                settings.registerNotifiable(mainGUI.getScoreboard());
+                settings.registerNotifiable(mainGUI);
+                settings.registerNotifiable(placementGUI);
+                settings.registerNotifiable(previewGUI);
+            });
+        } catch (InvocationTargetException | InterruptedException exception) {
+            GameMessage.showError("Could not create UI: " + exception.getMessage());
+        }
     }
 
     /**

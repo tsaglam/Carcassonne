@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import carcassonne.control.ControllerFacade;
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
@@ -22,7 +23,7 @@ public class MeepleDepictionPanel extends JPanel {
 
     private static final int GRID_INDEX_OFFSET = 1;
     private static final long serialVersionUID = -1475325065701922699L;
-    private final MainController controller;
+    private final ControllerFacade controller;
     private final Map<GridDirection, MeepleDepiction> labels;
     private Dimension size;
 
@@ -31,7 +32,7 @@ public class MeepleDepictionPanel extends JPanel {
      * @param scalingFactor is the initial scaling factor.
      * @param controller is the responsible {@link MainController}.
      */
-    public MeepleDepictionPanel(int scalingFactor, MainController controller) {
+    public MeepleDepictionPanel(int scalingFactor, ControllerFacade controller) {
         this.controller = controller;
         labels = new HashMap<GridDirection, MeepleDepiction>(GridDirection.values().length);
         setOpaque(false);
@@ -68,7 +69,8 @@ public class MeepleDepictionPanel extends JPanel {
     public void setMeeplePreview(Tile tile, Player currentPlayer) {
         for (GridDirection direction : GridDirection.values()) {
             TerrainType terrain = tile.getTerrain(direction);
-            if (tile.hasMeepleSpot(direction) && controller.requestPlacementStatus(direction) && controller.getSettings().getMeepleRule(terrain)) {
+            if (tile.hasMeepleSpot(direction) && tile.allowsPlacingMeeple(direction, currentPlayer, controller.getSettings())
+                    && controller.getSettings().getMeepleRule(terrain)) {
                 labels.get(direction).setPreview(tile.getTerrain(direction), currentPlayer);
             }
         }

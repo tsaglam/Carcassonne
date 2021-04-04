@@ -1,7 +1,5 @@
 package carcassonne;
 
-import java.awt.EventQueue;
-
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -26,8 +24,7 @@ public final class Carcassonne {
      */
     public static void main(String[] args) {
         setLookAndFeel();
-        MainController controller = new MainController();
-        EventQueue.invokeLater(() -> controller.startGame());
+        new MainController().startGame();
     }
 
     private Carcassonne() {

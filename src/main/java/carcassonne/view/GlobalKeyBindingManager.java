@@ -13,7 +13,7 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.view.main.MainGUI;
 import carcassonne.view.main.ZoomMode;
 import carcassonne.view.secondary.PreviewGUI;
@@ -30,7 +30,7 @@ public class GlobalKeyBindingManager {
     private final List<String> inputToActionKeys;
     private final MainGUI mainUI;
     private final PreviewGUI previewUI;
-    private final MainController controller;
+    private final ControllerFacade controller;
 
     /**
      * Creates the key binding manager.
@@ -38,7 +38,7 @@ public class GlobalKeyBindingManager {
      * @param mainUI is the main user interface.
      * @param previewUI is the user interface for rotating tiles.
      */
-    public GlobalKeyBindingManager(MainController controller, MainGUI mainUI, PreviewGUI previewUI) {
+    public GlobalKeyBindingManager(ControllerFacade controller, MainGUI mainUI, PreviewGUI previewUI) {
         this.mainUI = mainUI;
         this.previewUI = previewUI;
         this.controller = controller;

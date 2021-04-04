@@ -2,7 +2,7 @@ package carcassonne.view.secondary;
 
 import javax.swing.JButton;
 
-import carcassonne.control.MainController;
+import carcassonne.control.ControllerFacade;
 import carcassonne.model.grid.GridDirection;
 
 /**
@@ -24,7 +24,7 @@ public class PlacementButton extends JButton {
      * @param controller is the controller of the GUI.
      * @param direction is the direction of the correlating meeple of the button on the tile.
      */
-    public PlacementButton(MainController controller, GridDirection direction) {
+    public PlacementButton(ControllerFacade controller, GridDirection direction) {
         super();
         addMouseListener(new PlacementButtonMouseAdapter(direction, controller, this));
     }

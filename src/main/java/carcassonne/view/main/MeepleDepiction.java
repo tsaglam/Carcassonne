@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import carcassonne.control.ControllerFacade;
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
@@ -32,7 +33,7 @@ public class MeepleDepiction {
      * @param controller is the {@link MainController} of the game.
      * @param direction is the {@link GridDirection} where the meeple label sits on the tile.
      */
-    public MeepleDepiction(int scalingFactor, MainController controller, GridDirection direction) {
+    public MeepleDepiction(int scalingFactor, ControllerFacade controller, GridDirection direction) {
         updateMeepleSize(scalingFactor);
         terrain = TerrainType.OTHER;
         label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize)); // new RigidLabel(meepleSize, meepleSize);
