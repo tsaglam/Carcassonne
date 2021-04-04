@@ -9,7 +9,7 @@ import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
-import carcassonne.view.ViewContainer;
+import carcassonne.view.ViewFacade;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -26,7 +26,7 @@ public class StatePlacing extends AbstractGameState {
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public StatePlacing(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
+    public StatePlacing(MainController controller, ViewFacade views, ArtificialIntelligence playerAI) {
         super(controller, views, playerAI);
     }
 

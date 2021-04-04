@@ -10,7 +10,7 @@ import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.ViewContainer;
+import carcassonne.view.ViewFacade;
 
 /**
  * Is the abstract state of the state machine.
@@ -19,7 +19,7 @@ import carcassonne.view.ViewContainer;
 public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human move states from AI moves?
 
     protected MainController controller;
-    protected ViewContainer views;
+    protected ViewFacade views;
     protected Round round;
     protected TileStack tileStack;
     protected Grid grid;
@@ -33,7 +33,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public AbstractGameState(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
+    public AbstractGameState(MainController controller, ViewFacade views, ArtificialIntelligence playerAI) {
         this.controller = controller;
         this.playerAI = playerAI;
         this.views = views;

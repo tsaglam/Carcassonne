@@ -17,7 +17,7 @@ import carcassonne.view.util.GameMessage;
  * Facade class for the different views that manages proper swing threading for the UI access.
  * @author Timur Saglam
  */
-public class ViewContainer { // TODO (HIGH) [DESIGN] rename class, is no longer a pure container.
+public class ViewFacade { // TODO (HIGH) [DESIGN] rename class, is no longer a pure container.
     private final MainView mainView;
     private final MeepleView meepleView;
     private final Scoreboard scoreboard;
@@ -32,7 +32,7 @@ public class ViewContainer { // TODO (HIGH) [DESIGN] rename class, is no longer 
      * @param tileView is the view used for previewing and rotating tiles.
      * @param meepleView is the view used to place meeples.
      */
-    public ViewContainer(MainView mainView, TileView tileView, MeepleView placmementView) {
+    public ViewFacade(MainView mainView, TileView tileView, MeepleView placmementView) {
         if (mainView == null || tileView == null || placmementView == null) {
             throw new IllegalArgumentException("View container can only contain non-null views!");
         }

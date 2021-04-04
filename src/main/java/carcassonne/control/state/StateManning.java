@@ -10,7 +10,7 @@ import carcassonne.model.grid.GridPattern;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.ViewContainer;
+import carcassonne.view.ViewFacade;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -26,7 +26,7 @@ public class StateManning extends AbstractGameState {
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public StateManning(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
+    public StateManning(MainController controller, ViewFacade views, ArtificialIntelligence playerAI) {
         super(controller, views, playerAI);
         noMeeplesNotification = new boolean[GameSettings.MAXIMAL_PLAYERS]; // stores whether a player was already notified about a lack of meeples
     }
