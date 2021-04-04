@@ -18,17 +18,17 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.GlobalKeyBindingManager;
-import carcassonne.view.NotifiableUI;
+import carcassonne.view.NotifiableView;
 import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.util.LookAndFeelUtil;
 
 /**
- * The main GUI class.
+ * The main user interface, showing the grid and the menu bar.
  * @author Timur Saglam
  */
-public class MainGUI extends JFrame implements NotifiableUI {
+public class MainView extends JFrame implements NotifiableView {
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 25;
@@ -45,10 +45,10 @@ public class MainGUI extends JFrame implements NotifiableUI {
     private int zoomLevel;
 
     /**
-     * Constructor of the main GUI. creates the GUI with a scoreboard.
+     * Constructor of the main view. creates the view, menu bar, and scoreboard.
      * @param controller sets the connection to the game controller.
      */
-    public MainGUI(ControllerFacade controller) {
+    public MainView(ControllerFacade controller) {
         this.controller = controller;
         gridWidth = controller.getSettings().getGridWidth();
         gridHeight = controller.getSettings().getGridHeight();
@@ -204,7 +204,7 @@ public class MainGUI extends JFrame implements NotifiableUI {
     }
 
     /**
-     * Notifies the the main GUI about a (new) current player. This allows the UI to adapt color schemes to the player.
+     * Notifies the the main view about a (new) current player. This allows the UI to adapt color schemes to the player.
      * @param currentPlayer is the current {@link Player}.
      */
     public void setCurrentPlayer(Player currentPlayer) {
@@ -256,7 +256,7 @@ public class MainGUI extends JFrame implements NotifiableUI {
     }
 
     /**
-     * Draws the tile on a specific position on the GUI.
+     * Draws the tile on a specific position on the view.
      * @param tile is the tile.
      * @param x is the x coordinate.
      * @param y is the y coordinate.

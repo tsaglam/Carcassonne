@@ -22,10 +22,9 @@ public class StateManning extends AbstractGameState {
 
     /**
      * Constructor of the state.
-     * @param controller sets the controller.
-     * @param mainGUI sets the MainGUI
-     * @param previewGUI sets the PreviewGUI
-     * @param placementGUI sets the PlacementGUI
+     * @param controller is the game controller.
+     * @param views contains the user interfaces.
+     * @param playerAI is the current AI strategy.
      */
     public StateManning(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
         super(controller, views, playerAI);
@@ -140,7 +139,7 @@ public class StateManning extends AbstractGameState {
                 placeMeepleWithAI();
             } else {
                 views.onMainView(it -> it.setMeeplePreview(selectedTile, player));
-                views.onPlacementView(it -> it.setTile(selectedTile, player));
+                views.onMeepleView(it -> it.setTile(selectedTile, player));
             }
         } else {
             if (!noMeeplesNotification[player.getNumber()] && !player.isComputerControlled()) { // Only warn player once until he regains meeples
@@ -157,6 +156,6 @@ public class StateManning extends AbstractGameState {
      */
     @Override
     protected void exit() {
-        views.onPlacementView(it -> it.setVisible(false));
+        views.onMeepleView(it -> it.setVisible(false));
     }
 }

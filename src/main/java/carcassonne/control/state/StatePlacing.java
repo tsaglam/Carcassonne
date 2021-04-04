@@ -20,10 +20,9 @@ public class StatePlacing extends AbstractGameState {
 
     /**
      * Constructor of the state.
-     * @param controller sets the controller.
-     * @param mainGUI sets the MainGUI
-     * @param previewGUI sets the PreviewGUI
-     * @param placementGUI sets the PlacementGUI
+     * @param controller is the game controller.
+     * @param views contains the user interfaces.
+     * @param playerAI is the current AI strategy.
      */
     public StatePlacing(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
         super(controller, views, playerAI);

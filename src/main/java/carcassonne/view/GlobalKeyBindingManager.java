@@ -14,9 +14,9 @@ import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
 import carcassonne.control.ControllerFacade;
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.MainView;
 import carcassonne.view.main.ZoomMode;
-import carcassonne.view.secondary.PreviewGUI;
+import carcassonne.view.secondary.TileView;
 
 /**
  * Container class for global key bindings. Offers a global action map and input map which are supposed to be used as
@@ -28,18 +28,18 @@ public class GlobalKeyBindingManager {
     private final Map<String, Action> actions;
     private final Map<String, KeyStroke> inputs;
     private final List<String> inputToActionKeys;
-    private final MainGUI mainUI;
-    private final PreviewGUI previewUI;
+    private final MainView mainView;
+    private final TileView previewUI;
     private final ControllerFacade controller;
 
     /**
      * Creates the key binding manager.
      * @param controller is the main controller.
-     * @param mainUI is the main user interface.
+     * @param mainView is the main user interface.
      * @param previewUI is the user interface for rotating tiles.
      */
-    public GlobalKeyBindingManager(ControllerFacade controller, MainGUI mainUI, PreviewGUI previewUI) {
-        this.mainUI = mainUI;
+    public GlobalKeyBindingManager(ControllerFacade controller, MainView mainView, TileView previewUI) {
+        this.mainView = mainView;
         this.previewUI = previewUI;
         this.controller = controller;
         actions = new HashMap<>();
@@ -146,7 +146,7 @@ public class GlobalKeyBindingManager {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                mainUI.zoomIn(ZoomMode.SMOOTH);
+                mainView.zoomIn(ZoomMode.SMOOTH);
             }
         };
         addKeyBinding("plus", plusStroke, zoomInAction);
@@ -157,7 +157,7 @@ public class GlobalKeyBindingManager {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                mainUI.zoomOut(ZoomMode.SMOOTH);
+                mainView.zoomOut(ZoomMode.SMOOTH);
             }
         };
         addKeyBinding("minus", minusStroke, zoomOutAction);
@@ -168,7 +168,7 @@ public class GlobalKeyBindingManager {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                mainUI.updateToChangedZoomLevel(ZoomMode.SMOOTH);
+                mainView.updateToChangedZoomLevel(ZoomMode.SMOOTH);
             }
         };
         addKeyBinding("meta", metaReleased, metaReleasedAction);
@@ -179,7 +179,7 @@ public class GlobalKeyBindingManager {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                mainUI.updateToChangedZoomLevel(ZoomMode.SMOOTH);
+                mainView.updateToChangedZoomLevel(ZoomMode.SMOOTH);
             }
         };
         addKeyBinding("control", controlReleased, controlReleasedAction);

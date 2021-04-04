@@ -18,14 +18,14 @@ import javax.swing.table.TableColumnModel;
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.Round;
 import carcassonne.view.GlobalKeyBindingManager;
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.MainView;
 import carcassonne.view.util.MouseClickListener;
 
 /**
- * A class for the game statistics GUI that shows the final scores of a round.
+ * A class for the game statistics view that shows the final scores of a round.
  * @author Timur Saglam
  */
-public class GameStatisticsGUI extends JDialog {
+public class GameStatisticsView extends JDialog {
     private static final long serialVersionUID = 2862334382605282126L; // generated UID
     private static final int ADDITIONAL_VERTICLE_SIZE = 100; // ensures that all text is readable
     static final int SCORE_COLUMN = 5;
@@ -36,14 +36,14 @@ public class GameStatisticsGUI extends JDialog {
     private JTable table;
 
     /**
-     * Creates the GUI and extracts the data from the current round.
-     * @param mainUI is the main user interface.
+     * Creates the view and extracts the data from the current round.
+     * @param mainView is the main user interface.
      * @param round is the current round.
-     * @mainUI is the main user interface.
+     * @mainView is the main user interface.
      */
-    public GameStatisticsGUI(MainGUI mainUI, Round round) {
-        super(mainUI);
-        controller = mainUI.getController();
+    public GameStatisticsView(MainView mainView, Round round) {
+        super(mainView);
+        controller = mainView.getController();
         buildTable(round);
         buildButtonClose();
         buildFrame();
@@ -51,9 +51,9 @@ public class GameStatisticsGUI extends JDialog {
     }
 
     /**
-     * Hides and disposes the GUI.
+     * Hides and disposes the view.
      */
-    public void closeGUI() {
+    public void closeView() {
         setVisible(false);
         dispose();
     }

@@ -26,7 +26,7 @@ import carcassonne.view.util.MouseClickListener;
  * disabled.)
  * @author Timur Saglam
  */
-public class TileDistributionGUI extends JDialog {
+public class TileDistributionView extends JDialog {
     private static final long serialVersionUID = 1805511300999150753L;
     private static final String MULTIPLIER = "Tile Stack Size Multiplier: ";
     private static final String BRACKET = "\t (";
@@ -48,7 +48,7 @@ public class TileDistributionGUI extends JDialog {
      * Creates the UI and shows it.
      * @param distribution is the {@link TileDistribution} to show in the UI.
      */
-    public TileDistributionGUI(GameSettings settings) {
+    public TileDistributionView(GameSettings settings) {
         this.settings = settings;
         distribution = settings.getTileDistribution();
         distribution.createBackup();

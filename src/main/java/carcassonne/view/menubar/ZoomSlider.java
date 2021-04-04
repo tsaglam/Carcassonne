@@ -4,7 +4,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.MainView;
 
 /**
  * Custom {@link JSlider} for the zoom functionality. Additionally, this class creates the zoom in/out menu items.
@@ -21,16 +21,16 @@ public class ZoomSlider extends JSlider {
 
     /**
      * Creates the slider.
-     * @param mainUI is the correlatin main user interface.f
+     * @param mainView is the correlatin main user interface.f
      */
-    public ZoomSlider(MainGUI mainUI) {
-        super(MINIMUM_VALUE, MAXIMUM_VALUE, mainUI.getZoom());
+    public ZoomSlider(MainView mainView) {
+        super(MINIMUM_VALUE, MAXIMUM_VALUE, mainView.getZoom());
         setPaintTicks(true);
         setOrientation(SwingConstants.VERTICAL);
         setMinorTickSpacing(5);
         setMajorTickSpacing(50);
         setSnapToTicks(true);
-        zoomListener = new ZoomSliderListener(mainUI, this);
+        zoomListener = new ZoomSliderListener(mainView, this);
         addMouseListener(zoomListener);
         addChangeListener(zoomListener);
         zoomIn = new JMenuItem("Zoom In (+)");

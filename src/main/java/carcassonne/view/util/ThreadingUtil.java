@@ -16,7 +16,7 @@ public final class ThreadingUtil {
     }
 
     /**
-     * Helps UI classes to execute a task in the background where there is no result to be returned.
+     * Helps view classes to execute a task in the background where there is no result to be returned.
      * @param task is the task to execute.
      */
     public static void runInBackground(Runnable task) {
@@ -31,7 +31,7 @@ public final class ThreadingUtil {
     }
 
     /**
-     * Helps UI classes to execute a task in the background and call-back on completion.
+     * Helps view classes to execute a task in the background and call-back on completion.
      * @param <T> is the return type of the task.
      * @param task is the task to be executed.
      * @param callback is the callback with the result on completion.

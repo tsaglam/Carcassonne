@@ -8,7 +8,7 @@ import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
 
 /**
- * ControllerFacade adapter for UI classes that manages the AWT/Swing threading for them and delegates all calls to a real
+ * ControllerFacade adapter for view classes that manages the AWT/Swing threading for them and delegates all calls to a real
  * controller.
  */
 public class ControllerAdapter implements ControllerFacade {
@@ -51,12 +51,12 @@ public class ControllerAdapter implements ControllerFacade {
 
     @Override
     public GlobalKeyBindingManager getKeyBindings() {
-        return controller.getKeyBindings(); // TODO (HIGH) [THREADING] Should not be on UI thread!
+        return controller.getKeyBindings(); // TODO (HIGH) [THREADING] Should not be on view thread!
     }
 
     @Override
     public GameSettings getSettings() {
-        return controller.getSettings(); // TODO (HIGH) [THREADING] Should not be on UI thread!
+        return controller.getSettings(); // TODO (HIGH) [THREADING] Should not be on view thread!
     }
 
     private void runInBackground(Runnable task) { // TODO (HIGH) [THREADING] Should be a single thread to allow aborting

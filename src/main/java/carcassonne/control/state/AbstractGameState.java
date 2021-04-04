@@ -29,8 +29,9 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     /**
      * Constructor of the abstract state, sets the controller from the parameter, registers the state at the controller and
      * calls the <code>entry()</code> method.
+     * @param controller is the game controller.
      * @param views contains the user interfaces.
-     * @param placementGUI sets the PlacementGUI
+     * @param playerAI is the current AI strategy.
      */
     public AbstractGameState(MainController controller, ViewContainer views, ArtificialIntelligence playerAI) {
         this.controller = controller;
@@ -157,7 +158,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     }
 
     /**
-     * Highlights the surroundings of a {@link GridSpot} on the main UI.
+     * Highlights the surroundings of a {@link GridSpot} on the main view.
      * @param spot is the {@link GridSpot} that determines where to highlight.
      */
     protected void highlightSurroundings(GridSpot spot) {

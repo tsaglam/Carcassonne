@@ -10,14 +10,14 @@ import javax.swing.JLabel;
 
 import carcassonne.model.Player;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.NotifiableUI;
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.NotifiableView;
+import carcassonne.view.main.MainView;
 
 /**
  * Is the scoreboard class of the game. Manages a score label for each player.
  * @author Timur Saglam
  */
-public class Scoreboard implements NotifiableUI {
+public class Scoreboard implements NotifiableView {
     private static final String FONT_TYPE = "Helvetica";
     private static final String TOOL_TIP = "Settings for player ";
     private final JLabel[] scoreLabels;
@@ -29,16 +29,16 @@ public class Scoreboard implements NotifiableUI {
     /**
      * Standard constructor. Creates score board.
      * @param settings are the {@link GameSettings}.
-     * @param mainUI is the main user interface.
+     * @param mainView is the main user interface.
      */
-    public Scoreboard(GameSettings settings, MainGUI mainUI) { // TODO (MEDIUM) link with players?
+    public Scoreboard(GameSettings settings, MainView mainView) { // TODO (MEDIUM) link with players?
         this.settings = settings;
         scoreLabels = new JLabel[GameSettings.MAXIMAL_PLAYERS];
         settingsListeners = new ArrayList<>();
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
             scoreLabels[i].setForeground(settings.getPlayerColor(i).textColor());
-            MenuSettingsListener listener = new MenuSettingsListener(i, settings, mainUI);
+            MenuSettingsListener listener = new MenuSettingsListener(i, settings, mainView);
             settingsListeners.add(listener);
             scoreLabels[i].addMouseListener(listener);
         }

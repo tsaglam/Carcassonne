@@ -12,7 +12,7 @@ import java.util.Map;
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileDistribution;
-import carcassonne.view.NotifiableUI;
+import carcassonne.view.NotifiableView;
 import carcassonne.view.PaintShop;
 
 /**
@@ -38,7 +38,7 @@ public class GameSettings {
     private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };
 
     // COLOR CONSTANTS:
-    public static final Color GUI_COLOR = new Color(190, 190, 190);
+    public static final Color UI_COLOR = new Color(190, 190, 190);
     private static final PlayerColor[] DEFAULT_COLORS = { new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
             new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147) };
 
@@ -60,7 +60,7 @@ public class GameSettings {
 
     // OTHER/INTERNAL
     private boolean gridSizeChanged;
-    private final List<NotifiableUI> changeListeners;
+    private final List<NotifiableView> changeListeners;
 
     /**
      * Creates a settings instance. Instances hold different setting values when one is changed.
@@ -77,7 +77,7 @@ public class GameSettings {
         gridWidth = 29;
         gridHeight = 19;
         gridSizeChanged = false;
-        changeListeners = new ArrayList<NotifiableUI>();
+        changeListeners = new ArrayList<NotifiableView>();
     }
 
     /**
@@ -173,10 +173,10 @@ public class GameSettings {
     }
 
     /**
-     * Registers a UI element that wants to listen to changes.
-     * @param notifiable is the UI element.
+     * Registers a view element that wants to listen to changes.
+     * @param notifiable is the view element.
      */
-    public void registerNotifiable(NotifiableUI notifiable) {
+    public void registerNotifiable(NotifiableView notifiable) {
         changeListeners.add(notifiable);
     }
 
@@ -269,7 +269,7 @@ public class GameSettings {
 
     private void notifyListeners() {
         PaintShop.clearCachedImages();
-        for (NotifiableUI notifiable : changeListeners) {
+        for (NotifiableView notifiable : changeListeners) {
             EventQueue.invokeLater(() -> notifiable.notifyChange());
         }
     }

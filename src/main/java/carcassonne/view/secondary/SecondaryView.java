@@ -13,14 +13,14 @@ import carcassonne.control.ControllerFacade;
 import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.view.GlobalKeyBindingManager;
-import carcassonne.view.NotifiableUI;
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.NotifiableView;
+import carcassonne.view.main.MainView;
 
 /**
- * Super class for all other smaller GUI beneath the main GUI.
+ * Super class for all other smaller view beneath the main view.
  * @author Timur Saglam
  */
-public abstract class SecondaryGUI extends JDialog implements NotifiableUI {
+public abstract class SecondaryView extends JDialog implements NotifiableView {
     private static final int INITIAL_X = 100;
     private static final int INITIAL_Y = 150;
     private static final long serialVersionUID = 4056347951568551115L;
@@ -29,11 +29,11 @@ public abstract class SecondaryGUI extends JDialog implements NotifiableUI {
     protected JPanel dialogPanel;
 
     /**
-     * Constructor for the class. Sets the controller of the GUI and the window title.
+     * Constructor for the class. Sets the controller of the view and the window title.
      * @param controller sets the {@link MainController}.
      * @param ui is the main graphical user interface.
      */
-    public SecondaryGUI(ControllerFacade controller, MainGUI ui) {
+    public SecondaryView(ControllerFacade controller, MainView ui) {
         super(ui);
         dialogPanel = new JPanel(new GridBagLayout());
         this.controller = controller;
@@ -83,7 +83,7 @@ public abstract class SecondaryGUI extends JDialog implements NotifiableUI {
     protected void showUI() {
         pack();
         setVisible(true);
-        toFront(); // sets the focus on the secondary GUI, removes need for double clicks
+        toFront(); // sets the focus on the secondary view, removes need for double clicks
     }
 
 }

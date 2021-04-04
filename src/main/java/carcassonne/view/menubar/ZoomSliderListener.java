@@ -10,7 +10,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import carcassonne.view.main.MainGUI;
+import carcassonne.view.main.MainView;
 import carcassonne.view.main.ZoomMode;
 
 /**
@@ -21,25 +21,25 @@ import carcassonne.view.main.ZoomMode;
 public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
 
     private static final double SMOOTHING_FACTOR = 5.0; // only update zoom with this step size.
-    private final MainGUI mainUI;
+    private final MainView mainView;
     private final JSlider slider;
     private int previousValue;
     private boolean blockingEvents;
 
     /**
      * Creates the listener.
-     * @param mainUI is the main user interface, needed for zooming.
+     * @param mainView is the main user interface, needed for zooming.
      * @param slider is the slider, needed for the values.
      */
-    public ZoomSliderListener(MainGUI mainUI, JSlider slider) {
-        this.mainUI = mainUI;
+    public ZoomSliderListener(MainView mainView, JSlider slider) {
+        this.mainView = mainView;
         this.slider = slider;
         previousValue = -1;
     }
 
     @Override
     public void mouseReleased(MouseEvent event) {
-        mainUI.setZoom(slider.getValue(), ZoomMode.SMOOTH);
+        mainView.setZoom(slider.getValue(), ZoomMode.SMOOTH);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
         int smoothedValue = (int) (Math.round(slider.getValue() / SMOOTHING_FACTOR) * SMOOTHING_FACTOR);
         if (previousValue != smoothedValue && !blockingEvents) { // limit zoom updated when dragging.
             previousValue = smoothedValue;
-            mainUI.setZoom(smoothedValue, ZoomMode.SEMI_FAST);
+            mainView.setZoom(smoothedValue, ZoomMode.SEMI_FAST);
         }
     }
 
