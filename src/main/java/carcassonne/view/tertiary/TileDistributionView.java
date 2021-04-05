@@ -20,6 +20,7 @@ import carcassonne.model.tile.TileDistribution;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.util.MouseClickListener;
+import carcassonne.view.util.ThreadingUtil;
 
 /**
  * User interface that shows all tiles and how often they are used in a standard game (two players, chaos mode
@@ -150,20 +151,22 @@ public class TileDistributionView extends JDialog {
     private List<JButton> createButtons() {
         JButton shuffleButton = new JButton(SHUFFLE);
         shuffleButton.addMouseListener((MouseClickListener) event -> {
-            applyChangesToDistribution();
-            distribution.shuffle();
-            updateFromDistribution();
+            ThreadingUtil.runAndCallback(() -> {
+                applyChangesToDistribution();
+                distribution.shuffle();
+            }, () -> updateFromDistribution());
         });
         JButton resetButton = new JButton(RESET);
         resetButton.addMouseListener((MouseClickListener) event -> {
-            distribution.reset();
-            updateFromDistribution();
+            ThreadingUtil.runAndCallback(() -> distribution.reset(), () -> updateFromDistribution());
         });
         JButton acceptButton = new JButton(ACCEPT);
         acceptButton.addMouseListener((MouseClickListener) event -> {
             dispose();
-            settings.setStackSizeMultiplier(stackSizeMultiplier);
-            applyChangesToDistribution();
+            ThreadingUtil.runInBackground(() -> {
+                settings.setStackSizeMultiplier(stackSizeMultiplier);
+                applyChangesToDistribution();
+            });
         });
         return List.of(shuffleButton, resetButton, acceptButton);
     }
