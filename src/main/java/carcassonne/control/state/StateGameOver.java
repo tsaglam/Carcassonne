@@ -30,7 +30,7 @@ public class StateGameOver extends AbstractGameState {
      */
     @Override
     public void abortGame() {
-        GameMessage.showWarning("You already aborted the current game. Close the game statistics to start a new game.");
+        // Do nothing, round is already aborted.
     }
 
     /**
@@ -74,9 +74,9 @@ public class StateGameOver extends AbstractGameState {
      */
     @Override
     protected void entry() {
-        System.out.println("FINAL PATTERNS:"); // TODO (LOW) remove debug output
+        System.out.println("FINAL PATTERNS:"); // TODO (LOW) [PRINT] remove debug output
         for (GridPattern pattern : grid.getAllPatterns()) {
-            System.out.println(pattern); // TODO (LOW) remove debug output
+            System.out.println(pattern); // TODO (LOW) [PRINT] remove debug output
             pattern.forceDisburse();
         }
         updateScores();
