@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
@@ -22,6 +21,7 @@ import carcassonne.settings.GameSettings;
 import carcassonne.view.PaintShop;
 import carcassonne.view.main.MainView;
 import carcassonne.view.util.GameMessage;
+import carcassonne.view.util.ThreadingUtil;
 
 /**
  * Custom UI for the play settings. Allows changing the name and the color of a player.
@@ -72,8 +72,8 @@ public class PlayerSettingsView extends JDialog implements ChangeListener, Actio
     @Override
     public void stateChanged(ChangeEvent event) {
         for (TerrainType terrain : TerrainType.basicTerrain()) {
-            ImageIcon icon = PaintShop.getColoredMeeple(terrain, colorChooser.getColor(), MEEPLE_PREVIEW_SIZE);
-            labelMap.get(terrain).setIcon(icon); // Update the preview labels.
+            ThreadingUtil.runAndCallback(() -> PaintShop.getColoredMeeple(terrain, colorChooser.getColor(), MEEPLE_PREVIEW_SIZE),
+                    it -> labelMap.get(terrain).setIcon(it)); // Update the preview labels.
         }
     }
 
@@ -82,9 +82,10 @@ public class PlayerSettingsView extends JDialog implements ChangeListener, Actio
         if (nameTextField.getText().isEmpty()) {
             GameMessage.showMessage(EMPTY_NAME);
         } else {
-            settings.setPlayerName(nameTextField.getText(), playerNumber);
-            settings.setPlayerColor(colorChooser.getColor(), playerNumber);
-            setVisible(false);
+            ThreadingUtil.runAndCallback(() -> {
+                settings.setPlayerName(nameTextField.getText(), playerNumber);
+                settings.setPlayerColor(colorChooser.getColor(), playerNumber);
+            }, () -> setVisible(false));
         }
     }
 

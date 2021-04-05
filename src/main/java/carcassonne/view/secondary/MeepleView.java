@@ -16,6 +16,7 @@ import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
 import carcassonne.view.main.MainView;
 import carcassonne.view.util.MouseClickListener;
+import carcassonne.view.util.ThreadingUtil;
 
 /**
  * A view for the placement of Meeples on the Tile that was placed previously.
@@ -51,8 +52,7 @@ public class MeepleView extends SecondaryView {
         }
         this.tile = tile;
         setCurrentPlayer(currentPlayer);
-        updatePlacementButtons();
-        showUI();
+        ThreadingUtil.runAndCallback(() -> updatePlacementButtons(), () -> showUI());
     }
 
     // build button grid

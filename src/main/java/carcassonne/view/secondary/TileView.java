@@ -19,6 +19,7 @@ import carcassonne.settings.GameSettings;
 import carcassonne.util.ImageLoadingUtil;
 import carcassonne.view.main.MainView;
 import carcassonne.view.util.MouseClickListener;
+import carcassonne.view.util.ThreadingUtil;
 
 /**
  * view class for the tile orientation. It lets the user look at the tile to place and rotate it both right and left.
@@ -109,8 +110,7 @@ public class TileView extends SecondaryView {
         tiles.clear();
         tiles.addAll(currentPlayer.getHandOfTiles());
         setCurrentPlayer(currentPlayer);
-        updatePreviewLabels();
-        showUI();
+        ThreadingUtil.runAndCallback(() -> updatePreviewLabels(), () -> showUI());
     }
 
     @Override
