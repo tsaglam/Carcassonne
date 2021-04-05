@@ -8,12 +8,13 @@ import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
 
 /**
- * ControllerFacade adapter for view classes that manages the AWT/Swing threading for them and delegates all calls to a real
- * controller.
+ * ControllerFacade adapter for view classes that manages the AWT/Swing threading for them and delegates all calls to a
+ * real controller.
  */
 public class ControllerAdapter implements ControllerFacade {
 
     private final MainController controller;
+    private final ExecutorService service;
 
     /**
      * Creates the controller adapter from a original controller.
@@ -21,10 +22,12 @@ public class ControllerAdapter implements ControllerFacade {
      */
     ControllerAdapter(MainController controller) {
         this.controller = controller;
+        service = Executors.newSingleThreadExecutor();
     }
 
     @Override
     public void requestAbortGame() {
+        controller.requestAbortOnStateChange(); // require for AI vs. AI play where the thread never pauses
         runInBackground(() -> controller.requestAbortGame());
     }
 
@@ -51,16 +54,15 @@ public class ControllerAdapter implements ControllerFacade {
 
     @Override
     public GlobalKeyBindingManager getKeyBindings() {
-        return controller.getKeyBindings(); // TODO (HIGH) [THREADING] Should not be on view thread!
+        return controller.getKeyBindings(); // TODO (HIGH) [THREADING] Should this be on view thread?
     }
 
     @Override
     public GameSettings getSettings() {
-        return controller.getSettings(); // TODO (HIGH) [THREADING] Should not be on view thread!
+        return controller.getSettings(); // TODO (HIGH) [THREADING] Should this be on view thread?
     }
 
-    private void runInBackground(Runnable task) { // TODO (HIGH) [THREADING] Should be a single thread to allow aborting
-        ExecutorService service = Executors.newCachedThreadPool();
+    private void runInBackground(Runnable task) {
         service.submit(task);
     }
 

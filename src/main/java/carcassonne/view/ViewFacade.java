@@ -86,7 +86,11 @@ public class ViewFacade { // TODO (HIGH) [DESIGN] rename class, is no longer a p
      * Closes the statistics view.
      */
     public void closeGameStatistics() {
-        schedule(() -> gameStatistics.closeView());
+        schedule(() -> {
+            if (gameStatistics != null) {
+                gameStatistics.closeView();
+            }
+        });
     }
 
     /**

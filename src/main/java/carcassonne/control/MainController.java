@@ -37,6 +37,7 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
     private GlobalKeyBindingManager keyBindings;
     private TileView tileView;
     private MeepleView meepleView;
+    private boolean abortOnStateChange;
 
     /**
      * Basic constructor. Creates the view and the model of the game.
@@ -60,6 +61,10 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
      * @return the new state.
      */
     public AbstractGameState changeState(Class<? extends AbstractGameState> stateType) {
+        if (abortOnStateChange && stateType == StatePlacing.class) {
+            abortOnStateChange = false;
+            return changeState(StateGameOver.class);
+        }
         currentState = stateMap.get(stateType);
         if (currentState == null) {
             throw new IllegalStateException("State is not registered: " + stateType);
@@ -73,6 +78,7 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
     @Override
     public void requestAbortGame() {
         currentState.abortGame();
+        abortOnStateChange = false;
     }
 
     /**
@@ -138,6 +144,15 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
     @Override
     public GameSettings getSettings() {
         return settings;
+    }
+
+    /**
+     * Signals that a abort request was scheduled. This request wait too long during AI vs. AI gameplay, thus this method
+     * requests the state machine to abort on the next state change. This method should not be queued on the state machine
+     * thread.
+     */
+    void requestAbortOnStateChange() {
+        abortOnStateChange = true;
     }
 
     /**

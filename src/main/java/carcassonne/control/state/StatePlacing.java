@@ -60,8 +60,10 @@ public class StatePlacing extends AbstractGameState {
      */
     @Override
     public void placeTile(int x, int y) {
-        Tile tile = views.getSelectedTile();
-        placeTile(tile, x, y);
+        if (!round.getActivePlayer().isComputerControlled()) {
+            Tile tile = views.getSelectedTile();
+            placeTile(tile, x, y);
+        }
     }
 
     /**
@@ -69,6 +71,12 @@ public class StatePlacing extends AbstractGameState {
      */
     @Override
     public void skip() {
+        if (!round.getActivePlayer().isComputerControlled()) {
+            skipPlacingTile();
+        }
+    }
+
+    private void skipPlacingTile() {
         if (round.isOver()) {
             changeState(StateGameOver.class);
         } else {
@@ -96,7 +104,7 @@ public class StatePlacing extends AbstractGameState {
     private void placeTileWithAI(Player player) {
         Optional<AbstractCarcassonneMove> bestMove = playerAI.calculateBestMoveFor(player.getHandOfTiles(), player, grid, tileStack);
         if (bestMove.isEmpty() || bestMove.get().getValue() < 0) {
-            skip();
+            skipPlacingTile();
         }
         bestMove.ifPresent(it -> {
             Tile tile = it.getOriginalTile();
@@ -132,7 +140,7 @@ public class StatePlacing extends AbstractGameState {
             player.addTile(tileStack.drawTile());
         }
         updateStackSize();
-        if (player.isComputerControlled()) { // TODO (HIGH) [AI] Slow with timer between two AI players.
+        if (player.isComputerControlled()) {
             waitForUI();
             placeTileWithAI(player);
         } else {

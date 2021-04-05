@@ -52,21 +52,10 @@ public class StateManning extends AbstractGameState {
      */
     @Override
     public void placeMeeple(GridDirection position) {
-        Tile tile = views.getSelectedTile();
-        views.onMainView(it -> it.resetMeeplePreview(tile));
-        placeMeeple(position, tile);
-    }
-
-    private void placeMeeple(GridDirection position, Tile tile) {
-        Player player = round.getActivePlayer();
-        if (player.hasFreeMeeples() && tile.allowsPlacingMeeple(position, player, controller.getSettings())) {
-            tile.placeMeeple(player, position, controller.getSettings());
-            views.onMainView(it -> it.setMeeple(tile, position, player));
-            updateScores();
-            processGridPatterns();
-            startNextTurn();
-        } else {
-            GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!");
+        if (!round.getActivePlayer().isComputerControlled()) {
+            Tile tile = views.getSelectedTile();
+            views.onMainView(it -> it.resetMeeplePreview(tile));
+            placeMeeple(position, tile);
         }
     }
 
@@ -83,6 +72,25 @@ public class StateManning extends AbstractGameState {
      */
     @Override
     public void skip() {
+        if (!round.getActivePlayer().isComputerControlled()) {
+            skipPlacingMeeple();
+        }
+    }
+
+    private void placeMeeple(GridDirection position, Tile tile) {
+        Player player = round.getActivePlayer();
+        if (player.hasFreeMeeples() && tile.allowsPlacingMeeple(position, player, controller.getSettings())) {
+            tile.placeMeeple(player, position, controller.getSettings());
+            views.onMainView(it -> it.setMeeple(tile, position, player));
+            updateScores();
+            processGridPatterns();
+            startNextTurn();
+        } else {
+            GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!");
+        }
+    }
+
+    private void skipPlacingMeeple() {
         if (!round.getActivePlayer().isComputerControlled()) {
             Tile tile = views.getSelectedTile();
             views.onMainView(it -> it.resetMeeplePreview(tile));
@@ -122,7 +130,7 @@ public class StateManning extends AbstractGameState {
         if (move.involvesMeeplePlacement()) {
             placeMeeple(move.getMeeplePosition(), move.getOriginalTile());
         } else {
-            skip();
+            skipPlacingMeeple();
         }
     }
 
