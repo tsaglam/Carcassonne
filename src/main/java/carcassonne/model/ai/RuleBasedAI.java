@@ -40,7 +40,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
             consideredMoves = consideredMoves.stream().filter(it -> !it.isFieldMove()).collect(toList());
         }
         if (!consideredMoves.isEmpty()) {
-            currentMove = chooseBestMove(consideredMoves);
+            currentMove = chooseBestMove(consideredMoves, grid);
         }
         System.out.println(currentMove); // TODO (HIGH) [AI] remove debug output
         return currentMove;
@@ -56,14 +56,14 @@ public class RuleBasedAI implements ArtificialIntelligence {
         return currentMove;
     }
 
-    private Optional<AbstractCarcassonneMove> chooseBestMove(List<AbstractCarcassonneMove> consideredMoves) {
+    private Optional<AbstractCarcassonneMove> chooseBestMove(List<AbstractCarcassonneMove> consideredMoves, Grid grid) {
         double maximumValue = consideredMoves.stream().mapToDouble(it -> it.getValue()).max().getAsDouble();
         Stream<AbstractCarcassonneMove> bestMoves = consideredMoves.stream().filter(it -> it.getValue() == maximumValue);
-        return chooseAmongBestMoves(bestMoves);
+        return chooseAmongBestMoves(bestMoves, grid);
     }
 
-    private Optional<AbstractCarcassonneMove> chooseAmongBestMoves(Stream<AbstractCarcassonneMove> bestMoves) {
-        RuleBasedComparator comparator = new RuleBasedComparator();
+    private Optional<AbstractCarcassonneMove> chooseAmongBestMoves(Stream<AbstractCarcassonneMove> bestMoves, Grid grid) {
+        RuleBasedComparator comparator = new RuleBasedComparator(grid.getFoundation());
         List<AbstractCarcassonneMove> listOfMoves = bestMoves.collect(toList());
         Collections.sort(listOfMoves, comparator.reversed());
         AbstractCarcassonneMove first = listOfMoves.get(0);
