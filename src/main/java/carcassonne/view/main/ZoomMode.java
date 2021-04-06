@@ -13,10 +13,5 @@ public enum ZoomMode {
     /**
      * Fast image scaling, but with highlight scaling.
      */
-    SEMI_FAST,
-
-    /**
-     * Fast image scaling, looks not as good.
-     */
-    FAST; // TODO (HIGH) technically no longer needed.
+    FAST,
 }

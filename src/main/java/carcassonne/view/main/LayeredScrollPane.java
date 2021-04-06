@@ -14,8 +14,6 @@ import javax.swing.OverlayLayout;
  * @author Timur Saglam
  */
 public class LayeredScrollPane extends JScrollPane {
-    private static final int PERFORMANCE_THRESHOLD = 2500; // if there are more tiles UI validation gets expensive
-    private static final double SIZE_FACTOR = 0.75; // affects validation, see shouldValidate()
     private static final long serialVersionUID = 7863596860273426396L;
     private static final int SCROLL_SPEED = 15;
     private final JLayeredPane layeredPane;
@@ -78,23 +76,10 @@ public class LayeredScrollPane extends JScrollPane {
     }
 
     /**
-     * Centers the scroll pane view to show the center of the grid. Uses calculated grid information to avoid validation.
-     * @param width is the width of the tile grid.
-     * @param height is the height of the tile grid.
-     */
-    public void centerView(int width, int height, int zoomLevel) { // TODO (HIGH) fix remaining jitter
-        if (width * height < PERFORMANCE_THRESHOLD || shouldValidate(width, height)) {
-            validateAndCenter();
-        } else {
-            centerScrollBars(width * zoomLevel, height * zoomLevel);
-        }
-    }
-
-    /**
      * Centers the scroll pane view to show the center of the grid. Since this method revalidates the viewport it can be
      * expensive if the scroll pane contains complex content (e.g. a very large grid).
      */
-    public void validateAndCenter() { // TODO (HIGH) zoom based on view center and not grid center?
+    public void validateAndCenter() { // TODO (HIGH) [ZOOMING] zoom based on view center and not grid center?
         validate(); // IMPORTANT: required to allow proper centering
         centerScrollBars(getHorizontalScrollBar().getMaximum(), getVerticalScrollBar().getMaximum());
     }
@@ -108,13 +93,5 @@ public class LayeredScrollPane extends JScrollPane {
         Rectangle view = getViewport().getViewRect();
         getHorizontalScrollBar().setValue(Math.max(0, (width - view.width) / 2));
         getVerticalScrollBar().setValue(Math.max(0, (height - view.height) / 2));
-    }
-
-    /*
-     * Determines if the tile grid is just large enough to be a little bit bigger as the scroll pane view.
-     */
-    private boolean shouldValidate(int width, int height) {
-        Rectangle visible = getViewport().getVisibleRect();
-        return width * SIZE_FACTOR < visible.width && width >= visible.width || height * SIZE_FACTOR < visible.height && height >= visible.height;
     }
 }

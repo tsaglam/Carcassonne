@@ -7,7 +7,7 @@ import java.util.Map;
 import carcassonne.settings.GameSettings;
 
 /**
- * Tile utility class. TODO (HIGH) Maybe move this somewhere else.
+ * Tile utility class. TODO (HIGH) [DESIGN] Maybe move this somewhere else.
  * @author Timur Saglam
  */
 public final class TileUtil {

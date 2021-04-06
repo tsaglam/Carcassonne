@@ -1,8 +1,6 @@
 package carcassonne.view.main;
 
 import static carcassonne.view.main.ZoomMode.FAST;
-import static carcassonne.view.main.ZoomMode.SEMI_FAST;
-import static carcassonne.view.main.ZoomMode.SMOOTH;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,6 +21,7 @@ import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.util.LookAndFeelUtil;
+import carcassonne.view.util.ThreadingUtil;
 
 /**
  * The main user interface, showing the grid and the menu bar.
@@ -30,6 +29,7 @@ import carcassonne.view.util.LookAndFeelUtil;
  */
 public class MainView extends JFrame implements NotifiableView {
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
+    private static final int DEFAULT_ZOOM_LEVEL = 125;
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 25;
     private static final int ZOOM_STEP_SIZE = 25;
@@ -52,7 +52,7 @@ public class MainView extends JFrame implements NotifiableView {
         this.controller = controller;
         gridWidth = controller.getSettings().getGridWidth();
         gridHeight = controller.getSettings().getGridHeight();
-        zoomLevel = 125;
+        zoomLevel = DEFAULT_ZOOM_LEVEL;
         buildFrame();
     }
 
@@ -188,18 +188,14 @@ public class MainView extends JFrame implements NotifiableView {
      * Updates the view to a changed zoom level. Centers the view.
      * @param mode determines the zoom mode, which affects image quality and performance.
      */
-    public void updateToChangedZoomLevel(ZoomMode mode) {
-        if (mode != FAST && currentPlayer != null) { // only update highlights when there is an active round
-            tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel)); // TODO (HIGH) [THREADING] Swing threading here
+    public void updateToChangedZoomLevel(ZoomMode mode) { // TODO (HIGH) [THREADING] Better threading for zooming?
+        if (currentPlayer != null) { // only update highlights when there is an active round
+            tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, mode == FAST));
         }
-        tileLayer.changeZoomLevel(zoomLevel, mode != SMOOTH); // Executed in parallel for improved performance
+        tileLayer.changeZoomLevel(zoomLevel, mode == FAST); // Executed in parallel for improved performance
         meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
-        meepleLayer.changeZoomLevel(zoomLevel); // TODO (HIGH) [THREADING] Swing threading here
-        if (mode == SMOOTH) {
-            scrollPane.validateAndCenter();
-        } else {
-            scrollPane.centerView(gridWidth, gridHeight, zoomLevel);
-        }
+        meepleLayer.changeZoomLevel(zoomLevel);
+        ThreadingUtil.runInBackground(() -> scrollPane.validateAndCenter());
         scrollPane.repaintLayers(); // IMPORTANT: Prevents meeples from disappearing.
     }
 
@@ -212,7 +208,7 @@ public class MainView extends JFrame implements NotifiableView {
             scrollPane.validateAndCenter(); // ensures centered view on game start for heterogenous multi-monitor setups
         }
         this.currentPlayer = currentPlayer;
-        ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel);
+        ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel, false);
         tileLayer.refreshHighlight(newHighlight);
     }
 
@@ -287,7 +283,7 @@ public class MainView extends JFrame implements NotifiableView {
         setLayout(new BorderLayout());
         scrollPane = LookAndFeelUtil.createModifiedScrollpane();
         scrollPane.addLayers(meepleLayer, tileLayer);
-        scrollPane.addZoomListener(() -> zoomIn(SEMI_FAST), () -> zoomOut(SEMI_FAST));
+        scrollPane.addZoomListener(() -> zoomIn(FAST), () -> zoomOut(FAST));
         add(scrollPane, BorderLayout.CENTER);
         setMinimumSize(MINIMAL_WINDOW_SIZE);
         addWindowListener(new WindowMaximizationAdapter(this));
