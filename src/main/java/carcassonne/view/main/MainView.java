@@ -143,7 +143,7 @@ public class MainView extends JFrame implements NotifiableView {
      * Grants access to the current zoom level of the UI.
      * @return the zoom level.
      */
-    public int getZoom() {
+    public synchronized int getZoom() {
         return zoomLevel;
     }
 

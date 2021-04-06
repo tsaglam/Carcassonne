@@ -345,8 +345,8 @@ public class Grid {
      * @param tileType is the type of that specific tile.
      */
     private void placeFoundation(TileType tileType) {
-        int centerX = Math.round((width - 1) / 2);
-        int centerY = Math.round((height - 1) / 2);
+        int centerX = (width - 1) / 2;
+        int centerY = (height - 1) / 2;
         foundation = spots[centerX][centerY];
         foundation.forcePlacement(new Tile(tileType));
     }
