@@ -79,7 +79,7 @@ public final class TileImageScalingCache {
      */
     private static void restoreConsistency() {
         Integer lastRemovedKey = cachedImages.getLastRemovedKey();
-        if (lastRemovedKey != null && cachedScalingInformation.contains(lastRemovedKey)) {
+        if (lastRemovedKey != null && cachedScalingInformation.containsKey(lastRemovedKey)) {
             cachedScalingInformation.remove(lastRemovedKey);
         }
     }
