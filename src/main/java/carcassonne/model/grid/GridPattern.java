@@ -191,7 +191,7 @@ public class GridPattern {
     }
 
     private int divideScore(int score, List<Player> dominantPlayers) {
-        return (int) Math.ceil(score / dominantPlayers.size());
+        return (int) Math.ceil(score / (double) dominantPlayers.size());
     }
 
     private boolean isPartOfPattern(GridSpot spot, GridDirection position) {
