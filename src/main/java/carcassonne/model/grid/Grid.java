@@ -257,7 +257,7 @@ public class Grid {
         List<ZeroSumMove> possibleMoves = new ArrayList<>();
         for (TileRotation rotation : tile.getPossibleRotations()) {
             tile.rotateTo(rotation);
-            for (int x = 0; x < width; x++) { // TODO (HIGH) maybe we should track free and occupied spots?
+            for (int x = 0; x < width; x++) { // TODO (HIGH) [PERFORMANCE] maybe we should track free and occupied spots?
                 for (int y = 0; y < height; y++) {
                     possibleMoves.addAll(movesForGridSpot(player, spots[x][y], tile, settings));
                 }

@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
+import carcassonne.util.FastImageScaler;
 import carcassonne.util.ImageLoadingUtil;
 
 /**
@@ -31,7 +32,6 @@ public final class PaintShop {
     private static final Map<TerrainType, BufferedImage> imageMap = buildImageMap(false);
     private static final String KEY_SEPARATOR = "|";
     private static final int MAXIMAL_ALPHA = 255;
-    private static final int SCALING_STRATEGY = Image.SCALE_SMOOTH;
 
     private PaintShop() {
         // private constructor ensures non-instantiability!
@@ -68,13 +68,11 @@ public final class PaintShop {
      * @param size is the edge length in pixels of the image.
      * @return the highlighted tile.
      */
-    public static ImageIcon getColoredHighlight(Player player, int size) {
+    public static ImageIcon getColoredHighlight(Player player, int size, boolean fastScaling) {
         ImageIcon coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
-
-        Image small = coloredImage.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
+        Image small = scaleDown(coloredImage.getImage(), size, fastScaling);
         int largeSize = Math.min(size * HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
-        Image large = coloredImage.getImage().getScaledInstance(largeSize, largeSize, Image.SCALE_SMOOTH);
-
+        Image large = scaleDown(coloredImage.getImage(), largeSize, fastScaling);
         return new ImageIcon(new BaseMultiResolutionImage(small, large));
     }
 
@@ -118,7 +116,7 @@ public final class PaintShop {
         if (chachedMeepleImages.containsKey(key)) {
             return chachedMeepleImages.get(key);
         }
-        Image preview = imageMap.get(meepleType).getScaledInstance(size * HIGH_DPI_FACTOR, size * HIGH_DPI_FACTOR, SCALING_STRATEGY);
+        Image preview = imageMap.get(meepleType).getScaledInstance(size * HIGH_DPI_FACTOR, size * HIGH_DPI_FACTOR, Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(preview));
         chachedMeepleImages.put(key, icon);
         return icon;
@@ -194,6 +192,13 @@ public final class PaintShop {
                     image.setRGB(x, y, color);
                 }
             }
+        }
+        return image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
+    }
+
+    private static Image scaleDown(Image image, int size, boolean fastScaling) {
+        if (fastScaling) {
+            return FastImageScaler.scaleDown(image, size);
         }
         return image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
     }

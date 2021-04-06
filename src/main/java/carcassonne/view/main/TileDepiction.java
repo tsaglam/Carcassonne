@@ -80,7 +80,7 @@ public class TileDepiction {
      */
     public void setTileSize(int tileSize, boolean preview) {
         this.tileSize = tileSize;
-        label.setIcon(tile.getScaledIcon(tileSize, preview)); // TODO (HIGH) [THREADING] Swing threading here
+        label.setIcon(tile.getScaledIcon(tileSize, preview));
     }
 
     /**
