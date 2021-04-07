@@ -3,6 +3,7 @@ package carcassonne.model.ai;
 import java.util.Comparator;
 
 import carcassonne.model.grid.GridSpot;
+import carcassonne.util.MinkowskiDistance;
 
 /**
  * Comparator to compare moves with an equal value based on simple heuristic rules.
@@ -55,7 +56,7 @@ public class RuleBasedComparator implements Comparator<AbstractCarcassonneMove> 
     }
 
     private double distanceToCenter(AbstractCarcassonneMove move) {
-        return Math.sqrt(Math.pow(center.getX() - move.getX(), 2) + Math.pow(center.getY() - move.getY(), 2));
+        return MinkowskiDistance.ROUNDED_SQUARE.distance(center.getX(), center.getY(), move.getX(), move.getY());
     }
 
     private int preferFalse(Boolean first, Boolean second) {
