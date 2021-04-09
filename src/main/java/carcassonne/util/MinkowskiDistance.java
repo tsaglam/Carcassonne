@@ -1,12 +1,12 @@
 package carcassonne.util;
 
 /**
- * Utility class for the calculation of the Minkowski distance, including Manhatten and Euclidean distance.
+ * Utility class for the calculation of the Minkowski distance, including Manhattan and Euclidean distance.
  * @author Timur Saglam
  */
 public enum MinkowskiDistance {
     COMPASS(Math.pow(2, -0.5)),
-    MANHATTEN(1),
+    MANHATTAN(1),
     ROUNDED_DIAMOND(Math.pow(2, 0.5)),
     EUCLIDEAN(2),
     ROUNDED_SQUARE(Math.pow(2, 1.5));
