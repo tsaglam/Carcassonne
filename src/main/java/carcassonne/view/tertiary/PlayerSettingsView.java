@@ -59,7 +59,7 @@ public class PlayerSettingsView extends JDialog implements ChangeListener, Actio
      * Updates the name and color of the correlating player and then makes the UI visible.
      */
     public void updateAndShow() {
-        if (colorChooser == null) { // create JColorChoser on demand for optimal performance
+        if (colorChooser == null) { // create JColorChooser on demand for optimal performance
             createColorChooser();
             pack(); // adapt UI size to content
             setLocationRelativeTo(null); // place UI in the center of the screen
