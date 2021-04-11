@@ -107,7 +107,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     protected void startNewRound(int playerCount) {
         GameSettings settings = controller.getSettings();
         Grid newGrid = new Grid(settings.getGridWidth(), settings.getGridHeight());
-        TileStack tileStack = new TileStack(playerCount, settings.getTileDistribution(), settings.getStackSizeMultiplier());
+        TileStack tileStack = new TileStack(settings.getTileDistribution(), settings.getStackSizeMultiplier());
         Round newRound = new Round(playerCount, tileStack, newGrid, controller.getSettings());
         controller.updateStates(newRound, tileStack, newGrid);
         updateScores();
