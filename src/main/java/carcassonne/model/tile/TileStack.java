@@ -3,6 +3,7 @@ package carcassonne.model.tile;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Stack;
 
 /**
@@ -15,18 +16,31 @@ public class TileStack {
     private final int multiplicator;
 
     /**
-     * Simple constructor, creates the default fixed-amount stack.
-     * @param players is the amount of player for which this tile stack is intended.
+     * Basic constructor, creates the tile stack.
      * @param distribution is the tile distribution according which the stack is filled.
      * @param multiplicator is the tile stack multiplier, meaning how often the distribution is added to the stack.
      */
-    public TileStack(int players, TileDistribution distribution, int multiplicator) {
+    public TileStack(TileDistribution distribution, int multiplicator) {
+        this(distribution, multiplicator, null);
+    }
+
+    /**
+     * Creates a tile stack with a pseudo-random tile order.
+     * @param distribution is the tile distribution according which the stack is filled.
+     * @param multiplicator is the tile stack multiplier, meaning how often the distribution is added to the stack.
+     * @param sortingSeed is the seed for the tile order.
+     */
+    public TileStack(TileDistribution distribution, int multiplicator, Long sortingSeed) {
         this.multiplicator = multiplicator;
         tiles = new Stack<>();
         returnedTiles = new LinkedList<>();
         fillStack(distribution);
         rotateRandomly();
-        Collections.shuffle(tiles);
+        if (sortingSeed == null) {
+            Collections.shuffle(tiles);
+        } else {
+            Collections.shuffle(tiles, new Random(sortingSeed));
+        }
     }
 
     /**
