@@ -52,6 +52,7 @@ public class GameSettings {
     private int amountOfPlayers;
     private int stackSizeMultiplier;
     private final TileDistribution tileDistribution;
+    private final List<Boolean> playerTypes;
 
     // GAME RULES:
     private boolean allowFortifying;
@@ -68,6 +69,7 @@ public class GameSettings {
     public GameSettings() {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
+        playerTypes = new ArrayList<>(Arrays.asList(false, false, false, false, false));
         meepleRules = new HashMap<TerrainType, Boolean>();
         TerrainType.basicTerrain().forEach(it -> meepleRules.put(it, true));
         tileDistribution = new TileDistribution();
@@ -172,6 +174,11 @@ public class GameSettings {
         return gridSizeChanged;
     }
 
+    // TODO (HIGH) [COMMENT]
+    public boolean isPlayerComputerControlled(int playerNumber) {
+        return playerTypes.get(playerNumber);
+    }
+
     /**
      * Registers a view element that wants to listen to changes.
      * @param notifiable is the view element.
@@ -230,6 +237,11 @@ public class GameSettings {
     public void setPlayerColor(Color color, int playerNumber) {
         colors.set(playerNumber, new PlayerColor(color));
         notifyListeners();
+    }
+
+    // TODO (HIGH) [COMMENT]
+    public void setPlayerComputerControlled(boolean computerControlled, int playerNumber) {
+        playerTypes.set(playerNumber, computerControlled);
     }
 
     /**
