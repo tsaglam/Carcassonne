@@ -1,7 +1,5 @@
 package carcassonne.view.menubar;
 
-import java.awt.Color;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
@@ -14,8 +12,8 @@ import javax.swing.JSeparator;
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
-import carcassonne.view.NotifiableView;
 import carcassonne.view.main.MainView;
+import carcassonne.view.tertiary.PlayerSettingsView;
 import carcassonne.view.tertiary.GridSizeDialog;
 import carcassonne.view.tertiary.TileDistributionView;
 import carcassonne.view.util.GameMessage;
@@ -24,7 +22,7 @@ import carcassonne.view.util.GameMessage;
  * The menu bar for the main view.
  * @author Timur Saglam
  */
-public class MainMenuBar extends JMenuBar implements NotifiableView {
+public class MainMenuBar extends JMenuBar {
     private static final long serialVersionUID = -599734693130415390L;
     private static final String ALLOW_FORTIFYING = "Allow direct meeple placement on own patterns";
     private static final String MEEPLE_RULE_SUFFIX = " Meeples";
@@ -35,25 +33,22 @@ public class MainMenuBar extends JMenuBar implements NotifiableView {
     private static final String HAND_SETTINGS = "Hand of Tiles";
     private static final String GRID_SIZE = "Change Grid Size";
     private static final String ABORT = "Abort Current Game";
-    private static final String AMOUNT = "Amount of Players";
     private static final String GAME = "Game";
     private static final String LARGE_SPACE = "          ";
     private static final String NEW_ROUND = "Start New Round";
     private static final String OPTIONS = "Options";
-    private static final String PLAYERS = " Players";
     private static final String PLAYER_SETTINGS = "Player Settings";
-    private static final String SETTINGS_OF = "Settings of ";
     private static final String VIEW = "View";
     private static final String ABOUT = "About";
     private final ControllerFacade controller;
     private JMenuItem itemAbortRound;
     private JMenuItem itemNewRound;
-    private JMenuItem[] itemSettings;
     private final MainView mainView;
     private final Scoreboard scoreboard;
     private final GameSettings settings;
     private ZoomSlider slider;
     private final TileDistributionView tileDistributionUI;
+    private final PlayerSettingsView playerView;
 
     /**
      * Simple constructor creating the menu bar.
@@ -65,9 +60,9 @@ public class MainMenuBar extends JMenuBar implements NotifiableView {
         this.controller = controller;
         this.mainView = mainView;
         settings = controller.getSettings();
-        settings.registerNotifiable(this);
         scoreboard = new Scoreboard(settings, mainView);
         tileDistributionUI = new TileDistributionView(settings);
+        playerView = new PlayerSettingsView(settings, scoreboard);
         buildGameMenu();
         buildOptionsMenu();
         buildViewMenu();
@@ -99,16 +94,6 @@ public class MainMenuBar extends JMenuBar implements NotifiableView {
         return slider;
     }
 
-    @Override
-    public final void notifyChange() {
-        for (int i = 0; i < itemSettings.length; i++) {
-            Color color = settings.getPlayerColor(i).textColor();
-            String name = settings.getPlayerName(i);
-            itemSettings[i].setForeground(color);
-            itemSettings[i].setText(SETTINGS_OF + name);
-        }
-    }
-
     // adds labels of the scoreboard to the menu bar.
     private void add(Scoreboard scoreboard) {
         for (JLabel label : scoreboard.getLabels()) {
@@ -134,11 +119,11 @@ public class MainMenuBar extends JMenuBar implements NotifiableView {
 
     private void buildOptionsMenu() {
         JMenu menuOptions = new JMenu(OPTIONS);
-        menuOptions.add(buildPlayerMenu());
+        JMenuItem itemPlayerSettings = new JMenuItem(PLAYER_SETTINGS);
+        itemPlayerSettings.addActionListener(it -> playerView.setVisible(true));
+        menuOptions.add(itemPlayerSettings);
         menuOptions.add(buildHandMenu());
         menuOptions.add(buildMeepleRuleMenu());
-        menuOptions.add(buildColorMenu());
-        notifyChange(); // set colors
         menuOptions.addSeparator();
         JMenuItem itemGridSize = new JMenuItem(GRID_SIZE);
         GridSizeDialog dialog = new GridSizeDialog(settings);
@@ -148,32 +133,6 @@ public class MainMenuBar extends JMenuBar implements NotifiableView {
         itemDistribution.addActionListener(event -> tileDistributionUI.setVisible(true));
         menuOptions.add(itemDistribution);
         add(menuOptions);
-    }
-
-    private JMenu buildPlayerMenu() {
-        JMenu menu = new JMenu(AMOUNT);
-        JRadioButtonMenuItem[] itemPlayerCount = new JRadioButtonMenuItem[GameSettings.MAXIMAL_PLAYERS - 1];
-        ButtonGroup group = new ButtonGroup();
-        for (int i = 0; i < itemPlayerCount.length; i++) {
-            int players = i + 2;
-            itemPlayerCount[i] = new JRadioButtonMenuItem(players + PLAYERS);
-            itemPlayerCount[i].addActionListener(event -> settings.setAmountOfPlayers(players));
-            group.add(itemPlayerCount[i]);
-            menu.add(itemPlayerCount[i]);
-        }
-        itemPlayerCount[0].setSelected(true);
-        return menu;
-    }
-
-    private JMenu buildColorMenu() {
-        itemSettings = new JMenuItem[GameSettings.MAXIMAL_PLAYERS];
-        JMenu menu = new JMenu(PLAYER_SETTINGS);
-        for (int i = 0; i < itemSettings.length; i++) {
-            itemSettings[i] = new JMenuItem();
-            itemSettings[i].addActionListener(scoreboard.getSettingsListener(i));
-            menu.add(itemSettings[i]);
-        }
-        return menu;
     }
 
     private JMenu buildHandMenu() {

@@ -38,7 +38,7 @@ public class Scoreboard implements NotifiableView {
         for (int i = 0; i < scoreLabels.length; i++) {
             scoreLabels[i] = new JLabel();
             scoreLabels[i].setForeground(settings.getPlayerColor(i).textColor());
-            MenuSettingsListener listener = new MenuSettingsListener(i, settings, mainView);
+            MenuViewListener listener = new MenuViewListener(i, settings, mainView);
             settingsListeners.add(listener);
             scoreLabels[i].addMouseListener(listener);
         }
