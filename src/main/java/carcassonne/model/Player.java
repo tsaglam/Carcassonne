@@ -23,7 +23,7 @@ public class Player {
     private Map<TerrainType, Integer> terrainSpecificScores;
     private final GameSettings settings;
     private final List<Tile> handOfTiles;
-    private boolean computerControlled;
+    private final boolean computerControlled;
 
     /**
      * Simple constructor.
@@ -36,7 +36,8 @@ public class Player {
         freeMeeples = GameSettings.MAXIMAL_MEEPLES;
         maximalTiles = settings.getTilesPerPlayer();
         handOfTiles = new ArrayList<>();
-        initializeScores();  
+        computerControlled = settings.isPlayerComputerControlled(number);
+        initializeScores();
     }
 
     /**
@@ -192,13 +193,5 @@ public class Player {
      */
     public boolean isComputerControlled() {
         return computerControlled;
-    }
-
-    /**
-     * Specifies whether the player is a human player or an AI player.
-     * @param computerControlled set true for AI players.
-     */
-    public void setComputerControlled(boolean computerControlled) {
-        this.computerControlled = computerControlled;
     }
 }
