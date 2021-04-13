@@ -87,9 +87,9 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
 
     private void createPlayerNumberButton(int numberOfPlayers, JPanel panel, ButtonGroup group) {
         JRadioButton button = new JRadioButton(Integer.toString(numberOfPlayers));
-        button.setSelected(settings.getAmountOfPlayers() == numberOfPlayers);
-        button.addMouseListener((MouseClickListener) event -> settings.setAmountOfPlayers(numberOfPlayers));
-        if (settings.getAmountOfPlayers() == numberOfPlayers) {
+        button.setSelected(settings.getNumberOfPlayers() == numberOfPlayers);
+        button.addMouseListener((MouseClickListener) event -> settings.setNumberOfPlayers(numberOfPlayers));
+        if (settings.getNumberOfPlayers() == numberOfPlayers) {
             button.setSelected(true);
         }
         group.add(button);

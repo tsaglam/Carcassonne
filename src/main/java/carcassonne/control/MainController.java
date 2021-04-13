@@ -95,7 +95,7 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
      */
     @Override
     public void requestNewRound() {
-        currentState.newRound(settings.getAmountOfPlayers());
+        currentState.newRound(settings.getNumberOfPlayers());
     }
 
     /**

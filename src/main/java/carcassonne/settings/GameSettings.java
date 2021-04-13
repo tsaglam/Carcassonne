@@ -49,7 +49,7 @@ public class GameSettings {
     // GAME SETUP:
     private int gridWidth;
     private int gridHeight;
-    private int amountOfPlayers;
+    private int numberOfPlayers;
     private int stackSizeMultiplier;
     private final TileDistribution tileDistribution;
     private final List<Boolean> playerTypes;
@@ -73,21 +73,13 @@ public class GameSettings {
         meepleRules = new HashMap<TerrainType, Boolean>();
         TerrainType.basicTerrain().forEach(it -> meepleRules.put(it, true));
         tileDistribution = new TileDistribution();
-        amountOfPlayers = 2;
+        numberOfPlayers = 2;
         tilesPerPlayer = 1;
         stackSizeMultiplier = 1;
         gridWidth = 29;
         gridHeight = 19;
         gridSizeChanged = false;
         changeListeners = new ArrayList<NotifiableView>();
-    }
-
-    /**
-     * Returns how many player are playing in the next round.
-     * @return the amount of players.
-     */
-    public int getAmountOfPlayers() {
-        return amountOfPlayers;
     }
 
     /**
@@ -113,6 +105,14 @@ public class GameSettings {
      */
     public boolean getMeepleRule(TerrainType type) {
         return meepleRules.getOrDefault(type, false);
+    }
+
+    /**
+     * Returns how many player are playing in the next round.
+     * @return the amount of players.
+     */
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
     }
 
     /**
@@ -196,14 +196,6 @@ public class GameSettings {
     }
 
     /**
-     * Specifies how many player are playing in the next round.
-     * @param amountOfPlayers is the amount of players.
-     */
-    public void setAmountOfPlayers(int amountOfPlayers) {
-        this.amountOfPlayers = amountOfPlayers;
-    }
-
-    /**
      * Setter for the height of grid.
      * @param gridHeight the grid height in tiles.
      */
@@ -227,6 +219,14 @@ public class GameSettings {
     public void setGridWidth(int gridWidth) {
         this.gridWidth = gridWidth;
         gridSizeChanged = true;
+    }
+
+    /**
+     * Specifies how many player are playing in the next round.
+     * @param numberOfPlayers is the amount of players.
+     */
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     /**

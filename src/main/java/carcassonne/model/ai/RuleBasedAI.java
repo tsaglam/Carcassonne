@@ -36,7 +36,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
         // RULE 1: Only consider move with a positive value:
         List<AbstractCarcassonneMove> consideredMoves = possibleMoves.stream().filter(it -> it.getPureValue() >= VALUE_THRESHOLD).collect(toList());
         // RULE 2: Do not place last meeple on fields
-        if (player.getFreeMeeples() == 1 && stack.getSize() > settings.getAmountOfPlayers()) {
+        if (player.getFreeMeeples() == 1 && stack.getSize() > settings.getNumberOfPlayers()) {
             consideredMoves = consideredMoves.stream().filter(it -> !it.isFieldMove()).collect(toList());
         }
         if (!consideredMoves.isEmpty()) {
