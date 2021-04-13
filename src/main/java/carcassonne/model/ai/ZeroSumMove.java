@@ -6,6 +6,7 @@ import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.model.grid.GridSpot;
+import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
 
 /**
@@ -52,14 +53,16 @@ public class ZeroSumMove extends AbstractCarcassonneMove {
         }
         localPatterns = gridSpot.getGrid().getLocalPatterns(gridSpot);
         double scoreAfter = localPatterns.stream().mapToInt(this::zeroSumScore).sum();
-        int meeplesAfter = calculateEmployedMeeples(localPatterns);
+        gainedMeeples -= calculateEmployedMeeples(localPatterns);
         tile.removeMeeple();
-        gainedMeeples -= meeplesAfter;
         pureValue = (scoreAfter - scoreBefore);
         return pureValue + variableMeepleValue(gainedMeeples);
     }
 
     private double variableMeepleValue(int meepleDifference) {
+        if (getMeepleType() == TerrainType.FIELDS) {
+            meepleDifference--; // placing a field meeple is valued as two meeples
+        }
         double value = MEEPLE_BASE_VALUE;
         if (actingPlayer.getFreeMeeples() == 0 && meepleDifference != 0) {
             value += LAST_MEEPLE_INCENTIVE;

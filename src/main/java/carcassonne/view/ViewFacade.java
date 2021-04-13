@@ -14,10 +14,11 @@ import carcassonne.view.tertiary.GameStatisticsView;
 import carcassonne.view.util.GameMessage;
 
 /**
- * Facade class for the different views that manages proper swing threading for the UI access.
+ * Facade class for the different views that manages proper swing threading for the UI access. This is not a traditional
+ * facade per se, as it technically grant access to its managed objects.
  * @author Timur Saglam
  */
-public class ViewFacade { // TODO (HIGH) [DESIGN] rename class, is no longer a pure container.
+public class ViewFacade {
     private final MainView mainView;
     private final MeepleView meepleView;
     private final Scoreboard scoreboard;
