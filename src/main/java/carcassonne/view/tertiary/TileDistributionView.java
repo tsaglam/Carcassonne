@@ -8,13 +8,13 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.border.LineBorder;
 
 import carcassonne.model.tile.TileDistribution;
 import carcassonne.model.tile.TileType;
@@ -124,7 +124,7 @@ public class TileDistributionView extends JDialog {
 
     private JPanel buildMultiplierPanel() {
         JPanel multiplierPanel = new JPanel();
-        multiplierPanel.setBorder(new LineBorder(Color.DARK_GRAY, 2));
+        multiplierPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
         multiplierPanel.setBackground(Color.LIGHT_GRAY);
         multiplierPanel.add(new JLabel(MULTIPLIER));
         ButtonGroup group = new ButtonGroup();
@@ -200,5 +200,6 @@ public class TileDistributionView extends JDialog {
         pack();
         setSize(getWidth() + PADDING * GRID_WIDTH, getHeight() + PADDING * GRID_HEIGHT);
         setLocationRelativeTo(null);
+        setModalityType(ModalityType.APPLICATION_MODAL);
     }
 }

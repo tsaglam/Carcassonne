@@ -4,12 +4,12 @@ import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
@@ -199,6 +199,6 @@ public class TileView extends SecondaryView {
 
     // Creates the selection border. The color is always up to date.
     private Border createSelectionBorder() {
-        return new LineBorder(currentPlayer.getColor().textColor(), SELECTION_BORDER_WIDTH);
+        return BorderFactory.createLineBorder(currentPlayer.getColor().textColor(), SELECTION_BORDER_WIDTH);
     }
 }

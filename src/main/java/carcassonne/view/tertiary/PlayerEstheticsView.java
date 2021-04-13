@@ -53,6 +53,7 @@ public class PlayerEstheticsView extends JDialog implements ChangeListener, Acti
         setLayout(new BorderLayout());
         createNamePanel();
         createCloseButton();
+        setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
     /**
