@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 
 import carcassonne.model.grid.GridDirection;
 import carcassonne.settings.GameSettings;
+import carcassonne.util.ErrorReportingRunnable;
 import carcassonne.view.GlobalKeyBindingManager;
 
 /**
@@ -63,7 +64,7 @@ public class ControllerAdapter implements ControllerFacade {
     }
 
     private void runInBackground(Runnable task) {
-        service.submit(task);
+        service.submit(new ErrorReportingRunnable(task, "UI request led to an error: "));
     }
 
 }

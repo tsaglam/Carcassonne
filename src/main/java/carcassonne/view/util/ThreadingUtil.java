@@ -48,7 +48,7 @@ public final class ThreadingUtil {
                 try {
                     callback.accept(get());
                 } catch (InterruptedException | ExecutionException exception) {
-                    exception.printStackTrace();
+                    GameMessage.showError(exception.getCause().getMessage());
                 }
             }
         };
