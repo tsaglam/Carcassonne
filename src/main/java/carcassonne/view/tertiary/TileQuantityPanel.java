@@ -5,11 +5,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.text.NumberFormat;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 import javax.swing.text.NumberFormatter;
 
 import carcassonne.model.tile.Tile;
@@ -36,7 +36,7 @@ public class TileQuantityPanel extends JPanel {
     public TileQuantityPanel(TileType type, int initialQuantity, TileDistributionView ui) {
         this.type = type;
         setLayout(new BorderLayout());
-        setBorder(new LineBorder(Color.DARK_GRAY, BORDER_SIZE));
+        setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, BORDER_SIZE));
         setBackground(Color.LIGHT_GRAY);
         createTileLabel(type);
         createTextField(initialQuantity, ui);
