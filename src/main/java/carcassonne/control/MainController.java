@@ -2,20 +2,11 @@ package carcassonne.control;
 
 import java.awt.EventQueue;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
-import carcassonne.control.state.AbstractGameState;
-import carcassonne.control.state.StateGameOver;
-import carcassonne.control.state.StateIdle;
-import carcassonne.control.state.StateManning;
-import carcassonne.control.state.StatePlacing;
-import carcassonne.model.Round;
+import carcassonne.control.state.StateMachine;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.ai.RuleBasedAI;
-import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
-import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.ViewFacade;
@@ -29,15 +20,13 @@ import carcassonne.view.util.GameMessage;
  * <code>view package</code>, and controls both the <code>view</code> and the <code>model</code>.
  * @author Timur Saglam
  */
-public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN] separate main controller from state machine?
-    private MainView mainView;
-    private Map<Class<? extends AbstractGameState>, AbstractGameState> stateMap;
-    private AbstractGameState currentState;
-    private final GameSettings settings;
+public class MainController implements ControllerFacade {
     private GlobalKeyBindingManager keyBindings;
-    private TileView tileView;
+    private MainView mainView;
     private MeepleView meepleView;
-    private boolean abortOnStateChange;
+    private final GameSettings settings;
+    private final StateMachine stateMachine;
+    private TileView tileView;
 
     /**
      * Basic constructor. Creates the view and the model of the game.
@@ -45,87 +34,9 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
     public MainController() {
         settings = new GameSettings();
         createUserInterface();
-        createStateMachine();
-    }
-
-    /**
-     * Shows the main user interface.
-     */
-    public void startGame() {
-        EventQueue.invokeLater(() -> mainView.showUI());
-    }
-
-    /**
-     * Changes the state of the controller to a new state.
-     * @param stateType specifies which state is the new state.
-     * @return the new state.
-     */
-    public AbstractGameState changeState(Class<? extends AbstractGameState> stateType) {
-        if (abortOnStateChange && stateType == StatePlacing.class) {
-            abortOnStateChange = false;
-            return changeState(StateGameOver.class);
-        }
-        currentState = stateMap.get(stateType);
-        if (currentState == null) {
-            throw new IllegalStateException("State is not registered: " + stateType);
-        }
-        return currentState;
-    }
-
-    /**
-     * Requests to abort the round.
-     */
-    @Override
-    public void requestAbortGame() {
-        currentState.abortGame();
-        abortOnStateChange = false;
-    }
-
-    /**
-     * Method for the view to call if a user mans a tile with a meeple.
-     * @param position is the position the user wants to place on.
-     */
-    @Override
-    public void requestMeeplePlacement(GridDirection position) {
-        currentState.placeMeeple(position);
-    }
-
-    /**
-     * Requests to start a new round with a specific amount of players.
-     */
-    @Override
-    public void requestNewRound() {
-        currentState.newRound(settings.getNumberOfPlayers());
-    }
-
-    /**
-     * Method for the view to call if the user wants to skip a round.
-     */
-    @Override
-    public void requestSkip() {
-        currentState.skip();
-    }
-
-    /**
-     * Method for the view to call if a user places a tile.
-     * @param x is the x coordinate.
-     * @param y is the y coordinate.
-     */
-    @Override
-    public void requestTilePlacement(int x, int y) {
-        currentState.placeTile(x, y);
-    }
-
-    /**
-     * Updates the round and the grid of every state after a new round has been started.
-     * @param newRound sets the new round.
-     * @param newGrid sets the new grid.
-     */
-    public void updateStates(Round newRound, TileStack tileStack, Grid newGrid) {
-        mainView.getScoreboard().rebuild(newRound.getPlayerCount());
-        for (AbstractGameState state : stateMap.values()) {
-            state.updateState(newRound, tileStack, newGrid);
-        }
+        ArtificialIntelligence playerAI = new RuleBasedAI(settings);
+        ViewFacade views = new ViewFacade(mainView, tileView, meepleView);
+        stateMachine = new StateMachine(views, playerAI, settings);
     }
 
     /**
@@ -147,26 +58,63 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
     }
 
     /**
+     * Requests to abort the round.
+     */
+    @Override
+    public void requestAbortGame() {
+        stateMachine.getCurrentState().abortGame();
+        stateMachine.setAbortRequested(false);
+    }
+
+    /**
      * Signals that a abort request was scheduled. This request wait too long during AI vs. AI gameplay, thus this method
      * requests the state machine to abort on the next state change. This method should not be queued on the state machine
      * thread.
      */
-    void requestAbortOnStateChange() {
-        abortOnStateChange = true;
+    public void requestAsynchronousAbort() {
+        stateMachine.setAbortRequested(true);
     }
 
     /**
-     * Creates the state machine.
+     * Method for the view to call if a user mans a tile with a meeple.
+     * @param position is the position the user wants to place on.
      */
-    private void createStateMachine() {
-        stateMap = new HashMap<>();
-        ArtificialIntelligence playerAI = new RuleBasedAI(settings);
-        ViewFacade views = new ViewFacade(mainView, tileView, meepleView);
-        currentState = new StateIdle(this, views, playerAI);
-        registerState(currentState);
-        registerState(new StateManning(this, views, playerAI));
-        registerState(new StatePlacing(this, views, playerAI));
-        registerState(new StateGameOver(this, views, playerAI));
+    @Override
+    public void requestMeeplePlacement(GridDirection position) {
+        stateMachine.getCurrentState().placeMeeple(position);
+    }
+
+    /**
+     * Requests to start a new round with a specific amount of players.
+     */
+    @Override
+    public void requestNewRound() {
+        stateMachine.getCurrentState().newRound(settings.getNumberOfPlayers());
+    }
+
+    /**
+     * Method for the view to call if the user wants to skip a round.
+     */
+    @Override
+    public void requestSkip() {
+        stateMachine.getCurrentState().skip();
+    }
+
+    /**
+     * Method for the view to call if a user places a tile.
+     * @param x is the x coordinate.
+     * @param y is the y coordinate.
+     */
+    @Override
+    public void requestTilePlacement(int x, int y) {
+        stateMachine.getCurrentState().placeTile(x, y);
+    }
+
+    /**
+     * Shows the main user interface.
+     */
+    public void startGame() {
+        EventQueue.invokeLater(() -> mainView.showUI());
     }
 
     /**
@@ -190,16 +138,6 @@ public class MainController implements ControllerFacade { // TODO (HIGH) [DESIGN
             });
         } catch (InvocationTargetException | InterruptedException exception) {
             GameMessage.showError("Could not create user interface: " + exception.getMessage());
-        }
-    }
-
-    /**
-     * Registers a specific state at the controller.
-     * @param state is the specific state.
-     */
-    private void registerState(AbstractGameState state) {
-        if (stateMap.put(state.getClass(), state) != null) {
-            throw new IllegalArgumentException("Can't register two states of a kind.");
         }
     }
 }

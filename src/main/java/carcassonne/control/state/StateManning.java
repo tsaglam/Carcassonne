@@ -1,6 +1,5 @@
 package carcassonne.control.state;
 
-import carcassonne.control.MainController;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.ai.AbstractCarcassonneMove;
@@ -22,12 +21,13 @@ public class StateManning extends AbstractGameState {
 
     /**
      * Constructor of the state.
-     * @param controller is the game controller.
+     * @param stateMachine is the state machine managing this state.
+     * @param settings are the game settings.
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public StateManning(MainController controller, ViewFacade views, ArtificialIntelligence playerAI) {
-        super(controller, views, playerAI);
+    public StateManning(StateMachine stateMachine, GameSettings settings, ViewFacade views, ArtificialIntelligence playerAI) {
+        super(stateMachine, settings, views, playerAI);
         noMeeplesNotification = new boolean[GameSettings.MAXIMAL_PLAYERS]; // stores whether a player was already notified about a lack of meeples
     }
 
@@ -79,8 +79,8 @@ public class StateManning extends AbstractGameState {
 
     private void placeMeeple(GridDirection position, Tile tile) {
         Player player = round.getActivePlayer();
-        if (player.hasFreeMeeples() && tile.allowsPlacingMeeple(position, player, controller.getSettings())) {
-            tile.placeMeeple(player, position, controller.getSettings());
+        if (player.hasFreeMeeples() && tile.allowsPlacingMeeple(position, player, settings)) {
+            tile.placeMeeple(player, position, settings);
             views.onMainView(it -> it.setMeeple(tile, position, player));
             updateScores();
             processGridPatterns();

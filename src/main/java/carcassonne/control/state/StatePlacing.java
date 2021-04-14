@@ -2,13 +2,13 @@ package carcassonne.control.state;
 
 import java.util.Optional;
 
-import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.ai.AbstractCarcassonneMove;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
+import carcassonne.settings.GameSettings;
 import carcassonne.view.ViewFacade;
 import carcassonne.view.util.GameMessage;
 
@@ -22,12 +22,13 @@ public class StatePlacing extends AbstractGameState {
 
     /**
      * Constructor of the state.
-     * @param controller is the game controller.
+     * @param stateMachine is the state machine managing this state.
+     * @param settings are the game settings.
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public StatePlacing(MainController controller, ViewFacade views, ArtificialIntelligence playerAI) {
-        super(controller, views, playerAI);
+    public StatePlacing(StateMachine stateMachine, GameSettings settings, ViewFacade views, ArtificialIntelligence playerAI) {
+        super(stateMachine, settings, views, playerAI);
     }
 
     /**
@@ -140,7 +141,7 @@ public class StatePlacing extends AbstractGameState {
             player.addTile(tileStack.drawTile());
         }
         updateStackSize();
-        if (player.isComputerControlled()) {
+        if (player.isComputerControlled()) { // FIXME (HIGH) [AI] last turn with empty hand when playing against AI
             waitForUI();
             placeTileWithAI(player);
         } else {
