@@ -1,6 +1,5 @@
 package carcassonne.control.state;
 
-import carcassonne.control.MainController;
 import carcassonne.model.Player;
 import carcassonne.model.Round;
 import carcassonne.model.ai.ArtificialIntelligence;
@@ -18,7 +17,8 @@ import carcassonne.view.ViewFacade;
  */
 public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human move states from AI moves?
 
-    protected MainController controller;
+    private StateMachine stateMachine;
+    protected GameSettings settings;
     protected ViewFacade views;
     protected Round round;
     protected TileStack tileStack;
@@ -29,12 +29,14 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     /**
      * Constructor of the abstract state, sets the controller from the parameter, registers the state at the controller and
      * calls the <code>entry()</code> method.
-     * @param controller is the game controller.
+     * @param stateMachine is the state machine managing this state.
+     * @param settings are the game settings.
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public AbstractGameState(MainController controller, ViewFacade views, ArtificialIntelligence playerAI) {
-        this.controller = controller;
+    public AbstractGameState(StateMachine stateMachine, GameSettings settings, ViewFacade views, ArtificialIntelligence playerAI) {
+        this.stateMachine = stateMachine;
+        this.settings = settings;
         this.playerAI = playerAI;
         this.views = views;
     }
@@ -81,13 +83,11 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     }
 
     /**
-     * Changes the state to a new state.
-     * @param stateType is the type of the new state.
+     * Changes the state of the state machine to a new state.
+     * @param stateType is the class of the target state.
      */
     protected void changeState(Class<? extends AbstractGameState> stateType) {
-        exit();
-        AbstractGameState newState = controller.changeState(stateType);
-        newState.entry();
+        stateMachine.changeState(stateType); // Encapsulated in a method, as concrete state do not know the state machine
     }
 
     /**
@@ -105,11 +105,10 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
      * @param playerCount is the specific number of players.
      */
     protected void startNewRound(int playerCount) {
-        GameSettings settings = controller.getSettings();
         Grid newGrid = new Grid(settings.getGridWidth(), settings.getGridHeight());
         TileStack tileStack = new TileStack(settings.getTileDistribution(), settings.getStackSizeMultiplier());
-        Round newRound = new Round(playerCount, tileStack, newGrid, controller.getSettings());
-        controller.updateStates(newRound, tileStack, newGrid);
+        Round newRound = new Round(playerCount, tileStack, newGrid, settings);
+        stateMachine.updateStates(newRound, tileStack, newGrid);
         updateScores();
         updateStackSize();
         if (settings.isGridSizeChanged()) {

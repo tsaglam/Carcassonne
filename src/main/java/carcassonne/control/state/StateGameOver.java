@@ -1,9 +1,9 @@
 package carcassonne.control.state;
 
-import carcassonne.control.MainController;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
+import carcassonne.settings.GameSettings;
 import carcassonne.view.ViewFacade;
 import carcassonne.view.util.GameMessage;
 
@@ -17,12 +17,13 @@ public class StateGameOver extends AbstractGameState {
 
     /**
      * Constructor of the state.
-     * @param controller is the game controller.
+     * @param stateMachine is the state machine managing this state.
+     * @param settings are the game settings.
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public StateGameOver(MainController controller, ViewFacade views, ArtificialIntelligence playerAI) {
-        super(controller, views, playerAI);
+    public StateGameOver(StateMachine stateMachine, GameSettings settings, ViewFacade views, ArtificialIntelligence playerAI) {
+        super(stateMachine, settings, views, playerAI);
     }
 
     /**

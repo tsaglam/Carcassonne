@@ -28,7 +28,7 @@ public class ControllerAdapter implements ControllerFacade {
 
     @Override
     public void requestAbortGame() {
-        controller.requestAbortOnStateChange(); // require for AI vs. AI play where the thread never pauses
+        controller.requestAsynchronousAbort(); // require for AI vs. AI play where the thread never pauses
         runInBackground(() -> controller.requestAbortGame());
     }
 
