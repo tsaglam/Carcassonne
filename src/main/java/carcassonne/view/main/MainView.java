@@ -32,7 +32,8 @@ public class MainView extends JFrame implements NotifiableView {
     private static final int DEFAULT_ZOOM_LEVEL = 125;
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 25;
-    private static final int ZOOM_STEP_SIZE = 25;
+    private static final int ZOOM_STEP_LARGE = 25;
+    private static final int ZOOM_STEP_SMALL = 5;
     private static final Dimension MINIMAL_WINDOW_SIZE = new Dimension(640, 480);
     private final ControllerFacade controller;
     private Player currentPlayer;
@@ -154,7 +155,7 @@ public class MainView extends JFrame implements NotifiableView {
      */
     public synchronized void zoomIn(ZoomMode mode) {
         if (zoomLevel < MAX_ZOOM_LEVEL) {
-            zoomLevel += ZOOM_STEP_SIZE;
+            zoomLevel += mode == FAST ? ZOOM_STEP_SMALL : ZOOM_STEP_LARGE;
             updateToChangedZoomLevel(mode);
             menuBar.getZoomSlider().setValueSneakily(zoomLevel); // ensures the slider is updated when using key bindings.
         }
@@ -166,7 +167,7 @@ public class MainView extends JFrame implements NotifiableView {
      */
     public synchronized void zoomOut(ZoomMode mode) {
         if (zoomLevel > MIN_ZOOM_LEVEL) {
-            zoomLevel -= ZOOM_STEP_SIZE;
+            zoomLevel -= mode == FAST ? ZOOM_STEP_SMALL : ZOOM_STEP_LARGE;
             updateToChangedZoomLevel(mode);
             menuBar.getZoomSlider().setValueSneakily(zoomLevel); // ensures the slider is updated when using key bindings.
         }
