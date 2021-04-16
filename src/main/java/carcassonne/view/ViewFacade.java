@@ -104,7 +104,8 @@ public class ViewFacade {
                 selectedTile = tileView.getSelectedTile();
             });
         } catch (InvocationTargetException | InterruptedException exception) {
-            GameMessage.showError("Cannot retrieve selected tile: " + exception); // TODO (HIGH) [THREADING] can be triggered with AI vs. AI
+            exception.printStackTrace();
+            GameMessage.showError("Cannot retrieve selected tile:\n" + exception);
         }
         return selectedTile;
     }
