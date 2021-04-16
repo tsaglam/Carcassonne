@@ -64,7 +64,7 @@ public class ControllerAdapter implements ControllerFacade {
     }
 
     private void runInBackground(Runnable task) {
-        service.submit(new ErrorReportingRunnable(task, "UI request led to an error: "));
+        service.submit(new ErrorReportingRunnable(task, "UI request led to an error:\n"));
     }
 
 }

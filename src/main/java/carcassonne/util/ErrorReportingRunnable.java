@@ -45,6 +45,7 @@ public class ErrorReportingRunnable implements Runnable {
     }
 
     private void reportError(Throwable throwable) {
+        throwable.printStackTrace();
         GameMessage.showError(messagePrefix + throwable.getMessage());
     }
 }

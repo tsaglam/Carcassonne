@@ -310,7 +310,7 @@ public class Tile {
 
     @Override
     public String toString() {
-        return type + getClass().getSimpleName() + "[coordinates: " + gridSpot + ", terrain" + terrain + ", Meeple: " + meeple + "]";
+        return type + getClass().getSimpleName() + "[coordinates: " + gridSpot + ", Meeple: " + meeple + "]";
     }
 
     /**
