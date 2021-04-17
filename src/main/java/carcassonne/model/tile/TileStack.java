@@ -1,9 +1,11 @@
 package carcassonne.model.tile;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -13,6 +15,7 @@ import java.util.Stack;
 public class TileStack {
     private final Stack<Tile> tiles;
     private final Queue<Tile> returnedTiles;
+    private final Set<Tile> returnHistory;
     private final int multiplicator;
 
     /**
@@ -34,12 +37,16 @@ public class TileStack {
         this.multiplicator = multiplicator;
         tiles = new Stack<>();
         returnedTiles = new LinkedList<>();
+        returnHistory = new HashSet<>();
         fillStack(distribution);
         rotateRandomly();
         if (sortingSeed == null) {
             Collections.shuffle(tiles);
         } else {
             Collections.shuffle(tiles, new Random(sortingSeed));
+        }
+        while (getSize() > 2) {
+            drawTile();
         }
     }
 
@@ -48,12 +55,10 @@ public class TileStack {
      * @return the tile or null if the stack is empty.
      */
     public Tile drawTile() {
-        if (tiles.isEmpty()) {
-            if (returnedTiles.isEmpty()) {
-                return null;
-            } else {
-                return returnedTiles.poll();
-            }
+        if (tiles.isEmpty() && returnedTiles.isEmpty()) {
+            return null; // no tile to draw!
+        } else if (tiles.isEmpty()) {
+            return returnedTiles.poll();
         }
         return tiles.pop();
     }
@@ -66,8 +71,8 @@ public class TileStack {
         if (tile.isPlaced()) {
             throw new IllegalArgumentException("Cannot return a placed tile!");
         }
-        if (!tiles.isEmpty()) {
-            returnedTiles.add(tile); // tiles can only be returned once!
+        if (returnHistory.add(tile)) { // tiles can only be returned once!
+            returnedTiles.add(tile);
         }
     }
 
