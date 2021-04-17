@@ -78,18 +78,14 @@ public class StatePlacing extends AbstractGameState {
     }
 
     private void skipPlacingTile() {
-        if (round.isOver()) {
-            changeState(StateGameOver.class);
-        } else {
-            Tile tile = getTileToDrop();
-            tileStack.putBack(tile);
-            if (!round.getActivePlayer().dropTile(tile)) {
-                throw new IllegalStateException("Cannot drop tile " + tile + "from player " + round.getActivePlayer());
-            }
-            round.nextTurn();
-            views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
-            entry();
+        Tile tile = getTileToDrop();
+        tileStack.putBack(tile);
+        if (!round.getActivePlayer().dropTile(tile)) {
+            throw new IllegalStateException("Cannot drop tile " + tile + "from player " + round.getActivePlayer());
         }
+        round.nextTurn();
+        views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
+        entry();
     }
 
     private void placeTile(Tile tile, int x, int y) {
@@ -104,7 +100,7 @@ public class StatePlacing extends AbstractGameState {
 
     private void placeTileWithAI(Player player) {
         Optional<AbstractCarcassonneMove> bestMove = playerAI.calculateBestMoveFor(player.getHandOfTiles(), player, grid, tileStack);
-        if (bestMove.isEmpty() || bestMove.get().getValue() < 0) {
+        if (bestMove.isEmpty()) {
             skipPlacingTile();
         }
         bestMove.ifPresent(it -> {
@@ -127,6 +123,7 @@ public class StatePlacing extends AbstractGameState {
                 Thread.sleep(SLEEP_DURATION);
             } catch (InterruptedException exception) {
                 exception.printStackTrace();
+                GameMessage.showError(exception.getMessage());
             }
         }
     }
@@ -141,7 +138,9 @@ public class StatePlacing extends AbstractGameState {
             player.addTile(tileStack.drawTile());
         }
         updateStackSize();
-        if (player.isComputerControlled()) { // FIXME (HIGH) [AI] last turn with empty hand when playing against AI
+        if (round.isOver()) {
+            changeState(StateGameOver.class);
+        } else if (player.isComputerControlled()) {
             waitForUI();
             placeTileWithAI(player);
         } else {
