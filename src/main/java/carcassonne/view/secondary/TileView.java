@@ -31,7 +31,8 @@ public class TileView extends SecondaryView {
     private static final int VERTICAL_SPACE = 10;
     private static final double SELECTION_FACTOR = 0.9;
     private static final int SELECTION_BORDER_WIDTH = 3;
-    private static final String TILE_TOOL_TIP = "Tile of type ";
+    private static final String NO_TILE_TO_SELECT = "has no Tile to select!";
+    private static final String TOOL_TIP = "Tile of type ";
     private final int selectionSize;
     private final int defaultSize;
     private JButton buttonRotateLeft;
@@ -59,7 +60,10 @@ public class TileView extends SecondaryView {
      * @return the tile.
      */
     public Tile getSelectedTile() {
-        return tiles.get(selectionIndex);
+        if (selectionIndex < tiles.size()) {
+            return tiles.get(selectionIndex);
+        }
+        throw new IllegalStateException(getClass().getSimpleName() + NO_TILE_TO_SELECT);
     }
 
     /**
@@ -108,9 +112,11 @@ public class TileView extends SecondaryView {
      */
     public void setTiles(Player currentPlayer) {
         tiles.clear();
-        tiles.addAll(currentPlayer.getHandOfTiles());
-        setCurrentPlayer(currentPlayer);
-        ThreadingUtil.runAndCallback(() -> updatePreviewLabels(), () -> showUI());
+        if (!currentPlayer.getHandOfTiles().isEmpty()) {
+            tiles.addAll(currentPlayer.getHandOfTiles());
+            setCurrentPlayer(currentPlayer);
+            ThreadingUtil.runAndCallback(() -> updatePreviewLabels(), () -> showUI());
+        }
     }
 
     @Override
@@ -179,7 +185,7 @@ public class TileView extends SecondaryView {
         boolean singleTile = tiles.size() == 1;
         boolean selected = index == selectionIndex; // is the label selected or not?
         ImageIcon icon = tiles.get(index).getScaledIcon(selected || singleTile ? selectionSize : defaultSize);
-        tileLabels.get(index).setToolTipText(TILE_TOOL_TIP + tiles.get(index).getType().readableRepresentation());
+        tileLabels.get(index).setToolTipText(TOOL_TIP + tiles.get(index).getType().readableRepresentation());
         tileLabels.get(index).setIcon(icon);
         tileLabels.get(index).setBorder(selected && !singleTile ? createSelectionBorder() : null);
     }
