@@ -45,9 +45,6 @@ public class TileStack {
         } else {
             Collections.shuffle(tiles, new Random(sortingSeed));
         }
-        while (getSize() > 2) {
-            drawTile();
-        }
     }
 
     /**
