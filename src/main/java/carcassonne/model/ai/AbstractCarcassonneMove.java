@@ -27,7 +27,6 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
     protected final GameSettings settings;
     protected final TemporaryTile tile;
     protected final double value;
-    protected double pureValue;
 
     /**
      * Creates the move. Does not check if the move is legal.
@@ -110,14 +109,6 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
      */
     public double getValue() {
         return value;
-    }
-
-    /**
-     * Getter for the pure value of the move, only consisting of the score difference.
-     * @return the potential value.
-     */
-    public double getPureValue() {
-        return pureValue;
     }
 
     /**
