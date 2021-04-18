@@ -174,7 +174,11 @@ public class GameSettings {
         return gridSizeChanged;
     }
 
-    // TODO (HIGH) [COMMENT]
+    /**
+     * Checks if a player with a certain number is set to be computer-controlled.
+     * @param playerNumber is the number of the player.
+     * @return true if he is computer-controlled.
+     */
     public boolean isPlayerComputerControlled(int playerNumber) {
         return playerTypes.get(playerNumber);
     }
@@ -239,7 +243,11 @@ public class GameSettings {
         notifyListeners();
     }
 
-    // TODO (HIGH) [COMMENT]
+    /**
+     * Sets a player with a certain number to be computer-controlled or not.
+     * @param computerControlled determines whether he is computer-controlled.
+     * @param playerNumber is the number of the player.F
+     */
     public void setPlayerComputerControlled(boolean computerControlled, int playerNumber) {
         playerTypes.set(playerNumber, computerControlled);
     }
