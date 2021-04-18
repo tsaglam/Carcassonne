@@ -17,6 +17,7 @@ public class TileStack {
     private final Queue<Tile> returnedTiles;
     private final Set<Tile> returnHistory;
     private final int multiplicator;
+    private final int initialSize;
 
     /**
      * Basic constructor, creates the tile stack.
@@ -39,6 +40,7 @@ public class TileStack {
         returnedTiles = new LinkedList<>();
         returnHistory = new HashSet<>();
         fillStack(distribution);
+        initialSize = getSize();
         rotateRandomly();
         if (sortingSeed == null) {
             Collections.shuffle(tiles);
@@ -61,16 +63,11 @@ public class TileStack {
     }
 
     /**
-     * Returns a tile that is not placed under the stack.
-     * @param tile is the tile to put back under the stack.
+     * Returns the initial size of the stack.
+     * @return the size of the full stack.
      */
-    public void putBack(Tile tile) {
-        if (tile.isPlaced()) {
-            throw new IllegalArgumentException("Cannot return a placed tile!");
-        }
-        if (returnHistory.add(tile)) { // tiles can only be returned once!
-            returnedTiles.add(tile);
-        }
+    public int getInitialSize() {
+        return initialSize;
     }
 
     /**
@@ -87,6 +84,19 @@ public class TileStack {
      */
     public boolean isEmpty() {
         return tiles.isEmpty() && returnedTiles.isEmpty();
+    }
+
+    /**
+     * Returns a tile that is not placed under the stack.
+     * @param tile is the tile to put back under the stack.
+     */
+    public void putBack(Tile tile) {
+        if (tile.isPlaced()) {
+            throw new IllegalArgumentException("Cannot return a placed tile!");
+        }
+        if (returnHistory.add(tile)) { // tiles can only be returned once!
+            returnedTiles.add(tile);
+        }
     }
 
     private void fillStack(TileDistribution distribution) {
