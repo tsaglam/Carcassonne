@@ -19,6 +19,7 @@ import javax.swing.JRadioButton;
 
 import carcassonne.model.tile.TileDistribution;
 import carcassonne.settings.GameSettings;
+import carcassonne.util.MinkowskiDistance;
 import carcassonne.view.NotifiableView;
 import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.util.MouseClickListener;
@@ -29,11 +30,14 @@ import carcassonne.view.util.MouseClickListener;
  * @author Timur Saglam
  */
 public class PlayerSettingsView extends JDialog implements NotifiableView {
+
     private static final long serialVersionUID = -4633728570151183720L;
     private static final Dimension SPACING_DIMENSION = new Dimension(0, 5);
     private static final int PADDING = 5;
     private static final int PLAYER_LABEL_WIDTH = 100;
     private static final String SPACE = " ";
+    private static final String AESTHETIC = "AI Aesthetic:";
+    private static final String AESTHETIC_TOOL_TIP = "Affects how AI players place tiles. The effect is most pronounced with only AI players and a bigger tile stack.";
     private static final String CUSTOMIZE = "Customize";
     private static final String AI_PLAYER = "AI player";
     private static final String PLAYERS = "Players: ";
@@ -73,6 +77,8 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         mainPanel.add(Box.createRigidArea(SPACING_DIMENSION));
         mainPanel.add(createPlayerPanel());
         mainPanel.add(Box.createRigidArea(SPACING_DIMENSION));
+        mainPanel.add(createAIAestheticPanel());
+        mainPanel.add(Box.createRigidArea(SPACING_DIMENSION));
         mainPanel.add(createOkButton());
         getContentPane().add(mainPanel);
     }
@@ -85,35 +91,65 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         setLocationRelativeTo(null);
     }
 
+    private void createAIAestheticButton(MinkowskiDistance distanceMeasure, JPanel panel, ButtonGroup group) {
+        JRadioButton button = new JRadioButton(distanceMeasure.getDescription());
+        button.setSelected(settings.getDistanceMeasure() == distanceMeasure);
+        button.addMouseListener((MouseClickListener) event -> settings.setDistanceMeasure(distanceMeasure));
+        group.add(button);
+        panel.add(button);
+    }
+
+    private JPanel createAIAestheticPanel() {
+        JPanel panel = createBasicPanel(AESTHETIC);
+        panel.setToolTipText(AESTHETIC_TOOL_TIP);
+        ButtonGroup group = new ButtonGroup();
+        for (MinkowskiDistance distanceMeasure : MinkowskiDistance.values()) {
+            createAIAestheticButton(distanceMeasure, panel, group);
+        }
+        return panel;
+    }
+
+    private JPanel createBasicPanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.LIGHT_GRAY);
+        panel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
+        return panel;
+    }
+
+    private JPanel createBasicPanel(String labelText) {
+        JPanel panel = createBasicPanel();
+        panel.add(new JLabel(labelText));
+        return panel;
+    }
+
+    private JPanel createOkButton() {
+        JButton closeButton = new JButton(OK);
+        closeButton.addActionListener(it -> dispose());
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
+        buttonPanel.add(closeButton); // Weirdly, the button needs to be in a panel or it will not be centered.
+        return buttonPanel;
+    }
+
     private void createPlayerNumberButton(int numberOfPlayers, JPanel panel, ButtonGroup group) {
         JRadioButton button = new JRadioButton(Integer.toString(numberOfPlayers));
         button.setSelected(settings.getNumberOfPlayers() == numberOfPlayers);
         button.addMouseListener((MouseClickListener) event -> settings.setNumberOfPlayers(numberOfPlayers));
-        if (settings.getNumberOfPlayers() == numberOfPlayers) {
-            button.setSelected(true);
-        }
         group.add(button);
         panel.add(button);
     }
 
     private JPanel createPlayerNumberPanel() {
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.LIGHT_GRAY);
-        panel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
-        panel.add(new JLabel(PLAYERS));
+        JPanel panel = createBasicPanel(PLAYERS);
         ButtonGroup group = new ButtonGroup();
-        JLabel sizeLabel = new JLabel();
         for (int numberOfPlayers = 2; numberOfPlayers <= GameSettings.MAXIMAL_PLAYERS; numberOfPlayers++) {
             createPlayerNumberButton(numberOfPlayers, panel, group);
         }
-        panel.add(sizeLabel);
         return panel;
     }
 
     private JPanel createPlayerPanel() {
-        JPanel playerPanel = new JPanel();
-        playerPanel.setBackground(Color.LIGHT_GRAY);
-        playerPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
+        JPanel playerPanel = createBasicPanel();
         playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
         for (int i = 0; i < GameSettings.MAXIMAL_PLAYERS; i++) {
             playerPanel.add(createPlayerRow(i));
@@ -138,14 +174,5 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         configurationButton.addActionListener(scoreboard.getSettingsListener(playerNumber));
         panel.add(configurationButton, BorderLayout.LINE_END);
         return panel;
-    }
-
-    private JPanel createOkButton() {
-        JButton closeButton = new JButton(OK);
-        closeButton.addActionListener(it -> dispose());
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(closeButton); // Weirdly, the button needs to be in a panel or it will not be centered.
-        return buttonPanel;
     }
 }
