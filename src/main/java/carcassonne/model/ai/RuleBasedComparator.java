@@ -11,14 +11,17 @@ import carcassonne.util.MinkowskiDistance;
  */
 public class RuleBasedComparator implements Comparator<AbstractCarcassonneMove> {
     private static final int ROUNDING_FACTOR = 100;
-    private GridSpot center;
+    private final GridSpot center;
+
+    private final MinkowskiDistance distanceMeasure;
 
     /**
      * Creates a rule-based comparator for moves.
      * @param center is the grid spot in the center of the grid, where the foundation tile is placed.
      */
-    public RuleBasedComparator(GridSpot center) {
+    public RuleBasedComparator(GridSpot center, MinkowskiDistance distanceMeasure) {
         this.center = center;
+        this.distanceMeasure = distanceMeasure;
     }
 
     @Override
@@ -56,7 +59,7 @@ public class RuleBasedComparator implements Comparator<AbstractCarcassonneMove> 
     }
 
     private double distanceToCenter(AbstractCarcassonneMove move) {
-        return MinkowskiDistance.ROUNDED_SQUARE.distance(center.getX(), center.getY(), move.getX(), move.getY());
+        return distanceMeasure.distance(center.getX(), center.getY(), move.getX(), move.getY());
     }
 
     private int preferFalse(Boolean first, Boolean second) {
