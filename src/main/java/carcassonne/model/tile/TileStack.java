@@ -16,13 +16,13 @@ public class TileStack {
     private final Stack<Tile> tiles;
     private final Queue<Tile> returnedTiles;
     private final Set<Tile> returnHistory;
-    private final int multiplicator;
+    private final int multiplier;
     private final int initialSize;
 
     /**
      * Basic constructor, creates the tile stack.
      * @param distribution is the tile distribution according which the stack is filled.
-     * @param multiplicator is the tile stack multiplier, meaning how often the distribution is added to the stack.
+     * @param multiplier is the tile stack multiplier, meaning how often the distribution is added to the stack.
      */
     public TileStack(TileDistribution distribution, int multiplicator) {
         this(distribution, multiplicator, null);
@@ -31,11 +31,11 @@ public class TileStack {
     /**
      * Creates a tile stack with a pseudo-random tile order.
      * @param distribution is the tile distribution according which the stack is filled.
-     * @param multiplicator is the tile stack multiplier, meaning how often the distribution is added to the stack.
+     * @param multiplier is the tile stack multiplier, meaning how often the distribution is added to the stack.
      * @param sortingSeed is the seed for the tile order.
      */
-    public TileStack(TileDistribution distribution, int multiplicator, Long sortingSeed) {
-        this.multiplicator = multiplicator;
+    public TileStack(TileDistribution distribution, int multiplier, Long sortingSeed) {
+        this.multiplier = multiplier;
         tiles = new Stack<>();
         returnedTiles = new LinkedList<>();
         returnHistory = new HashSet<>();
@@ -101,7 +101,7 @@ public class TileStack {
 
     private void fillStack(TileDistribution distribution) {
         for (TileType tileType : TileType.validTiles()) {
-            int amount = distribution.getQuantity(tileType) * multiplicator;
+            int amount = distribution.getQuantity(tileType) * multiplier;
             for (int i = 0; i < amount; i++) {
                 tiles.add(new Tile(tileType));
             }
