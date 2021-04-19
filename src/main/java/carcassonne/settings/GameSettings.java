@@ -12,6 +12,7 @@ import java.util.Map;
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileDistribution;
+import carcassonne.util.MinkowskiDistance;
 import carcassonne.view.NotifiableView;
 import carcassonne.view.PaintShop;
 
@@ -51,6 +52,7 @@ public class GameSettings {
     private int gridHeight;
     private int numberOfPlayers;
     private int stackSizeMultiplier;
+    private MinkowskiDistance distanceMeasure;
     private final TileDistribution tileDistribution;
     private final List<Boolean> playerTypes;
 
@@ -73,6 +75,7 @@ public class GameSettings {
         meepleRules = new HashMap<TerrainType, Boolean>();
         TerrainType.basicTerrain().forEach(it -> meepleRules.put(it, true));
         tileDistribution = new TileDistribution();
+        setDistanceMeasure(MinkowskiDistance.ROUNDED_SQUARE);
         numberOfPlayers = 2;
         tilesPerPlayer = 1;
         stackSizeMultiplier = 1;
@@ -80,6 +83,14 @@ public class GameSettings {
         gridHeight = 19;
         gridSizeChanged = false;
         changeListeners = new ArrayList<NotifiableView>();
+    }
+
+    /**
+     * Returns the distance measure used for AI players.
+     * @return the specific Minkowski distance.
+     */
+    public MinkowskiDistance getDistanceMeasure() {
+        return distanceMeasure;
     }
 
     /**
@@ -197,6 +208,14 @@ public class GameSettings {
      */
     public void setAllowFortifying(boolean allowFortifying) {
         this.allowFortifying = allowFortifying;
+    }
+
+    /**
+     * Sets the distance measure used for AI players.
+     * @param distanceMeasure is the specific Minkowski distance to set.
+     */
+    public void setDistanceMeasure(MinkowskiDistance distanceMeasure) {
+        this.distanceMeasure = distanceMeasure;
     }
 
     /**

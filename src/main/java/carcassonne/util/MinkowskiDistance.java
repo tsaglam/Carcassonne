@@ -5,20 +5,21 @@ package carcassonne.util;
  * @author Timur Saglam
  */
 public enum MinkowskiDistance {
-    COMPASS(Math.pow(2, -0.5)),
-    MANHATTAN(1),
-    ROUNDED_DIAMOND(Math.pow(2, 0.5)),
-    EUCLIDEAN(2),
-    ROUNDED_SQUARE(Math.pow(2, 1.5));
+    COMPASS(Math.pow(2, -0.5), "Compass"),
+    MANHATTAN(1, "Diamond"),
+    EUCLIDEAN(2, "Round"),
+    ROUNDED_SQUARE(Math.pow(2, 1.5), "Rounded Square");
 
     private final double order;
+    private final String description;
 
     /**
      * Minkowski distance of a certain order.
      * @param order specifies the order.
      */
-    private MinkowskiDistance(double order) {
+    private MinkowskiDistance(double order, String description) {
         this.order = order;
+        this.description = description;
     }
 
     /**
@@ -31,6 +32,14 @@ public enum MinkowskiDistance {
      */
     public double distance(int x1, int y1, int x2, int y2) {
         return calculate(x1, y1, x2, y2, order);
+    }
+
+    /**
+     * Returns a textual description of the geometric properties of the distance measure.
+     * @return the textual description.
+     */
+    public String getDescription() {
+        return description;
     }
 
     /**
