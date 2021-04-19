@@ -23,6 +23,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
     private static final double MEEPLE_VALUE_FACTOR = 0.5;
     private static final double LAST_MEEPLE_INCENTIVE = 2.5;
     private static final String EMPTY_COLLECTION = "Cannot choose random element from empty collection!";
+    private static final double EPSILON = 0.01;
     private final GameSettings settings;
     private Optional<AbstractCarcassonneMove> currentMove;
 
@@ -87,7 +88,11 @@ public class RuleBasedAI implements ArtificialIntelligence {
     }
 
     private double combinedValue(AbstractCarcassonneMove move, TileStack stack) {
-        return move.getValue() + variableMeepleValue(move, stack);
+        double meepleValue = variableMeepleValue(move, stack);
+        if (move.getValue() > 0 && move.getValue() + meepleValue <= 0 && move.getActingPlayer().getFreeMeeples() > 1) {
+            return EPSILON; // meeple value should only lead to wasted moves if there is only one meeple left
+        }
+        return move.getValue() + meepleValue;
     }
 
     /**
