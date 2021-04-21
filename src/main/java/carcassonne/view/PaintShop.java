@@ -1,6 +1,7 @@
 package carcassonne.view;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
@@ -13,7 +14,9 @@ import javax.swing.ImageIcon;
 
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
+import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
+import carcassonne.util.ConcurrentTileImageScaler;
 import carcassonne.util.FastImageScaler;
 import carcassonne.util.ImageLoadingUtil;
 
@@ -69,10 +72,28 @@ public final class PaintShop {
      * @return the highlighted tile.
      */
     public static ImageIcon getColoredHighlight(Player player, int size, boolean fastScaling) {
-        ImageIcon coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
-        Image small = scaleDown(coloredImage.getImage(), size, fastScaling);
+        Image coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
+        Image smallImage = scaleDown(coloredImage, size, fastScaling);
         int largeSize = Math.min(size * HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
-        Image large = scaleDown(coloredImage.getImage(), largeSize, fastScaling);
+        Image largeImage = scaleDown(coloredImage, largeSize, fastScaling);
+        return new ImageIcon(new BaseMultiResolutionImage(smallImage, largeImage));
+    }
+
+    /**
+     * Returns a colored tile image icon.
+     * @param tile is the tile to be colored.
+     * @param player is the player whose color is used.
+     * @param size is the desired tile size.
+     * @param fastScaling determines the rendering quality.
+     * @return the colored tile image wrapped in a image icon.
+     */
+    public static ImageIcon getColoredTile(Tile tile, Player player, int size, boolean fastScaling) {
+        Image baseImage = ConcurrentTileImageScaler.getScaledImage(tile, GameSettings.TILE_RESOLUTION, fastScaling);
+        BufferedImage bufferedBaseImage = bufferedImageOf(baseImage);
+        Image coloredImage = colorMaskBased(bufferedBaseImage, highlightImage, player.getColor());
+        Image small = scaleDown(coloredImage, size, fastScaling);
+        int largeSize = Math.min(size * HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
+        Image large = scaleDown(coloredImage, largeSize, fastScaling);
         return new ImageIcon(new BaseMultiResolutionImage(small, large));
     }
 
@@ -142,6 +163,22 @@ public final class PaintShop {
         return new Color((int) red, (int) green, (int) blue, alpha);
     }
 
+    /**
+     * Converts a given Image into a BufferedImage. This can be costly and should only be done when really required.
+     * @param image is the {@link Image} to be converted.
+     * @return a {@link BufferedImage}, either the casted original image or a copy.
+     */
+    private static BufferedImage bufferedImageOf(Image image) {
+        if (image instanceof BufferedImage) {
+            return (BufferedImage) image;
+        }
+        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = bufferedImage.createGraphics();
+        graphics.drawImage(image, 0, 0, null);
+        graphics.dispose();
+        return bufferedImage;
+    }
+
     // prepares the base images and templates
     private static Map<TerrainType, BufferedImage> buildImageMap(boolean isTemplate) {
         Map<TerrainType, BufferedImage> map = new HashMap<>();
@@ -152,8 +189,8 @@ public final class PaintShop {
         return map;
     }
 
-    private static ImageIcon colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
-        BufferedImage image = deepCopy(imageToColor);
+    private static BufferedImage colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
+        BufferedImage image = deepCopy(imageToColor); // TODO (HIGH) [PERFORMANCE] This could be made faster with raster operations
         for (int x = 0; x < maskImage.getWidth(); x++) {
             for (int y = 0; y < maskImage.getHeight(); y++) {
                 Color maskPixel = new Color(maskImage.getRGB(x, y), true);
@@ -163,7 +200,7 @@ public final class PaintShop {
                 image.setRGB(x, y, blendedColor.getRGB());
             }
         }
-        return new ImageIcon(image);
+        return image;
     }
 
     private static String createKey(Color color, TerrainType meepleType, int size) {
@@ -171,14 +208,14 @@ public final class PaintShop {
     }
 
     private static String createKey(TerrainType meepleType, int size) {
-        return meepleType + KEY_SEPARATOR + size + KEY_SEPARATOR; // TODO (MEDIUM) choose more efficient composite key
+        return meepleType + KEY_SEPARATOR + size + KEY_SEPARATOR;
     }
 
     // copies a image to avoid side effects.
     private static BufferedImage deepCopy(BufferedImage image) {
         ColorModel model = image.getColorModel();
         boolean isAlphaPremultiplied = model.isAlphaPremultiplied();
-        WritableRaster raster = image.copyData(null);
+        WritableRaster raster = image.copyData(image.getRaster().createCompatibleWritableRaster());
         return new BufferedImage(model, raster, isAlphaPremultiplied, null);
     }
 
