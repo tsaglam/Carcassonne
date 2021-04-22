@@ -31,7 +31,7 @@ public class Scoreboard implements NotifiableView {
      * @param settings are the {@link GameSettings}.
      * @param mainView is the main user interface.
      */
-    public Scoreboard(GameSettings settings, MainView mainView) { // TODO (MEDIUM) link with players?
+    public Scoreboard(GameSettings settings, MainView mainView) { // TODO (MEDIUM) [UI] link with players?
         this.settings = settings;
         scoreLabels = new JLabel[GameSettings.MAXIMAL_PLAYERS];
         settingsListeners = new ArrayList<>();

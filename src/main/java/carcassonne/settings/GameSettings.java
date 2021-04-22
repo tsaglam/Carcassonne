@@ -319,7 +319,7 @@ public class GameSettings {
      * @param isTemplate specifies whether the template image should be loaded.
      * @return the path as a String.
      */
-    public static String getMeeplePath(TerrainType type, boolean isTemplate) { // TODO (MEDIUM) move to image loading utility class?
+    public static String getMeeplePath(TerrainType type, boolean isTemplate) { // TODO (MEDIUM) [UTILS] move to image loading utility class?
         return MEEPLE_PATH + type.toString().toLowerCase(Locale.UK) + (isTemplate ? TEMPLATE : EMPTY) + PNG;
     }
 }

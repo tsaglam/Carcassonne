@@ -7,7 +7,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import carcassonne.control.ControllerFacade;
+import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
+import carcassonne.view.PaintShop;
 
 /**
  * Is a simple class derived form JLabel, which stores (additionally to the JLabel functions) the coordinates of the
@@ -21,6 +23,7 @@ public class TileDepiction {
     private final JLabel label;
     private ImageIcon coloredHighlight;
     private int tileSize;
+    private Player recentlyPlaced;
 
     /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
@@ -70,7 +73,11 @@ public class TileDepiction {
      */
     public final void setTile(Tile tile) {
         this.tile = tile;
-        label.setIcon(tile.getScaledIcon(tileSize));
+        if (recentlyPlaced == null) {
+            label.setIcon(tile.getScaledIcon(tileSize));
+        } else {
+            label.setIcon(PaintShop.getColoredTile(tile, recentlyPlaced, tileSize, false));
+        }
     }
 
     /**
@@ -80,7 +87,12 @@ public class TileDepiction {
      */
     public void setTileSize(int tileSize, boolean preview) {
         this.tileSize = tileSize;
-        label.setIcon(tile.getScaledIcon(tileSize, preview));
+        if (recentlyPlaced == null) {
+            label.setIcon(tile.getScaledIcon(tileSize, preview));
+        } else {
+            label.setIcon(PaintShop.getColoredTile(tile, recentlyPlaced, tileSize, preview));
+        }
+
     }
 
     /**
@@ -94,8 +106,32 @@ public class TileDepiction {
     /**
      * Enables the colored mouseover highlight.
      */
-    public void highlight() {
+    public void highlightSelection() {
         setTile(highlightTile);
+    }
+
+    /**
+     * Enables the colored highlight that indicated the recent placement.
+     * @param player is this player that placed the tile.
+     */
+    public void highlightPlacement(Player player) {
+        recentlyPlaced = player;
+        setTile(tile);
+    }
+
+    /**
+     * Resets the colored highlight that indicated the recent placement.
+     */
+    public void resetPlacementHighlight() {
+        recentlyPlaced = null;
+        setTile(tile);
+    }
+
+    /**
+     * Disables the colored mouseover highlight and sets this tile to the default tile.
+     */
+    public final void refresh() {
+        setTile(tile);
     }
 
     /**
@@ -103,6 +139,7 @@ public class TileDepiction {
      */
     public final void reset() {
         if (tile != defaultTile) {
+            recentlyPlaced = null;
             setTile(defaultTile);
         }
     }

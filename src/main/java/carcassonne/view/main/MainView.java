@@ -113,7 +113,7 @@ public class MainView extends JFrame implements NotifiableView {
      * Resets the state of the menu to allows restarting.
      */
     public void resetMenuState() {
-        menuBar.enableStart(); // TODO (MEDIUM) Find better solution.
+        menuBar.enableStart(); // TODO (MEDIUM) [UI] Find better solution.
     }
 
     /**
@@ -137,7 +137,7 @@ public class MainView extends JFrame implements NotifiableView {
      * @return the scoreboard.
      */
     public Scoreboard getScoreboard() {
-        return menuBar.getScoreboard(); // TODO (MEDIUM) Find better solution.
+        return menuBar.getScoreboard(); // TODO (MEDIUM) [UI] Find better solution.
     }
 
     /**
@@ -218,9 +218,30 @@ public class MainView extends JFrame implements NotifiableView {
      * @param x is the x coordinate.
      * @param y is the y coordinate.
      */
-    public void setHighlight(int x, int y) {
+    public void setSelectionHighlight(int x, int y) {
         checkCoordinates(x, y);
         tileLayer.highlightTile(x, y);
+    }
+
+    /**
+     * Highlights a position on the grid to indicate that an AI player recently placed the tile.
+     * @param x is the x coordinate.
+     * @param y is the y coordinate.
+     */
+    public void setPlacementHighlight(int x, int y) {
+        checkCoordinates(x, y);
+        tileLayer.highlightTile(x, y, currentPlayer);
+        scrollPane.repaintLayers();
+    }
+
+    /**
+     * Highlights a position on the grid to indicate that an AI player recently placed the tile.
+     * @param x is the x coordinate.
+     * @param y is the y coordinate.
+     */
+    public void resetPlacementHighlights() {
+        tileLayer.resetPlacementHighlights();
+        scrollPane.repaintLayers();
     }
 
     /**
@@ -235,7 +256,7 @@ public class MainView extends JFrame implements NotifiableView {
         int y = tile.getGridSpot().getY();
         checkCoordinates(x, y);
         meepleLayer.placeMeeple(x, y, tile.getTerrain(position), position, owner);
-        scrollPane.repaintLayers(); // This is required! TODO (MEDIUM) Is there a better way for AI moves than this?
+        scrollPane.repaintLayers(); // This is required!
     }
 
     /**
@@ -269,10 +290,11 @@ public class MainView extends JFrame implements NotifiableView {
      */
     @Override
     public void notifyChange() {
-        meepleLayer.refreshLayer();
         if (currentPlayer != null) {
             setCurrentPlayer(currentPlayer);
+            tileLayer.refreshPlacementHighlights();
         }
+        meepleLayer.refreshLayer();
     }
 
     private void buildFrame() {
