@@ -70,7 +70,7 @@ public enum GridDirection {
      * @param other is the other direction.
      * @return true if smaller or equal.
      */
-    public boolean isSmallerOrEquals(GridDirection other) { // TODO (MEDIUM) Ordinal magic should not be exposed too much
+    public boolean isSmallerOrEquals(GridDirection other) { // TODO (MEDIUM) [STYLE] Ordinal magic should not be exposed too much
         return ordinal() <= other.ordinal();
     }
 

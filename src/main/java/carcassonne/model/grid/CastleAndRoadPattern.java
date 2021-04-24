@@ -5,7 +5,7 @@ import carcassonne.model.terrain.TerrainType;
 /**
  * @author Timur Saglam
  */
-public class CastleAndRoadPattern extends GridPattern { // TODO (MEDIUM) use subclasses to make constructors generic (factory?)
+public class CastleAndRoadPattern extends GridPattern { // TODO (MEDIUM) [STYLE] use subclasses to make constructors generic (factory?)
     private static final double UNFINISHED_CASTLE_MULTIPLIER = 0.5;
 
     /**

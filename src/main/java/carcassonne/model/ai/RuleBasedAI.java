@@ -84,6 +84,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
     private List<AbstractCarcassonneMove> filterEarlyFieldMoves(Collection<AbstractCarcassonneMove> moves, TileStack stack) {
         double tiles = Math.max(LOWER_BOUND, Math.min(stack.getSize(), UPPER_BOUND));
         double requiredValue = REQUIRED_FIELD_VALUE * (tiles / 50 - 0.5);
+        // TODO (HIGH) [AI] only consider field pattern value:
         return moves.stream().filter(move -> !move.isFieldMove() || move.getValue() > requiredValue).collect(toList());
     }
 

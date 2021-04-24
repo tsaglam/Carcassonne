@@ -19,7 +19,7 @@ import carcassonne.model.terrain.TerrainType;
  * emblems, pattern completion). Values use lower case for easy image importing.
  * @author Timur
  */
-public enum TileType { // TODO (MEDIUM) rename enum values and tile image resources.
+public enum TileType { // TODO (MEDIUM) [STYLE] rename enum values and tile image resources.
     Null(0, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER, OTHER),
     CastleCenter(1, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE, CASTLE),
     CastleCenterEntry(3, CASTLE, CASTLE, ROAD, CASTLE, CASTLE, FIELDS, FIELDS, CASTLE, CASTLE),
