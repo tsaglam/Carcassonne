@@ -44,6 +44,14 @@ public class Round {
     }
 
     /**
+     * Checks if there are any human players in a match.
+     * @return true if at least human player is taking part.
+     */
+    public boolean hasHumanPlayers() {
+        return Arrays.stream(players).anyMatch(it -> !it.isComputerControlled());
+    }
+
+    /**
      * Getter for a specific players of the round.
      * @param playerNumber is the number of the specific players.
      * @return returns the players.

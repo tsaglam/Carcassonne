@@ -119,6 +119,9 @@ public class StateManning extends AbstractGameState {
         if (round.isOver()) {
             changeState(StateGameOver.class);
         } else {
+            if (!round.getActivePlayer().isComputerControlled()) {
+                views.onMainView(it -> it.resetPlacementHighlights());
+            }
             round.nextTurn();
             views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
             changeState(StatePlacing.class);

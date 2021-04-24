@@ -163,7 +163,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     protected void highlightSurroundings(GridSpot spot) {
         for (GridSpot neighbor : grid.getNeighbors(spot, true, GridDirection.directNeighbors())) {
             if (neighbor != null && neighbor.isFree()) {
-                views.onMainView(it -> it.setHighlight(neighbor.getX(), neighbor.getY()));
+                views.onMainView(it -> it.setSelectionHighlight(neighbor.getX(), neighbor.getY()));
             }
         }
     }
