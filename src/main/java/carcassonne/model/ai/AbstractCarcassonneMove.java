@@ -26,7 +26,7 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
     protected final GridDirection meeplePosition;
     protected final GameSettings settings;
     protected final TemporaryTile tile;
-    protected final double value;
+    protected final double value; // TODO (HIGH) [AI] track field pattern value separately
 
     /**
      * Creates the move. Does not check if the move is legal.
