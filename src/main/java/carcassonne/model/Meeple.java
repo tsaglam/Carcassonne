@@ -2,6 +2,7 @@ package carcassonne.model;
 
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
+import carcassonne.model.terrain.TerrainType;
 
 /**
  * Meeples are the token that a player places on the grid.
@@ -45,6 +46,17 @@ public class Meeple {
     }
 
     /**
+     * Returns the type of the meeple, meaning on which terrain the meeple is placed on.
+     * @return the terrain or OTHER if it is not placed.
+     */
+    public TerrainType getType() {
+        if (isPlaced()) {
+            return location.getTile().getTerrain(position);
+        }
+        return TerrainType.OTHER;
+    }
+
+    /**
      * Indicates whether the meeple is placed or not.
      * @return true if placed.
      */
@@ -57,7 +69,7 @@ public class Meeple {
      */
     public void removePlacement() {
         if (location != null) {
-            owner.returnMeeple(); // return me.
+            owner.returnMeeple(this); // return me.
             location = null; // mark as unplaced.
         }
     }

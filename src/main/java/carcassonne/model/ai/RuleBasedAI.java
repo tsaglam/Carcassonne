@@ -18,8 +18,9 @@ import carcassonne.settings.GameSettings;
 
 public class RuleBasedAI implements ArtificialIntelligence {
     private static final double REQUIRED_FIELD_VALUE = 12;
-    private static final int UPPER_BOUND = 75;
-    private static final int LOWER_BOUND = 25;
+    private static final int UPPER_BOUND = 75; // tiles for max required field value
+    private static final int LOWER_BOUND = 25; // tiles for min required field value
+    private static final double OFFSET = 0.5;
     private static final double MEEPLE_VALUE_FACTOR = 0.5;
     private static final double LAST_MEEPLE_INCENTIVE = 2.5;
     private static final String EMPTY_COLLECTION = "Cannot choose random element from empty collection!";
@@ -45,7 +46,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
             consideredMoves = consideredMoves.stream().filter(it -> !it.isFieldMove()).collect(toList());
         }
         // RULE 3: Avoid placing low value fields early in the game:
-        consideredMoves = filterEarlyFieldMoves(consideredMoves, stack);
+        consideredMoves = filterEarlyFieldMoves(consideredMoves, stack, player);
         // RULE 4: Find best move based on score value and meeple value
         if (!consideredMoves.isEmpty()) {
             double maximumValue = consideredMoves.stream().mapToDouble(it -> combinedValue(it, stack)).max().getAsDouble();
@@ -81,11 +82,11 @@ public class RuleBasedAI implements ArtificialIntelligence {
     /**
      * Filters field moves if their value is too low. The required value decreases with a shrinking tile stack.
      */
-    private List<AbstractCarcassonneMove> filterEarlyFieldMoves(Collection<AbstractCarcassonneMove> moves, TileStack stack) {
+    private List<AbstractCarcassonneMove> filterEarlyFieldMoves(Collection<AbstractCarcassonneMove> moves, TileStack stack, Player player) {
         double tiles = Math.max(LOWER_BOUND, Math.min(stack.getSize(), UPPER_BOUND));
-        double requiredValue = REQUIRED_FIELD_VALUE * (tiles / 50 - 0.5);
-        // TODO (HIGH) [AI] only consider field pattern value:
-        return moves.stream().filter(move -> !move.isFieldMove() || move.getValue() > requiredValue).collect(toList());
+        double variableRequiredValue = REQUIRED_FIELD_VALUE * (tiles / (UPPER_BOUND - LOWER_BOUND) - OFFSET);
+        double requiredValue = player.getUnretrievableMeeples() + variableRequiredValue;
+        return moves.stream().filter(move -> !move.isFieldMove() || move.getFieldValue() > requiredValue).collect(toList());
     }
 
     private double combinedValue(AbstractCarcassonneMove move, TileStack stack) {
