@@ -63,7 +63,7 @@ public class StatePlacing extends AbstractGameState {
     public void placeTile(int x, int y) {
         if (!round.getActivePlayer().isComputerControlled()) {
             Tile tile = views.getSelectedTile();
-            placeTile(tile, x, y);
+            placeTile(tile, x, y, false);
         }
     }
 
@@ -83,15 +83,21 @@ public class StatePlacing extends AbstractGameState {
         if (!round.getActivePlayer().dropTile(tile)) {
             throw new IllegalStateException("Cannot drop tile " + tile + "from player " + round.getActivePlayer());
         }
+        if (!round.getActivePlayer().isComputerControlled()) {
+            views.onMainView(it -> it.resetPlacementHighlights());
+        }
         round.nextTurn();
         views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
         entry();
     }
 
-    private void placeTile(Tile tile, int x, int y) {
+    private void placeTile(Tile tile, int x, int y, boolean highlightPlacement) {
         if (grid.place(x, y, tile)) {
             round.getActivePlayer().dropTile(tile);
             views.onMainView(it -> it.setTile(tile, x, y));
+            if (highlightPlacement) {
+                views.onMainView(view -> view.setPlacementHighlight(x, y));
+            }
             GridSpot spot = grid.getSpot(x, y);
             highlightSurroundings(spot);
             changeState(StateManning.class);
@@ -106,7 +112,7 @@ public class StatePlacing extends AbstractGameState {
         bestMove.ifPresent(it -> {
             Tile tile = it.getOriginalTile();
             tile.rotateTo(it.getRequiredTileRotation());
-            placeTile(tile, it.getX(), it.getY());
+            placeTile(tile, it.getX(), it.getY(), round.hasHumanPlayers());
         });
     }
 
