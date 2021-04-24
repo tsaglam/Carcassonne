@@ -24,6 +24,7 @@ public class Player {
     private final GameSettings settings;
     private final List<Tile> handOfTiles;
     private final boolean computerControlled;
+    private final List<Meeple> placedMeeples;
 
     /**
      * Simple constructor.
@@ -36,6 +37,7 @@ public class Player {
         freeMeeples = GameSettings.MAXIMAL_MEEPLES;
         maximalTiles = settings.getTilesPerPlayer();
         handOfTiles = new ArrayList<>();
+        placedMeeples = new ArrayList<>();
         computerControlled = settings.isPlayerComputerControlled(number);
         initializeScores();
     }
@@ -88,6 +90,14 @@ public class Player {
     }
 
     /**
+     * Returns the number of placed meeples that cannot be retrieved, meaning placed on a field.
+     * @return the number of placed fields meeples.
+     */
+    public int getUnretrievableMeeples() {
+        return (int) placedMeeples.stream().filter(it -> it.getType() == TerrainType.FIELDS).count();
+    }
+
+    /**
      * Gives read access to the hand of tiles.
      * @return the hand of tiles.
      */
@@ -102,7 +112,10 @@ public class Player {
     public Meeple getMeeple() {
         if (hasFreeMeeples()) {
             freeMeeples--;
-            return new Meeple(this);
+            Meeple meeple = new Meeple(this);
+            placedMeeples.add(meeple);
+            assert placedMeeples.size() <= GameSettings.MAXIMAL_MEEPLES;
+            return meeple;
         }
         throw new IllegalStateException("No unused meeples are left.");
     }
@@ -170,7 +183,8 @@ public class Player {
     /**
      * Returns a meeple after its job is down. Allows the player to place another meeple.
      */
-    public void returnMeeple() {
+    public void returnMeeple(Meeple meeple) {
+        assert placedMeeples.remove(meeple);
         freeMeeples++;
     }
 

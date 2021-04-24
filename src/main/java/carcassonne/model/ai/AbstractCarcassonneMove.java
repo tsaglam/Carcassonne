@@ -26,7 +26,8 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
     protected final GridDirection meeplePosition;
     protected final GameSettings settings;
     protected final TemporaryTile tile;
-    protected final double value; // TODO (HIGH) [AI] track field pattern value separately
+    protected final double value;
+    protected double fieldValue;
 
     /**
      * Creates the move. Does not check if the move is legal.
@@ -43,6 +44,7 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
         if (!tile.isPlaced()) {
             throw new IllegalStateException("Tile needs to be placed: " + tile);
         }
+        fieldValue = Double.NaN; // field score not yet set
         gridSpot = tile.getGridSpot();
         value = calculateValue();
     }
@@ -104,11 +106,19 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
     }
 
     /**
-     * Getter for the combined value of the move including the score difference and meeple value.
+     * Getter for the combined value of the move for all grid patterns.
      * @return the combined value.
      */
     public double getValue() {
         return value;
+    }
+
+    /**
+     * Getter for the value of the move regarding field patterns.
+     * @return the field value.
+     */
+    public double getFieldValue() {
+        return fieldValue;
     }
 
     /**
@@ -146,8 +156,8 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
     @Override
     public String toString() {
         String meeple = involvesMeeplePlacement() ? tile.getTerrain(meeplePosition) + " on " + meeplePosition : "without meeple";
-        return getClass().getSimpleName() + " for " + actingPlayer.getName() + " with value " + value + ": " + tile.getType() + " " + meeple + " "
-                + gridSpot;
+        return getClass().getSimpleName() + " for " + actingPlayer.getName() + " with value " + value + " (field value: " + fieldValue + "): "
+                + tile.getType() + " " + meeple + " " + gridSpot;
     }
 
     /**
@@ -160,6 +170,12 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
         return Math.toIntExact(localMeeples.filter(it -> it.getOwner() == actingPlayer).count());
     }
 
+    /**
+     * Calculates the value of the move as well as the pure field value.
+     * @return the value of the move.
+     * @see AbstractCarcassonneMove#getValue()
+     * @see AbstractCarcassonneMove#getFieldValue()
+     */
     protected abstract double calculateValue();
 
 }

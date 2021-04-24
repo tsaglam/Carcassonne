@@ -99,6 +99,14 @@ public class GridPattern {
         return containedSpots.size() * scoreMultiplier;
     }
 
+    /**
+     * Returns the type of the pattern in form of a {@link TerrainType}.
+     * @return the pattern type.
+     */
+    public TerrainType getType() {
+        return patternType;
+    }
+
     public int getScoreFor(Player player) {
         List<Player> dominantPlayers = getDominantPlayers();
         if (dominantPlayers.contains(player)) {

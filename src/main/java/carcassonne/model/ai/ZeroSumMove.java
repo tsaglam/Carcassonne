@@ -1,5 +1,7 @@
 package carcassonne.model.ai;
 
+import static carcassonne.model.terrain.TerrainType.FIELDS;
+
 import java.util.Collection;
 
 import carcassonne.model.Player;
@@ -39,17 +41,20 @@ public class ZeroSumMove extends AbstractCarcassonneMove {
     @Override
     protected double calculateValue() {
         gridSpot.removeTile();
-        Collection<GridPattern> localPatterns = gridSpot.getGrid().getLocalPatterns(gridSpot);
-        double scoreBefore = localPatterns.stream().mapToInt(this::zeroSumScore).sum();
-        gainedMeeples = calculateEmployedMeeples(localPatterns);
+        Collection<GridPattern> patterns = gridSpot.getGrid().getLocalPatterns(gridSpot);
+        double scoreBefore = patterns.stream().mapToInt(this::zeroSumScore).sum();
+        double fieldScoreBefore = patterns.stream().filter(it -> it.getType() == FIELDS).mapToInt(this::zeroSumScore).sum();
+        gainedMeeples = calculateEmployedMeeples(patterns);
         gridSpot.place(tile);
         if (involvesMeeplePlacement()) {
             tile.placeMeeple(actingPlayer, meeplePosition, new TemporaryMeeple(actingPlayer), settings);
         }
-        localPatterns = gridSpot.getGrid().getLocalPatterns(gridSpot);
-        double scoreAfter = localPatterns.stream().mapToInt(this::zeroSumScore).sum();
-        gainedMeeples -= calculateEmployedMeeples(localPatterns);
+        patterns = gridSpot.getGrid().getLocalPatterns(gridSpot);
+        double scoreAfter = patterns.stream().mapToInt(this::zeroSumScore).sum();
+        double fieldScoreAfter = patterns.stream().filter(it -> it.getType() == FIELDS).mapToInt(this::zeroSumScore).sum();
+        gainedMeeples -= calculateEmployedMeeples(patterns);
         tile.removeMeeple();
+        fieldValue = fieldScoreAfter - fieldScoreBefore;
         return scoreAfter - scoreBefore;
     }
 
