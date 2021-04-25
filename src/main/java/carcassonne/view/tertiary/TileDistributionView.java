@@ -173,7 +173,9 @@ public class TileDistributionView extends JDialog {
 
     private void applyChangesToDistribution() {
         for (TileQuantityPanel panel : quantityPanels) {
-            distribution.setQuantity(panel.getTileType(), panel.getQuantity());
+            if (panel.getQuantity() >= 0) {
+                distribution.setQuantity(panel.getTileType(), panel.getQuantity());
+            }
         }
     }
 
@@ -186,7 +188,12 @@ public class TileDistributionView extends JDialog {
     private int calculateStackSize(int multiplier) {
         int size = 0;
         for (TileQuantityPanel panel : quantityPanels) {
-            size += panel.getQuantity();
+            if (panel.getQuantity() >= 0) {
+                size += panel.getQuantity();
+            } else {
+                size += distribution.getQuantity(panel.getTileType());
+            }
+
         }
         return size * multiplier;
     }
