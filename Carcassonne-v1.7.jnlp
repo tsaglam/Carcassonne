@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="1.0+" codebase="https://github.com/tsaglam/Carcassonne/releases/download/v1.7/" href="Carcassonne-v1.7.jnlp">
+<jnlp spec="1.0+" codebase="https://github.com/tsaglam/Carcassonne/releases/download/v1.8/" href="Carcassonne-v1.8.jnlp">
  
      <information>
-          <title>Carcassonne v1.7</title>
+          <title>Carcassonne v1.8</title>
           <vendor>Timur Sağlam</vendor>
           <homepage href="https://github.com/tsaglam/" />
           <description>A digital version of the board game Carcassonne</description>
@@ -14,7 +14,7 @@
  
      <resources>
           <j2se version="1.9+" />
-          <jar href="Carcassonne-v1.7.jar" />
+          <jar href="Carcassonne-v1.8.jar" />
      </resources>
  
      <application-desc main-class="carcassonne.Carcassonne" />
