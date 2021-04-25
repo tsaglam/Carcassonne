@@ -13,7 +13,7 @@
      </security>
  
      <resources>
-          <j2se version="1.9+" />
+          <j2se version="1.9+" max-heap-size="3G"/>
           <jar href="Carcassonne-v1.8.jar" />
      </resources>
  
