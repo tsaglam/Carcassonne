@@ -71,7 +71,7 @@ public class GameSettings {
     public GameSettings() {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
-        playerTypes = new ArrayList<>(Arrays.asList(false, false, false, false, false));
+        playerTypes = new ArrayList<>(Arrays.asList(false, true, true, true, true));
         meepleRules = new HashMap<TerrainType, Boolean>();
         TerrainType.basicTerrain().forEach(it -> meepleRules.put(it, true));
         tileDistribution = new TileDistribution();
