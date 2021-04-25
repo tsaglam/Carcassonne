@@ -129,7 +129,7 @@ public class StatePlacing extends AbstractGameState {
                 Thread.sleep(SLEEP_DURATION);
             } catch (InterruptedException exception) {
                 exception.printStackTrace();
-                GameMessage.showError(exception.getMessage());
+                GameMessage.showError(exception.getCause().getMessage());
             }
         }
     }

@@ -137,7 +137,8 @@ public class MainController implements ControllerFacade {
                 settings.registerNotifiable(tileView);
             });
         } catch (InvocationTargetException | InterruptedException exception) {
-            GameMessage.showError("Could not create user interface: " + exception.getMessage());
+            exception.printStackTrace();
+            GameMessage.showError("Could not create user interface: " + exception.getCause().getMessage());
         }
     }
 }
