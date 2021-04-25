@@ -1,20 +1,15 @@
 package carcassonne.view.menubar;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSeparator;
 
 import carcassonne.control.ControllerFacade;
-import carcassonne.model.terrain.TerrainType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.main.MainView;
-import carcassonne.view.tertiary.PlayerSettingsView;
 import carcassonne.view.tertiary.GridSizeDialog;
+import carcassonne.view.tertiary.PlayerSettingsView;
 import carcassonne.view.tertiary.TileDistributionView;
 import carcassonne.view.util.GameMessage;
 
@@ -23,14 +18,11 @@ import carcassonne.view.util.GameMessage;
  * @author Timur Saglam
  */
 public class MainMenuBar extends JMenuBar {
+    // ID:
     private static final long serialVersionUID = -599734693130415390L;
-    private static final String ALLOW_FORTIFYING = "Allow direct meeple placement on own patterns";
-    private static final String MEEPLE_RULE_SUFFIX = " Meeples";
-    private static final String MEEPLE_RULES = "Meeple Placement Rules";
+
+    // TEXT:
     private static final String DISTRIBUTION = "Change Tile Distribution";
-    private static final String CLASSIC = " (Classic)";
-    private static final String TILES_PER_PLAYER = " Tiles";
-    private static final String HAND_SETTINGS = "Hand of Tiles";
     private static final String GRID_SIZE = "Change Grid Size";
     private static final String ABORT = "Abort Current Game";
     private static final String GAME = "Game";
@@ -40,6 +32,8 @@ public class MainMenuBar extends JMenuBar {
     private static final String PLAYER_SETTINGS = "Player Settings";
     private static final String VIEW = "View";
     private static final String ABOUT = "About";
+
+    // STATE:
     private final ControllerFacade controller;
     private JMenuItem itemAbortRound;
     private JMenuItem itemNewRound;
@@ -122,8 +116,6 @@ public class MainMenuBar extends JMenuBar {
         JMenuItem itemPlayerSettings = new JMenuItem(PLAYER_SETTINGS);
         itemPlayerSettings.addActionListener(it -> playerView.setVisible(true));
         menuOptions.add(itemPlayerSettings);
-        menuOptions.add(buildHandMenu());
-        menuOptions.add(buildMeepleRuleMenu());
         menuOptions.addSeparator();
         JMenuItem itemGridSize = new JMenuItem(GRID_SIZE);
         GridSizeDialog dialog = new GridSizeDialog(settings);
@@ -133,41 +125,6 @@ public class MainMenuBar extends JMenuBar {
         itemDistribution.addActionListener(event -> tileDistributionUI.setVisible(true));
         menuOptions.add(itemDistribution);
         add(menuOptions);
-    }
-
-    private JMenu buildHandMenu() {
-        JMenuItem[] itemTiles = new JRadioButtonMenuItem[GameSettings.MAXIMAL_TILES_ON_HAND];
-        JMenu menu = new JMenu(HAND_SETTINGS);
-        ButtonGroup group = new ButtonGroup();
-        for (int i = 0; i < itemTiles.length; i++) {
-            int numberOfTiles = i + 1;
-            String itemText = numberOfTiles + TILES_PER_PLAYER;
-            if (numberOfTiles == 1) {
-                itemText += CLASSIC;
-            }
-            itemTiles[i] = new JRadioButtonMenuItem(itemText);
-            itemTiles[i].addActionListener(event -> settings.setTilesPerPlayer(numberOfTiles));
-            group.add(itemTiles[i]);
-            menu.add(itemTiles[i]);
-        }
-        itemTiles[settings.getTilesPerPlayer() - 1].setSelected(true);
-        return menu;
-    }
-
-    private JMenu buildMeepleRuleMenu() {
-        JMenu menu = new JMenu(MEEPLE_RULES);
-        for (TerrainType type : TerrainType.basicTerrain()) {
-            JCheckBoxMenuItem item = new JCheckBoxMenuItem(type.toReadableString() + MEEPLE_RULE_SUFFIX);
-            item.setSelected(settings.getMeepleRule(type));
-            item.addActionListener(event -> settings.toggleMeepleRule(type));
-            menu.add(item);
-        }
-        menu.add(new JSeparator());
-        JCheckBoxMenuItem fortifyingItem = new JCheckBoxMenuItem(ALLOW_FORTIFYING);
-        fortifyingItem.setSelected(settings.isAllowingFortifying());
-        fortifyingItem.addActionListener(event -> settings.setAllowFortifying(fortifyingItem.isSelected()));
-        menu.add(fortifyingItem);
-        return menu;
     }
 
     private void buildViewMenu() {
