@@ -52,10 +52,15 @@ public class TileQuantityPanel extends JPanel {
 
     /**
      * Getter for the quantity specified in the text field of the panel.
-     * @return the specified quantity.
+     * @return the specified quantity or -1 if it is empty.
      */
     public int getQuantity() {
-        return Integer.parseInt(textField.getText());
+        String text = textField.getText();
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException exception) {
+            return -1;
+        }
     }
 
     /**
@@ -83,7 +88,7 @@ public class TileQuantityPanel extends JPanel {
         NumberFormatter formatter = new NumberFormatter(NumberFormat.getIntegerInstance());
         formatter.setMinimum(0);
         formatter.setMaximum(99);
-        formatter.setAllowsInvalid(false);
+        formatter.setAllowsInvalid(true);
         formatter.setCommitsOnValidEdit(true);
         textField = new JFormattedTextField(formatter);
         textField.addPropertyChangeListener(event -> ui.updateStackSizePreview());
