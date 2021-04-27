@@ -248,7 +248,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         playerPanels.add(panel);
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
         panel.setOpaque(false);
-        panel.add(embolden(new JLabel(PLAYER + playerNumber + COLON)));
+        panel.add(embolden(new JLabel(PLAYER + (playerNumber + 1) + COLON)));
         JCheckBox checkBox = new JCheckBox(AI_PLAYER);
         checkBox.setSelected(settings.isPlayerComputerControlled(playerNumber));
         checkBox.addActionListener(event -> settings.setPlayerComputerControlled(checkBox.isSelected(), playerNumber));
