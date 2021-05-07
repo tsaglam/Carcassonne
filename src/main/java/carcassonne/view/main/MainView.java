@@ -1,6 +1,7 @@
 package carcassonne.view.main;
 
 import static carcassonne.view.main.ZoomMode.FAST;
+import static carcassonne.view.main.ZoomMode.SMOOTH;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -189,8 +190,10 @@ public class MainView extends JFrame implements NotifiableView {
      * @param mode determines the zoom mode, which affects image quality and performance.
      */
     public void updateToChangedZoomLevel(ZoomMode mode) { // TODO (HIGH) [THREADING] Better threading for zooming?
-        if (currentPlayer != null) { // only update highlights when there is an active round
+        if (currentPlayer != null && mode == SMOOTH) { // only update highlights when there is an active round
             tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, mode == FAST));
+        } else {
+            tileLayer.resetPlacementHighlights();
         }
         tileLayer.changeZoomLevel(zoomLevel, mode == FAST); // Executed in parallel for improved performance
         meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
