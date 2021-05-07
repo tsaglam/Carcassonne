@@ -1,6 +1,3 @@
-/**
- * 
- */
 package carcassonne.view.menubar;
 
 import java.awt.event.MouseAdapter;
