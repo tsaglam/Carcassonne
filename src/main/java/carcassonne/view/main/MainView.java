@@ -189,7 +189,7 @@ public class MainView extends JFrame implements NotifiableView {
      * Updates the view to a changed zoom level. Centers the view.
      * @param mode determines the zoom mode, which affects image quality and performance.
      */
-    public void updateToChangedZoomLevel(ZoomMode mode) { // TODO (HIGH) [THREADING] Better threading for zooming?
+    public void updateToChangedZoomLevel(ZoomMode mode) {
         if (currentPlayer != null && mode == SMOOTH) { // only update highlights when there is an active round
             tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, mode == FAST));
         } else {
