@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileType;
 import carcassonne.view.PaintShop;
 
 /**
@@ -92,7 +93,6 @@ public class TileDepiction {
         } else {
             label.setIcon(PaintShop.getColoredTile(tile, recentlyPlaced, tileSize, preview));
         }
-
     }
 
     /**
@@ -150,5 +150,13 @@ public class TileDepiction {
      */
     public JLabel getLabel() {
         return label;
+    }
+
+    /**
+     * Returns the currently depicted tile.
+     * @return the tile, which can be of {@link TileType#Null}.
+     */
+    public Tile getTile() {
+        return tile;
     }
 }
