@@ -21,7 +21,6 @@ import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.util.LookAndFeelUtil;
-import carcassonne.view.util.ThreadingUtil;
 
 /**
  * The main user interface, showing the grid and the menu bar.
@@ -196,7 +195,7 @@ public class MainView extends JFrame implements NotifiableView {
         tileLayer.changeZoomLevel(zoomLevel, mode == FAST); // Executed in parallel for improved performance
         meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
         meepleLayer.changeZoomLevel(zoomLevel);
-        ThreadingUtil.runInBackground(() -> scrollPane.validateAndCenter());
+        scrollPane.validateAndCenter();
         scrollPane.repaintLayers(); // IMPORTANT: Prevents meeples from disappearing.
     }
 
