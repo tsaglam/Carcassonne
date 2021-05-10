@@ -29,12 +29,18 @@ import carcassonne.view.util.LookAndFeelUtil;
  */
 public class MainView extends JFrame implements NotifiableView {
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
+
+    // ZOOM CONSTANTS:
     private static final int DEFAULT_ZOOM_LEVEL = 125;
     private static final int MAX_ZOOM_LEVEL = 300;
     private static final int MIN_ZOOM_LEVEL = 25;
     private static final int ZOOM_STEP_LARGE = 25;
     private static final int ZOOM_STEP_SMALL = 5;
+
+    // UI CONSTANTS:
     private static final Dimension MINIMAL_WINDOW_SIZE = new Dimension(640, 480);
+
+    // FIELDS:
     private final ControllerFacade controller;
     private Player currentPlayer;
     private int gridHeight;

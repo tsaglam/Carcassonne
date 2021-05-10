@@ -13,9 +13,19 @@ import carcassonne.view.main.ZoomMode;
  */
 public class ZoomSlider extends JSlider {
     private static final long serialVersionUID = -5518487902213410121L;
+
+    // SEMANTIC CONSTANTS:
     private static final int MAXIMUM_VALUE = 300;
     private static final int MINIMUM_VALUE = 25;
     private static final int SLIDER_STEP_SIZE = 25;
+
+    // UI CONSTANTS:
+    private static final int MAJOR_TICK = 50;
+    private static final int MINOR_TICK = 5;
+    private static final String ZOOM_OUT = "Zoom Out (-)";
+    private static final String ZOOM_IN = "Zoom In (+)";
+
+    // FIELDS:
     private final JMenuItem zoomOut;
     private final JMenuItem zoomIn;
     private final ZoomSliderListener zoomListener;
@@ -28,14 +38,14 @@ public class ZoomSlider extends JSlider {
         super(MINIMUM_VALUE, MAXIMUM_VALUE, mainView.getZoom());
         setPaintTicks(true);
         setOrientation(SwingConstants.VERTICAL);
-        setMinorTickSpacing(5);
-        setMajorTickSpacing(50);
+        setMinorTickSpacing(MINOR_TICK);
+        setMajorTickSpacing(MAJOR_TICK);
         setSnapToTicks(true);
         zoomListener = new ZoomSliderListener(mainView, this);
         addMouseListener(zoomListener);
         addChangeListener(zoomListener);
-        zoomIn = new JMenuItem("Zoom In (+)");
-        zoomOut = new JMenuItem("Zoom Out (-)");
+        zoomIn = new JMenuItem(ZOOM_IN);
+        zoomOut = new JMenuItem(ZOOM_OUT);
         zoomIn.addActionListener(event -> {
             setValueSneakily(getValue() + SLIDER_STEP_SIZE);
             mainView.zoomIn(ZoomMode.SMOOTH);
