@@ -3,7 +3,7 @@
 </p>
 
 [![CI status](https://github.com/tsaglam/Carcassonne/actions/workflows/CI.yml/badge.svg)](https://github.com/tsaglam/Carcassonne/actions)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/tsaglam/Carcassonne)](https://github.com/tsaglam/Carcassonne/pulse)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/tsaglam/Carcassonne)](https://github.com/tsaglam/Carcassonne/pulse)
 [![Lines of code](https://img.shields.io/tokei/lines/github/tsaglam/Carcassonne)](https://github.com/tsaglam/Carcassonne/graphs/contributors)
 [![License](https://img.shields.io/github/license/tsaglam/Carcassonne?color=informational)](https://github.com/tsaglam/Carcassonne/blob/master/LICENSE)
 
