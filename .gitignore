@@ -1,5 +1,12 @@
-/bin/
-*.checkstyle
+# Binaries
+bin/
+target/
+ 
+# Eclipse
+.settings/
 *.project
 *.classpath
-*.eclipse.jdt.core.prefs
+
+# Other
+*.checkstyle
+*.log
