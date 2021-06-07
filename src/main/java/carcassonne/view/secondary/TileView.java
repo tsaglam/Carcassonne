@@ -131,7 +131,7 @@ public class TileView extends SecondaryView {
      * Selects a specific tile label, increasing its size and adding a border. Resets the previous selection.
      * @param index is the index of the label. If the index is not valid nothing will happen.
      */
-    public void selectTileLabel(int index) {
+    private void selectTileLabel(int index) {
         if (index < tiles.size()) {
             int oldSelection = selectionIndex;
             selectionIndex = index;

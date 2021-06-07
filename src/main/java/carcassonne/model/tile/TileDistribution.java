@@ -11,8 +11,8 @@ import java.util.Stack;
  */
 public class TileDistribution {
     private static final int MAXIMAL_ATTEMPTS = 5;
-    protected final Map<TileType, Integer> distribution;
-    protected final Map<TileType, Integer> restorationPoint;
+    private final Map<TileType, Integer> distribution;
+    private final Map<TileType, Integer> restorationPoint;
 
     /**
      * Creates a default distribution.

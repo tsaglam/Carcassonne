@@ -59,13 +59,6 @@ public class Scoreboard implements NotifiableView {
     }
 
     /**
-     * Enables all the scoreboard labels.
-     */
-    public void enable() {
-        allLabels.forEach(it -> it.setVisible(true));
-    }
-
-    /**
      * Grants access to the labels themselves.
      * @return the array of labels.
      */

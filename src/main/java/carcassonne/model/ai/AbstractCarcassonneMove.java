@@ -26,7 +26,7 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
     protected final GridDirection meeplePosition;
     protected final GameSettings settings;
     protected final TemporaryTile tile;
-    protected final double value;
+    private final double value;
     protected double fieldValue;
 
     /**

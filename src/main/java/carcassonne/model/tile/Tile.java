@@ -161,18 +161,6 @@ public class Tile {
     }
 
     /**
-     * Checks whether the tile has a meeple on a specific position.
-     * @param position is the specific position.
-     * @return true if there is a tile on that position.
-     */
-    public boolean hasMeepleAt(GridDirection position) {
-        if (hasMeeple()) {
-            return meeple.getPosition() == position;
-        }
-        return false;
-    }
-
-    /**
      * Checks whether a meeple can be potentially placed on a specific position by its terrain.
      * @param direction is the specific position on the tile.
      * @return if it can be potentially placed. Does not check whether enemy players sit on the pattern.

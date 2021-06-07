@@ -61,23 +61,6 @@ public class Grid {
     }
 
     /**
-     * Creates a list of spots that are connected to a specific spot with the terrain in a specific direction on the spot.
-     * @param spot is the spot on the grid where the tile is.
-     * @param from is the direction the tile is connected from
-     * @return the list of connected tiles.
-     */
-    public List<GridSpot> getConnectedTiles(GridSpot spot, GridDirection from) {
-        checkParameters(spot);
-        List<GridSpot> list = new LinkedList<>();
-        for (GridDirection to : GridDirection.directNeighbors()) {
-            if (spot.getTile().hasConnection(from, to) && from != to) { // if connected
-                list.addAll(getNeighbors(spot, false, to));
-            }
-        }
-        return list;
-    }
-
-    /**
      * Returns the spot of the first tile of round, the foundation tile.
      * @return the grid spot.
      */
@@ -91,21 +74,6 @@ public class Grid {
      */
     public int getHeight() {
         return height;
-    }
-
-    /**
-     * Method checks for potentially modified patterns on the grid.
-     * @param spot is the spot of the last placed tile.
-     * @return the list of the modified patterns.
-     */
-    public Collection<GridPattern> getModifiedPatterns(GridSpot spot) {
-        checkParameters(spot);
-        if (spot.isFree()) {
-            throw new IllegalArgumentException("Can't check for patterns on an free grid space");
-        }
-        Collection<GridPattern> modifiedPatterns = spot.createPatternList();
-        modifiedPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
-        return modifiedPatterns; // get patterns.
     }
 
     /**
@@ -124,6 +92,21 @@ public class Grid {
         }
         gridPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
         return gridPatterns; // get patterns.
+    }
+
+    /**
+     * Method checks for potentially modified patterns on the grid.
+     * @param spot is the spot of the last placed tile.
+     * @return the list of the modified patterns.
+     */
+    public Collection<GridPattern> getModifiedPatterns(GridSpot spot) {
+        checkParameters(spot);
+        if (spot.isFree()) {
+            throw new IllegalArgumentException("Can't check for patterns on an free grid space");
+        }
+        Collection<GridPattern> modifiedPatterns = spot.createPatternList();
+        modifiedPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
+        return modifiedPatterns; // get patterns.
     }
 
     /**
@@ -162,8 +145,27 @@ public class Grid {
         return neighbors;
     }
 
-    public List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection direction) {
-        return getNeighbors(spot, allowEmptySpots, List.of(direction));
+    /**
+     * Returns a collection all possible and legal moves.
+     * @param tile is the tile that is placed during the move.
+     * @param player is the player that conducts the move.
+     * @param settings are the game settings.
+     * @return the collection of all moves.
+     */
+    public Collection<? extends AbstractCarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
+        checkParameters(tile);
+        List<ZeroSumMove> possibleMoves = new ArrayList<>();
+        for (TileRotation rotation : tile.getPossibleRotations()) {
+            tile.rotateTo(rotation);
+            for (int x = 0; x < width; x++) { // TODO (HIGH) [PERFORMANCE] maybe we should track free and occupied spots?
+                for (int y = 0; y < height; y++) {
+                    possibleMoves.addAll(movesForGridSpot(player, spots[x][y], tile, settings));
+                }
+            }
+        }
+        Collections.sort(possibleMoves);
+        Collections.reverse(possibleMoves);
+        return possibleMoves;
     }
 
     /**
@@ -214,25 +216,6 @@ public class Grid {
     }
 
     /**
-     * Checks whether a specific spot on the grid is valid.
-     * @param spot is the spot
-     * @return true if it is on the grid.
-     */
-    public boolean isOnGrid(GridSpot spot) {
-        return spot != null && spot.equals(spots[spot.getX()][spot.getY()]);
-    }
-
-    /**
-     * Checks whether specific coordinates are on the grid.
-     * @param x is the x coordinate
-     * @param y is the y coordinate
-     * @return true if it is on the grid.
-     */
-    public boolean isOnGrid(int x, int y) {
-        return x >= 0 && x < width && y >= 0 && y < height;
-    }
-
-    /**
      * Tries to place a tile on a spot on the grid.
      * @param x is the x coordinate
      * @param y is the y coordinate
@@ -243,48 +226,6 @@ public class Grid {
         checkParameters(x, y);
         checkParameters(tile);
         return spots[x][y].place(tile);
-    }
-
-    /**
-     * Returns a collection all possible and legal moves.
-     * @param tile is the tile that is placed during the move.
-     * @param player is the player that conducts the move.
-     * @param settings are the game settings.
-     * @return the collection of all moves.
-     */
-    public Collection<? extends AbstractCarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
-        checkParameters(tile);
-        List<ZeroSumMove> possibleMoves = new ArrayList<>();
-        for (TileRotation rotation : tile.getPossibleRotations()) {
-            tile.rotateTo(rotation);
-            for (int x = 0; x < width; x++) { // TODO (HIGH) [PERFORMANCE] maybe we should track free and occupied spots?
-                for (int y = 0; y < height; y++) {
-                    possibleMoves.addAll(movesForGridSpot(player, spots[x][y], tile, settings));
-                }
-            }
-        }
-        Collections.sort(possibleMoves);
-        Collections.reverse(possibleMoves);
-        return possibleMoves;
-    }
-
-    private List<ZeroSumMove> movesForGridSpot(Player player, GridSpot spot, Tile originalTile, GameSettings settings) {
-        List<ZeroSumMove> possibleMoves = new ArrayList<>();
-        if (spot.isPlaceable(originalTile)) {
-            TemporaryTile tile = new TemporaryTile(originalTile, originalTile.getRotation());
-            spot.place(tile);
-            possibleMoves.add(new ZeroSumMove(tile, player, settings));
-            if (player.hasFreeMeeples()) {
-                for (GridDirection position : GridDirection.values()) {
-                    if (tile.hasMeepleSpot(position) && settings.getMeepleRule(tile.getTerrain(position))
-                            && tile.allowsPlacingMeeple(position, player, settings)) {
-                        possibleMoves.add(new ZeroSumMove(tile, position, player, settings));
-                    }
-                }
-            }
-            spot.removeTile();
-        }
-        return possibleMoves;
     }
 
     private void checkParameters(GridSpot spot) {
@@ -338,6 +279,39 @@ public class Grid {
             return true; // found boundary
         }
         return false; // has not found boundary
+    }
+
+    private List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection direction) {
+        return getNeighbors(spot, allowEmptySpots, List.of(direction));
+    }
+
+    /**
+     * Checks whether specific coordinates are on the grid.
+     * @param x is the x coordinate
+     * @param y is the y coordinate
+     * @return true if it is on the grid.
+     */
+    private boolean isOnGrid(int x, int y) {
+        return x >= 0 && x < width && y >= 0 && y < height;
+    }
+
+    private List<ZeroSumMove> movesForGridSpot(Player player, GridSpot spot, Tile originalTile, GameSettings settings) {
+        List<ZeroSumMove> possibleMoves = new ArrayList<>();
+        if (spot.isPlaceable(originalTile)) {
+            TemporaryTile tile = new TemporaryTile(originalTile, originalTile.getRotation());
+            spot.place(tile);
+            possibleMoves.add(new ZeroSumMove(tile, player, settings));
+            if (player.hasFreeMeeples()) {
+                for (GridDirection position : GridDirection.values()) {
+                    if (tile.hasMeepleSpot(position) && settings.getMeepleRule(tile.getTerrain(position))
+                            && tile.allowsPlacingMeeple(position, player, settings)) {
+                        possibleMoves.add(new ZeroSumMove(tile, position, player, settings));
+                    }
+                }
+            }
+            spot.removeTile();
+        }
+        return possibleMoves;
     }
 
     /**

@@ -70,20 +70,6 @@ public enum TileType { // TODO (MEDIUM) [STYLE] rename enum values and tile imag
     }
 
     /**
-     * Checks whether this {@link TileType} contains a specific {@link TerrainType}.
-     * @param terrainType is the specific {@link TerrainType}.
-     * @return true if it does.
-     */
-    public boolean contains(TerrainType terrainType) {
-        for (TerrainType tileTerrain : terrain) {
-            if (tileTerrain.equals(terrainType)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Getter for the standard amount of tiles of this type in a stack.
      * @return the amount of tiles.
      */
