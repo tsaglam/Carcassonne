@@ -1,8 +1,5 @@
 package carcassonne.model.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
@@ -16,7 +13,7 @@ import carcassonne.settings.GameSettings;
  */
 public class TemporaryTile extends Tile {
 
-    final Tile original;
+    private final Tile original;
 
     public TemporaryTile(Tile original) {
         super(original.getType());
@@ -49,14 +46,6 @@ public class TemporaryTile extends Tile {
     @Override
     public void setPosition(GridSpot spot) {
         gridSpot = spot; // no null check, allows removing spot
-    }
-
-    public static List<TemporaryTile> possibleRotationsOf(Tile tile) {
-        List<TemporaryTile> rotatedTiles = new ArrayList<>();
-        for (TileRotation rotation : tile.getPossibleRotations()) {
-            rotatedTiles.add(new TemporaryTile(tile, rotation));
-        }
-        return rotatedTiles;
     }
 
 }

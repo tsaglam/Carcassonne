@@ -21,15 +21,6 @@ public final class GameMessage {
     }
 
     /**
-     * Asks the user for text input.
-     * @param messageText is the custom message.
-     * @return the user input string.
-     */
-    public static String getUserInput(String messageText) {
-        return JOptionPane.showInputDialog(null, messageText, TITLE, JOptionPane.QUESTION_MESSAGE);
-    }
-
-    /**
      * Shows a custom error message.
      * @param messageText is the message text.
      */

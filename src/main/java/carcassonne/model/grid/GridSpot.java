@@ -158,15 +158,6 @@ public class GridSpot {
         return tile != null;
     }
 
-    /**
-     * Method determines if tile recently was tagged by grid pattern checks on a specific position or not.
-     * @param tilePosition is the specific position.
-     * @return true if it was tagged.
-     */
-    public Boolean isTagged(GridDirection direction) {
-        return !tagMap.get(direction).isEmpty();
-    }
-
     public boolean isPlaceable(Tile tile) {
         if (isOccupied()) {
             return false; // can't be placed if spot is occupied.
@@ -245,5 +236,14 @@ public class GridSpot {
         if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY && !spot.isIndirectlyTagged(CENTER)) {
             patternList.add(new MonasteryPattern(spot));
         }
+    }
+
+    /**
+     * Method determines if tile recently was tagged by grid pattern checks on a specific position or not.
+     * @param tilePosition is the specific position.
+     * @return true if it was tagged.
+     */
+    private Boolean isTagged(GridDirection direction) {
+        return !tagMap.get(direction).isEmpty();
     }
 }

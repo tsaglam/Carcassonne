@@ -64,18 +64,6 @@ public class LayeredScrollPane extends JScrollPane {
     }
 
     /**
-     * Determines for a given grid size and zoom level of the full grid is shown in the view.
-     * @param gridWidth is the width of the grid in tiles.
-     * @param gridHeight is the height of the grid in tiles.
-     * @param zoomLevel is the zoom level and also the tile edge length in pixel.
-     * @return true if it shows the full grid
-     */
-    public boolean showsFullGrid(int gridWidth, int gridHeight, int zoomLevel) {
-        Rectangle bounds = getViewport().getViewRect();
-        return gridWidth * zoomLevel < bounds.width || gridHeight * zoomLevel < bounds.height;
-    }
-
-    /**
      * Centers the scroll pane view to show the center of the grid. Since this method revalidates the viewport it can be
      * expensive if the scroll pane contains complex content (e.g. a very large grid).
      */
