@@ -1,5 +1,6 @@
 package carcassonne.control.state;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import carcassonne.model.Player;
@@ -78,11 +79,12 @@ public class StatePlacing extends AbstractGameState {
     }
 
     private void skipPlacingTile() {
-        Tile tile = getTileToDrop();
-        tileStack.putBack(tile);
-        if (!round.getActivePlayer().dropTile(tile)) {
-            throw new IllegalStateException("Cannot drop tile " + tile + "from player " + round.getActivePlayer());
-        }
+        getTileToDrop().ifPresent(it -> {
+            tileStack.putBack(it);
+            if (!round.getActivePlayer().dropTile(it)) {
+                throw new IllegalStateException("Cannot drop tile " + it + "from player " + round.getActivePlayer());
+            }
+        });
         if (!round.getActivePlayer().isComputerControlled()) {
             views.onMainView(it -> it.resetPlacementHighlights());
         }
@@ -116,11 +118,15 @@ public class StatePlacing extends AbstractGameState {
         });
     }
 
-    private Tile getTileToDrop() {
+    private Optional<Tile> getTileToDrop() {
         if (round.getActivePlayer().isComputerControlled()) {
-            return playerAI.chooseTileToDrop(round.getActivePlayer().getHandOfTiles());
+            Collection<Tile> handOfTiles = round.getActivePlayer().getHandOfTiles();
+            if (handOfTiles.isEmpty()) {
+                return Optional.empty();
+            }
+            return Optional.of(playerAI.chooseTileToDrop(handOfTiles));
         }
-        return views.getSelectedTile();
+        return Optional.of(views.getSelectedTile());
     }
 
     private void waitForUI() {
