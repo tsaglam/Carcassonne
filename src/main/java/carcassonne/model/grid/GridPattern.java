@@ -42,15 +42,6 @@ public class GridPattern {
     }
 
     /**
-     * Checks whether the pattern already contains a grid spot.
-     * @param spot is the grid spot to check.
-     * @return true if the pattern already contains the grid spot.
-     */
-    public boolean contains(GridSpot spot) {
-        return containedSpots.contains(spot);
-    }
-
-    /**
      * Disburses complete patterns. Distributes the score among all dominant players on the pattern. Removes the meeple
      * placement and returns them to the players. Can only be called once in the lifetime of a pattern.
      */

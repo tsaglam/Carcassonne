@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
@@ -310,7 +311,7 @@ public class MainView extends JFrame implements NotifiableView {
         meepleLayer = new MeepleLayer(controller, gridWidth, gridHeight, zoomLevel);
         menuBar = new MainMenuBar(controller, this);
         setJMenuBar(menuBar);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         scrollPane = LookAndFeelUtil.createModifiedScrollpane();
         scrollPane.addLayers(meepleLayer, tileLayer);

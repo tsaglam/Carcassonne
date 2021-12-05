@@ -90,7 +90,7 @@ public class MeepleView extends SecondaryView {
     private void updatePlacementButtons() {
         for (GridDirection direction : GridDirection.values()) {
             TerrainType terrain = tile.getTerrain(direction);
-            Boolean placeable = tile.hasMeepleSpot(direction) && controller.getSettings().getMeepleRule(terrain);
+            boolean placeable = tile.hasMeepleSpot(direction) && controller.getSettings().getMeepleRule(terrain);
             JButton button = meepleButtons.get(direction);
             if (placeable) {
                 button.setIcon(ImageLoadingUtil.createHighDpiImageIcon(GameSettings.getMeeplePath(terrain, false)));

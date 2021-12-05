@@ -37,7 +37,7 @@ public final class ThreadingUtil {
      * @param callback is the callback with the result on completion.
      */
     public static <T> void runAndCallback(Callable<T> task, Consumer<T> callback) {
-        SwingWorker<T, ?> worker = new SwingWorker<T, Object>() {
+        SwingWorker<T, ?> worker = new SwingWorker<>() {
             @Override
             protected T doInBackground() throws Exception {
                 return task.call();
