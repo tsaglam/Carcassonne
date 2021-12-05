@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.Set;
 
 import javax.swing.ImageIcon;
 
@@ -299,13 +298,5 @@ public class Tile {
     @Override
     public String toString() {
         return type + getClass().getSimpleName() + "[coordinates: " + gridSpot + ", Meeple: " + meeple + "]";
-    }
-
-    /**
-     * Getter for the meeple spots.
-     * @return the positions on the grid where placing a meeple is possible.
-     */
-    protected Set<GridDirection> getMeepleSpots() {
-        return terrain.getMeepleSpots();
     }
 }

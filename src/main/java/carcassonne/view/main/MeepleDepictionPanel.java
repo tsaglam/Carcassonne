@@ -34,7 +34,7 @@ public class MeepleDepictionPanel extends JPanel {
      */
     public MeepleDepictionPanel(int scalingFactor, ControllerFacade controller) {
         this.controller = controller;
-        labels = new HashMap<GridDirection, MeepleDepiction>(GridDirection.values().length);
+        labels = new HashMap<>(GridDirection.values().length);
         setOpaque(false);
         setLayout(new GridBagLayout());
         size = new Dimension(scalingFactor, scalingFactor);

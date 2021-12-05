@@ -71,7 +71,7 @@ public class GameSettings {
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
         playerTypes = new ArrayList<>(Arrays.asList(false, true, true, true, true));
-        meepleRules = new HashMap<TerrainType, Boolean>();
+        meepleRules = new HashMap<>();
         TerrainType.basicTerrain().forEach(it -> meepleRules.put(it, true));
         tileDistribution = new TileDistribution();
         setDistanceMeasure(MinkowskiDistance.ROUNDED_SQUARE);
@@ -81,7 +81,7 @@ public class GameSettings {
         gridWidth = 29;
         gridHeight = 19;
         gridSizeChanged = false;
-        changeListeners = new ArrayList<NotifiableView>();
+        changeListeners = new ArrayList<>();
     }
 
     /**

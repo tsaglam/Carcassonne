@@ -26,10 +26,12 @@ public class RuleBasedAI implements ArtificialIntelligence {
     private static final String EMPTY_COLLECTION = "Cannot choose random element from empty collection!";
     private static final double EPSILON = 0.01;
     private final GameSettings settings;
+    private final Random random;
     private Optional<AbstractCarcassonneMove> currentMove;
 
     public RuleBasedAI(GameSettings settings) {
         this.settings = settings;
+        random = new Random();
     }
 
     @Override
@@ -75,7 +77,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
     }
 
     private <T> T chooseRandom(Collection<T> elements) {
-        Optional<T> randomElement = elements.stream().skip(new Random().nextInt(elements.size())).findFirst();
+        Optional<T> randomElement = elements.stream().skip(random.nextInt(elements.size())).findFirst();
         return randomElement.orElseThrow(() -> new IllegalArgumentException(EMPTY_COLLECTION));
     }
 

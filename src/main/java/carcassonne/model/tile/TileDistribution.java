@@ -74,7 +74,7 @@ public class TileDistribution {
      */
     public void shuffle() {
         TileType.enabledTiles().forEach(it -> distribution.putIfAbsent(it, it.getAmount()));
-        Stack<Integer> tileAmounts = new Stack<Integer>();
+        Stack<Integer> tileAmounts = new Stack<>();
         tileAmounts.addAll(distribution.values());
         Collections.shuffle(tileAmounts);
         TileType.enabledTiles().forEach(it -> distribution.put(it, getPseudoRandomAmount(it, tileAmounts)));
