@@ -54,6 +54,8 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
     private static final String MEEPLE_RULES_TOOL_TIP = "Allow or forbid placing meeples on certain terrain";
     private static final String FORTIFYING = " Allow Fortifying Own Patterns:";
     private static final String FORTIFYING_TOOL_TIP = "Allow or forbid directly placing meeples on own patterns";
+    private static final String SCORE_SPLITTING = " Split score on shared paterns:";
+    private static final String SCORE_SPLITTING_TOOL_TIP = "Split score among dominant players of pattern instead of warding the full score.";
     private static final String MULTI_TILE = " Tiles";
     private static final String CLASSIC = " Tile (Classic)";
     private static final String CUSTOMIZE = "Customize";
@@ -115,7 +117,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         addWithBox(mainPanel, createPlayerPanel());
         addWithBox(mainPanel, createAIAestheticPanel());
         addWithBox(mainPanel, createPlacementRulePanel());
-        addWithBox(mainPanel, createFortificationPanel());
+        addWithBox(mainPanel, createDualPanel());
         mainPanel.add(createCloseButton());
         getContentPane().add(mainPanel);
     }
@@ -156,8 +158,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
 
     private JPanel createBasicPanel(String labelText) {
         JPanel panel = createBasicPanel();
-        JLabel titleLabel = embolden(new JLabel(labelText + SPACE));
-        panel.add(titleLabel);
+        panel.add(embolden(new JLabel(labelText + SPACE)));
         return panel;
     }
 
@@ -171,12 +172,32 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         return buttonPanel;
     }
 
+    private JPanel createDualPanel() {
+        JPanel dualPanel = new JPanel();
+        dualPanel.setOpaque(false);
+        dualPanel.setLayout(new BoxLayout(dualPanel, BoxLayout.X_AXIS));
+        dualPanel.add(createFortificationPanel());
+        dualPanel.add(Box.createRigidArea(new Dimension(PADDING, 0)));
+        dualPanel.add(createScoreSplittingPanel());
+        return dualPanel;
+    }
+
     private JPanel createFortificationPanel() {
         JPanel panel = createBasicPanel(FORTIFYING);
         panel.setToolTipText(FORTIFYING_TOOL_TIP);
         JCheckBox checkBox = new JCheckBox();
         checkBox.setSelected(settings.isAllowingFortifying());
         checkBox.addActionListener(event -> settings.setAllowFortifying(checkBox.isSelected()));
+        panel.add(checkBox);
+        return panel;
+    }
+
+    private JPanel createScoreSplittingPanel() {
+        JPanel panel = createBasicPanel(SCORE_SPLITTING);
+        panel.setToolTipText(SCORE_SPLITTING_TOOL_TIP);
+        JCheckBox checkBox = new JCheckBox();
+        checkBox.setSelected(settings.getSplitPatternScore());
+        checkBox.addActionListener(event -> settings.setSplitPatternScore(checkBox.isSelected()));
         panel.add(checkBox);
         return panel;
     }
