@@ -78,7 +78,7 @@ public class StateGameOver extends AbstractGameState {
         System.out.println("FINAL PATTERNS:"); // TODO (LOW) [PRINT] remove debug output
         for (GridPattern pattern : grid.getAllPatterns()) {
             System.out.println(pattern); // TODO (LOW) [PRINT] remove debug output
-            pattern.forceDisburse();
+            pattern.forceDisburse(settings.getSplitPatternScore());
         }
         updateScores();
         updateStackSize();

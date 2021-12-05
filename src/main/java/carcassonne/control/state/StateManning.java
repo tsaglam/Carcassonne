@@ -108,7 +108,7 @@ public class StateManning extends AbstractGameState {
                     GridSpot spot = meeple.getLocation();
                     views.onMainView(it -> it.removeMeeple(spot.getX(), spot.getY()));
                 }
-                pattern.disburse();
+                pattern.disburse(settings.getSplitPatternScore());
                 updateScores();
             }
         }

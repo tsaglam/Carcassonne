@@ -59,6 +59,7 @@ public class GameSettings {
     private boolean allowFortifying;
     private int tilesPerPlayer;
     private final Map<TerrainType, Boolean> meepleRules;
+    private boolean splitPatternScore;
 
     // OTHER/INTERNAL
     private boolean gridSizeChanged;
@@ -80,7 +81,6 @@ public class GameSettings {
         stackSizeMultiplier = 1;
         gridWidth = 29;
         gridHeight = 19;
-        gridSizeChanged = false;
         changeListeners = new ArrayList<>();
     }
 
@@ -141,6 +141,14 @@ public class GameSettings {
      */
     public String getPlayerName(int playerNumber) {
         return names.get(playerNumber);
+    }
+
+    /**
+     * Returns the value for the split points option.
+     * @return true if points of a pattern should be split instead of every player getting the score.
+     */
+    public boolean getSplitPatternScore() {
+        return splitPatternScore;
     }
 
     /**
@@ -278,6 +286,14 @@ public class GameSettings {
     public void setPlayerName(String name, int playerNumber) {
         names.set(playerNumber, name);
         notifyListeners();
+    }
+
+    /**
+     * Sets the value for the split points option.
+     * @param splitPatternScore determines if points of a pattern should be split instead of every player getting the score.
+     */
+    public void setSplitPatternScore(boolean splitPatternScore) {
+        this.splitPatternScore = splitPatternScore;
     }
 
     /**
