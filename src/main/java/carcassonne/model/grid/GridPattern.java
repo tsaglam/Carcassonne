@@ -44,10 +44,11 @@ public class GridPattern {
     /**
      * Disburses complete patterns. Distributes the score among all dominant players on the pattern. Removes the meeple
      * placement and returns them to the players. Can only be called once in the lifetime of a pattern.
+     * @param splitScore determines if shared patterns are scored by splitting the score or awarding full score.
      */
-    public void disburse() {
+    public void disburse(boolean splitScore) {
         if (complete) {
-            distributePatternScore();
+            distributePatternScore(splitScore);
             meepleList.forEach(it -> it.getLocation().getTile().removeMeeple()); // remove meeples from tiles.
             involvedPlayers.clear();
         }
@@ -56,10 +57,11 @@ public class GridPattern {
     /**
      * Disburses incomplete patterns. Distributes the score among all dominant players on the pattern. This should be used
      * at the end of the round.
+     * @param splitScore determines if shared patterns are scored by splitting the score or awarding full score.
      */
-    public void forceDisburse() {
+    public void forceDisburse(boolean splitScore) {
         if (!complete) {
-            distributePatternScore();
+            distributePatternScore(splitScore);
         }
     }
 
@@ -163,10 +165,10 @@ public class GridPattern {
         return builder.toString();
     }
 
-    private void distributePatternScore() {
+    private void distributePatternScore(boolean splitScore) {
         if (!disbursed && !involvedPlayers.isEmpty()) {
             List<Player> dominantPlayers = getDominantPlayers();
-            int stake = divideScore(getPatternScore(), dominantPlayers);
+            int stake = splitScore ? divideScore(getPatternScore(), dominantPlayers) : getPatternScore();
             for (Player player : dominantPlayers) { // dominant players split the pot
                 player.addPoints(stake, patternType);
             }
