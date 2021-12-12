@@ -72,10 +72,10 @@ public final class PaintShop {
      * @return the highlighted tile.
      */
     public static ImageIcon getColoredHighlight(Player player, int size, boolean fastScaling) {
-        Image coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
-        Image smallImage = scaleDown(coloredImage, size, fastScaling);
+        BufferedImage coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
+        Image smallImage = scaleDown(coloredImage, size, fastScaling, coloredImage.getTransparency());
         int largeSize = Math.min(size * HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
-        Image largeImage = scaleDown(coloredImage, largeSize, fastScaling);
+        Image largeImage = scaleDown(coloredImage, largeSize, fastScaling, coloredImage.getTransparency());
         return new ImageIcon(new BaseMultiResolutionImage(smallImage, largeImage));
     }
 
@@ -90,10 +90,10 @@ public final class PaintShop {
     public static ImageIcon getColoredTile(Tile tile, Player player, int size, boolean fastScaling) {
         Image baseImage = ConcurrentTileImageScaler.getScaledImage(tile, GameSettings.TILE_RESOLUTION, fastScaling);
         BufferedImage bufferedBaseImage = bufferedImageOf(baseImage);
-        Image coloredImage = colorMaskBased(bufferedBaseImage, highlightImage, player.getColor());
-        Image small = scaleDown(coloredImage, size, fastScaling);
+        BufferedImage coloredImage = colorMaskBased(bufferedBaseImage, highlightImage, player.getColor());
+        Image small = scaleDown(coloredImage, size, fastScaling, coloredImage.getTransparency());
         int largeSize = Math.min(size * HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
-        Image large = scaleDown(coloredImage, largeSize, fastScaling);
+        Image large = scaleDown(coloredImage, largeSize, fastScaling, coloredImage.getTransparency());
         return new ImageIcon(new BaseMultiResolutionImage(small, large));
     }
 
@@ -110,7 +110,8 @@ public final class PaintShop {
             return chachedMeepleImages.get(key);
         }
         Image paintedMeeple = paintMeeple(meepleType, color.getRGB(), size * HIGH_DPI_FACTOR);
-        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(paintedMeeple));
+        int transparency = imageMap.get(meepleType).getTransparency();
+        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(paintedMeeple, transparency));
         chachedMeepleImages.put(key, icon);
         return icon;
     }
@@ -138,7 +139,8 @@ public final class PaintShop {
             return chachedMeepleImages.get(key);
         }
         Image preview = imageMap.get(meepleType).getScaledInstance(size * HIGH_DPI_FACTOR, size * HIGH_DPI_FACTOR, Image.SCALE_SMOOTH);
-        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(preview));
+        int transparency = imageMap.get(meepleType).getTransparency();
+        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(preview, transparency));
         chachedMeepleImages.put(key, icon);
         return icon;
     }
@@ -172,7 +174,8 @@ public final class PaintShop {
         if (image instanceof BufferedImage) {
             return (BufferedImage) image;
         }
-        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bufferedImage = ImageLoadingUtil
+                .makeCompatible(new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB));
         Graphics2D graphics = bufferedImage.createGraphics();
         graphics.drawImage(image, 0, 0, null);
         graphics.dispose();
@@ -190,7 +193,7 @@ public final class PaintShop {
     }
 
     private static BufferedImage colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
-        BufferedImage image = deepCopy(imageToColor); // TODO (HIGH) [PERFORMANCE] This could be made faster with raster operations
+        BufferedImage image = deepCopy(imageToColor);
         for (int x = 0; x < maskImage.getWidth(); x++) {
             for (int y = 0; y < maskImage.getHeight(); y++) {
                 Color maskPixel = new Color(maskImage.getRGB(x, y), true);
@@ -216,7 +219,7 @@ public final class PaintShop {
         ColorModel model = image.getColorModel();
         boolean isAlphaPremultiplied = model.isAlphaPremultiplied();
         WritableRaster raster = image.copyData(image.getRaster().createCompatibleWritableRaster());
-        return new BufferedImage(model, raster, isAlphaPremultiplied, null);
+        return ImageLoadingUtil.makeCompatible(new BufferedImage(model, raster, isAlphaPremultiplied, null));
     }
 
     // Colors a meeple with RGB color.
@@ -231,6 +234,10 @@ public final class PaintShop {
             }
         }
         return image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
+    }
+
+    private static Image scaleDown(Image image, int size, boolean fastScaling, int transparency) {
+        return ImageLoadingUtil.makeCompatible(scaleDown(image, size, fastScaling), transparency);
     }
 
     private static Image scaleDown(Image image, int size, boolean fastScaling) {
