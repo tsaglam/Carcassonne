@@ -5,17 +5,13 @@ import static carcassonne.settings.GameSettings.TILE_RESOLUTION;
 import java.awt.Image;
 import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Semaphore;
 
-import javax.imageio.ImageIO;
-
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.PaintShop;
-import carcassonne.view.util.GameMessage;
 
 /**
  * Tile scaling utility class that is optimized for concurrent use. It uses a sophisticated locking mechanism and
@@ -125,16 +121,10 @@ public final class ConcurrentTileImageScaler {
      * Loads a tile image for a tile with a certain rotation index and paints its emblem.
      */
     private static Image loadImageAndPaintEmblem(Tile tile, String imagePath) {
-        try {
-            BufferedImage image = ImageIO.read(ConcurrentTileImageScaler.class.getClassLoader().getResourceAsStream(imagePath));
-            Image paintedImage = PaintShop.addEmblem(image);
-            TileImageScalingCache.putScaledImage(paintedImage, tile, TILE_RESOLUTION, false);
-            return paintedImage;
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            GameMessage.showError("ERROR: Could not load image loacted at " + imagePath);
-        }
-        return null;
+        BufferedImage image = ImageLoadingUtil.createBufferedImage(imagePath);
+        Image paintedImage = PaintShop.addEmblem(image);
+        TileImageScalingCache.putScaledImage(paintedImage, tile, TILE_RESOLUTION, false);
+        return paintedImage;
     }
 
     /**
