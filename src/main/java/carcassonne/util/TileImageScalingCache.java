@@ -1,7 +1,7 @@
 package carcassonne.util;
 
 import java.awt.Image;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 import carcassonne.model.tile.Tile;
 
@@ -12,8 +12,7 @@ import carcassonne.model.tile.Tile;
  */
 public final class TileImageScalingCache {
     private static final int SHIFT_VALUE = 1000;
-    private static final LRUHashMap<Integer, Image> cachedImages = new LRUHashMap<>();
-    private static final ConcurrentHashMap<Integer, Boolean> cachedScalingInformation = new ConcurrentHashMap<>();
+    private static final HashMap<Integer, CachedImage> cachedImages = new LRUHashMap<>();
 
     private TileImageScalingCache() {
         // private constructor ensures non-instantiability!
@@ -23,15 +22,15 @@ public final class TileImageScalingCache {
      * Checks if there is an existing scaled tile image in this cache.
      * @param tile is the tile whose scaled image is requested.
      * @param size is the edge with of the (quadratic) image.
-     * @param preview determines if the image should be a preview render or final render.
+     * @param previewAllowed determines if the cached image may be a preview render or should be a final render.
      * @return true if there is an existing image cached with the specified size.
      */
-    public static boolean containsScaledImage(Tile tile, int size, boolean preview) {
+    public static boolean containsScaledImage(Tile tile, int size, boolean previewAllowed) {
         int key = createKey(tile, size);
-        if (preview) {
+        if (previewAllowed) {
             return cachedImages.containsKey(key);
         }
-        return cachedImages.containsKey(key) && !cachedScalingInformation.get(key);
+        return cachedImages.containsKey(key) && !cachedImages.get(key).isPreview();
     }
 
     /**
@@ -41,7 +40,7 @@ public final class TileImageScalingCache {
      * @return the scaled image or null if there is none.
      */
     public static Image getScaledImage(Tile tile, int size) {
-        return cachedImages.get(createKey(tile, size));
+        return cachedImages.get(createKey(tile, size)).getImage();
     }
 
     /**
@@ -52,18 +51,15 @@ public final class TileImageScalingCache {
      * @param preview determines if the image is a preview render or final render.
      */
     public static void putScaledImage(Image image, Tile tile, int size, boolean preview) {
-        int key = createKey(tile, size);
-        cachedImages.put(key, image);
-        cachedScalingInformation.put(key, preview);
-        restoreConsistency();
+        cachedImages.put(createKey(tile, size), new CachedImage(image, preview));
     }
 
     /**
-     * Clears the cache, removing all stored tile images.
+     * Clears the cache, removing all stored tile images. This call might be unsafe with concurrent calls, as there are no
+     * guarantees for clearing while putting.
      */
     public static void clear() {
         cachedImages.clear();
-        cachedScalingInformation.clear();
     }
 
     /**
@@ -72,16 +68,6 @@ public final class TileImageScalingCache {
      */
     public static int size() {
         return cachedImages.size();
-    }
-
-    /**
-     * Restores consistency between the cached images and the cached scaling information.
-     */
-    private static void restoreConsistency() {
-        Integer lastRemovedKey = cachedImages.getLastRemovedKey();
-        if (lastRemovedKey != null && cachedScalingInformation.containsKey(lastRemovedKey)) {
-            cachedScalingInformation.remove(lastRemovedKey);
-        }
     }
 
     /**
