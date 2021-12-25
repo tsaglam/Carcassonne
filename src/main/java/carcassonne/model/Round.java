@@ -15,6 +15,9 @@ import carcassonne.settings.GameSettings;
  */
 public class Round {
 
+    private static final String NOTHING = "";
+    private static final String SQUARE_BRACKETS = "[\\[\\]]";
+    
     private int activePlayerIndex;
     private final Grid grid;
     private Player[] players;
@@ -72,7 +75,7 @@ public class Round {
      * Method determines the winning players by the highest score.
      * @return a list of names of the winning players.
      */
-    public List<String> getWinningPlayers() {
+    public String winningPlayers() {
         List<String> winnerList = new LinkedList<>();
         int maxScore = 0;
         for (Player player : players) {
@@ -84,7 +87,7 @@ public class Round {
                 maxScore = player.getScore();
             }
         }
-        return winnerList;
+        return winnerList.toString().replaceAll(SQUARE_BRACKETS, NOTHING);
     }
 
     /**
