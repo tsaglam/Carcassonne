@@ -59,14 +59,6 @@ public enum ImageLoadingUtil {
     }
 
     /**
-     * Convenience method that creates an image icon for the image enumeral.
-     * @return the image icon.
-     */
-    public ImageIcon createImageIcon() {
-        return createImageIcon(path);
-    }
-
-    /**
      * Loads an image from a path and creates a buffered image. Does some performance optimizations.
      * @param path is the relative file path, omitting the resource folder path.
      * @return the buffered image.
@@ -124,7 +116,7 @@ public enum ImageLoadingUtil {
      * @see GraphicsConfiguration#createCompatibleImage(int, int, int)
      */
     public static BufferedImage makeCompatible(BufferedImage image) {
-        return image;
+        return makeCompatibleImage(image, image.getWidth(), image.getHeight(), image.getTransparency());
     }
 
     /**
@@ -135,7 +127,7 @@ public enum ImageLoadingUtil {
      * @return the compatible image.
      * @see GraphicsConfiguration#createCompatibleImage(int, int, int)
      */
-    public static BufferedImage makeCompatible(Image image, int transparency) {
+    public static Image makeCompatible(Image image, int transparency) {
         return makeCompatibleImage(image, image.getWidth(null), image.getHeight(null), transparency);
     }
 
