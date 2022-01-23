@@ -25,15 +25,18 @@ public class Grid {
     private final int height;
     private final GridSpot[][] spots;
     private GridSpot foundation;
+    private final boolean allowEnclaves;
 
     /**
      * Basic constructor
      * @param width is the grid width.
      * @param height is the grid height.
+     * @param allowEnclaves determines if it is legal to enclose free spots.
      */
-    public Grid(int width, int height) {
+    public Grid(int width, int height, boolean allowEnclaves) {
         this.width = width;
         this.height = height;
+        this.allowEnclaves = allowEnclaves;
         spots = new GridSpot[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -201,6 +204,13 @@ public class Grid {
     }
 
     /**
+     * @return true if this grid allows enclosing free spot with tiles, leading to the free spots forming enclaves.
+     */
+    public boolean isAllowingEnclaves() {
+        return allowEnclaves;
+    }
+
+    /**
      * Checks whether the grid is full.
      * @return true if full.
      */
@@ -225,7 +235,7 @@ public class Grid {
     public boolean place(int x, int y, Tile tile) {
         checkParameters(x, y);
         checkParameters(tile);
-        return spots[x][y].place(tile);
+        return spots[x][y].place(tile, allowEnclaves);
     }
 
     private void checkParameters(GridSpot spot) {
@@ -297,9 +307,9 @@ public class Grid {
 
     private List<ZeroSumMove> movesForGridSpot(Player player, GridSpot spot, Tile originalTile, GameSettings settings) {
         List<ZeroSumMove> possibleMoves = new ArrayList<>();
-        if (spot.isPlaceable(originalTile)) {
+        if (spot.isPlaceable(originalTile, allowEnclaves)) {
             TemporaryTile tile = new TemporaryTile(originalTile, originalTile.getRotation());
-            spot.place(tile);
+            spot.place(tile, allowEnclaves);
             possibleMoves.add(new ZeroSumMove(tile, player, settings));
             if (player.hasFreeMeeples()) {
                 for (GridDirection position : GridDirection.values()) {

@@ -45,7 +45,7 @@ public class ZeroSumMove extends AbstractCarcassonneMove {
         double scoreBefore = patterns.stream().mapToInt(this::zeroSumScore).sum();
         double fieldScoreBefore = patterns.stream().filter(it -> it.getType() == FIELDS).mapToInt(this::zeroSumScore).sum();
         gainedMeeples = calculateEmployedMeeples(patterns);
-        gridSpot.place(tile);
+        gridSpot.place(tile, gridSpot.getGrid().isAllowingEnclaves());
         if (involvesMeeplePlacement()) {
             tile.placeMeeple(actingPlayer, meeplePosition, new TemporaryMeeple(actingPlayer), settings);
         }

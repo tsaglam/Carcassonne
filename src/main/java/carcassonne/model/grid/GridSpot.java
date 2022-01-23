@@ -158,7 +158,14 @@ public class GridSpot {
         return tile != null;
     }
 
-    public boolean isPlaceable(Tile tile) {
+    /**
+     * Checks whether a tile can be placed on this spot. This requires the spot to be free, the tile to be compatible with
+     * the neighboring tiles, and being compatible with the enclave game rule if present.
+     * @param tile is the tile to place.
+     * @param allowEnclaves determines if it is legal to enclose free spots.
+     * @return true if the tile can be placed.
+     */
+    public boolean isPlaceable(Tile tile, boolean allowEnclaves) {
         if (isOccupied()) {
             return false; // can't be placed if spot is occupied.
         }
@@ -166,7 +173,7 @@ public class GridSpot {
         for (GridDirection direction : GridDirection.directNeighbors()) { // for every direction
             GridSpot neighbor = grid.getNeighbor(this, direction);
             if (neighbor == null) { // free space
-                if (grid.isClosingFreeSpotsOff(this, direction)) {
+                if (!allowEnclaves && grid.isClosingFreeSpotsOff(this, direction)) {
                     return false; // you can't close off free spaces
                 }
             } else { // if there is a neighbor in the direction.
@@ -197,10 +204,11 @@ public class GridSpot {
     /**
      * Set tile on grid spot if possible.
      * @param tile is the tile to set.
+     * @param allowEnclaves determines if it is legal to enclose free spots.
      * @return true if the tile could be placed.
      */
-    public boolean place(Tile tile) {
-        if (isPlaceable(tile)) {
+    public boolean place(Tile tile, boolean allowEnclaves) {
+        if (isPlaceable(tile, allowEnclaves)) {
             tile.setPosition(this);
             this.tile = tile;
             return true; // tile was successfully placed.
