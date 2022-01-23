@@ -105,7 +105,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
      * @param playerCount is the specific number of players.
      */
     protected void startNewRound(int playerCount) {
-        Grid newGrid = new Grid(settings.getGridWidth(), settings.getGridHeight());
+        Grid newGrid = new Grid(settings.getGridWidth(), settings.getGridHeight(), settings.isAllowingEnclaves());
         TileStack tileStack = new TileStack(settings.getTileDistribution(), settings.getStackSizeMultiplier());
         Round newRound = new Round(playerCount, tileStack, newGrid, settings);
         stateMachine.updateStates(newRound, tileStack, newGrid);
