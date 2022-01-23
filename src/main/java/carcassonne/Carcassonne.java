@@ -1,5 +1,6 @@
 package carcassonne;
 
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -12,6 +13,7 @@ import carcassonne.view.util.GameMessage;
  * @author Timur Saglam
  */
 public final class Carcassonne {
+    private static final int TOOL_TIP_DISMISS_DELAY_IN_MILLISECONDS = 30000;
     private static final String LOOK_AND_FEEL_ERROR = "Could not use Nimbus LookAndFeel. Using default instead (";
     private static final String CLOSING_BRACKET = ").";
     private static final String NIMBUS = "Nimbus";
@@ -24,6 +26,7 @@ public final class Carcassonne {
      */
     public static void main(String[] args) {
         setLookAndFeel();
+        ToolTipManager.sharedInstance().setDismissDelay(TOOL_TIP_DISMISS_DELAY_IN_MILLISECONDS);
         new MainController().startGame();
     }
 
