@@ -18,6 +18,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.ToolTipManager;
 
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileDistribution;
@@ -54,6 +55,8 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
     private static final String MEEPLE_RULES_TOOL_TIP = "Allow or forbid placing meeples on certain terrain";
     private static final String FORTIFYING = " Allow Fortifying Own Patterns:";
     private static final String FORTIFYING_TOOL_TIP = "Allow or forbid directly placing meeples on own patterns";
+    private static final String ENCLAVE = "Allow Enclaves of Free Spots";
+    private static final String ENCLAVE_TOOL_TIP = "Allow or forbid enclosing free spots in the grid, leading to these spots forming enclaves.";
     private static final String SCORE_SPLITTING = " Split score on shared paterns:";
     private static final String SCORE_SPLITTING_TOOL_TIP = "Split score among dominant players of pattern instead of warding the full score.";
     private static final String MULTI_TILE = " Tiles";
@@ -117,6 +120,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         addWithBox(mainPanel, createPlayerPanel());
         addWithBox(mainPanel, createAIAestheticPanel());
         addWithBox(mainPanel, createPlacementRulePanel());
+        addWithBox(mainPanel, createScoreSplittingPanel());
         addWithBox(mainPanel, createDualPanel());
         mainPanel.add(createCloseButton());
         getContentPane().add(mainPanel);
@@ -178,7 +182,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         dualPanel.setLayout(new BoxLayout(dualPanel, BoxLayout.X_AXIS));
         dualPanel.add(createFortificationPanel());
         dualPanel.add(Box.createRigidArea(new Dimension(PADDING, 0)));
-        dualPanel.add(createScoreSplittingPanel());
+        dualPanel.add(createEnclavePanel());
         return dualPanel;
     }
 
@@ -188,6 +192,16 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         JCheckBox checkBox = new JCheckBox();
         checkBox.setSelected(settings.isAllowingFortifying());
         checkBox.addActionListener(event -> settings.setAllowFortifying(checkBox.isSelected()));
+        panel.add(checkBox);
+        return panel;
+    }
+    
+    private JPanel createEnclavePanel() {
+        JPanel panel = createBasicPanel(ENCLAVE);
+        panel.setToolTipText(ENCLAVE_TOOL_TIP);
+        JCheckBox checkBox = new JCheckBox();
+        checkBox.setSelected(settings.isAllowingEnclaves());
+        checkBox.addActionListener(event -> settings.setAllowEnclaves(checkBox.isSelected()));
         panel.add(checkBox);
         return panel;
     }

@@ -57,6 +57,7 @@ public class GameSettings {
 
     // GAME RULES:
     private boolean allowFortifying;
+    private boolean allowEnclaves;
     private int tilesPerPlayer;
     private final Map<TerrainType, Boolean> meepleRules;
     private boolean splitPatternScore;
@@ -81,6 +82,7 @@ public class GameSettings {
         stackSizeMultiplier = 1;
         gridWidth = 29;
         gridHeight = 19;
+        allowEnclaves = true;
         changeListeners = new ArrayList<>();
     }
 
@@ -177,6 +179,13 @@ public class GameSettings {
     }
 
     /**
+     * @return determines whether it is legal to enclose free spot with tiles, leading to the free spots forming enclaves.
+     */
+    public boolean isAllowingEnclaves() {
+        return allowEnclaves;
+    }
+
+    /**
      * Determines if players are allowed to directly place meeples on patterns they already own.
      * @return true if it is allowed.
      */
@@ -207,6 +216,14 @@ public class GameSettings {
      */
     public void registerNotifiable(NotifiableView notifiable) {
         changeListeners.add(notifiable);
+    }
+
+    /**
+     * Determines whether it is legal to enclose free spot with tiles, leading to the free spots forming enclaves.
+     * @param allowEnclaves set to true if enclaves are allowed.
+     */
+    public void setAllowEnclaves(boolean allowEnclaves) {
+        this.allowEnclaves = allowEnclaves;
     }
 
     /**
