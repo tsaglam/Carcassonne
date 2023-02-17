@@ -15,6 +15,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>11</maven.compiler.release>
   </properties>
+  
+  <properties>
+    <sonar.organization>tsaglam</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+  </properties>
 
   <dependencies>
     <dependency>
