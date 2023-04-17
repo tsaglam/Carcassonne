@@ -14,7 +14,7 @@ public class GameStatisticsModel extends AbstractTableModel {
 
     private static final long serialVersionUID = -7138458001360243937L; // generated UID
     private final Round round;
-    private static final String[] HEADER = { "Player", "Castle", "Road", "Monastery", "Field", "SCORE" };
+    private static final String[] HEADER = {"Player", "Castle", "Road", "Monastery", "Field", "SCORE"};
 
     /**
      * Creates the game statistics model with the current round.

@@ -184,7 +184,7 @@ public class Player {
      * Returns a meeple after its job is down. Allows the player to place another meeple.
      */
     public void returnMeeple(Meeple meeple) {
-    boolean isRemoved = placedMeeples.remove(meeple);
+        boolean isRemoved = placedMeeples.remove(meeple);
         assert isRemoved;
         freeMeeples++;
     }

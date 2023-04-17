@@ -5,8 +5,8 @@ import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
 
 /**
- * Facade for the game controller. Allows to call view classes or potentially external services to make requests regarding
- * the game flow.
+ * Facade for the game controller. Allows to call view classes or potentially external services to make requests
+ * regarding the game flow.
  * @author Timur Saglam
  */
 public interface ControllerFacade {
