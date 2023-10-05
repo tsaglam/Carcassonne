@@ -17,7 +17,7 @@ public class Round {
 
     private static final String NOTHING = "";
     private static final String SQUARE_BRACKETS = "[\\[\\]]";
-    
+
     private int activePlayerIndex;
     private final Grid grid;
     private Player[] players;

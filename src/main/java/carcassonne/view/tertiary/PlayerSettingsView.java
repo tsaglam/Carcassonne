@@ -18,7 +18,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.ToolTipManager;
 
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileDistribution;
@@ -195,7 +194,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         panel.add(checkBox);
         return panel;
     }
-    
+
     private JPanel createEnclavePanel() {
         JPanel panel = createBasicPanel(ENCLAVE);
         panel.setToolTipText(ENCLAVE_TOOL_TIP);
