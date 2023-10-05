@@ -83,7 +83,7 @@ public enum GridDirection {
         if (this == CENTER) {
             return this;
         }
-        GridDirection[] cycle = { NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST };
+        GridDirection[] cycle = {NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST};
         int position = -2; // error case, sum with parameter side is negative
         for (int i = 0; i < cycle.length; i++) {
             if (cycle[i] == this) { // find in cycle
@@ -167,6 +167,6 @@ public enum GridDirection {
      * @return a 2D list of of NORTH_WEST, WEST, SOUTH_WEST, NORTH, CENTER, SOUTH, NORTH_EAST, EAST and SOUTH_EAST.
      */
     public static GridDirection[][] values2D() {
-        return new GridDirection[][] { { NORTH_WEST, WEST, SOUTH_WEST }, { NORTH, CENTER, SOUTH }, { NORTH_EAST, EAST, SOUTH_EAST } };
+        return new GridDirection[][] {{NORTH_WEST, WEST, SOUTH_WEST}, {NORTH, CENTER, SOUTH}, {NORTH_EAST, EAST, SOUTH_EAST}};
     }
 }

@@ -46,13 +46,13 @@ public class RuleBasedComparator implements Comparator<AbstractCarcassonneMove> 
     private int compareMoveType(AbstractCarcassonneMove move) {
         if (move.involvesMeeplePlacement()) {
             switch (move.getMeepleType()) {
-            case CASTLE:
-                return 3;
-            case MONASTERY:
-                return 2;
-            case ROAD:
-                return 1;
-            default:
+                case CASTLE:
+                    return 3;
+                case MONASTERY:
+                    return 2;
+                case ROAD:
+                    return 1;
+                default:
             }
         }
         return 0; // fields or no meeple placed

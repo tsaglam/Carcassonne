@@ -35,12 +35,12 @@ public class GameSettings {
     private static final String MEEPLE_PATH = "meeple/meeple_";
     private static final String PNG = ".png";
     private static final String TEMPLATE = "_template";
-    private static final String[] DEFAULT_NAMES = { "ONE", "TWO", "THREE", "FOUR", "FIVE" };
+    private static final String[] DEFAULT_NAMES = {"ONE", "TWO", "THREE", "FOUR", "FIVE"};
 
     // COLOR CONSTANTS:
     public static final Color UI_COLOR = new Color(190, 190, 190);
-    private static final PlayerColor[] DEFAULT_COLORS = { new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
-            new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147) };
+    private static final PlayerColor[] DEFAULT_COLORS = {new PlayerColor(30, 26, 197), new PlayerColor(151, 4, 12), new PlayerColor(14, 119, 25),
+            new PlayerColor(216, 124, 0), new PlayerColor(96, 0, 147)};
 
     // COSMETIC:
     private final List<PlayerColor> colors;
