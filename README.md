@@ -3,8 +3,8 @@
 </p>
 
 [![CI status](https://github.com/tsaglam/Carcassonne/actions/workflows/CI.yml/badge.svg)](https://github.com/tsaglam/Carcassonne/actions)
+[![Latest Release](https://img.shields.io/github/release/tsaglam/Carcassonne.svg)](https://github.com/jplag/jplag/releases/latest)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/tsaglam/Carcassonne)](https://github.com/tsaglam/Carcassonne/pulse)
-[![Lines of code](https://img.shields.io/tokei/lines/github/tsaglam/Carcassonne)](https://github.com/tsaglam/Carcassonne/graphs/contributors)
 [![License](https://img.shields.io/github/license/tsaglam/Carcassonne?color=informational)](https://github.com/tsaglam/Carcassonne/blob/master/LICENSE)
 
 This is a slightly adapted, digital version of the board game Carcassonne. <br>
