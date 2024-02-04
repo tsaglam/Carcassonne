@@ -28,7 +28,8 @@ public enum GridDirection {
     public int getX() {
         if (this == NORTH_EAST || this == EAST || this == SOUTH_EAST) {
             return 1;
-        } else if (this == NORTH_WEST || this == WEST || this == SOUTH_WEST) {
+        }
+        if (this == NORTH_WEST || this == WEST || this == SOUTH_WEST) {
             return -1;
         }
         return 0;
@@ -41,7 +42,8 @@ public enum GridDirection {
     public int getY() {
         if (this == SOUTH_WEST || this == SOUTH || this == SOUTH_EAST) {
             return 1;
-        } else if (this == NORTH_WEST || this == NORTH || this == NORTH_EAST) {
+        }
+        if (this == NORTH_WEST || this == NORTH || this == NORTH_EAST) {
             return -1;
         }
         return 0;
@@ -100,7 +102,8 @@ public enum GridDirection {
     public GridDirection opposite() {
         if (ordinal() <= 3) { // for NORTH, EAST, SOUTH and WEST:
             return values()[smallOpposite(ordinal())];
-        } else if (ordinal() <= 7) { // for NORTH_EAST, SOUTH_EAST, SOUTH_WEST and NORTH_WEST:
+        }
+        if (ordinal() <= 7) { // for NORTH_EAST, SOUTH_EAST, SOUTH_WEST and NORTH_WEST:
             return values()[bigOpposite(ordinal())];
         }
         return CENTER; // middle is the opposite of itself.

@@ -72,11 +72,10 @@ public class TileTerrain {
      * @return true if connected, false if not.
      */
     public final boolean isConnected(GridDirection from, GridDirection towards) {
-        if (isDirectConnected(from, towards)) {
-            return true; // directly connected through the middle of the tile
-        } else if (from != CENTER && towards != CENTER && isIndirectConnected(from, towards)) {
+        if (isDirectConnected(from, towards) || (from != CENTER && towards != CENTER && isIndirectConnected(from, towards))) {
             return true; // is not from or to middle but indirectly connected (counter)clockwise
-        } else if (terrain.get(from) == TerrainType.FIELDS && terrain.get(towards) == TerrainType.FIELDS) {
+        }
+        if (terrain.get(from) == TerrainType.FIELDS && terrain.get(towards) == TerrainType.FIELDS) {
             return isImplicitlyConnected(from, towards); // is connected through implicit terrain information
         }
         return false;

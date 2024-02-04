@@ -237,13 +237,12 @@ public class Tile {
     }
 
     public void placeMeeple(Player player, GridDirection position, Meeple meeple, GameSettings settings) {
-        if (this.meeple == null && allowsPlacingMeeple(position, player, settings)) {
-            this.meeple = meeple;
-            meeple.setLocation(gridSpot);
-            meeple.setPosition(position);
-        } else {
+        if ((this.meeple != null) || !allowsPlacingMeeple(position, player, settings)) {
             throw new IllegalArgumentException("Tile can not have already a meeple placed on it: " + toString());
         }
+        this.meeple = meeple;
+        meeple.setLocation(gridSpot);
+        meeple.setPosition(position);
     }
 
     /**

@@ -5,6 +5,8 @@ import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridPattern;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.ViewFacade;
+import carcassonne.view.main.MainView;
+import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -65,7 +67,7 @@ public class StateGameOver extends AbstractGameState {
      */
     @Override
     public void skip() {
-        views.onScoreboard(it -> it.disable());
+        views.onScoreboard(Scoreboard::disable);
         exit();
         changeState(StateIdle.class);
     }
@@ -82,7 +84,7 @@ public class StateGameOver extends AbstractGameState {
         }
         updateScores();
         updateStackSize();
-        views.onMainView(it -> it.resetMenuState());
+        views.onMainView(MainView::resetMenuState);
         GameMessage.showMessage(GAME_OVER_MESSAGE + round.winningPlayers());
         views.showGameStatistics(round);
     }

@@ -154,11 +154,11 @@ public class TileDistributionView extends JDialog {
             ThreadingUtil.runAndCallback(() -> {
                 applyChangesToDistribution();
                 distribution.shuffle();
-            }, () -> updateFromDistribution());
+            }, this::updateFromDistribution);
         });
         JButton resetButton = new JButton(RESET);
         resetButton.addMouseListener((MouseClickListener) event -> {
-            ThreadingUtil.runAndCallback(() -> distribution.reset(), () -> updateFromDistribution());
+            ThreadingUtil.runAndCallback(() -> distribution.reset(), this::updateFromDistribution);
         });
         JButton acceptButton = new JButton(ACCEPT);
         acceptButton.addMouseListener((MouseClickListener) event -> {

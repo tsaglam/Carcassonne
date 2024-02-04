@@ -56,7 +56,8 @@ public class TileStack {
     public Tile drawTile() {
         if (tiles.isEmpty() && returnedTiles.isEmpty()) {
             return null; // no tile to draw!
-        } else if (tiles.isEmpty()) {
+        }
+        if (tiles.isEmpty()) {
             return returnedTiles.poll();
         }
         return tiles.pop();

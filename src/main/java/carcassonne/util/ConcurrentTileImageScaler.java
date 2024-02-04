@@ -108,13 +108,13 @@ public final class ConcurrentTileImageScaler {
         String imagePath = GameSettings.TILE_FOLDER_PATH + tile.getType().name() + tile.getImageIndex() + GameSettings.TILE_FILE_TYPE;
         if (TileImageScalingCache.containsScaledImage(tile, TILE_RESOLUTION, false)) {
             return TileImageScalingCache.getScaledImage(tile, TILE_RESOLUTION);
-        } else if (tile.hasEmblem()) {
-            return loadImageAndPaintEmblem(tile, imagePath);
-        } else {
-            Image image = ImageLoadingUtil.createBufferedImage(imagePath);
-            TileImageScalingCache.putScaledImage(image, tile, TILE_RESOLUTION, false);
-            return image;
         }
+        if (tile.hasEmblem()) {
+            return loadImageAndPaintEmblem(tile, imagePath);
+        }
+        Image image = ImageLoadingUtil.createBufferedImage(imagePath);
+        TileImageScalingCache.putScaledImage(image, tile, TILE_RESOLUTION, false);
+        return image;
     }
 
     /**

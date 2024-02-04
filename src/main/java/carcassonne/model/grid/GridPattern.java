@@ -151,7 +151,7 @@ public class GridPattern {
      * Removes all tags of all tiles of the pattern. Needs to be called after ALL patterns of a tile have been created.
      */
     public void removeTileTags() {
-        containedSpots.forEach(it -> it.removeTags());
+        containedSpots.forEach(GridSpot::removeTags);
     }
 
     @Override
