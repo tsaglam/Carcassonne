@@ -6,7 +6,6 @@ import static carcassonne.model.terrain.TerrainType.MONASTERY;
 import static carcassonne.model.terrain.TerrainType.OTHER;
 import static carcassonne.model.terrain.TerrainType.ROAD;
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.Locale;
@@ -98,7 +97,7 @@ public enum TileType { // TODO (MEDIUM) [STYLE] rename enum values and tile imag
      * @return all tile types except {@link TileType#Null}.
      */
     public static List<TileType> validTiles() {
-        return stream(values()).filter(it -> it != Null).collect(toList());
+        return stream(values()).filter(it -> it != Null).toList();
     }
 
     /**
@@ -106,7 +105,7 @@ public enum TileType { // TODO (MEDIUM) [STYLE] rename enum values and tile imag
      * @return the list of enabled tiles.
      */
     public static List<TileType> enabledTiles() {
-        return stream(values()).filter(it -> it != Null && it.getAmount() > 0).collect(toList());
+        return stream(values()).filter(it -> it != Null && it.getAmount() > 0).toList();
     }
 
 }

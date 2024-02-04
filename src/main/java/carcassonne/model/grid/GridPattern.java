@@ -1,7 +1,5 @@
 package carcassonne.model.grid;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -73,7 +71,7 @@ public class GridPattern {
             return Collections.emptyList();
         }
         int maximum = Collections.max(involvedPlayers.values()); // most meeples on pattern
-        return involvedPlayers.keySet().stream().filter(player -> involvedPlayers.get(player) == maximum).collect(toList());
+        return involvedPlayers.keySet().stream().filter(player -> involvedPlayers.get(player) == maximum).toList();
     }
 
     /**
@@ -161,7 +159,7 @@ public class GridPattern {
         StringBuilder builder = new StringBuilder("GridPattern[type: ");
         builder.append(patternType).append(", size: ").append(getSize()).append(", complete: ").append(complete);
         builder.append(", disbursed: ").append(disbursed).append(", meeples: ").append(meepleList).append(", on: ");
-        builder.append(containedSpots.stream().map(it -> "(" + it.getX() + "|" + it.getY() + ")").collect(toList()));
+        builder.append(containedSpots.stream().map(it -> "(" + it.getX() + "|" + it.getY() + ")").toList());
         return builder.toString();
     }
 

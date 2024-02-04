@@ -1,7 +1,5 @@
 package carcassonne.model.tile;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.Collection;
 import java.util.EnumSet;
 
@@ -121,7 +119,7 @@ public class Tile {
     }
 
     public Collection<TileRotation> getPossibleRotations() {
-        return EnumSet.allOf(TileRotation.class).stream().filter(it -> it.ordinal() < rotationLimit - 1).collect(toList());
+        return EnumSet.allOf(TileRotation.class).stream().filter(it -> it.ordinal() < rotationLimit - 1).toList();
     }
 
     /**

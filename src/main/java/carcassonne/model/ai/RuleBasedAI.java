@@ -1,7 +1,5 @@
 package carcassonne.model.ai;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,10 +40,10 @@ public class RuleBasedAI implements ArtificialIntelligence {
             possibleMoves.addAll(grid.getPossibleMoves(tile, player, settings));
         }
         // RULE 1: Only consider move with a positive value:
-        List<AbstractCarcassonneMove> consideredMoves = possibleMoves.stream().filter(it -> it.getValue() >= 0).collect(toList());
+        List<AbstractCarcassonneMove> consideredMoves = possibleMoves.stream().filter(it -> it.getValue() >= 0).toList();
         // RULE 2: Do not place last meeple on fields (except at the end):
         if (player.getFreeMeeples() == 1 && stack.getSize() > settings.getNumberOfPlayers()) {
-            consideredMoves = consideredMoves.stream().filter(it -> !it.isFieldMove()).collect(toList());
+            consideredMoves = consideredMoves.stream().filter(it -> !it.isFieldMove()).toList();
         }
         // RULE 3: Avoid placing low value fields early in the game:
         consideredMoves = filterEarlyFieldMoves(consideredMoves, stack, player);
@@ -53,7 +51,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
         if (!consideredMoves.isEmpty()) {
             double maximumValue = consideredMoves.stream().mapToDouble(it -> combinedValue(it, stack)).max().getAsDouble();
             Stream<AbstractCarcassonneMove> bestMoves = consideredMoves.stream().filter(it -> combinedValue(it, stack) == maximumValue);
-            currentMove = chooseAmongBestMoves(bestMoves.collect(toList()), grid);
+            currentMove = chooseAmongBestMoves(bestMoves.toList(), grid);
         }
         System.out.println(currentMove); // TODO (HIGH) [AI] remove debug output
         return currentMove;
@@ -72,7 +70,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
     private Optional<AbstractCarcassonneMove> chooseAmongBestMoves(List<AbstractCarcassonneMove> listOfMoves, Grid grid) {
         RuleBasedComparator comparator = new RuleBasedComparator(grid.getFoundation(), settings.getDistanceMeasure());
         AbstractCarcassonneMove maximum = Collections.max(listOfMoves, comparator);
-        List<AbstractCarcassonneMove> bestMoves = listOfMoves.stream().filter(it -> comparator.compare(it, maximum) == 0).collect(toList());
+        List<AbstractCarcassonneMove> bestMoves = listOfMoves.stream().filter(it -> comparator.compare(it, maximum) == 0).toList();
         return Optional.of(chooseRandom(bestMoves));
     }
 
@@ -88,7 +86,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
         double tiles = Math.max(LOWER_BOUND, Math.min(stack.getSize(), UPPER_BOUND));
         double variableRequiredValue = REQUIRED_FIELD_VALUE * (tiles / (UPPER_BOUND - LOWER_BOUND) - OFFSET);
         double requiredValue = player.getUnretrievableMeeples() + variableRequiredValue;
-        return moves.stream().filter(move -> !move.isFieldMove() || move.getFieldValue() > requiredValue).collect(toList());
+        return moves.stream().filter(move -> !move.isFieldMove() || move.getFieldValue() > requiredValue).toList();
     }
 
     private double combinedValue(AbstractCarcassonneMove move, TileStack stack) {
