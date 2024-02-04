@@ -22,7 +22,7 @@ Development started in 2016, and since then, this computer game has been an ongo
 For more information about the board game, this computer game implementation or the technical details behind this projeckt check out the [wiki page](https://github.com/tsaglam/Carcassonne/wiki).
 
 ### Latest Release
-The latest release is [version 1.8](https://github.com/tsaglam/Carcassonne/releases/tag/v1.8), all release notes can be found [here](https://github.com/tsaglam/Carcassonne/releases).
+The latest release can be found [here](https://github.com/tsaglam/Carcassonne/releases/latest), all releases can be found [here](https://github.com/tsaglam/Carcassonne/releases).
 
 ### Download & Run
 There are two options how to download and run Carcassonne:
@@ -31,9 +31,9 @@ There are two options how to download and run Carcassonne:
  1. Download [OpenWebStart](https://openwebstart.com/download/) or any other web start implementation.
  2. Download and run the [web start file](https://github.com/tsaglam/Carcassonne/releases/download/v1.8/Carcassonne-v1.8.jnlp).
 
-**Via the Jar file** (requires Java SE 11 or newer):
- 1. Download and install [Java SE 11](https://www.oracle.com/de/java/technologies/javase-downloads.html) or a newer version.
- 2. Download and run the [latest executable](https://github.com/tsaglam/Carcassonne/releases/download/v1.8/Carcassonne-v1.8.jar).
+**Via the Jar file** (requires Java SE 17 or newer):
+ 1. Download and install [Java SE 17](https://www.oracle.com/de/java/technologies/javase-downloads.html) or a newer version.
+ 2. Download and run the [latest executable](https://github.com/tsaglam/Carcassonne/releases/download/v1.8.1/Carcassonne-v1.8.1.jar).
 
 ### Feedback & Suggestions
 If you have any feedback on the game or if you have suggestions for new features just let me know (or open up a new issue)!
