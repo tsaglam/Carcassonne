@@ -96,7 +96,7 @@ public enum ImageLoadingUtil {
      * @param transparency is the {@link Transparency} of the image.
      * @return the image, which has half of the width and height of the original file.
      */
-    public static Image createHighDpiImage(Image image, int transparency) {
+    public static Image createHighDpiImage(Image image) {
         Image base = image.getScaledInstance(image.getWidth(null) / 2, image.getHeight(null) / 2, Image.SCALE_SMOOTH);
         return new BaseMultiResolutionImage(base, image);
     }
