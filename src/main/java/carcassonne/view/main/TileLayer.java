@@ -21,8 +21,8 @@ import carcassonne.settings.GameSettings;
 public class TileLayer extends JPanel {
     private static final long serialVersionUID = 1503933201337556131L;
     private final List<TileDepiction> placementHighlights;
-    private List<TileDepiction> tileLabels;
-    private TileDepiction[][] tileDepictionGrid;
+    private final List<TileDepiction> tileLabels;
+    private final TileDepiction[][] tileDepictionGrid;
 
     /**
      * Creates the tile layer.
