@@ -190,7 +190,7 @@ public class GridSpot {
      * Removes all the tags from the tile.
      */
     public void removeTags() {
-        tagMap.values().forEach(it -> it.clear());
+        tagMap.values().forEach(Set::clear);
     }
 
     /**

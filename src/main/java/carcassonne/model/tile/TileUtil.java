@@ -23,7 +23,7 @@ public final class TileUtil {
      * @return the number of possible rotations (between 1 and 3).
      */
     public static int rotationLimitFor(TileType type) {
-        return rotations.computeIfAbsent(type, key -> determineRotationLimit(key));
+        return rotations.computeIfAbsent(type, TileUtil::determineRotationLimit);
     }
 
     /**

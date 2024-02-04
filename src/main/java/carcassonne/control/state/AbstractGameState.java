@@ -10,6 +10,7 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.ViewFacade;
+import carcassonne.view.main.MainView;
 
 /**
  * Is the abstract state of the state machine.
@@ -113,7 +114,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
         updateStackSize();
         if (settings.isGridSizeChanged()) {
             settings.setGridSizeChanged(false);
-            views.onMainView(it -> it.rebuildGrid());
+            views.onMainView(MainView::rebuildGrid);
         }
         GridSpot spot = grid.getFoundation(); // starting spot.
         views.onMainView(it -> it.setTile(spot.getTile(), spot.getX(), spot.getY()));

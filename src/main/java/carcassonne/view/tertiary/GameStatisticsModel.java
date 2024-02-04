@@ -44,10 +44,10 @@ public class GameStatisticsModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
             return round.getPlayer(rowIndex).getName();
-        } else if (columnIndex == 5) {
-            return round.getPlayer(rowIndex).getScore();
-        } else {
-            return round.getPlayer(rowIndex).getTerrainScore(TerrainType.values()[columnIndex - 1]);
         }
+        if (columnIndex == 5) {
+            return round.getPlayer(rowIndex).getScore();
+        }
+        return round.getPlayer(rowIndex).getTerrainScore(TerrainType.values()[columnIndex - 1]);
     }
 }

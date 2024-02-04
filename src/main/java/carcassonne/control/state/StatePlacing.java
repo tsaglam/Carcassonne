@@ -11,6 +11,7 @@ import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.ViewFacade;
+import carcassonne.view.main.MainView;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -86,7 +87,7 @@ public class StatePlacing extends AbstractGameState {
             }
         });
         if (!round.getActivePlayer().isComputerControlled()) {
-            views.onMainView(it -> it.resetPlacementHighlights());
+            views.onMainView(MainView::resetPlacementHighlights);
         }
         round.nextTurn();
         views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));

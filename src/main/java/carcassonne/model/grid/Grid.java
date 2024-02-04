@@ -59,7 +59,7 @@ public class Grid {
                 }
             }
         }
-        patterns.forEach(it -> it.removeTileTags());  // IMPORTANT
+        patterns.forEach(GridPattern::removeTileTags);  // IMPORTANT
         return patterns;
     }
 
@@ -93,7 +93,7 @@ public class Grid {
         for (GridSpot neighbor : getNeighbors(spot, false, GridDirection.directNeighbors())) {
             gridPatterns.addAll(neighbor.createPatternList());
         }
-        gridPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
+        gridPatterns.forEach(GridPattern::removeTileTags); // VERY IMPORTANT!
         return gridPatterns; // get patterns.
     }
 
@@ -108,7 +108,7 @@ public class Grid {
             throw new IllegalArgumentException("Can't check for patterns on an free grid space");
         }
         Collection<GridPattern> modifiedPatterns = spot.createPatternList();
-        modifiedPatterns.forEach(it -> it.removeTileTags()); // VERY IMPORTANT!
+        modifiedPatterns.forEach(GridPattern::removeTileTags); // VERY IMPORTANT!
         return modifiedPatterns; // get patterns.
     }
 
@@ -122,9 +122,8 @@ public class Grid {
         List<GridSpot> neighbors = getNeighbors(spot, false, direction);
         if (neighbors.isEmpty()) {
             return null; // return null if tile not placed or not on grid.
-        } else {
-            return neighbors.get(0);
         }
+        return neighbors.get(0);
     }
 
     /**
@@ -241,7 +240,8 @@ public class Grid {
     private void checkParameters(GridSpot spot) {
         if (spot == null) {
             throw new IllegalArgumentException("Spot can't be null!");
-        } else if (!spots[spot.getX()][spot.getY()].equals(spot)) {
+        }
+        if (!spots[spot.getX()][spot.getY()].equals(spot)) {
             throw new IllegalArgumentException("Spot is not on the grid!");
         }
     }
@@ -265,7 +265,8 @@ public class Grid {
     private void checkParameters(Tile tile) {
         if (tile == null) {
             throw new IllegalArgumentException("Tile can't be null.");
-        } else if (tile.getType() == TileType.Null) {
+        }
+        if (tile.getType() == TileType.Null) {
             throw new IllegalArgumentException("Tile from type TileType.Null can't be placed.");
         }
     }
@@ -274,19 +275,17 @@ public class Grid {
     private boolean findBoundary(GridSpot spot, GridDirection direction, boolean[][] visitedPositions) {
         int newX = direction.getX() + spot.getX(); // get coordinates
         int newY = direction.getY() + spot.getY(); // of free space
-        if (isOnGrid(newX, newY)) { // if on grid
-            if (spots[newX][newY].isOccupied()) {
-                return false; // is a tile, can't go through tiles
-            } else if (!visitedPositions[newX][newY]) { // if not visited
-                visitedPositions[newX][newY] = true; // mark as visited
-                for (GridDirection newDirection : GridDirection.directNeighbors()) { // recursion
-                    if (findBoundary(spots[newX][newY], newDirection, visitedPositions)) {
-                        return true; // found boundary
-                    }
+        if (!isOnGrid(newX, newY)) { // if not on grid
+            return true; // found boundary
+        }
+        if (spots[newX][newY].isOccupied()) {
+        } else if (!visitedPositions[newX][newY]) { // if not visited
+            visitedPositions[newX][newY] = true; // mark as visited
+            for (GridDirection newDirection : GridDirection.directNeighbors()) { // recursion
+                if (findBoundary(spots[newX][newY], newDirection, visitedPositions)) {
+                    return true; // found boundary
                 }
             }
-        } else { // if not on grid
-            return true; // found boundary
         }
         return false; // has not found boundary
     }

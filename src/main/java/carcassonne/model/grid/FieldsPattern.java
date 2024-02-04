@@ -37,7 +37,7 @@ public class FieldsPattern extends GridPattern {
         startingSpot.setTag(startingDirection, this); // initial tag, is needed for adding meeples!
         add(startingSpot); // initial tile
         buildPattern(startingSpot, startingDirection);
-        adjacentCastles.forEach(it -> it.removeOwnTags()); // also remove the tile tags of the marked adjacentCastles
+        adjacentCastles.forEach(CastleAndRoadPattern::removeOwnTags); // also remove the tile tags of the marked adjacentCastles
     }
 
     @Override
@@ -128,12 +128,12 @@ public class FieldsPattern extends GridPattern {
     private GridDirection getFieldOpposite(GridDirection position, GridDirection neighborDirection) {
         if (position.isSmallerOrEquals(WEST)) {
             return position.opposite(); // top, right, bottom, left are simply inverted
-        } else if (position.isSmallerOrEquals(NORTH_WEST)) {
+        }
+        if (position.isSmallerOrEquals(NORTH_WEST)) {
             if (neighborDirection.isLeftOf(position)) { // neighbor to the left of the corner
                 return position.opposite().nextDirectionTo(LEFT).nextDirectionTo(LEFT); // return opposite and two to the right
-            } else { // neighbor to the right of the corner
-                return position.opposite().nextDirectionTo(RIGHT).nextDirectionTo(RIGHT); // return opposite and two to the left
             }
+            return position.opposite().nextDirectionTo(RIGHT).nextDirectionTo(RIGHT); // return opposite and two to the left
         }
         return position; // middle stays middle
     }

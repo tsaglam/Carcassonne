@@ -104,11 +104,11 @@ public class TileLayer extends JPanel {
      * @param newHighlight is the new image.
      */
     public void refreshPlacementHighlights() {
-        placementHighlights.forEach(it -> it.refresh());
+        placementHighlights.forEach(TileDepiction::refresh);
     }
 
     public void resetPlacementHighlights() {
-        placementHighlights.forEach(it -> it.resetPlacementHighlight());
+        placementHighlights.forEach(TileDepiction::resetPlacementHighlight);
         placementHighlights.clear();
     }
 
@@ -116,6 +116,6 @@ public class TileLayer extends JPanel {
      * Resets every tile label in this layer.
      */
     public void resetLayer() {
-        tileLabels.stream().forEach(it -> it.reset());
+        tileLabels.stream().forEach(TileDepiction::reset);
     }
 }

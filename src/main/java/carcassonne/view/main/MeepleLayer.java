@@ -117,14 +117,14 @@ public class MeepleLayer extends JPanel {
      * Refreshes all meeple labels in this layer. This updates the images to color changes.
      */
     public void refreshLayer() {
-        meeplePanels.stream().forEach(it -> it.refreshAll());
+        meeplePanels.stream().forEach(MeepleDepictionPanel::refreshAll);
     }
 
     /**
      * Resets all meeples in the layer.
      */
     public void resetLayer() {
-        meeplePanels.stream().forEach(it -> it.resetAll());
+        meeplePanels.stream().forEach(MeepleDepictionPanel::resetAll);
     }
 
     /**

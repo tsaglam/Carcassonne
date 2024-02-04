@@ -29,7 +29,8 @@ public class RuleBasedComparator implements Comparator<AbstractCarcassonneMove> 
         if (firstMove.getGainedMeeples() != secondMove.getGainedMeeples()) {
             // Rule 1: Prefer move with a maximal meeple gain
             return firstMove.getGainedMeeples() - secondMove.getGainedMeeples();
-        } else if (firstMove.involvesMeeplePlacement() != secondMove.involvesMeeplePlacement()) {
+        }
+        if (firstMove.involvesMeeplePlacement() != secondMove.involvesMeeplePlacement()) {
             // Rule 2: Prefer move without meeple placement
             return preferFalse(firstMove.involvesMeeplePlacement(), secondMove.involvesMeeplePlacement());
         }

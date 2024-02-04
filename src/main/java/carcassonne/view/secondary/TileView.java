@@ -115,7 +115,7 @@ public class TileView extends SecondaryView {
         if (!currentPlayer.getHandOfTiles().isEmpty()) {
             tiles.addAll(currentPlayer.getHandOfTiles());
             setCurrentPlayer(currentPlayer);
-            ThreadingUtil.runAndCallback(() -> updatePreviewLabels(), () -> showUI());
+            ThreadingUtil.runAndCallback(this::updatePreviewLabels, this::showUI);
         }
     }
 

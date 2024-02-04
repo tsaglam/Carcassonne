@@ -52,7 +52,7 @@ public class MeepleView extends SecondaryView {
         }
         this.tile = tile;
         setCurrentPlayer(currentPlayer);
-        ThreadingUtil.runAndCallback(() -> updatePlacementButtons(), () -> showUI());
+        ThreadingUtil.runAndCallback(this::updatePlacementButtons, this::showUI);
     }
 
     // build button grid

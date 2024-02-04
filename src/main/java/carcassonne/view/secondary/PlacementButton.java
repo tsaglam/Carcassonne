@@ -38,12 +38,11 @@ public class PlacementButton extends JButton {
         String osName = System.getProperty(OS_NAME);
         if (osName.startsWith(MAC) || osName.equals(WINDOWS_10)) {
             return isEnabled(); // normal function on mac os x
-        } else {
-            // own implementation to fix the functionality which is destroyed by the hack. If the
-            // original isEnabled method is overwritten, it breaks some functionality (e.g.updating
-            // the background):
-            return enabled;
         }
+        // own implementation to fix the functionality which is destroyed by the hack. If the
+        // original isEnabled method is overwritten, it breaks some functionality (e.g.updating
+        // the background):
+        return enabled;
     }
 
     @Override
