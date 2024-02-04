@@ -49,7 +49,7 @@ public class TileDistribution {
      */
     public void createBackup() {
         restorationPoint.clear();
-        distribution.forEach((key, value) -> restorationPoint.put(key, value));
+        distribution.forEach(restorationPoint::put);
     }
 
     /**
@@ -58,7 +58,7 @@ public class TileDistribution {
      */
     public void restoreLastBackup() {
         distribution.clear();
-        restorationPoint.forEach((key, value) -> distribution.put(key, value));
+        restorationPoint.forEach(restorationPoint::put);
     }
 
     /**
