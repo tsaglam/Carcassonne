@@ -28,6 +28,7 @@ public enum ImageLoadingUtil {
     SKIP("icons/skip.png"),
     SPLASH("splash.png");
 
+    private static final int PLACEHOLDER_IMAGE_SIZE = 10;
     private final String path;
 
     ImageLoadingUtil(String path) {
@@ -146,7 +147,7 @@ public enum ImageLoadingUtil {
         } catch (IOException exception) {
             exception.printStackTrace();
             GameMessage.showError("ERROR: Could not load image loacted at " + path);
-            return null;
+            return new BufferedImage(PLACEHOLDER_IMAGE_SIZE, PLACEHOLDER_IMAGE_SIZE, BufferedImage.TYPE_INT_ARGB);
         }
     }
 }
