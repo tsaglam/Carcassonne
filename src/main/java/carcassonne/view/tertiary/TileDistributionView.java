@@ -157,9 +157,7 @@ public class TileDistributionView extends JDialog {
             }, this::updateFromDistribution);
         });
         JButton resetButton = new JButton(RESET);
-        resetButton.addMouseListener((MouseClickListener) event -> {
-            ThreadingUtil.runAndCallback(() -> distribution.reset(), this::updateFromDistribution);
-        });
+        resetButton.addMouseListener((MouseClickListener) event -> ThreadingUtil.runAndCallback(distribution::reset, this::updateFromDistribution));
         JButton acceptButton = new JButton(ACCEPT);
         acceptButton.addMouseListener((MouseClickListener) event -> {
             dispose();

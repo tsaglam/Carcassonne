@@ -341,7 +341,7 @@ public class GameSettings {
     private void notifyListeners() {
         PaintShop.clearCachedImages();
         for (NotifiableView notifiable : changeListeners) {
-            EventQueue.invokeLater(() -> notifiable.notifyChange());
+            EventQueue.invokeLater(notifiable::notifyChange);
         }
     }
 
