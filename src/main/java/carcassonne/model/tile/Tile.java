@@ -207,11 +207,9 @@ public class Tile {
         TerrainType terrain = getTerrain(position);
         boolean placeable = false;
         if (isPlaced()) { // placing meeples on tiles that are not placed is not possible
-            if (terrain == TerrainType.OTHER) {
-                placeable = false; // you can never place on terrain other
-            } else if (terrain == TerrainType.MONASTERY) {
+            if (terrain == TerrainType.MONASTERY) {
                 placeable = true; // you can always place on a monastery
-            } else {
+            } else if (terrain != TerrainType.OTHER) {
                 GridPattern pattern;
                 if (terrain == TerrainType.FIELDS) {
                     pattern = new FieldsPattern(getGridSpot(), position);
