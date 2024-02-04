@@ -110,8 +110,7 @@ public final class PaintShop {
             return chachedMeepleImages.get(key);
         }
         Image paintedMeeple = paintMeeple(meepleType, color.getRGB(), size * HIGH_DPI_FACTOR);
-        int transparency = imageMap.get(meepleType).getTransparency();
-        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(paintedMeeple, transparency));
+        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(paintedMeeple));
         chachedMeepleImages.put(key, icon);
         return icon;
     }
@@ -139,8 +138,7 @@ public final class PaintShop {
             return chachedMeepleImages.get(key);
         }
         Image preview = imageMap.get(meepleType).getScaledInstance(size * HIGH_DPI_FACTOR, size * HIGH_DPI_FACTOR, Image.SCALE_SMOOTH);
-        int transparency = imageMap.get(meepleType).getTransparency();
-        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(preview, transparency));
+        ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(preview));
         chachedMeepleImages.put(key, icon);
         return icon;
     }
