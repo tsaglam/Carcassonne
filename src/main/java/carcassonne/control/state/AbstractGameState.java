@@ -35,7 +35,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
      * @param views contains the user interfaces.
      * @param playerAI is the current AI strategy.
      */
-    public AbstractGameState(StateMachine stateMachine, GameSettings settings, ViewFacade views, ArtificialIntelligence playerAI) {
+    protected AbstractGameState(StateMachine stateMachine, GameSettings settings, ViewFacade views, ArtificialIntelligence playerAI) {
         this.stateMachine = stateMachine;
         this.settings = settings;
         this.playerAI = playerAI;

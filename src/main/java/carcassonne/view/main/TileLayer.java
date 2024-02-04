@@ -22,7 +22,7 @@ public class TileLayer extends JPanel {
     private static final long serialVersionUID = 1503933201337556131L;
     private final List<TileDepiction> placementHighlights;
     private final transient List<TileDepiction> tileLabels;
-    private final TileDepiction[][] tileDepictionGrid;
+    private final transient TileDepiction[][] tileDepictionGrid;
 
     /**
      * Creates the tile layer.

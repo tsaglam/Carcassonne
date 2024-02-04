@@ -278,8 +278,7 @@ public class Grid {
         if (!isOnGrid(newX, newY)) { // if not on grid
             return true; // found boundary
         }
-        if (spots[newX][newY].isOccupied()) {
-        } else if (!visitedPositions[newX][newY]) { // if not visited
+        if (spots[newX][newY].isFree() && !visitedPositions[newX][newY]) { // if not visited
             visitedPositions[newX][newY] = true; // mark as visited
             for (GridDirection newDirection : GridDirection.directNeighbors()) { // recursion
                 if (findBoundary(spots[newX][newY], newDirection, visitedPositions)) {
