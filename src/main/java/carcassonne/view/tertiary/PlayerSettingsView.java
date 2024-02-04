@@ -56,7 +56,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
     private static final String FORTIFYING_TOOL_TIP = "Allow or forbid directly placing meeples on own patterns";
     private static final String ENCLAVE = "Allow Enclaves of Free Spots";
     private static final String ENCLAVE_TOOL_TIP = "Allow or forbid enclosing free spots in the grid, leading to these spots forming enclaves.";
-    private static final String SCORE_SPLITTING = " Split score on shared paterns:";
+    private static final String SCORE_SPLITTING = " Split score on shared patterns:";
     private static final String SCORE_SPLITTING_TOOL_TIP = "Split score among dominant players of pattern instead of warding the full score.";
     private static final String MULTI_TILE = " Tiles";
     private static final String CLASSIC = " Tile (Classic)";
