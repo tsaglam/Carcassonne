@@ -6,7 +6,7 @@
 
   <groupId>tmp.tsaglam.carcassonne</groupId>
   <artifactId>carcassonne</artifactId>
-  <version>1.8</version>
+  <version>1.8.1</version>
 
   <name>carcassonne</name>
   <url>https://github.com/tsaglam/Carcassonne</url>
