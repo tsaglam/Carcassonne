@@ -22,12 +22,12 @@ import carcassonne.view.util.RigidRectangle;
  */
 public class MeepleLayer extends JPanel {
     private static final long serialVersionUID = -843137441362337953L;
-    private List<MeepleDepictionPanel> meeplePanels;
-    private MeepleDepictionPanel[][] meeplePanelGrid;
-    private JComponent[][] placeholderGrid;
+    private final List<MeepleDepictionPanel> meeplePanels;
+    private final MeepleDepictionPanel[][] meeplePanelGrid;
+    private final JComponent[][] placeholderGrid;
     private final List<RigidRectangle> placeholders;
     private int zoomLevel;
-    private ControllerFacade controller;
+    private final ControllerFacade controller;
 
     /**
      * Creates the meeple layer.

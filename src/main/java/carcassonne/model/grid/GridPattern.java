@@ -22,8 +22,8 @@ public class GridPattern {
 
     private boolean disbursed;
     protected boolean complete;
-    private Map<Player, Integer> involvedPlayers;
-    private List<Meeple> meepleList;
+    private final Map<Player, Integer> involvedPlayers;
+    private final List<Meeple> meepleList;
     protected final TerrainType patternType;
     protected int scoreMultiplier;
     protected List<GridSpot> containedSpots;

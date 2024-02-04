@@ -17,7 +17,7 @@ import carcassonne.view.ViewFacade;
  */
 public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human move states from AI moves?
 
-    private StateMachine stateMachine;
+    private final StateMachine stateMachine;
     protected GameSettings settings;
     protected ViewFacade views;
     protected Round round;

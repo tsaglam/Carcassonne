@@ -17,7 +17,7 @@ import carcassonne.view.util.GameMessage;
  * @author Timur Saglam
  */
 public class StateManning extends AbstractGameState {
-    private boolean[] noMeeplesNotification;
+    private final boolean[] noMeeplesNotification;
 
     /**
      * Constructor of the state.
