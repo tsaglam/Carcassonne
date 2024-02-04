@@ -12,7 +12,10 @@ import carcassonne.util.ImageLoadingUtil;
  * @author Timur Saglam
  */
 public final class GameMessage {
-    private static final String ABOUT = "The board game Carcassonne is created by Klaus-Jürgen Wrede and published by Hans im Glück.\nThis computer game based on the board game is developed by Timur Sağlam.";
+    private static final String ABOUT = """
+            The board game Carcassonne is created by Klaus-Jürgen Wrede and published by Hans im Glück.
+            This computer game based on the board game is developed by Timur Sağlam.""";
+
     private static final int GAME_ICON_SIZE = 75;
     private static final String TITLE = "Carcassonne";
 

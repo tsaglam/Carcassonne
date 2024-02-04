@@ -27,7 +27,7 @@ public class MeepleLayer extends JPanel {
     private final JComponent[][] placeholderGrid;
     private final List<RigidRectangle> placeholders;
     private int zoomLevel;
-    private final ControllerFacade controller;
+    private final transient ControllerFacade controller;
 
     /**
      * Creates the meeple layer.

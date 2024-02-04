@@ -29,7 +29,7 @@ public class ControllerAdapter implements ControllerFacade {
     @Override
     public void requestAbortGame() {
         controller.requestAsynchronousAbort(); // require for AI vs. AI play where the thread never pauses
-        runInBackground(() -> controller.requestAbortGame());
+        runInBackground(controller::requestAbortGame);
     }
 
     @Override
@@ -40,12 +40,12 @@ public class ControllerAdapter implements ControllerFacade {
 
     @Override
     public void requestNewRound() {
-        runInBackground(() -> controller.requestNewRound());
+        runInBackground(controller::requestNewRound);
     }
 
     @Override
     public void requestSkip() {
-        runInBackground(() -> controller.requestSkip());
+        runInBackground(controller::requestSkip);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ControllerAdapter implements ControllerFacade {
     }
 
     private void runInBackground(Runnable task) {
-        service.submit(new ErrorReportingRunnable(task, "UI request led to an error:\n"));
+        service.submit(new ErrorReportingRunnable(task, "UI request led to an error:" + System.lineSeparator()));
     }
 
 }
