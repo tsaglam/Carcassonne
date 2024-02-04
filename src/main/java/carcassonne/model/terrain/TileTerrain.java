@@ -9,7 +9,6 @@ import static carcassonne.model.grid.GridDirection.SOUTH;
 import static carcassonne.model.grid.GridDirection.SOUTH_EAST;
 import static carcassonne.model.grid.GridDirection.SOUTH_WEST;
 import static carcassonne.model.grid.GridDirection.WEST;
-import static java.util.stream.Collectors.toList;
 
 import java.awt.Point;
 import java.util.Arrays;
@@ -118,7 +117,7 @@ public class TileTerrain {
      * Creates a single meeple spot.
      */
     private void createMeepleSpot(GridDirection position) {
-        List<GridDirection> connectedPositions = Stream.of(GridDirection.values()).filter(it -> isConnected(position, it)).collect(toList());
+        List<GridDirection> connectedPositions = Stream.of(GridDirection.values()).filter(it -> isConnected(position, it)).toList();
         Point sum = new Point();
         for (GridDirection connectedPosition : connectedPositions) {
             sum.x += connectedPosition.getX(); // sum up coordinate weights to calculate the center
