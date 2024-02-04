@@ -35,7 +35,7 @@ public class GameSettings {
     private static final String MEEPLE_PATH = "meeple/meeple_";
     private static final String PNG = ".png";
     private static final String TEMPLATE = "_template";
-    private static final String[] DEFAULT_NAMES = {"ONE", "TWO", "THREE", "FOUR", "FIVE"};
+    private static final String[] DEFAULT_NAMES = {"You", "Alice", "Bob", "Carol", "Dan"};
 
     // COLOR CONSTANTS:
     public static final Color UI_COLOR = new Color(190, 190, 190);
