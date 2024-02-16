@@ -29,13 +29,20 @@ public class GameSettings {
     public static final int MAXIMAL_MEEPLES = 7;
 
     // STRING CONSTANTS
+	private String YOU;
+	private String ALICE;
+	private String BOB;
+	private String CAROL;
+	private String DAN;
+
     public static final String TILE_FILE_TYPE = ".png";
     public static final String TILE_FOLDER_PATH = "tiles/";
     private static final String EMPTY = "";
     private static final String MEEPLE_PATH = "meeple/meeple_";
     private static final String PNG = ".png";
     private static final String TEMPLATE = "_template";
-    private static final String[] DEFAULT_NAMES = {"You", "Alice", "Bob", "Carol", "Dan"};
+    //private String[] DEFAULT_NAMES = {YOU, ALICE, BOB, CAROL, DAN};
+    private String[] DEFAULT_NAMES = new String[5];
 
     // COLOR CONSTANTS:
     public static final Color UI_COLOR = new Color(190, 190, 190);
@@ -70,6 +77,7 @@ public class GameSettings {
      * Creates a settings instance. Instances hold different setting values when one is changed.
      */
     public GameSettings() {
+		initResource();
         colors = new ArrayList<>(Arrays.asList(DEFAULT_COLORS));
         names = new ArrayList<>(Arrays.asList(DEFAULT_NAMES));
         playerTypes = new ArrayList<>(Arrays.asList(false, true, true, true, true));
@@ -354,4 +362,18 @@ public class GameSettings {
     public static String getMeeplePath(TerrainType type, boolean isTemplate) { // TODO (MEDIUM) [UTILS] move to image loading utility class?
         return MEEPLE_PATH + type.toString().toLowerCase(Locale.UK) + (isTemplate ? TEMPLATE : EMPTY) + PNG;
     }
+
+	private void initResource() {
+		LoadTextGameSettings resource = new LoadTextGameSettings();
+		YOU		= resource.get("YOU");
+		ALICE	= resource.get("ALICE");
+		BOB		= resource.get("BOB");
+		CAROL	= resource.get("CAROL");
+		DAN		= resource.get("DAN");
+    	DEFAULT_NAMES[0]=YOU;
+    	DEFAULT_NAMES[1]=ALICE;
+    	DEFAULT_NAMES[2]=BOB;
+    	DEFAULT_NAMES[3]=CAROL;
+    	DEFAULT_NAMES[4]=DAN;
+	}
 }

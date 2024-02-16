@@ -15,7 +15,7 @@ import carcassonne.view.util.GameMessage;
  */
 public class StateGameOver extends AbstractGameState {
 
-    private static final String GAME_OVER_MESSAGE = "The game is over. Winning player(s): ";
+    private String GAME_OVER_MESSAGE = "The game is over. Winning player(s): ";
 
     /**
      * Constructor of the state.
@@ -26,6 +26,7 @@ public class StateGameOver extends AbstractGameState {
      */
     public StateGameOver(StateMachine stateMachine, GameSettings settings, ViewFacade views, ArtificialIntelligence playerAI) {
         super(stateMachine, settings, views, playerAI);
+		initResource();
     }
 
     /**
@@ -96,4 +97,9 @@ public class StateGameOver extends AbstractGameState {
     protected void exit() {
         views.closeGameStatistics();
     }
+
+	private void initResource() {
+		LoadTextStateGameOver properties = new LoadTextStateGameOver();
+		GAME_OVER_MESSAGE = properties.get("GAME_OVER_MESSAGE");
+	}
 }

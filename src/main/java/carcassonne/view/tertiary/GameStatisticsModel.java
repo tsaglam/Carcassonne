@@ -14,7 +14,8 @@ public class GameStatisticsModel extends AbstractTableModel {
 
     private static final long serialVersionUID = -7138458001360243937L; // generated UID
     private final Round round;
-    private static final String[] HEADER = {"Player", "Castle", "Road", "Monastery", "Field", "SCORE"};
+    //private static final String[] HEADER = {"Player", "Castle", "Road", "Monastery", "Field", "SCORE"};
+    private static final String[] HEADER = new String[6];
 
     /**
      * Creates the game statistics model with the current round.
@@ -22,6 +23,7 @@ public class GameStatisticsModel extends AbstractTableModel {
      */
     public GameStatisticsModel(Round round) {
         super();
+		initResource();
         this.round = round;
     }
 
@@ -50,4 +52,14 @@ public class GameStatisticsModel extends AbstractTableModel {
         }
         return round.getPlayer(rowIndex).getTerrainScore(TerrainType.values()[columnIndex - 1]);
     }
+
+	private void initResource() {
+		LoadTextGameStatisticsModel properties = new LoadTextGameStatisticsModel();
+		HEADER[0]= properties.get("PLAYER");
+		HEADER[1]= properties.get("CASTLE");
+		HEADER[2]= properties.get("ROAD");
+		HEADER[3]= properties.get("MONASTERY");
+		HEADER[4]= properties.get("FIELD");
+		HEADER[5]= properties.get("SCORE");
+	}
 }

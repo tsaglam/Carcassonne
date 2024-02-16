@@ -22,8 +22,8 @@ public class ZoomSlider extends JSlider {
     // UI CONSTANTS:
     private static final int MAJOR_TICK = 50;
     private static final int MINOR_TICK = 5;
-    private static final String ZOOM_OUT = "Zoom Out (-)";
-    private static final String ZOOM_IN = "Zoom In (+)";
+    private String ZOOM_OUT = "Zoom Out (-)";
+    private String ZOOM_IN = "Zoom In (+)";
 
     // FIELDS:
     private final JMenuItem zoomOut;
@@ -36,6 +36,7 @@ public class ZoomSlider extends JSlider {
      */
     public ZoomSlider(MainView mainView) {
         super(MINIMUM_VALUE, MAXIMUM_VALUE, mainView.getZoom());
+		initResource();
         setPaintTicks(true);
         setOrientation(SwingConstants.VERTICAL);
         setMinorTickSpacing(MINOR_TICK);
@@ -82,4 +83,14 @@ public class ZoomSlider extends JSlider {
     public JMenuItem getZoomIn() {
         return zoomIn;
     }
+
+    /**
+     * Load text from property file.
+     */
+	private void initResource() {
+		LoadTextZoomSlider propertiesZoomSlider = new LoadTextZoomSlider();
+		ZOOM_OUT = propertiesZoomSlider.get("ZOOM_OUT");
+		ZOOM_IN  = propertiesZoomSlider.get("ZOOM_IN");
+	}
+
 }

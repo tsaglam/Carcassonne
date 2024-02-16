@@ -19,12 +19,19 @@ import carcassonne.view.main.MainView;
  */
 public class Scoreboard implements NotifiableView {
     private static final String FONT_TYPE = "Helvetica";
-    private static final String TOOL_TIP = "Settings for player ";
+    private String TOOL_TIP = "Settings for player ";
     private final JLabel[] scoreLabels;
     private final JLabel stackSizeLabel;
     private final List<JLabel> allLabels;
     private final List<ActionListener> settingsListeners;
     private final GameSettings settings;
+
+	private String SETTING_1;
+	private String SETTING_2;
+	private String POINTS;
+	private String MEEPLES;
+	private String STACK;
+
 
     /**
      * Standard constructor. Creates score board.
@@ -32,6 +39,7 @@ public class Scoreboard implements NotifiableView {
      * @param mainView is the main user interface.
      */
     public Scoreboard(GameSettings settings, MainView mainView) { // TODO (MEDIUM) [UI] link with players?
+		initResource();
         this.settings = settings;
         scoreLabels = new JLabel[GameSettings.MAXIMAL_PLAYERS];
         settingsListeners = new ArrayList<>();
@@ -83,9 +91,10 @@ public class Scoreboard implements NotifiableView {
      */
     public void update(Player player) {
         String playerName = player.getName();
-        String text = "[" + playerName + ": " + player.getScore() + " points, " + player.getFreeMeeples() + " meeples]    ";
+        String text = "[" + playerName + ": " + player.getScore() + " " + POINTS + ", " + player.getFreeMeeples() + " " + MEEPLES +"]    ";
         scoreLabels[player.getNumber()].setText(text);
-        scoreLabels[player.getNumber()].setToolTipText(TOOL_TIP + player.getName());
+        // scoreLabels[player.getNumber()].setToolTipText(TOOL_TIP + player.getName());
+        scoreLabels[player.getNumber()].setToolTipText(SETTING_1 + player.getName() + SETTING_2);
     }
 
     /**
@@ -93,7 +102,7 @@ public class Scoreboard implements NotifiableView {
      * @param stackSize is the updated size of the stack.
      */
     public void updateStackSize(int stackSize) {
-        stackSizeLabel.setText("   [Stack Size: " + stackSize + "]");
+        stackSizeLabel.setText("   [" + STACK + ": " + stackSize + "]");
     }
 
     /**
@@ -113,4 +122,13 @@ public class Scoreboard implements NotifiableView {
             scoreLabels[i].setToolTipText(TOOL_TIP + settings.getPlayerName(i));
         }
     }
+
+	private void initResource() {
+		LoadTextScoreboard resource =new LoadTextScoreboard();
+		SETTING_1 = resource.get("SETTING_1");
+		SETTING_2 = resource.get("SETTING_2");
+		POINTS = resource.get("POINTS");
+		MEEPLES = resource.get("MEEPLES");
+		STACK = resource.get("STACK");
+	}
 }

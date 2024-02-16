@@ -46,28 +46,28 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
     private static final int CLOSE_BUTTON_WIDTH = 125;
 
     // TEXT:
-    private static final String AESTHETIC = "AI Aesthetic:";
-    private static final String AESTHETIC_TOOL_TIP = "Affects how AI players place tiles. The effect is most pronounced with only AI players and a bigger tile stack.";
-    private static final String HAND_TOOL_TIP = "Number of tiles on the player's hand";
-    private static final String HAND = "Hand of Tiles:";
-    private static final String MEEPLE_RULES = "Meeple Placement on:";
-    private static final String MEEPLE_RULES_TOOL_TIP = "Allow or forbid placing meeples on certain terrain";
-    private static final String FORTIFYING = " Allow Fortifying Own Patterns:";
-    private static final String FORTIFYING_TOOL_TIP = "Allow or forbid directly placing meeples on own patterns";
-    private static final String ENCLAVE = "Allow Enclaves of Free Spots";
-    private static final String ENCLAVE_TOOL_TIP = "Allow or forbid enclosing free spots in the grid, leading to these spots forming enclaves.";
-    private static final String SCORE_SPLITTING = " Split Score on Shared Patterns:";
-    private static final String SCORE_SPLITTING_TOOL_TIP = "Split score among dominant players of pattern instead of warding the full score.";
-    private static final String MULTI_TILE = " Tiles";
-    private static final String CLASSIC = " Tile (Classic)";
-    private static final String CUSTOMIZE = "Customize";
-    private static final String AI_PLAYER = "AI player";
-    private static final String PLAYERS = "Players:";
-    private static final String CLOSE = "Close";
-    private static final String TITLE = "Player Settings";
-    private static final String COLON = ":";
-    private static final String PLAYER = "Player ";
-    private static final String SPACE = " ";
+    private String AESTHETIC = "AI Aesthetic:";
+    private String AESTHETIC_TOOL_TIP = "Affects how AI players place tiles. The effect is most pronounced with only AI players and a bigger tile stack.";
+    private String HAND_TOOL_TIP = "Number of tiles on the player's hand";
+    private String HAND = "Hand of Tiles:";
+    private String MEEPLE_RULES = "Meeple Placement on:";
+    private String MEEPLE_RULES_TOOL_TIP = "Allow or forbid placing meeples on certain terrain";
+    private String FORTIFYING = " Allow Fortifying Own Patterns:";
+    private String FORTIFYING_TOOL_TIP = "Allow or forbid directly placing meeples on own patterns";
+    private String ENCLAVE = "Allow Enclaves of Free Spots";
+    private String ENCLAVE_TOOL_TIP = "Allow or forbid enclosing free spots in the grid, leading to these spots forming enclaves.";
+    private String SCORE_SPLITTING = " Split Score on Shared Patterns:";
+    private String SCORE_SPLITTING_TOOL_TIP = "Split score among dominant players of pattern instead of warding the full score.";
+    private String MULTI_TILE = " Tiles";
+    private String CLASSIC = " Tile (Classic)";
+    private String CUSTOMIZE = "Customize";
+    private String AI_PLAYER = "AI player";
+    private String PLAYERS = "Players:";
+    private String CLOSE = "Close";
+    private String TITLE = "Player Settings";
+    private String COLON = ":";
+    private String PLAYER = "Player ";
+    private String SPACE = " ";
 
     // STATE:
     private final GameSettings settings;
@@ -80,6 +80,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
      * @param distribution is the {@link TileDistribution} to show in the UI.
      */
     public PlayerSettingsView(GameSettings settings, Scoreboard scoreboard) {
+		initResource();
         this.settings = settings;
         this.scoreboard = scoreboard;
         playerPanels = new ArrayList<>();
@@ -299,4 +300,31 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         label.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
         return label;
     }
+
+	private void initResource() {
+		LoadTextPlayerSettingsView properties = new LoadTextPlayerSettingsView();
+
+		AESTHETIC = properties.get("AESTHETIC");
+		AESTHETIC_TOOL_TIP = properties.get("AESTHETIC_TOOL_TIP");
+		HAND = properties.get("HAND");
+		HAND_TOOL_TIP = properties.get("HAND_TOOL_TIP");
+		MEEPLE_RULES = properties.get("MEEPLE_RULES");
+		MEEPLE_RULES_TOOL_TIP = properties.get("MEEPLE_RULES_TOOL_TIP");
+		FORTIFYING = properties.get("FORTIFYING");
+		FORTIFYING_TOOL_TIP = properties.get("FORTIFYING_TOOL_TIP");
+		ENCLAVE = properties.get("ENCLAVE");
+		ENCLAVE_TOOL_TIP = properties.get("ENCLAVE_TOOL_TIP");
+		SCORE_SPLITTING = properties.get("SCORE_SPLITTING");
+		SCORE_SPLITTING_TOOL_TIP = properties.get("SCORE_SPLITTING_TOOL_TIP");
+		MULTI_TILE = properties.get("MULTI_TILE");
+		CLASSIC = properties.get("CLASSIC");
+		CUSTOMIZE = properties.get("CUSTOMIZE");
+		AI_PLAYER = properties.get("AI_PLAYER");
+		PLAYERS = properties.get("PLAYERS");
+		CLOSE = properties.get("CLOSE");
+		TITLE = properties.get("TITLE");
+		COLON = properties.get("COLON");
+		PLAYER = properties.get("PLAYER");
+		SPACE = properties.get("SPACE");
+	}
 }

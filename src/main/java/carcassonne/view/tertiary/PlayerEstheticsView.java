@@ -30,10 +30,10 @@ import carcassonne.view.util.ThreadingUtil;
 public class PlayerEstheticsView extends JDialog implements ChangeListener, ActionListener {
     private static final int MEEPLE_PREVIEW_SIZE = 30;
     private static final long serialVersionUID = 1293883978626527260L; // generated serial UID
-    private static final String CHANGE_COLOR = "Choose Meeple Color:";
-    private static final String EMPTY_NAME = "The player name cannot be empty!";
-    private static final String ACCEPT_CHANGES = "Accept Changes";
-    private static final String CHANGE_NAME = "Choose Player Name:";
+    private String CHANGE_COLOR = "Choose Meeple Color:";
+    private String EMPTY_NAME = "The player name cannot be empty!";
+    private String ACCEPT_CHANGES = "Accept Changes";
+    private String CHANGE_NAME = "Choose Player Name:";
     private JColorChooser colorChooser;
     private Map<TerrainType, JLabel> labelMap;
     private final GameSettings settings;
@@ -48,6 +48,7 @@ public class PlayerEstheticsView extends JDialog implements ChangeListener, Acti
      */
     public PlayerEstheticsView(int playerNumber, GameSettings settings, MainView mainView) {
         super(mainView);
+		initResource();
         this.playerNumber = playerNumber;
         this.settings = settings;
         setLayout(new BorderLayout());
@@ -123,4 +124,13 @@ public class PlayerEstheticsView extends JDialog implements ChangeListener, Acti
         closeButton.addActionListener(this);
         add(closeButton, BorderLayout.SOUTH);
     }
+
+	private void initResource() {
+		LoadTextPlayerEstheticsView properties = new LoadTextPlayerEstheticsView();
+		CHANGE_COLOR = properties.get("CHANGE_COLOR");
+		EMPTY_NAME = properties.get("EMPTY_NAME");
+		ACCEPT_CHANGES = properties.get("ACCEPT_CHANGES");
+		CHANGE_NAME = properties.get("CHANGE_NAME");
+	}
 }
+

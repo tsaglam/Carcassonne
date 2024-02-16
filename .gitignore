@@ -1,7 +1,7 @@
 # Binaries
 bin/
 target/
- 
+
 # Eclipse
 .settings/
 *.project
@@ -10,3 +10,4 @@ target/
 # Other
 *.checkstyle
 *.log
+*.org
