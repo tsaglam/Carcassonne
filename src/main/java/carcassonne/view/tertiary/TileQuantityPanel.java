@@ -15,6 +15,7 @@ import javax.swing.text.NumberFormatter;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.view.util.MouseClickListener;
+import carcassonne.l18n.view.util.ConvStringL18n;
 
 /**
  * Panel that depicts the quantity of a tile type. Shows a image of the tile and a text field for the quantity.
@@ -75,7 +76,9 @@ public class TileQuantityPanel extends JPanel {
     private void createTileLabel(TileType type) {
         Tile tile = new Tile(type);
         JLabel label = new JLabel(tile.getScaledIcon(TILE_SIZE));
-        label.setToolTipText(CLICK_TO_ROTATE + type.readableRepresentation());
+		String key = "TQP_" + type.readableRepresentation().toUpperCase().replaceAll(" ","_") + ".text";
+		ConvStringL18n csL18n = new ConvStringL18n("RBView", key);
+        label.setToolTipText(CLICK_TO_ROTATE + csL18n.get(key));
         Font font = label.getFont();
         label.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
         label.addMouseListener((MouseClickListener) event -> {

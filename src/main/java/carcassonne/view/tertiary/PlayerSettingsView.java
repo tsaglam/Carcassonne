@@ -27,6 +27,7 @@ import carcassonne.view.NotifiableView;
 import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.util.FixedSizeLabel;
 import carcassonne.view.util.MouseClickListener;
+import carcassonne.l18n.view.util.ConvStringL18n;
 
 /**
  * All-in-one settings UI for the player settings. This includes the player name, the player type and the number of
@@ -135,7 +136,9 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
     }
 
     private void createAIAestheticButton(MinkowskiDistance distanceMeasure, JPanel panel, ButtonGroup group) {
-        JRadioButton button = new JRadioButton(distanceMeasure.getDescription());
+		String key = "MD_" + distanceMeasure.getDescription().toUpperCase().replaceAll(" ","_") +".text";
+		ConvStringL18n csL18n = new ConvStringL18n("RBUtil", key);
+        JRadioButton button = new JRadioButton(csL18n.get(key));
         button.setSelected(settings.getDistanceMeasure() == distanceMeasure);
         button.addMouseListener((MouseClickListener) event -> settings.setDistanceMeasure(distanceMeasure));
         group.add(button);
@@ -236,7 +239,11 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
     }
 
     private void createPlacementRuleButton(TerrainType type, JPanel panel) {
-        JCheckBox button = new JCheckBox(type.toReadableString());
+		// add l18n
+		String key = "TT_" + type.toReadableString().toUpperCase() + ".text";
+		ConvStringL18n csL18n = new ConvStringL18n("RBModel", key);
+        JCheckBox button = new JCheckBox(csL18n.get(key));
+		//
         button.setSelected(settings.getMeepleRule(type));
         button.addMouseListener((MouseClickListener) event -> settings.toggleMeepleRule(type));
         panel.add(button);

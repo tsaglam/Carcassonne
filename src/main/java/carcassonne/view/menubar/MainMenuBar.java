@@ -13,7 +13,6 @@ import carcassonne.view.main.MainView;
 import carcassonne.view.tertiary.GridSizeDialog;
 import carcassonne.view.tertiary.PlayerSettingsView;
 import carcassonne.view.tertiary.TileDistributionView;
-//import carcassonne.view.util.VariableGameMessage;
 import carcassonne.view.util.GameMessage;
 
 /**
