@@ -21,7 +21,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
     private static final double OFFSET = 0.5;
     private static final double MEEPLE_VALUE_FACTOR = 0.5;
     private static final double LAST_MEEPLE_INCENTIVE = 2.5;
-    private static final String EMPTY_COLLECTION = "Cannot choose random element from empty collection!";
+    private String EMPTY_COLLECTION = "Cannot choose random element from empty collection!";
     private static final double EPSILON = 0.01;
     private final GameSettings settings;
     private final Random random;
@@ -123,4 +123,8 @@ public class RuleBasedAI implements ArtificialIntelligence {
         return stack.getSize() / (double) settings.getNumberOfPlayers() <= player.getFreeMeeples();
     }
 
+	private void initResource() {
+		LoadTextRuleBasedAI properties = new LoadTextRuleBasedAI();
+		EMPTY_COLLECTION = properties.get("EMPTY_COLLECTION");
+	}
 }
