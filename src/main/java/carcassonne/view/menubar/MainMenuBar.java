@@ -14,6 +14,8 @@ import carcassonne.view.tertiary.GridSizeDialog;
 import carcassonne.view.tertiary.PlayerSettingsView;
 import carcassonne.view.tertiary.TileDistributionView;
 import carcassonne.view.util.GameMessage;
+import carcassonne.view.util.LoadTextGameMessage;
+import carcassonne.view.util.GameMessageL18n;
 
 /**
  * The menu bar for the main view.
@@ -102,8 +104,9 @@ public class MainMenuBar extends JMenuBar {
         itemNewRound = new JMenuItem(NEW_ROUND);
         itemAbortRound = new JMenuItem(ABORT);
         JMenuItem itemAbout = new JMenuItem(ABOUT);
+		LoadTextGameMessage prop = new LoadTextGameMessage();
         itemAbortRound.setEnabled(false);
-        itemAbout.addActionListener(event -> GameMessage.showGameInfo());
+        itemAbout.addActionListener(event -> GameMessageL18n.showGameInfo(prop.get("ABOUT"), prop.get("TITLE")));
         itemNewRound.addActionListener(new NewRoundListener(controller, itemNewRound, itemAbortRound));
         itemAbortRound.addActionListener(new AbortRoundListener(controller, itemNewRound, itemAbortRound));
         JMenu menuGame = new JMenu(GAME);
