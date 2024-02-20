@@ -7,6 +7,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import carcassonne.control.MainController;
 import carcassonne.view.util.GameMessage;
+import carcassonne.view.util.GameMessageL18n;
 
 /**
  * Carcassonne main class.
@@ -14,8 +15,8 @@ import carcassonne.view.util.GameMessage;
  */
 public final class Carcassonne {
     private static final int TOOL_TIP_DISMISS_DELAY_IN_MILLISECONDS = 30000;
-    private static final String LOOK_AND_FEEL_ERROR = "Could not use Nimbus LookAndFeel. Using default instead (";
-    private static final String CLOSING_BRACKET = ").";
+    private String LOOK_AND_FEEL_ERROR = "Could not use Nimbus LookAndFeel. Using default instead (";
+    private String CLOSING_BRACKET = ").";
     private static final String NIMBUS = "Nimbus";
     private static final String MAC = "Mac";
     private static final String OS_NAME_KEY = "os.name";
@@ -45,7 +46,8 @@ public final class Carcassonne {
                     try {
                         UIManager.setLookAndFeel(lookAndFeel.getClassName());
                     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException exception) {
-                        GameMessage.showError(LOOK_AND_FEEL_ERROR + exception.getMessage() + CLOSING_BRACKET);
+						LoadTextCarcassonne prop = new LoadTextCarcassonne();
+                        GameMessageL18n.showError(prop.get("LOOK_AND_FEEL_ERROR") + exception.getMessage() + prop.get("CLOSING_BRACKET"));
                     }
                 }
             }
