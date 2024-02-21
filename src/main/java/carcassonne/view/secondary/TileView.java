@@ -31,8 +31,11 @@ public class TileView extends SecondaryView {
     private static final int VERTICAL_SPACE = 10;
     private static final double SELECTION_FACTOR = 0.9;
     private static final int SELECTION_BORDER_WIDTH = 3;
-    private static final String NO_TILE_TO_SELECT = "has no Tile to select!";
-    private static final String TOOL_TIP = "Tile of type ";
+    private String NO_TILE_TO_SELECT = "has no Tile to select!";
+    private String TOOL_TIP = "Tile of type ";
+	private String SKIP_TURN;
+	private String ROTATE_LEFT;
+	private String ROTATE_RIGHT;
     private final int selectionSize;
     private final int defaultSize;
     private JButton buttonRotateLeft;
@@ -49,6 +52,7 @@ public class TileView extends SecondaryView {
      */
     public TileView(ControllerFacade controller, MainView ui) {
         super(controller, ui);
+		initResource();
         buildContent();
         pack();
         selectionSize = dialogPanel.getWidth() - VERTICAL_SPACE;
@@ -147,9 +151,9 @@ public class TileView extends SecondaryView {
         buttonRotateLeft = new JButton(ImageLoadingUtil.LEFT.createHighDpiImageIcon());
         buttonRotateRight = new JButton(ImageLoadingUtil.RIGHT.createHighDpiImageIcon());
         // set tool tips:
-        buttonSkip.setToolTipText("Don't place tile and skip turn");
-        buttonRotateLeft.setToolTipText("Rotate left");
-        buttonRotateRight.setToolTipText("Rotate right");
+        buttonSkip.setToolTipText(SKIP_TURN);
+        buttonRotateLeft.setToolTipText(ROTATE_LEFT);
+        buttonRotateRight.setToolTipText(ROTATE_RIGHT);
         // set listeners:
         buttonSkip.addMouseListener((MouseClickListener) event -> controller.requestSkip());
         buttonRotateLeft.addMouseListener((MouseClickListener) event -> rotateLeft());
@@ -207,4 +211,13 @@ public class TileView extends SecondaryView {
     private Border createSelectionBorder() {
         return BorderFactory.createLineBorder(currentPlayer.getColor().textColor(), SELECTION_BORDER_WIDTH);
     }
+
+	private void initResource() {
+		LoadTextTileView properties = new LoadTextTileView();
+		NO_TILE_TO_SELECT = properties.get("NO_TILE_TO_SELECT");
+		TOOL_TIP = properties.get("TOOL_TIP");
+		SKIP_TURN = properties.get("SKIP_TURN");
+		ROTATE_LEFT = properties.get("ROTATE_LEFT");
+		ROTATE_RIGHT = properties.get("ROTATE_RIGHT");
+	}
 }

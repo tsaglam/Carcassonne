@@ -19,6 +19,9 @@ import carcassonne.view.util.GameMessage;
  */
 public class StateManning extends AbstractGameState {
     private final boolean[] noMeeplesNotification;
+	private String ABORT;
+	private String CANT_PLACE;
+	private String NO_MEEPLE;
 
     /**
      * Constructor of the state.
@@ -29,6 +32,7 @@ public class StateManning extends AbstractGameState {
      */
     public StateManning(StateMachine stateMachine, GameSettings settings, ViewFacade views, ArtificialIntelligence playerAI) {
         super(stateMachine, settings, views, playerAI);
+		initResource();
         noMeeplesNotification = new boolean[GameSettings.MAXIMAL_PLAYERS]; // stores whether a player was already notified about a lack of meeples
     }
 
@@ -45,7 +49,7 @@ public class StateManning extends AbstractGameState {
      */
     @Override
     public void newRound(int playerCount) {
-        GameMessage.showWarning("Abort the current game before starting a new one.");
+        GameMessage.showWarning(ABORT);
     }
 
     /**
@@ -87,7 +91,7 @@ public class StateManning extends AbstractGameState {
             processGridPatterns();
             startNextTurn();
         } else {
-            GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!");
+            GameMessage.showWarning(CANT_PLACE);
         }
     }
 
@@ -155,7 +159,7 @@ public class StateManning extends AbstractGameState {
             }
         } else {
             if (!noMeeplesNotification[player.getNumber()] && !player.isComputerControlled()) { // Only warn player once until he regains meeples
-                GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meepeles again.");
+                GameMessage.showMessage(NO_MEEPLE);
                 noMeeplesNotification[player.getNumber()] = true;
             }
             processGridPatterns();
@@ -170,4 +174,11 @@ public class StateManning extends AbstractGameState {
     protected void exit() {
         views.onMeepleView(it -> it.setVisible(false));
     }
+
+	private void initResource() {
+		LoadTextStateManning properties = new LoadTextStateManning();
+		ABORT = properties.get("ABORT");
+		CANT_PLACE = properties.get("CANT_PLACE");
+		NO_MEEPLE = properties.get("NO_MEEPLE");
+	}
 }

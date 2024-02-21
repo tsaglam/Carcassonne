@@ -27,6 +27,10 @@ public class MeepleView extends SecondaryView {
     private Map<GridDirection, JButton> meepleButtons;
     private Color defaultButtonColor;
     private Tile tile;
+	private String PLACE_MEEPEL;
+	private String BRACKET;
+	private String DONT_PLACE_MEEPLE;
+	private LoadTextMeepleView properties;
 
     /**
      * Creates the view.
@@ -35,6 +39,7 @@ public class MeepleView extends SecondaryView {
      */
     public MeepleView(ControllerFacade controller, MainView ui) {
         super(controller, ui);
+		initResouece();
         buildButtonSkip();
         buildButtonGrid();
         pack();
@@ -64,7 +69,7 @@ public class MeepleView extends SecondaryView {
         int index = 0;
         for (GridDirection direction : GridDirection.byRow()) {
             JButton button = new PlacementButton(controller, direction);
-            button.setToolTipText("Place Meeple on the " + direction.toReadableString() + " of the tile.");
+            button.setToolTipText(PLACE_MEEPEL + properties.get(direction.toReadableString()) + BRACKET);
             constraints.gridx = index % 3; // from 0 to 2
             constraints.gridy = index / 3 + 1; // from 1 to 3
             dialogPanel.add(button, constraints);
@@ -75,7 +80,7 @@ public class MeepleView extends SecondaryView {
 
     private void buildButtonSkip() {
         JButton buttonSkip = new JButton(ImageLoadingUtil.SKIP.createHighDpiImageIcon());
-        buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
+        buttonSkip.setToolTipText(DONT_PLACE_MEEPLE);
         defaultButtonColor = buttonSkip.getBackground();
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
@@ -106,4 +111,11 @@ public class MeepleView extends SecondaryView {
             }
         }
     }
+
+	private void initResouece() {
+		properties = new LoadTextMeepleView();
+		PLACE_MEEPEL = properties.get("PLACE_MEEPEL");
+		BRACKET = properties.get("BRACKET");
+		DONT_PLACE_MEEPLE = properties.get("DONT_PLACE_MEEPLE");
+	}
 }
