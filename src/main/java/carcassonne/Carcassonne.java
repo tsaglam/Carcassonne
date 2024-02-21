@@ -7,7 +7,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import carcassonne.control.MainController;
 import carcassonne.view.util.GameMessage;
-import carcassonne.view.util.GameMessageL18n;
 
 /**
  * Carcassonne main class.
@@ -47,7 +46,7 @@ public final class Carcassonne {
                         UIManager.setLookAndFeel(lookAndFeel.getClassName());
                     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException exception) {
 						LoadTextCarcassonne prop = new LoadTextCarcassonne();
-                        GameMessageL18n.showError(prop.get("LOOK_AND_FEEL_ERROR") + exception.getMessage() + prop.get("CLOSING_BRACKET"));
+                        GameMessage.showError(prop.get("LOOK_AND_FEEL_ERROR") + exception.getMessage() + prop.get("CLOSING_BRACKET"));
                     }
                 }
             }

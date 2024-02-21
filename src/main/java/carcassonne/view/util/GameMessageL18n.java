@@ -27,6 +27,7 @@ public class GameMessageL18n {
         JOptionPane.showMessageDialog(null, about, title, JOptionPane.DEFAULT_OPTION, ImageLoadingUtil.SPLASH.createHighDpiImageIcon());
     }
 
+	/*
     public static void showError(String messageText) {
         show(messageText, JOptionPane.ERROR_MESSAGE);
     }
@@ -38,4 +39,5 @@ public class GameMessageL18n {
     public static Icon getGameIcon() {
         return new Tile(TileType.Null).getScaledIcon(GAME_ICON_SIZE);
     }
+	*/
 }
