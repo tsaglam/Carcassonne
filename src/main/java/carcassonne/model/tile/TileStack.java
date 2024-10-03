@@ -61,7 +61,7 @@ public class TileStack {
             return returnedTiles.poll();
         }
 
-        return tiles.removeFirst();
+        return tiles.remove(0);
     }
 
     /**
