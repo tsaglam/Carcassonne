@@ -103,7 +103,7 @@ public class ViewFacade {
             EventQueue.invokeAndWait(() -> selectedTile = tileView.getSelectedTile());
         } catch (InvocationTargetException | InterruptedException exception) {
             exception.printStackTrace();
-            GameMessage.showError("Cannot retrieve selected tile:\n" + exception);
+            GameMessage.showError("Cannot retrieve selected tile:" + System.lineSeparator() + exception);
         }
         return selectedTile;
     }
