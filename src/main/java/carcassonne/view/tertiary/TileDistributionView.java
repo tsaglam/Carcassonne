@@ -15,6 +15,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.border.TitledBorder;
 
 import carcassonne.model.tile.TileDistribution;
 import carcassonne.model.tile.TileType;
@@ -29,13 +30,13 @@ import carcassonne.view.util.ThreadingUtil;
  */
 public class TileDistributionView extends JDialog {
     private static final long serialVersionUID = 1805511300999150753L;
-    private static final String MULTIPLIER = "Tile Stack Size Multiplier: ";
-    private static final String BRACKET = "\t (";
-    private static final String STACK_SIZE = " tiles on the stack)";
-    private static final String SHUFFLE = "Shuffle";
-    private static final String RESET = "Reset";
-    private static final String ACCEPT = "Accept";
-    private static final String TITLE = "Tile Distribution";
+    private String MULTIPLIER = "Tile Stack Size Multiplier: ";
+    private String BRACKET = "\t (";
+    private String STACK_SIZE = " tiles on the stack)";
+    private String SHUFFLE = "Shuffle";
+    private String RESET = "Reset";
+    private String ACCEPT = "Accept";
+    private String TITLE = "Tile Distribution";
     private static final int GRID_WIDTH = 11;
     private static final int GRID_HEIGHT = 3;
     private static final int PADDING = 5;
@@ -50,6 +51,7 @@ public class TileDistributionView extends JDialog {
      * @param distribution is the {@link TileDistribution} to show in the UI.
      */
     public TileDistributionView(GameSettings settings) {
+		initResource();
         this.settings = settings;
         distribution = settings.getTileDistribution();
         distribution.createBackup();
@@ -207,4 +209,15 @@ public class TileDistributionView extends JDialog {
         setLocationRelativeTo(null);
         setModalityType(ModalityType.APPLICATION_MODAL);
     }
+
+	private void initResource() {
+		LoadTextTileDistributionView properties = new LoadTextTileDistributionView();
+		MULTIPLIER	= properties.get("MULTIPLIER");
+		BRACKET		= properties.get("BRACKET");
+		STACK_SIZE	= properties.get("STACK_SIZE");
+		SHUFFLE		= properties.get("SHUFFLE");
+		RESET		= properties.get("RESET");
+		ACCEPT		= properties.get("ACCEPT");
+		TITLE		= properties.get("TITLE");
+	}
 }

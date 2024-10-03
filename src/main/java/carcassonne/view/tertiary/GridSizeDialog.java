@@ -22,15 +22,15 @@ import carcassonne.view.util.GameMessage;
 public class GridSizeDialog extends JPanel {
 
     private static final long serialVersionUID = 6533357898928866596L;
-    private static final String BRACKET = ")";
-    private static final String TOTAL_TILES = "(spots to place tiles: ";
-    private static final String INVALID_SIZE = "Invalid grid size!";
-    private static final String CROSS = " x ";
-    private static final String TITLE = "Carcassonne";
-    private static final String WIDTH = "Width:";
-    private static final String HEIGHT = "Height:";
-    private static final String NOT_CORRECT = " is not a valid grid sizes!";
-    private static final String MESSAGE = "<html>Changes to the grid size will affect the next game. Choose values between 3 and 99.<br/>Large grids may affect the performance!</html>";
+    private String BRACKET = ")";
+    private String TOTAL_TILES = "(spots to place tiles: ";
+    private String INVALID_SIZE = "Invalid grid size!";
+    private String CROSS = " x ";
+    private String TITLE = "Carcassonne";
+    private String WIDTH = "Width:";
+    private String HEIGHT = "Height:";
+    private String NOT_CORRECT = " is not a valid grid sizes!";
+    private String MESSAGE = "<html>Changes to the grid size will affect the next game. Choose values between 3 and 99.<br/>Large grids may affect the performance!</html>";
     private static final int MIN_VALUE = 3;
     private static final int GAP = 5;
     private static final int SPACE = 100;
@@ -46,6 +46,7 @@ public class GridSizeDialog extends JPanel {
      * @param settings are the {@link GameSettings} that will receive the new grid size.
      */
     public GridSizeDialog(GameSettings settings) {
+		initResouce();
         this.settings = settings;
         numberOfTiles = new JLabel();
         numberOfTiles.setHorizontalAlignment(SwingConstants.CENTER);
@@ -123,4 +124,17 @@ public class GridSizeDialog extends JPanel {
         formatter.setMaximum(MAX_VALUE);
         return formatter;
     }
+
+	private void initResouce() {
+		LoadTextGridSizeDialog properties = new LoadTextGridSizeDialog();
+		BRACKET = properties.get("BRACKET");
+		TOTAL_TILES = properties.get("TOTAL_TILES");
+		INVALID_SIZE = properties.get("INVALID_SIZE");
+		CROSS = properties.get("CROSS");
+		TITLE = properties.get("TITLE");
+		WIDTH = properties.get("WIDTH");
+		HEIGHT = properties.get("HEIGHT");
+		NOT_CORRECT = properties.get("NOT_CORRECT");
+		MESSAGE = properties.get("MESSAGE");
+	}
 }

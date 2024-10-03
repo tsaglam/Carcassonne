@@ -1,5 +1,7 @@
 package carcassonne.view.menubar;
 
+import java.util.HashMap;
+
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -12,6 +14,8 @@ import carcassonne.view.tertiary.GridSizeDialog;
 import carcassonne.view.tertiary.PlayerSettingsView;
 import carcassonne.view.tertiary.TileDistributionView;
 import carcassonne.view.util.GameMessage;
+import carcassonne.view.util.LoadTextGameMessage;
+import carcassonne.view.util.GameMessageL18n;
 
 /**
  * The menu bar for the main view.
@@ -22,16 +26,16 @@ public class MainMenuBar extends JMenuBar {
     private static final long serialVersionUID = -599734693130415390L;
 
     // TEXT:
-    private static final String DISTRIBUTION = "Change Tile Distribution";
-    private static final String GRID_SIZE = "Change Grid Size";
-    private static final String ABORT = "Abort Current Game";
-    private static final String GAME = "Game";
+    private String DISTRIBUTION = "Change Tile Distribution";
+    private String GRID_SIZE = "Change Grid Size";
+    private String ABORT = "Abort Current Game";
+    private String GAME = "Game";
     private static final String LARGE_SPACE = "          ";
-    private static final String NEW_ROUND = "Start New Round";
-    private static final String OPTIONS = "Options";
-    private static final String PLAYER_SETTINGS = "Player Settings";
-    private static final String VIEW = "View";
-    private static final String ABOUT = "About";
+    private String NEW_ROUND = "Start New Round";
+    private String OPTIONS = "Options";
+    private String PLAYER_SETTINGS = "Player Settings";
+    private String VIEW = "View";
+    private String ABOUT = "About";
 
     // STATE:
     private final ControllerFacade controller;
@@ -51,6 +55,7 @@ public class MainMenuBar extends JMenuBar {
      */
     public MainMenuBar(ControllerFacade controller, MainView mainView) {
         super();
+		this.initResource();
         this.controller = controller;
         this.mainView = mainView;
         settings = controller.getSettings();
@@ -99,8 +104,9 @@ public class MainMenuBar extends JMenuBar {
         itemNewRound = new JMenuItem(NEW_ROUND);
         itemAbortRound = new JMenuItem(ABORT);
         JMenuItem itemAbout = new JMenuItem(ABOUT);
+		LoadTextGameMessage prop = new LoadTextGameMessage();
         itemAbortRound.setEnabled(false);
-        itemAbout.addActionListener(event -> GameMessage.showGameInfo());
+        itemAbout.addActionListener(event -> GameMessageL18n.showGameInfo(prop.get("ABOUT"), prop.get("TITLE")));
         itemNewRound.addActionListener(new NewRoundListener(controller, itemNewRound, itemAbortRound));
         itemAbortRound.addActionListener(new AbortRoundListener(controller, itemNewRound, itemAbortRound));
         JMenu menuGame = new JMenu(GAME);
@@ -135,4 +141,21 @@ public class MainMenuBar extends JMenuBar {
         menuView.add(slider.getZoomOut());
         add(menuView);
     }
+
+    /**
+     * Load menu text from property file.
+     */
+	private void initResource() {
+		LoadTextMainMenuBar propertiesMainManu = new LoadTextMainMenuBar();
+
+		DISTRIBUTION	= propertiesMainManu.get("DISTRIBUTION");
+    	GRID_SIZE		= propertiesMainManu.get("GRID_SIZE");
+    	ABORT			= propertiesMainManu.get("ABORT");
+    	GAME			= propertiesMainManu.get("GAME");
+    	NEW_ROUND		= propertiesMainManu.get("NEW_ROUND");
+    	OPTIONS			= propertiesMainManu.get("OPTIONS");
+    	PLAYER_SETTINGS	= propertiesMainManu.get("PLAYER_SETTINGS");
+    	VIEW			= propertiesMainManu.get("VIEW");
+    	ABOUT			= propertiesMainManu.get("ABOUT");
+	}
 }

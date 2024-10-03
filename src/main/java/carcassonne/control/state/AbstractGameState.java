@@ -25,7 +25,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     protected TileStack tileStack;
     protected Grid grid;
     protected ArtificialIntelligence playerAI;
-    protected static final String NO_MOVE = "No AI move is available!";
+    protected String NO_MOVE = "No AI move is available!";
 
     /**
      * Constructor of the abstract state, sets the controller from the parameter, registers the state at the controller and
@@ -40,6 +40,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
         this.settings = settings;
         this.playerAI = playerAI;
         this.views = views;
+		initResource();
     }
 
     /**
@@ -168,4 +169,9 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
             }
         }
     }
+
+	private void initResource() {
+		LoadTextAbstractGameState properties = new LoadTextAbstractGameState();
+		NO_MOVE = properties.get("NO_MOVE");
+	}
 }
