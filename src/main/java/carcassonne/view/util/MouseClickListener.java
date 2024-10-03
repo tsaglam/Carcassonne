@@ -12,22 +12,22 @@ import java.awt.event.MouseListener;
 public interface MouseClickListener extends MouseListener {
 
     @Override
-    public default void mousePressed(MouseEvent event) {
+    default void mousePressed(MouseEvent event) {
         // do nothing as only clicks are listened to.
     }
 
     @Override
-    public default void mouseClicked(MouseEvent event) {
+    default void mouseClicked(MouseEvent event) {
         // do nothing as only clicks are listened to.
     }
 
     @Override
-    public default void mouseEntered(MouseEvent event) {
+    default void mouseEntered(MouseEvent event) {
         // do nothing as only clicks are listened to.
     }
 
     @Override
-    public default void mouseExited(MouseEvent event) {
+    default void mouseExited(MouseEvent event) {
         // do nothing as only clicks are listened to.
     }
 }
