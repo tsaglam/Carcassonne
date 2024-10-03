@@ -51,7 +51,20 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
 
     @Override
     public int compareTo(AbstractCarcassonneMove other) {
-        return Double.valueOf(getValue()).compareTo(other.getValue());
+        return Double.compare(getValue(), other.getValue());
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof AbstractCarcassonneMove otherMove) {
+            return compareTo(otherMove) == 0;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Double.hashCode(getValue());
     }
 
     /**

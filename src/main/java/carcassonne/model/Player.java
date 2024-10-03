@@ -2,7 +2,7 @@ package carcassonne.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -196,7 +196,7 @@ public class Player {
 
     private void initializeScores() {
         overallScore = 0;
-        terrainSpecificScores = new HashMap<>();
+        terrainSpecificScores = new EnumMap<>(TerrainType.class);
         for (int i = 0; i < TerrainType.values().length - 1; i++) {
             terrainSpecificScores.put(TerrainType.values()[i], 0); // initial scores are zero
         }

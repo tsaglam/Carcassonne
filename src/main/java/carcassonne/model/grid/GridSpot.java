@@ -3,7 +3,7 @@ package carcassonne.model.grid;
 import static carcassonne.model.grid.GridDirection.CENTER;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class GridSpot {
         this.grid = grid;
         this.x = x;
         this.y = y;
-        tagMap = new HashMap<>();
+        tagMap = new EnumMap<>(GridDirection.class);
         for (GridDirection direction : GridDirection.values()) {
             tagMap.put(direction, new HashSet<>());
         }
@@ -117,7 +117,7 @@ public class GridSpot {
      * @param tilePosition is the specific position.
      * @return true if not directly or indirectly tagged.
      */
-    public Boolean isIndirectlyTagged(GridDirection tilePosition) {
+    public boolean isIndirectlyTagged(GridDirection tilePosition) {
         for (GridDirection otherPosition : GridDirection.values()) {
             if (isTagged(otherPosition) && tile.hasConnection(tilePosition, otherPosition)) {
                 return true;
@@ -133,7 +133,7 @@ public class GridSpot {
      * @param tagger is the specific grid pattern.
      * @return true if not directly or indirectly tagged by the grid pattern.
      */
-    public Boolean isIndirectlyTaggedBy(GridDirection tilePosition, GridPattern tagger) {
+    public boolean isIndirectlyTaggedBy(GridDirection tilePosition, GridPattern tagger) {
         for (GridDirection otherPosition : GridDirection.values()) {
             if (tile.hasConnection(tilePosition, otherPosition) && tagMap.get(otherPosition).contains(tagger)) {
                 return true;
