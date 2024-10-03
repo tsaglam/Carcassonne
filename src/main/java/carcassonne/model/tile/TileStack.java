@@ -3,17 +3,17 @@ package carcassonne.model.tile;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
-import java.util.Stack;
 
 /**
  * The stack of tiles for a game.
  * @author Timur Saglam
  */
 public class TileStack {
-    private final Stack<Tile> tiles;
+    private final List<Tile> tiles;
     private final Queue<Tile> returnedTiles;
     private final Set<Tile> returnHistory;
     private final int multiplier;
@@ -36,7 +36,7 @@ public class TileStack {
      */
     public TileStack(TileDistribution distribution, int multiplier, Long sortingSeed) {
         this.multiplier = multiplier;
-        tiles = new Stack<>();
+        tiles = new LinkedList<>();  // LinkedList is better for a stack here
         returnedTiles = new LinkedList<>();
         returnHistory = new HashSet<>();
         fillStack(distribution);
@@ -50,7 +50,7 @@ public class TileStack {
     }
 
     /**
-     * Draws random tile from the stack and returns it
+     * Draws random tile from the stack and returns it.
      * @return the tile or null if the stack is empty.
      */
     public Tile drawTile() {
@@ -60,7 +60,8 @@ public class TileStack {
         if (tiles.isEmpty()) {
             return returnedTiles.poll();
         }
-        return tiles.pop();
+
+        return tiles.removeFirst();
     }
 
     /**
@@ -73,7 +74,7 @@ public class TileStack {
 
     /**
      * Getter for the size of the stack.
-     * @return the amount of tiled on the stack.
+     * @return the amount of tiles on the stack.
      */
     public int getSize() {
         return tiles.size() + returnedTiles.size();
