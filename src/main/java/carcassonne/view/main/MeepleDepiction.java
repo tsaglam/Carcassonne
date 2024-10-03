@@ -36,7 +36,7 @@ public class MeepleDepiction {
     public MeepleDepiction(int scalingFactor, ControllerFacade controller, GridDirection direction) {
         updateMeepleSize(scalingFactor);
         terrain = TerrainType.OTHER;
-        label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize)); // new RigidLabel(meepleSize, meepleSize);
+        label = new JLabel(PaintShop.getPreviewMeeple(terrain, meepleSize));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         preview = false;
         mouseAdapter = new MouseAdapter() {

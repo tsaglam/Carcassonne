@@ -33,7 +33,7 @@ public abstract class SecondaryView extends JDialog implements NotifiableView {
      * @param controller sets the {@link MainController}.
      * @param ui is the main graphical user interface.
      */
-    public SecondaryView(ControllerFacade controller, MainView ui) {
+    protected SecondaryView(ControllerFacade controller, MainView ui) {
         super(ui);
         dialogPanel = new JPanel(new GridBagLayout());
         this.controller = controller;
