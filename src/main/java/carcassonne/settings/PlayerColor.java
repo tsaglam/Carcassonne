@@ -37,7 +37,7 @@ public class PlayerColor extends Color {
     public Color lightColor() {
         float[] hsb = Color.RGBtoHSB(getRed(), getGreen(), getBlue(), null);
         hsb[SATURATION] *= DESATURATION_FACTOR; // reduce saturation
-        hsb[BRIGHTNESS] = 1 - ((1 - hsb[BRIGHTNESS]) * BRIGHTEN_FACTOR); // increase brightness
+        hsb[BRIGHTNESS] = 1 - (1 - hsb[BRIGHTNESS]) * BRIGHTEN_FACTOR; // increase brightness
         return new Color(Color.HSBtoRGB(hsb[HUE], hsb[SATURATION], hsb[BRIGHTNESS])); // convert to RGB color
     }
 

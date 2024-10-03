@@ -173,7 +173,7 @@ public class Tile {
     public final boolean hasEmblem() {
         int castleSize = 0;
         for (GridDirection direction : GridDirection.values()) {
-            if (terrain.at(direction).equals(TerrainType.CASTLE)) {
+            if (TerrainType.CASTLE.equals(terrain.at(direction))) {
                 castleSize++;
             }
         }
@@ -216,7 +216,7 @@ public class Tile {
                 } else { // castle or road:
                     pattern = new CastleAndRoadPattern(getGridSpot(), position, terrain);
                 }
-                if (pattern.isNotOccupied() || (pattern.isOccupiedBy(player)) && settings.isAllowingFortifying()) {
+                if (pattern.isNotOccupied() || pattern.isOccupiedBy(player) && settings.isAllowingFortifying()) {
                     placeable = true; // can place meeple
                 }
                 pattern.removeTileTags();
@@ -235,7 +235,7 @@ public class Tile {
     }
 
     public void placeMeeple(Player player, GridDirection position, Meeple meeple, GameSettings settings) {
-        if ((this.meeple != null) || !allowsPlacingMeeple(position, player, settings)) {
+        if (this.meeple != null || !allowsPlacingMeeple(position, player, settings)) {
             throw new IllegalArgumentException("Tile can not have already a meeple placed on it: " + toString());
         }
         this.meeple = meeple;

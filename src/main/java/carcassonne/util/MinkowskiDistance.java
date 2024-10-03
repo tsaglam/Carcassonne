@@ -17,7 +17,7 @@ public enum MinkowskiDistance {
      * Minkowski distance of a certain order.
      * @param order specifies the order.
      */
-    private MinkowskiDistance(double order, String description) {
+    MinkowskiDistance(double order, String description) {
         this.order = order;
         this.description = description;
     }

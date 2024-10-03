@@ -16,7 +16,7 @@ public class CastleAndRoadPattern extends GridPattern { // TODO (MEDIUM) [STYLE]
      * @param grid is the grid the pattern is created on.
      */
     public CastleAndRoadPattern(GridSpot startingSpot, GridDirection startingDirection, TerrainType patternType) {
-        super(patternType, (patternType == TerrainType.CASTLE) ? 2 : 1);
+        super(patternType, patternType == TerrainType.CASTLE ? 2 : 1);
         checkArgs(startingSpot, startingDirection, patternType);
         startingSpot.setTag(startingDirection, this); // initial tag
         add(startingSpot); // initial tile

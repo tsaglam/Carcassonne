@@ -36,7 +36,7 @@ public class PlacementButton extends JButton {
      */
     public boolean isHackyEnabled() {
         String osName = System.getProperty(OS_NAME);
-        if (osName.startsWith(MAC) || osName.equals(WINDOWS_10)) {
+        if (osName.startsWith(MAC) || WINDOWS_10.equals(osName)) {
             return isEnabled(); // normal function on mac os x
         }
         // own implementation to fix the functionality which is destroyed by the hack. If the
@@ -48,7 +48,7 @@ public class PlacementButton extends JButton {
     @Override
     public void setEnabled(boolean value) {
         String osName = System.getProperty(OS_NAME);
-        if (osName.startsWith(MAC) || osName.equals(WINDOWS_10)) {
+        if (osName.startsWith(MAC) || WINDOWS_10.equals(osName)) {
             super.setEnabled(value); // normal function on mac os x
         } else {
             // Hacky method, some variated code from the class javax.swing.AbstractButton.

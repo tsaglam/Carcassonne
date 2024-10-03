@@ -72,7 +72,7 @@ public class TileTerrain {
      * @return true if connected, false if not.
      */
     public final boolean isConnected(GridDirection from, GridDirection towards) {
-        if (isDirectConnected(from, towards) || (from != CENTER && towards != CENTER && isIndirectConnected(from, towards))) {
+        if (isDirectConnected(from, towards) || from != CENTER && towards != CENTER && isIndirectConnected(from, towards)) {
             return true; // is not from or to middle but indirectly connected (counter)clockwise
         }
         if (terrain.get(from) == TerrainType.FIELDS && terrain.get(towards) == TerrainType.FIELDS) {
@@ -172,7 +172,7 @@ public class TileTerrain {
     private boolean isImplicitlyConnected(GridDirection from, GridDirection towards) {
         boolean connected = false;
         for (GridDirection direction : Arrays.asList(from, towards)) { // for both directions
-            GridDirection other = (from == direction) ? towards : from;
+            GridDirection other = from == direction ? towards : from;
             for (GridDirection corner : GridDirection.indirectNeighbors()) { // for every connected corner:
                 if (isDirectConnected(direction, corner) || isIndirectConnected(direction, corner)) { // if connected to corner
                     for (RotationDirection side : RotationDirection.values()) { // to the left and right
