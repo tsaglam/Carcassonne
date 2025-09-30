@@ -9,7 +9,7 @@
 
 This is a slightly adapted, digital version of the board game Carcassonne. <br>
 Carcassonne is a tile-based board game in a medieval setting created by [Klaus-Jürgen Wrede](https://www.kjwrede.de/) and published by [Hans im Glück](https://www.hans-im-glueck.de/).
-This project implements Carcassonne as an open-source platform-independent computer game that supports up to five players at the same time with shared-screen multiplayer mode. It stays true to Carcassonne's original look and gameplay while making some changes, such as new tiles and minor tweaks to the emblems. It currently contains the complete main game, some features from extensions, as well as some completely new functionalities.
+This project implements Carcassonne as an open-source platform-independent computer game that supports up to five players at the same time with a shared-screen multiplayer mode. It stays true to Carcassonne's original look and gameplay while making some changes, such as new tiles and minor tweaks to the emblems. It currently contains the complete main game, some features from extensions, as well as some completely new functionalities.
 The official rules can be found here: [Part 1](https://images.zmangames.com/filer_public/d5/20/d5208d61-8583-478b-a06d-b49fc9cd7aaa/zm7810_carcassonne_rules.pdf), [Part 2](https://images.zmangames.com/filer_public/14/af/14af825c-9879-42b8-851d-35ce41df7767/carcassonne-supplement.pdf).
 This is my personal project I work on (infrequently) whenever I have time available.
 Development started in 2016, and since then, this computer game has been an ongoing project...
@@ -19,13 +19,13 @@ Development started in 2016, and since then, this computer game has been an ongo
 </p>
 
 ### More Information
-For more information about the board game, this computer game implementation or the technical details behind this projeckt check out the [wiki page](https://github.com/tsaglam/Carcassonne/wiki).
+For more information about the board game, this computer game implementation, or the technical details behind this project, check out the [wiki page](https://github.com/tsaglam/Carcassonne/wiki).
 
 ### Latest Release
-The latest release can be found [here](https://github.com/tsaglam/Carcassonne/releases/latest), all releases can be found [here](https://github.com/tsaglam/Carcassonne/releases).
+The latest release can be found [here](https://github.com/tsaglam/Carcassonne/releases/latest), and all releases can be found [here](https://github.com/tsaglam/Carcassonne/releases).
 
 ### Download & Run
-There are two options how to download and run Carcassonne:
+There are two options for downloading and running Carcassonne:
 
 **Via Web Start** (manages the required Java version for you):
  1. Download [OpenWebStart](https://openwebstart.com/download/) or any other web start implementation.
