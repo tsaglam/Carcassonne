@@ -1,4 +1,4 @@
-name: SonarCloud
+name: SonarQube
 on:
   push:
     branches:
@@ -18,7 +18,7 @@ jobs:
         with:
           java-version: 21
           distribution: 'temurin'
-      - name: Cache SonarCloud packages
+      - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
@@ -32,6 +32,5 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=tsaglam_Carcassonne
