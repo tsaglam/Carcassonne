@@ -1,0 +1,33 @@
+name: Spotless Style Check
+
+on:
+  push:
+    paths:
+      - ".github/workflows/spotless.yml"
+      - "**/pom.xml"
+      - "**/*.java"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/spotless.yml"
+      - "**/pom.xml"
+      - "**.java"
+
+jobs:
+  spotless-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: 21
+        distribution: 'temurin'
+
+    - name: Check with Spotless
+      run: mvn clean spotless:check
+
+
+
