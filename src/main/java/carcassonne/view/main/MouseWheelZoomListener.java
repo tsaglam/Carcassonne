@@ -24,7 +24,6 @@ public class MouseWheelZoomListener implements MouseWheelListener {
      * @param parent is the dedicated parent component where non-zoom events are delegated to.
      */
     public MouseWheelZoomListener(Runnable zoomIn, Runnable zoomOut, Component parent) {
-        super();
         this.zoomIn = zoomIn;
         this.zoomOut = zoomOut;
         this.parent = parent;

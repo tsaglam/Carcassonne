@@ -21,7 +21,6 @@ public class GameStatisticsModel extends AbstractTableModel {
      * @param round is the current round.
      */
     public GameStatisticsModel(Round round) {
-        super();
         this.round = round;
     }
 

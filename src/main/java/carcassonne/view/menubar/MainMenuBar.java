@@ -50,7 +50,6 @@ public class MainMenuBar extends JMenuBar {
      * @param mainView is the main view instance.
      */
     public MainMenuBar(ControllerFacade controller, MainView mainView) {
-        super();
         this.controller = controller;
         this.mainView = mainView;
         settings = controller.getSettings();

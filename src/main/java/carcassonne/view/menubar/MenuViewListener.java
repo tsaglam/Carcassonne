@@ -23,7 +23,6 @@ public class MenuViewListener extends MouseAdapter implements ActionListener {
      * @param mainView is the main user interface.
      */
     public MenuViewListener(int playerNumber, GameSettings settings, MainView mainView) {
-        super();
         playerView = new PlayerEstheticsView(playerNumber, settings, mainView);
     }
 

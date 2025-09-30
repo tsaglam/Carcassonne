@@ -30,8 +30,7 @@ public final class FastImageScaler {
             return image; // do not do anything if image already has target size.
         }
         Image result = scaleByHalf(image, targetSize);
-        result = scaleExact(result, targetSize);
-        return result;
+        return scaleExact(result, targetSize);
     }
 
     /*
