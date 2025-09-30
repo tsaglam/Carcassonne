@@ -10,3 +10,4 @@ target/
 # Other
 *.checkstyle
 *.log
+*.DS_Store
