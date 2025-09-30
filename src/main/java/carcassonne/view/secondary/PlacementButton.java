@@ -25,7 +25,6 @@ public class PlacementButton extends JButton {
      * @param direction is the direction of the correlating meeple of the button on the tile.
      */
     public PlacementButton(ControllerFacade controller, GridDirection direction) {
-        super();
         addMouseListener(new PlacementButtonMouseAdapter(direction, controller, this));
     }
 

@@ -26,7 +26,6 @@ public class PlacementButtonMouseAdapter extends MouseAdapter {
      * @param button is the button which uses the adapter.
      */
     public PlacementButtonMouseAdapter(GridDirection direction, ControllerFacade controller, PlacementButton button) {
-        super();
         this.direction = direction;
         this.controller = controller;
         this.button = button;
