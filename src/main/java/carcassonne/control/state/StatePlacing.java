@@ -46,7 +46,7 @@ public class StatePlacing extends AbstractGameState {
      */
     @Override
     public void newRound(int playerCount) {
-        GameMessage.showWarning("Abort the current game before starting a new one.");
+        views.reroute(() -> GameMessage.showWarning("Abort the current game before starting a new one."));
 
     }
 
@@ -136,7 +136,7 @@ public class StatePlacing extends AbstractGameState {
                 Thread.sleep(SLEEP_DURATION);
             } catch (InterruptedException exception) {
                 exception.printStackTrace();
-                GameMessage.showError(exception.getCause().getMessage());
+                views.reroute(() -> GameMessage.showError(exception.getCause().getMessage()));
             }
         }
     }

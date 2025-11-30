@@ -18,7 +18,7 @@ public enum TileRotation {
      * @return the rotated {@link TileRotation}.
      */
     public TileRotation rotate(RotationDirection direction) {
-        int newOrdinal = Math.floorMod(this.ordinal() + direction.getValue(), values().length);
+        int newOrdinal = Math.floorMod(ordinal() + direction.getValue(), values().length);
         return values()[newOrdinal];
     }
 }

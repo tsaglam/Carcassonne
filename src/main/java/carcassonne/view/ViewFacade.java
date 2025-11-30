@@ -39,8 +39,8 @@ public class ViewFacade {
         }
         this.mainView = mainView;
         this.tileView = tileView;
-        this.meepleView = placmementView;
-        this.scoreboard = mainView.getScoreboard();
+        meepleView = placmementView;
+        scoreboard = mainView.getScoreboard();
     }
 
     /**
@@ -73,6 +73,15 @@ public class ViewFacade {
      */
     public void onTileView(Consumer<TileView> job) {
         schedule(() -> job.accept(tileView));
+    }
+
+    /**
+     * Reroutes a unspecified UI call via the view facade. The job is NOT scheduled with the {@link EventQueue}. It is
+     * recommended for calls coming from the game logic to separate the game logic from the UI.
+     * @param job is the unspecified UI call, for example to {@link GameMessage}.
+     */
+    public void reroute(Runnable job) {
+        job.run();
     }
 
     /**

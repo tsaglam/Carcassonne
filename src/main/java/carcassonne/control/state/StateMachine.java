@@ -51,7 +51,7 @@ public class StateMachine {
      * @param abortOnStateChange set true to schedule an abort request, set to false to cancel it.
      */
     public void setAbortRequested(boolean abortOnStateChange) {
-        this.abortRequested = abortOnStateChange;
+        abortRequested = abortOnStateChange;
     }
 
     /**
