@@ -29,7 +29,7 @@ public class StateIdle extends AbstractGameState {
      */
     @Override
     public void abortGame() {
-        GameMessage.showMessage("There is currently no game running.");
+        views.reroute(() -> GameMessage.showMessage("There is currently no game running."));
     }
 
     /**

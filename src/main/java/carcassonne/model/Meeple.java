@@ -79,7 +79,7 @@ public class Meeple {
      * @param placementLocation is the placement location.
      */
     public void setLocation(GridSpot placementLocation) {
-        this.location = placementLocation;
+        location = placementLocation;
     }
 
     /**
@@ -87,7 +87,7 @@ public class Meeple {
      * @param placementPosition is the placement position.
      */
     public void setPosition(GridDirection placementPosition) {
-        this.position = placementPosition;
+        position = placementPosition;
     }
 
     @Override
