@@ -1,0 +1,82 @@
+package carcassonne.control.state;
+
+import carcassonne.model.Round;
+import carcassonne.model.ai.RuleBasedAI;
+import carcassonne.model.grid.Grid;
+import carcassonne.model.tile.TileStack;
+import carcassonne.settings.GameSettings;
+import carcassonne.testutils.GridPrinter;
+import carcassonne.view.ViewFacade;
+
+/**
+ * A {@link StateMachine} implementation that exposes internal game-state objects such as the current {@link Round},
+ * {@link TileStack}, and {@link Grid}. This class is primarily intended for testing and debugging, allowing external
+ * code to inspect the state that is normally encapsulated inside the state machine. The exposed fields are refreshed
+ * whenever {@link #updateStates(Round, TileStack, Grid)} is invoked as part of the state machine lifecycle.
+ */
+public class StateExposingStateMachine extends StateMachine {
+    private static final String STATE_CHANGE_MESSAGE = " --> Game shifts to: ";
+    private static final String STATE_PREFIX = "State";
+    private static final String SEPARATOR = ", ";
+    private static final String EMPTY_STRING = "";
+
+    private Round round;
+    private TileStack tileStack;
+    private Grid grid;
+    private final boolean printGridOnTransitions;
+
+    /**
+     * Constructor using the specified view facade and game settings. A {@link RuleBasedAI} is automatically created based
+     * on the provided settings.
+     * @param views the view facade used for UI interactions. Can be a test facade.
+     * @param settings are the settings for the game.
+     */
+    public StateExposingStateMachine(ViewFacade views, GameSettings settings, boolean printGridOnTransitions) {
+        super(views, new RuleBasedAI(settings), settings);
+        this.printGridOnTransitions = printGridOnTransitions;
+    }
+
+    @Override
+    void updateStates(Round round, TileStack tileStack, Grid grid) {
+        this.round = round;
+        this.tileStack = tileStack;
+        this.grid = grid;
+        super.updateStates(round, tileStack, grid);
+    }
+
+    @Override
+    void changeState(Class<? extends AbstractGameState> stateType) {
+        super.changeState(stateType);
+        if (printGridOnTransitions) {
+            String state = stateType.getSimpleName().replace(STATE_PREFIX, EMPTY_STRING);
+            String player = round == null ? EMPTY_STRING : SEPARATOR + round.getActivePlayer();
+            System.out.println(STATE_CHANGE_MESSAGE + state + player);
+            GridPrinter.printGrid(grid);
+        }
+    }
+
+    /**
+     * Returns the current {@link Round} instance stored by the state machine.
+     * @return the current round, or {@code null} if not yet initialized
+     */
+    public Round getRound() {
+        return round;
+    }
+
+    /**
+     * Returns the current {@link TileStack} instance stored by the state machine.
+     * @return the current tile stack, or {@code null} if not yet initialized
+     */
+    public TileStack getTileStack() {
+        return tileStack;
+    }
+
+    /**
+     * Returns the current {@link Grid} instance stored by the state machine.
+     * @return the current grid, or {@code null} if not yet initialized
+     */
+    public Grid getGrid() {
+        return grid;
+    }
+
+}
