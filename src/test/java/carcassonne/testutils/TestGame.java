@@ -169,16 +169,6 @@ public class TestGame {
         return stateMachine.getGrid();
     }
 
-    /**
-     * Prints the grid via the {@link GridPrinter} if a game is running.
-     */
-    public void printGrid() {
-        Grid grid = stateMachine.getGrid();
-        if (grid != null) {
-            GridPrinter.printGrid(grid);
-        }
-    }
-
     private AbstractGameState state() {
         return stateMachine.getCurrentState();
     }

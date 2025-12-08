@@ -24,6 +24,7 @@ public class StateExposingStateMachine extends StateMachine {
     private TileStack tileStack;
     private Grid grid;
     private final boolean printGridOnTransitions;
+    private String lastPrintedGrid;
 
     /**
      * Constructor using the specified view facade and game settings. A {@link RuleBasedAI} is automatically created based
@@ -48,10 +49,14 @@ public class StateExposingStateMachine extends StateMachine {
     void changeState(Class<? extends AbstractGameState> stateType) {
         super.changeState(stateType);
         if (printGridOnTransitions) {
+            String currentGrid = GridPrinter.printGrid(grid);
+            if (!currentGrid.equals(lastPrintedGrid)) {
+                System.out.print(currentGrid);
+                lastPrintedGrid = currentGrid;
+            }
             String state = stateType.getSimpleName().replace(STATE_PREFIX, EMPTY_STRING);
             String player = round == null ? EMPTY_STRING : SEPARATOR + round.getActivePlayer();
             System.out.println(STATE_CHANGE_MESSAGE + state + player);
-            GridPrinter.printGrid(grid);
         }
     }
 
