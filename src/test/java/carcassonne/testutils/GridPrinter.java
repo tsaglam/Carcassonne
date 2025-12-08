@@ -24,10 +24,14 @@ import carcassonne.model.tile.Tile;
  */
 public final class GridPrinter {
 
+    private static final int HEADER_INDENT = 5;
+
+    private static final String COLUMN_LABEL = " %2d ";
+    private static final String ROW_LABEL = "  %2d |";
+    private static final String VERTICAL_BORDER = "|";
+    private static final String INTERSECTION = "+";
     private static final String EMPTY_CELL = "   |";
     private static final String ROW_SEPARATOR = "---+";
-
-    private static final int HEADER_INDENT = 5;
 
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_COLOR_TEMPLATE = "\u001B[38;2;%d;%d;%dm";
@@ -37,80 +41,83 @@ public final class GridPrinter {
     }
 
     /**
-     * Prints an ASCII representation of the grid to standard output. Each tile is displayed as a 3x3 character grid showing
+     * Returns an ASCII representation of the grid as a string. Each tile is displayed as a 3x3 character grid showing
      * terrain and meeple positions.
      */
-    public static void printGrid(Grid grid) {
-        printHeader(grid.getWidth());
+    public static String printGrid(Grid grid) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(printHeader(grid.getWidth()));
         for (int y = 0; y < grid.getHeight(); y++) {
-            // print row:
-            printGridLine(grid, y, List.of(NORTH_WEST, NORTH, NORTH_EAST), false);
-            printGridLine(grid, y, List.of(WEST, CENTER, EAST), true);
-            printGridLine(grid, y, List.of(SOUTH_WEST, SOUTH, SOUTH_EAST), false);
+            builder.append(printGridLine(grid, y, List.of(NORTH_WEST, NORTH, NORTH_EAST), false));
+            builder.append(printGridLine(grid, y, List.of(WEST, CENTER, EAST), true));
+            builder.append(printGridLine(grid, y, List.of(SOUTH_WEST, SOUTH, SOUTH_EAST), false));
 
-            // print row separator:
-            System.out.print(" ".repeat(HEADER_INDENT) + "+");
-            System.out.println(ROW_SEPARATOR.repeat(grid.getWidth()));
+            builder.append(" ".repeat(HEADER_INDENT) + INTERSECTION);
+            builder.append(ROW_SEPARATOR.repeat(grid.getWidth()));
+            builder.append(System.lineSeparator());
         }
-
-        System.out.println();
+        return builder.toString();
     }
 
     /**
-     * Prints a single tile as a 3x3 character representation.
+     * Returns a single tile as a 3x3 character representation.
      */
-    public static void printTile(Tile tile) {
+    public static String printTile(Tile tile) {
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 9; i++) {
             TerrainType terrain = tile.getTerrain(GridDirection.byRow().get(i));
-            System.out.print(terrain == TerrainType.FIELDS ? ' ' : terrain.toString().charAt(0));
+            builder.append(terrain == TerrainType.FIELDS ? ' ' : terrain.toString().charAt(0));
             if ((i + 1) % 3 == 0) {
-                System.out.println();
+                builder.append(System.lineSeparator());
             }
         }
+        return builder.toString();
     }
 
-    private static void printHeader(int width) {
-        System.out.print(" ".repeat(HEADER_INDENT));
+    private static String printHeader(int width) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(" ".repeat(HEADER_INDENT));
         for (int x = 0; x < width; x++) {
-            System.out.printf(" %2d ", x);
+            builder.append(COLUMN_LABEL.formatted(x));
         }
-        System.out.println();
+        builder.append(System.lineSeparator());
 
-        // Top border:
-        System.out.print(" ".repeat(HEADER_INDENT) + "+");
-        System.out.println(ROW_SEPARATOR.repeat(width));
+        builder.append(" ".repeat(HEADER_INDENT) + INTERSECTION);
+        builder.append(ROW_SEPARATOR.repeat(width));
+        builder.append(System.lineSeparator());
+        return builder.toString();
     }
 
-    private static void printGridLine(Grid grid, int y, List<GridDirection> directions, boolean showRowNumber) {
+    private static String printGridLine(Grid grid, int y, List<GridDirection> directions, boolean showRowNumber) {
+        StringBuilder builder = new StringBuilder();
         if (showRowNumber) {
-            System.out.printf("  %2d |", y);
+            builder.append(ROW_LABEL.formatted(y));
         } else {
-            System.out.print(" ".repeat(HEADER_INDENT) + "|");
+            builder.append(" ".repeat(HEADER_INDENT) + VERTICAL_BORDER);
         }
 
         for (int x = 0; x < grid.getWidth(); x++) {
             GridSpot spot = grid.getSpot(x, y);
             if (spot.isFree()) {
-                System.out.print(EMPTY_CELL);
+                builder.append(EMPTY_CELL);
             } else {
-                directions.forEach(dir -> System.out.print(getTileChar(spot, dir)));
-                System.out.print("|");
+                directions.forEach(dir -> builder.append(getTileChar(spot, dir)));
+                builder.append(VERTICAL_BORDER);
             }
         }
-        System.out.println();
+        builder.append(System.lineSeparator());
+        return builder.toString();
     }
 
     private static String getTileChar(GridSpot spot, GridDirection direction) {
         TerrainType terrain = spot.getTile().getTerrain(direction);
 
-        // Meeples:
         if (spot.getTile().hasMeeple() && spot.getTile().getMeeple().getPosition() == direction) {
             Color playerColor = spot.getTile().getMeeple().getOwner().getColor().lightColor();
             String ansiMeeple = ansiColor(playerColor);
             return ansiMeeple + getMeepleSymbol(terrain) + ANSI_RESET;
         }
 
-        // Terrain:
         if (terrain == TerrainType.FIELDS) {
             return " ";
         }
@@ -127,22 +134,22 @@ public final class GridPrinter {
             case MONASTERY -> '♚';
             case CASTLE -> '♜';
             case ROAD -> '♟';
-            case FIELDS -> '✳';
+            case FIELDS -> '♞';
             case OTHER -> '?';
         };
     }
 
     private static String ansiColor(Color c) {
-        return String.format(ANSI_COLOR_TEMPLATE, c.getRed(), c.getGreen(), c.getBlue());
+        return ANSI_COLOR_TEMPLATE.formatted(c.getRed(), c.getGreen(), c.getBlue());
     }
 
     private static Color getTerrainColor(TerrainType terrain) {
         return switch (terrain) {
-            case MONASTERY -> new Color(204, 136, 70); // Old red monastery roofs
-            case CASTLE -> new Color(184, 158, 122); // Classic castle beige dirt
-            case ROAD -> new Color(200, 200, 200); // Light, readable grey
-            case OTHER -> new Color(100, 100, 100); // Dark grey
-            case FIELDS -> new Color(106, 140, 52); // green fields
+            case MONASTERY -> new Color(204, 136, 70);
+            case CASTLE -> new Color(184, 158, 122);
+            case ROAD -> new Color(200, 200, 200);
+            case OTHER -> new Color(100, 100, 100);
+            case FIELDS -> new Color(106, 140, 52);
         };
     }
 }
