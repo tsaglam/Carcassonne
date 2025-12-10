@@ -19,7 +19,7 @@ import carcassonne.model.tile.TileType;
 public class ScoreTest extends CarcassonneTest {
 
     @Test
-    @DisplayName("Complection of a monastery")
+    @DisplayName("Completion of a monastery")
     void monasteryScoringTest() {
         game.newRound(2, 5, 4);
 
@@ -37,7 +37,7 @@ public class ScoreTest extends CarcassonneTest {
     }
 
     @Test
-    @DisplayName("Complection of starting tile castle")
+    @DisplayName("Completion of starting tile castle")
     void basicGameplayTest() {
         // Setup:
         game.newRound(2, 3, 3);

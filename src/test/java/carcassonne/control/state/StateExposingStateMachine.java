@@ -31,6 +31,8 @@ public class StateExposingStateMachine extends StateMachine {
      * on the provided settings.
      * @param views the view facade used for UI interactions. Can be a test facade.
      * @param settings are the settings for the game.
+     * @param printGridOnTransitions controls whether the ASCII grid representation should be printed between state
+     * transitions.
      */
     public StateExposingStateMachine(ViewFacade views, GameSettings settings, boolean printGridOnTransitions) {
         super(views, new RuleBasedAI(settings), settings);
@@ -48,7 +50,7 @@ public class StateExposingStateMachine extends StateMachine {
     @Override
     void changeState(Class<? extends AbstractGameState> stateType) {
         super.changeState(stateType);
-        if (printGridOnTransitions) {
+        if (printGridOnTransitions && grid != null) {
             String currentGrid = GridPrinter.printGrid(grid);
             if (!currentGrid.equals(lastPrintedGrid)) {
                 System.out.print(currentGrid);
