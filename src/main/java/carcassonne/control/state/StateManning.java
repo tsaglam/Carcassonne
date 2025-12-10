@@ -156,7 +156,7 @@ public class StateManning extends AbstractGameState {
         } else {
             if (!noMeeplesNotification[player.getNumber()] && !player.isComputerControlled()) { // Only warn player once until he regains meeples
                 views.reroute(
-                        () -> GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meepeles again."));
+                        () -> GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meeples again."));
                 noMeeplesNotification[player.getNumber()] = true;
             }
             processGridPatterns();

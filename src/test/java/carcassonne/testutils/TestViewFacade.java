@@ -112,7 +112,7 @@ public class TestViewFacade extends ViewFacade {
                 field.setAccessible(true);
                 try {
                     // TODO could be improved, e.g. if arg is just a state
-                    if (!field.get(job).toString().contains("carcassonne.control.state")) {
+                    if (field.get(job) != null && !field.get(job).toString().contains("carcassonne.control.state")) {
                         System.out.println(" → " + field.get(job));
                     }
 

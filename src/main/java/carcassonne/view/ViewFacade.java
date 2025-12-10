@@ -76,7 +76,7 @@ public class ViewFacade {
     }
 
     /**
-     * Reroutes a unspecified UI call via the view facade. The job is NOT scheduled with the {@link EventQueue}. It is
+     * Reroutes an unspecified UI call via the view facade. The job is NOT scheduled with the {@link EventQueue}. It is
      * recommended for calls coming from the game logic to separate the game logic from the UI.
      * @param job is the unspecified UI call, for example to {@link GameMessage}.
      */
