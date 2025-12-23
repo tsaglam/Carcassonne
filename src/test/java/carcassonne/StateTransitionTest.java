@@ -200,7 +200,11 @@ public class StateTransitionTest extends CarcassonneTest {
         assertState(StateIdle.class);
         assertThrows(IllegalStateException.class, () -> game.state().skip());
         assertState(StateIdle.class);
-        assertDoesNotThrow(() -> game.state().placeTile(-1, -1));
+        assertThrows(IllegalStateException.class, () -> game.state().placeMeeple(null));
+        assertState(StateIdle.class);
+        assertDoesNotThrow(() -> game.state().placeTile(0, 0));
+        assertState(StateIdle.class);
+        assertDoesNotThrow(() -> game.state().abortGame());
         assertState(StateIdle.class);
 
         // State placing
@@ -208,11 +212,15 @@ public class StateTransitionTest extends CarcassonneTest {
         assertState(StatePlacing.class);
         assertThrows(IllegalStateException.class, () -> game.state().placeMeeple(null));
         assertState(StatePlacing.class);
+        assertDoesNotThrow(() -> game.state().newRound(2));
+        assertState(StatePlacing.class);
 
         // State manning:
         game.placeTile(TileType.Road, TILTED_RIGHT, 1, 2);
         assertState(StateManning.class);
-        assertDoesNotThrow(() -> game.state().placeTile(-1, -1));
+        assertDoesNotThrow(() -> game.state().placeTile(0, 0));
+        assertState(StateManning.class);
+        assertDoesNotThrow(() -> game.state().newRound(2));
         assertState(StateManning.class);
 
         // State game over:
@@ -220,7 +228,7 @@ public class StateTransitionTest extends CarcassonneTest {
         assertState(StateGameOver.class);
         assertThrows(IllegalStateException.class, () -> game.state().placeMeeple(null));
         assertState(StateGameOver.class);
-        assertDoesNotThrow(() -> game.state().placeTile(-1, -1));
+        assertDoesNotThrow(() -> game.state().placeTile(0, 0));
         assertState(StateGameOver.class);
         assertDoesNotThrow(() -> game.abort());
         assertState(StateGameOver.class);
