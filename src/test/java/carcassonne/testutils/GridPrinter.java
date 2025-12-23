@@ -52,7 +52,7 @@ public final class GridPrinter {
             builder.append(printGridLine(grid, y, List.of(WEST, CENTER, EAST), true));
             builder.append(printGridLine(grid, y, List.of(SOUTH_WEST, SOUTH, SOUTH_EAST), false));
 
-            builder.append(" ".repeat(HEADER_INDENT) + INTERSECTION);
+            builder.append(" ".repeat(HEADER_INDENT)).append(INTERSECTION);
             builder.append(ROW_SEPARATOR.repeat(grid.getWidth()));
             builder.append(System.lineSeparator());
         }
@@ -82,7 +82,7 @@ public final class GridPrinter {
         }
         builder.append(System.lineSeparator());
 
-        builder.append(" ".repeat(HEADER_INDENT) + INTERSECTION);
+        builder.append(" ".repeat(HEADER_INDENT)).append(INTERSECTION);
         builder.append(ROW_SEPARATOR.repeat(width));
         builder.append(System.lineSeparator());
         return builder.toString();
@@ -93,7 +93,7 @@ public final class GridPrinter {
         if (showRowNumber) {
             builder.append(ROW_LABEL.formatted(y));
         } else {
-            builder.append(" ".repeat(HEADER_INDENT) + VERTICAL_BORDER);
+            builder.append(" ".repeat(HEADER_INDENT)).append(VERTICAL_BORDER);
         }
 
         for (int x = 0; x < grid.getWidth(); x++) {
