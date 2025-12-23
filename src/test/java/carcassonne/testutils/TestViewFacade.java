@@ -22,7 +22,7 @@ public class TestViewFacade extends ViewFacade {
 
     private Tile tile;
 
-    private boolean logUiCalls;
+    private final boolean logUiCalls;
 
     /**
      * Creates the facade using test stubs.

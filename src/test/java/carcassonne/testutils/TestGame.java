@@ -64,6 +64,8 @@ public class TestGame {
 
     public void skipTilePlacement() {
         assertEquals(StatePlacing.class, state().getClass());
+        Tile tile = getRound().getActivePlayer().getHandOfTiles().iterator().next();
+        views.setNextTile(tile);
         state().skip();
     }
 
@@ -132,9 +134,9 @@ public class TestGame {
     private void placeTile(Tile tile, int x, int y) {
         views.setNextTile(tile);
         boolean placeable = getGrid().getSpot(x, y).isPlaceable(tile, settings.isAllowingEnclaves());
-        assertTrue(placeable, "Cannot place tile " + tile.getType() + " at position (" + x + ", " + y + ").");
+        assertTrue(placeable, "Cannot place tile " + tile.getType() + " at position (" + x + ", " + y + ")." + GridPrinter.printTile(tile));
         state().placeTile(x, y);
-        assertTrue(getGrid().getSpot(x, y).isOccupied());
+        assertTrue(getGrid().getSpot(x, y).isOccupied(), "Could not place " + tile.getType() + " at position (" + x + ", " + y + ").");
     }
 
     public Class<? extends AbstractGameState> getState() {
@@ -169,7 +171,11 @@ public class TestGame {
         return stateMachine.getGrid();
     }
 
-    private AbstractGameState state() {
+    /**
+     * Returns direct access to the current state.
+     * @return the current state, which is only valid until the next state change.
+     */
+    public AbstractGameState state() {
         return stateMachine.getCurrentState();
     }
 
