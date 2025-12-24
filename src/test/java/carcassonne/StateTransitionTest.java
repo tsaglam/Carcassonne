@@ -22,7 +22,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Idle to Placing via start new round")
-    void idleToPlacingTest() {
+    void testIdleToPlacing() {
         assertState(StateIdle.class);
         game.newRound(2, 3, 3);
         assertState(StatePlacing.class);
@@ -30,7 +30,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Placing to Manning via place tile")
-    void placingToManningTest() {
+    void testPlacingToManning() {
         game.newRound(2, 3, 3);
         assertState(StatePlacing.class);
         game.placeTile(TileType.Road, TILTED_RIGHT, 1, 2);
@@ -39,7 +39,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Manning to Placing via place meeple")
-    void manningToPlacingViaMeepleTest() {
+    void testManningToPlacingViaMeeple() {
         game.newRound(2, 3, 3);
         game.placeTile(TileType.Road, TILTED_RIGHT, 2, 1);
         assertState(StateManning.class);
@@ -49,7 +49,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Manning to Placing via skip meeple")
-    void manningToPlacingViaSkipTest() {
+    void testManningToPlacingViaSkip() {
         game.newRound(2, 3, 3);
         game.placeTile(TileType.Road, TILTED_RIGHT, 1, 2);
         assertState(StateManning.class);
@@ -59,7 +59,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Placing to Placing via skip tile")
-    void placingToPlacingViaSkipTest() {
+    void testPlacingToPlacingViaSkip() {
         game.newRound(2, 3, 3);
         assertState(StatePlacing.class);
         game.skipTilePlacement();
@@ -68,7 +68,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Placing to GameOver via abort round")
-    void placingToGameOverViaAbortTest() {
+    void testPlacingToGameOverViaAbort() {
         game.newRound(2, 3, 3);
         assertState(StatePlacing.class);
         game.abort();
@@ -79,7 +79,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Manning to GameOver via abort round")
-    void manningToGameOverViaAbortTest() {
+    void testManningToGameOverViaAbort() {
         game.newRound(2, 3, 3);
         game.placeTile(TileType.Road, TILTED_RIGHT, 1, 2);
         assertState(StateManning.class);
@@ -91,7 +91,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Manning to GameOver via round over")
-    void manningToGameOverViaRoundOverTest() {
+    void testManningToGameOverViaRoundOver() {
         game.newRound(2, 3, 3);
         game.placeTile(TileType.Monastery, 1, 2);
         assertState(StateManning.class);
@@ -101,7 +101,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("GameOver to Idle via exit statistics")
-    void gameOverToIdleTest() {
+    void testGameOverToIdle() {
         game.newRound(2, 3, 3);
         game.abort();
         assertState(StateGameOver.class);
@@ -111,7 +111,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("GameOver to Placing via start new round")
-    void gameOverToPlacingTest() {
+    void testGameOverToPlacing() {
         game.newRound(2, 3, 3);
         game.abort();
         assertState(StateGameOver.class);
@@ -121,7 +121,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Multiple transitions: complete game flow")
-    void completeGameFlowTest() {
+    void testCompleteGameFlow() {
         assertState(StateIdle.class);
         game.newRound(2, 3, 3);
         assertState(StatePlacing.class);
@@ -141,7 +141,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Round completion with castle")
-    void roundCompletionWithCastleTest() {
+    void testRoundCompletionWithCastle() {
         game.newRound(2, 1, 3);
         game.placeTileWithoutMeeple(TileType.Monastery, 0, 2);
         assertState(StatePlacing.class);
@@ -151,7 +151,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Placing self-loop via invalid skip")
-    void placingSelfLoopTest() {
+    void testPlacingSelfLoop() {
         game.newRound(2, 3, 3);
         assertState(StatePlacing.class);
         game.skipTilePlacement();
@@ -162,7 +162,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Abort from different states")
-    void abortFromDifferentStatesTest() {
+    void testAbortFromDifferentStates() {
         // From Placing
         game.newRound(2, 3, 3);
         assertState(StatePlacing.class);
@@ -180,7 +180,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Multiple rounds in sequence")
-    void multipleRoundsTest() {
+    void testMultipleRounds() {
         for (int i = 0; i < 3; i++) {
             game.newRound(2, 3, 3);
             assertState(StatePlacing.class);
@@ -195,7 +195,7 @@ public class StateTransitionTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Invalid transitions: exceptions and no-ops")
-    void invalidTransitionsTest() {
+    void testInvalidTransitions() {
         // State idle:
         assertState(StateIdle.class);
         assertThrows(IllegalStateException.class, () -> game.state().skip());
