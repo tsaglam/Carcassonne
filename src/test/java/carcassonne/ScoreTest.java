@@ -20,7 +20,7 @@ public class ScoreTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Completion of a monastery")
-    void monasteryScoringTest() {
+    void testMonasteryScoring() {
         game.newRound(2, 5, 4);
 
         game.placeTileAndMeeple(TileType.Monastery, 2, 2, GridDirection.CENTER);
@@ -38,7 +38,7 @@ public class ScoreTest extends CarcassonneTest {
 
     @Test
     @DisplayName("Completion of starting tile castle")
-    void basicGameplayTest() {
+    void testCastleCompletion() {
         // Setup:
         game.newRound(2, 3, 3);
         assertState(StatePlacing.class);
@@ -56,7 +56,7 @@ public class ScoreTest extends CarcassonneTest {
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
     @DisplayName("2 players complete castle together")
-    void sharedCastleScoringParameterized(boolean splitScore) {
+    void testSharedCastleScoring(boolean splitScore) {
         int expectedScore = splitScore ? 3 : 6;
         settings.setSplitPatternScore(splitScore);
 
