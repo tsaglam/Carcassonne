@@ -76,9 +76,10 @@ public class ViewFacade {
     }
 
     /**
-     * Reroutes an unspecified UI call via the view facade. The job is NOT scheduled with the {@link EventQueue}. It is
-     * recommended for calls coming from the game logic to separate the game logic from the UI.
-     * @param job is the unspecified UI call, for example to {@link GameMessage}.
+     * Executes a UI call immediately on the calling thread without scheduling it with the {@link EventQueue}. This avoids
+     * EventQueue overhead but means the job runs synchronously and not on the EDT. Use this for simple updates from game
+     * logic; prefer other onXView methods for thread-safe UI operations.
+     * @param job the unspecified UI call, for example to {@link GameMessage}
      */
     public void reroute(Runnable job) {
         job.run();
