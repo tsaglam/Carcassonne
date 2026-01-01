@@ -36,12 +36,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar \
+            mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar -Pcoverage \
               -Dsonar.projectKey=tsaglam_Carcassonne \
               -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
               -Dsonar.pullrequest.branch=${{ github.head_ref }} \
               -Dsonar.pullrequest.base=${{ github.base_ref }}
           else
-            mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage \
               -Dsonar.projectKey=tsaglam_Carcassonne
           fi
