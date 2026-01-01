@@ -35,7 +35,7 @@ public final class Carcassonne {
     }
 
     /**
-     * Tries to set a custom look and feel if the operating system is not Mac OS. This ensures a at least somewhat decent
+     * Tries to set a custom look and feel if the operating system is not macOS. This ensures an at least somewhat decent
      * user interface on Windows operating systems.
      */
     private static void setLookAndFeel() {

@@ -31,15 +31,15 @@ public class ViewFacade {
      * Creates a view container that encapsulates the access to the three main user interfaces. Can be seen as view facade.
      * @param mainView is the main view showing the grid and the menu bar.
      * @param tileView is the view used for previewing and rotating tiles.
-     * @param meepleView is the view used to place meeples.
+     * @param placementView is the view used to place meeples.
      */
-    public ViewFacade(MainView mainView, TileView tileView, MeepleView placmementView) {
-        if (mainView == null || tileView == null || placmementView == null) {
+    public ViewFacade(MainView mainView, TileView tileView, MeepleView placementView) {
+        if (mainView == null || tileView == null || placementView == null) {
             throw new IllegalArgumentException("View container can only contain non-null views!");
         }
         this.mainView = mainView;
         this.tileView = tileView;
-        meepleView = placmementView;
+        meepleView = placementView;
         scoreboard = mainView.getScoreboard();
     }
 

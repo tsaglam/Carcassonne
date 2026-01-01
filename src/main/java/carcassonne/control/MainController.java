@@ -67,7 +67,7 @@ public class MainController implements ControllerFacade {
     }
 
     /**
-     * Signals that a abort request was scheduled. This request wait too long during AI vs. AI gameplay, thus this method
+     * Signals that an abort request was scheduled. This request wait too long during AI vs. AI gameplay, thus this method
      * requests the state machine to abort on the next state change. This method should not be queued on the state machine
      * thread.
      */
@@ -76,7 +76,7 @@ public class MainController implements ControllerFacade {
     }
 
     /**
-     * Method for the view to call if a user mans a tile with a meeple.
+     * Method for the view to call if a user places a meeple on a tile on the grid.
      * @param position is the position the user wants to place on.
      */
     @Override
@@ -120,7 +120,7 @@ public class MainController implements ControllerFacade {
     /**
      * Creates the views and waits on the completion of the creation.
      */
-    private final void createUserInterface() {
+    private void createUserInterface() {
         try {
             EventQueue.invokeAndWait(() -> {
                 ControllerAdapter adapter = new ControllerAdapter(this);

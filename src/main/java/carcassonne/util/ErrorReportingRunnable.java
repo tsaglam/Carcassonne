@@ -4,7 +4,7 @@ import carcassonne.view.util.GameMessage;
 
 /**
  * Runnable that does not swallow any {@link Throwable} when executed in an executor service. Errors and exceptions are
- * reported as an game message.
+ * reported as a game message.
  * @see GameMessage
  * @author Timur Saglam
  */

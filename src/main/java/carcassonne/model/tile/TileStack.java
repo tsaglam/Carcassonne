@@ -22,7 +22,7 @@ public class TileStack {
     /**
      * Basic constructor, creates the tile stack.
      * @param distribution is the tile distribution according which the stack is filled.
-     * @param multiplier is the tile stack multiplier, meaning how often the distribution is added to the stack.
+     * @param multiplicator is the tile stack multiplier, meaning how often the distribution is added to the stack.
      */
     public TileStack(TileDistribution distribution, int multiplicator) {
         this(distribution, multiplicator, null);
@@ -61,7 +61,7 @@ public class TileStack {
             return returnedTiles.poll();
         }
 
-        return tiles.remove(0);
+        return tiles.removeFirst();
     }
 
     /**

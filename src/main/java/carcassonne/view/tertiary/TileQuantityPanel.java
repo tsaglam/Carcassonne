@@ -17,7 +17,7 @@ import carcassonne.model.tile.TileType;
 import carcassonne.view.util.MouseClickListener;
 
 /**
- * Panel that depicts the quantity of a tile type. Shows a image of the tile and a text field for the quantity.
+ * Panel that depicts the quantity of a tile type. Shows an image of the tile and a text field for the quantity.
  * @author Timur Saglam
  */
 public class TileQuantityPanel extends JPanel {

@@ -84,7 +84,7 @@ public class MeepleLayer extends JPanel {
      */
     public void changeZoomLevel(int zoomLevel) {
         this.zoomLevel = zoomLevel;
-        placeholders.stream().forEach(it -> it.changeShape(zoomLevel));
+        placeholders.forEach(it -> it.changeShape(zoomLevel));
         meeplePanels.forEach(it -> it.setSize(zoomLevel));
     }
 
@@ -117,14 +117,14 @@ public class MeepleLayer extends JPanel {
      * Refreshes all meeple labels in this layer. This updates the images to color changes.
      */
     public void refreshLayer() {
-        meeplePanels.stream().forEach(MeepleDepictionPanel::refreshAll);
+        meeplePanels.forEach(MeepleDepictionPanel::refreshAll);
     }
 
     /**
      * Resets all meeples in the layer.
      */
     public void resetLayer() {
-        meeplePanels.stream().forEach(MeepleDepictionPanel::resetAll);
+        meeplePanels.forEach(MeepleDepictionPanel::resetAll);
     }
 
     /**

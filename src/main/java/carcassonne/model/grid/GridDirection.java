@@ -50,7 +50,7 @@ public enum GridDirection {
     }
 
     /**
-     * Checks whether the this grid direction is directly to the left of another grid direction.
+     * Checks whether this grid direction is directly to the left of another grid direction.
      * @param other is the other grid direction.
      * @return true if it is.
      */
@@ -59,7 +59,7 @@ public enum GridDirection {
     }
 
     /**
-     * Checks whether the this grid direction is directly to the right of another grid direction.
+     * Checks whether this grid direction is directly to the right of another grid direction.
      * @param other is the other grid direction.
      * @return true if it is.
      */
@@ -134,7 +134,7 @@ public enum GridDirection {
     }
 
     /**
-     * Generates a list of the GridDirections for a indirect neighbor on the grid.
+     * Generates a list of the GridDirections for an indirect neighbor on the grid.
      * @return a list of NORTH_EAST, SOUTH_EAST, SOUTH_WEST and NORTH_WEST.
      */
     public static List<GridDirection> indirectNeighbors() {
@@ -166,8 +166,8 @@ public enum GridDirection {
     }
 
     /**
-     * Generates a two dimensional list of the GridDirections for their orientation on a tile.
-     * @return a 2D list of of NORTH_WEST, WEST, SOUTH_WEST, NORTH, CENTER, SOUTH, NORTH_EAST, EAST and SOUTH_EAST.
+     * Generates a two-dimensional list of the GridDirections for their orientation on a tile.
+     * @return a 2D list of NORTH_WEST, WEST, SOUTH_WEST, NORTH, CENTER, SOUTH, NORTH_EAST, EAST and SOUTH_EAST.
      */
     public static GridDirection[][] values2D() {
         return new GridDirection[][] {{NORTH_WEST, WEST, SOUTH_WEST}, {NORTH, CENTER, SOUTH}, {NORTH_EAST, EAST, SOUTH_EAST}};

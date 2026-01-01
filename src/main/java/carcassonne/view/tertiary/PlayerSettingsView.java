@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import carcassonne.model.terrain.TerrainType;
-import carcassonne.model.tile.TileDistribution;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.MinkowskiDistance;
 import carcassonne.view.NotifiableView;
@@ -77,7 +76,6 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
 
     /**
      * Creates the UI and shows it.
-     * @param distribution is the {@link TileDistribution} to show in the UI.
      */
     public PlayerSettingsView(GameSettings settings, Scoreboard scoreboard) {
         this.settings = settings;
@@ -171,7 +169,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         closeButton.setPreferredSize(new Dimension(CLOSE_BUTTON_WIDTH, closeButton.getPreferredSize().height));
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
-        buttonPanel.add(closeButton); // Weirdly, the button needs to be in a panel or it will not be centered.
+        buttonPanel.add(closeButton); // Weirdly, the button needs to be in a panel, or it will not be centered.
         return buttonPanel;
     }
 
@@ -251,7 +249,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
     }
 
     private void createPlayerNumberButton(int numberOfPlayers, JPanel panel, ButtonGroup group) {
-        JRadioButton button = new JRadioButton(Integer.toString(numberOfPlayers) + SPACE + PLAYERS);
+        JRadioButton button = new JRadioButton(numberOfPlayers + SPACE + PLAYERS);
         button.setSelected(settings.getNumberOfPlayers() == numberOfPlayers);
         button.addMouseListener((MouseClickListener) event -> settings.setNumberOfPlayers(numberOfPlayers));
         group.add(button);

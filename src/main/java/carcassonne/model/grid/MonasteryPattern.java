@@ -17,7 +17,6 @@ public class MonasteryPattern extends GridPattern {
     /**
      * Simple constructor that creates the pattern.
      * @param spot is the starting spot of the pattern, containing a monastery tile.
-     * @param grid is the grid the pattern is created from.
      */
     public MonasteryPattern(GridSpot spot) {
         super(MONASTERY, 1);
@@ -31,7 +30,7 @@ public class MonasteryPattern extends GridPattern {
         List<GridSpot> neighbors = monasterySpot.getGrid().getNeighbors(monasterySpot, false, GridDirection.neighbors());
         add(monasterySpot); // add monastery
         monasterySpot.setTag(CENTER, this);
-        neighbors.forEach(it -> containedSpots.add(it));
+        containedSpots.addAll(neighbors);
         if (neighbors.size() == GridDirection.neighbors().size()) {
             complete = true;
         }

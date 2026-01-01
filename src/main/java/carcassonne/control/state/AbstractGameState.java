@@ -54,7 +54,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     public abstract void newRound(int playerCount);
 
     /**
-     * Method for the view to call if a user mans a tile with a Meeple.
+     * Method for the view to call if a user places a meeple on a tle.
      * @param position is the placement position.
      */
     public abstract void placeMeeple(GridDirection position);

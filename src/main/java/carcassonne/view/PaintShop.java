@@ -30,7 +30,7 @@ public final class PaintShop {
     private static final BufferedImage emblemImage = ImageLoadingUtil.EMBLEM.createBufferedImage();
     private static final BufferedImage highlightBaseImage = ImageLoadingUtil.NULL_TILE.createBufferedImage();
     private static final BufferedImage highlightImage = ImageLoadingUtil.HIGHLIGHT.createBufferedImage();
-    private static final Map<String, ImageIcon> chachedMeepleImages = new HashMap<>();
+    private static final Map<String, ImageIcon> cachedMeepleImages = new HashMap<>();
     private static final Map<TerrainType, BufferedImage> templateMap = buildImageMap(true);
     private static final Map<TerrainType, BufferedImage> imageMap = buildImageMap(false);
     private static final String KEY_SEPARATOR = "|";
@@ -62,7 +62,7 @@ public final class PaintShop {
      * Clears the meeple image cache. Should be cleared when player colors change.
      */
     public static void clearCachedImages() {
-        chachedMeepleImages.clear();
+        cachedMeepleImages.clear();
     }
 
     /**
@@ -85,7 +85,7 @@ public final class PaintShop {
      * @param player is the player whose color is used.
      * @param size is the desired tile size.
      * @param fastScaling determines the rendering quality.
-     * @return the colored tile image wrapped in a image icon.
+     * @return the colored tile image wrapped in an image icon.
      */
     public static ImageIcon getColoredTile(Tile tile, Player player, int size, boolean fastScaling) {
         Image baseImage = ConcurrentTileImageScaler.getScaledImage(tile, GameSettings.TILE_RESOLUTION, fastScaling);
@@ -106,12 +106,12 @@ public final class PaintShop {
      */
     public static ImageIcon getColoredMeeple(TerrainType meepleType, Color color, int size) {
         String key = createKey(color, meepleType, size);
-        if (chachedMeepleImages.containsKey(key)) {
-            return chachedMeepleImages.get(key);
+        if (cachedMeepleImages.containsKey(key)) {
+            return cachedMeepleImages.get(key);
         }
         Image paintedMeeple = paintMeeple(meepleType, color.getRGB(), size * HIGH_DPI_FACTOR);
         ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(paintedMeeple));
-        chachedMeepleImages.put(key, icon);
+        cachedMeepleImages.put(key, icon);
         return icon;
     }
 
@@ -134,12 +134,12 @@ public final class PaintShop {
      */
     public static ImageIcon getPreviewMeeple(TerrainType meepleType, int size) {
         String key = createKey(meepleType, size);
-        if (chachedMeepleImages.containsKey(key)) {
-            return chachedMeepleImages.get(key);
+        if (cachedMeepleImages.containsKey(key)) {
+            return cachedMeepleImages.get(key);
         }
         Image preview = imageMap.get(meepleType).getScaledInstance(size * HIGH_DPI_FACTOR, size * HIGH_DPI_FACTOR, Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(preview));
-        chachedMeepleImages.put(key, icon);
+        cachedMeepleImages.put(key, icon);
         return icon;
     }
 
@@ -166,7 +166,7 @@ public final class PaintShop {
     /**
      * Converts a given Image into a BufferedImage. This can be costly and should only be done when really required.
      * @param image is the {@link Image} to be converted.
-     * @return a {@link BufferedImage}, either the casted original image or a copy.
+     * @return a {@link BufferedImage}, either the cast original image or a copy.
      */
     private static BufferedImage bufferedImageOf(Image image) {
         if (image instanceof BufferedImage) {
@@ -212,7 +212,7 @@ public final class PaintShop {
         return meepleType + KEY_SEPARATOR + size + KEY_SEPARATOR;
     }
 
-    // copies a image to avoid side effects.
+    // copies an image to avoid side effects.
     private static BufferedImage deepCopy(BufferedImage image) {
         ColorModel model = image.getColorModel();
         boolean isAlphaPremultiplied = model.isAlphaPremultiplied();

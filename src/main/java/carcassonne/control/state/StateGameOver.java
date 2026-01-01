@@ -28,17 +28,11 @@ public class StateGameOver extends AbstractGameState {
         super(stateMachine, settings, views, playerAI);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#abortGame()
-     */
     @Override
     public void abortGame() {
         // Do nothing, round is already aborted.
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#newRound()
-     */
     @Override
     public void newRound(int playerCount) {
         exit();
@@ -46,25 +40,16 @@ public class StateGameOver extends AbstractGameState {
         startNewRound(playerCount);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#placeMeeple()
-     */
     @Override
     public void placeMeeple(GridDirection position) {
         throw new IllegalStateException("Placing meeples in StateGameOver is not allowed.");
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#placeTile()
-     */
     @Override
     public void placeTile(int x, int y) {
         // do nothing.
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#skip()
-     */
     @Override
     public void skip() {
         views.onScoreboard(Scoreboard::disable);
@@ -72,9 +57,6 @@ public class StateGameOver extends AbstractGameState {
         changeState(StateIdle.class);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#entry()
-     */
     @Override
     protected void entry() {
         System.out.println("FINAL PATTERNS:"); // TODO (LOW) [PRINT] remove debug output
@@ -89,9 +71,6 @@ public class StateGameOver extends AbstractGameState {
         views.showGameStatistics(round);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#exit()
-     */
     @Override
     protected void exit() {
         views.closeGameStatistics();

@@ -18,7 +18,7 @@ public class ControllerAdapter implements ControllerFacade {
     private final ExecutorService service;
 
     /**
-     * Creates the controller adapter from a original controller.
+     * Creates the controller adapter from an original controller.
      * @param controller is the original to which all calls are delegated to.
      */
     ControllerAdapter(MainController controller) {

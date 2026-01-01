@@ -33,34 +33,21 @@ public class StatePlacing extends AbstractGameState {
         super(stateMachine, settings, views, playerAI);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#abortGame()
-     */
     @Override
     public void abortGame() {
         changeState(StateGameOver.class);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#newRound()
-     */
     @Override
     public void newRound(int playerCount) {
         views.reroute(() -> GameMessage.showWarning("Abort the current game before starting a new one."));
-
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#placeMeeple()
-     */
     @Override
     public void placeMeeple(GridDirection position) {
         throw new IllegalStateException("Placing meeples in StatePlacing is not allowed.");
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#placeTile()
-     */
     @Override
     public void placeTile(int x, int y) {
         if (!round.getActivePlayer().isComputerControlled()) {
@@ -69,9 +56,6 @@ public class StatePlacing extends AbstractGameState {
         }
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#skip()
-     */
     @Override
     public void skip() {
         if (!round.getActivePlayer().isComputerControlled()) {
@@ -141,9 +125,6 @@ public class StatePlacing extends AbstractGameState {
         }
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#entry()
-     */
     @Override
     protected void entry() {
         Player player = round.getActivePlayer();
@@ -161,9 +142,6 @@ public class StatePlacing extends AbstractGameState {
         }
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#exit()
-     */
     @Override
     protected void exit() {
         views.onTileView(it -> it.setVisible(false));

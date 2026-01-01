@@ -26,7 +26,6 @@ public class FieldsPattern extends GridPattern {
      * Creates a new field pattern.
      * @param startingSpot is the {@link GridSpot} where the pattern starts.
      * @param startingDirection is the position on the spot where the pattern starts.
-     * @param grid is the correlating {@link Grid}.
      */
     public FieldsPattern(GridSpot startingSpot, GridDirection startingDirection) {
         super(FIELDS, POINTS_PER_CASTLE);
@@ -45,7 +44,7 @@ public class FieldsPattern extends GridPattern {
         return adjacentCastles.size() * scoreMultiplier;
     }
 
-    // adds a grid direction to a list if it has not castle terrain at that direction on the tile.
+    // adds a grid direction to a list if it has no castle terrain at that direction on the tile.
     private void addIfNotCastle(List<GridDirection> results, Tile tile, GridDirection next) {
         if (tile.getTerrain(next) != CASTLE) {
             results.add(next);
@@ -54,7 +53,7 @@ public class FieldsPattern extends GridPattern {
 
     private void buildPattern(GridSpot spot, GridDirection startingPoint) {
         List<GridDirection> fieldPositions = getFieldPositions(spot.getTile(), startingPoint);
-        for (GridDirection position : fieldPositions) { // for every positions of this field on this tile
+        for (GridDirection position : fieldPositions) { // for every position of this field on this tile
             countAdjacentCastles(spot, position); // count castles to determine pattern size
             spot.setTag(position, this); // mark as visited
         }
@@ -116,7 +115,7 @@ public class FieldsPattern extends GridPattern {
             if (position.isSmallerOrEquals(WEST)) {
                 results.add(position); // for simple directions just return themselves.
             } else if (position.isSmallerOrEquals(NORTH_WEST)) {
-                addIfNotCastle(results, tile, position.nextDirectionTo(LEFT)); // for edges it depends whether the neighboring
+                addIfNotCastle(results, tile, position.nextDirectionTo(LEFT)); // for edges, it depends on whether the neighboring
                 addIfNotCastle(results, tile, position.nextDirectionTo(RIGHT)); // directions have castle terrain or not
             }
         }

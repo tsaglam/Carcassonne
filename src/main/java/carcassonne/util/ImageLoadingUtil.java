@@ -93,7 +93,6 @@ public enum ImageLoadingUtil {
     /**
      * Creates a high-DPI image from a high-res image.
      * @param image is the high resolution image used as the version with the highest resolution.
-     * @param transparency is the {@link Transparency} of the image.
      * @return the image, which has half of the width and height of the original file.
      */
     public static Image createHighDpiImage(Image image) {
@@ -123,7 +122,7 @@ public enum ImageLoadingUtil {
     /**
      * Converts an image to a compatible image.
      * @param image is the image to convert.
-     * @param is the transparency of the image, can be received from buffered images with
+     * @param transparency the transparency of the image, can be received from buffered images with
      * {@link Transparency#getTransparency()}.
      * @return the compatible image.
      * @see GraphicsConfiguration#createCompatibleImage(int, int, int)
@@ -146,7 +145,7 @@ public enum ImageLoadingUtil {
             return ImageIO.read(PaintShop.class.getClassLoader().getResourceAsStream(path));
         } catch (IOException exception) {
             exception.printStackTrace();
-            GameMessage.showError("ERROR: Could not load image loacted at " + path);
+            GameMessage.showError("ERROR: Could not load image located at " + path);
             return new BufferedImage(PLACEHOLDER_IMAGE_SIZE, PLACEHOLDER_IMAGE_SIZE, BufferedImage.TYPE_INT_ARGB);
         }
     }

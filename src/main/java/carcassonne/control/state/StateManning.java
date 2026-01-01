@@ -32,25 +32,16 @@ public class StateManning extends AbstractGameState {
         noMeeplesNotification = new boolean[GameSettings.MAXIMAL_PLAYERS]; // stores whether a player was already notified about a lack of meeples
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#abortGame()
-     */
     @Override
     public void abortGame() {
         changeState(StateGameOver.class);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#newRound()
-     */
     @Override
     public void newRound(int playerCount) {
         views.reroute(() -> GameMessage.showWarning("Abort the current game before starting a new one."));
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#placeMeeple()
-     */
     @Override
     public void placeMeeple(GridDirection position) {
         if (!round.getActivePlayer().isComputerControlled()) {
@@ -60,17 +51,11 @@ public class StateManning extends AbstractGameState {
         }
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#placeTile()
-     */
     @Override
     public void placeTile(int x, int y) {
         // do nothing.
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#skip()
-     */
     @Override
     public void skip() {
         if (!round.getActivePlayer().isComputerControlled()) {
@@ -138,9 +123,6 @@ public class StateManning extends AbstractGameState {
         }
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#entry()
-     */
     @Override
     protected void entry() {
         Player player = round.getActivePlayer();
@@ -164,9 +146,6 @@ public class StateManning extends AbstractGameState {
         }
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#exit()
-     */
     @Override
     protected void exit() {
         views.onMeepleView(it -> it.setVisible(false));
