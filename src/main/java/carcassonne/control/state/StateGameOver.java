@@ -85,7 +85,7 @@ public class StateGameOver extends AbstractGameState {
         updateScores();
         updateStackSize();
         views.onMainView(MainView::resetMenuState);
-        GameMessage.showMessage(GAME_OVER_MESSAGE + round.winningPlayers());
+        views.reroute(() -> GameMessage.showMessage(GAME_OVER_MESSAGE + round.winningPlayers()));
         views.showGameStatistics(round);
     }
 
