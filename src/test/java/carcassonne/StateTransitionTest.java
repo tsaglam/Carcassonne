@@ -92,11 +92,13 @@ public class StateTransitionTest extends CarcassonneTest {
     @Test
     @DisplayName("Manning to GameOver via round over")
     void testManningToGameOverViaRoundOver() {
-        game.newRound(2, 3, 3);
-        game.placeTile(TileType.Monastery, 1, 2);
+        game.newRound(2, 1, 2);
+        game.placeTile(TileType.Monastery, 0, 1);
         assertState(StateManning.class);
-        game.abort();
+        game.skipMeeplePlacement();
         assertState(StateGameOver.class);
+        game.skipPostGameStatistics();
+        assertState(StateIdle.class);
     }
 
     @Test
