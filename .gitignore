@@ -7,7 +7,12 @@ target/
 *.project
 *.classpath
 
+# IntelliJ
+/.idea/
+/qodana.yaml
+
 # Other
 *.checkstyle
 *.log
 *.DS_Store
+

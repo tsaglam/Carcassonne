@@ -45,7 +45,7 @@ public class StateManning extends AbstractGameState {
      */
     @Override
     public void newRound(int playerCount) {
-        GameMessage.showWarning("Abort the current game before starting a new one.");
+        views.reroute(() -> GameMessage.showWarning("Abort the current game before starting a new one."));
     }
 
     /**
@@ -87,7 +87,7 @@ public class StateManning extends AbstractGameState {
             processGridPatterns();
             startNextTurn();
         } else {
-            GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!");
+            views.reroute(() -> GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!"));
         }
     }
 
@@ -155,7 +155,8 @@ public class StateManning extends AbstractGameState {
             }
         } else {
             if (!noMeeplesNotification[player.getNumber()] && !player.isComputerControlled()) { // Only warn player once until he regains meeples
-                GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meepeles again.");
+                views.reroute(
+                        () -> GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meeples again."));
                 noMeeplesNotification[player.getNumber()] = true;
             }
             processGridPatterns();

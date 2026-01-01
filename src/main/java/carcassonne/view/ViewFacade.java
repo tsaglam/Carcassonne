@@ -39,8 +39,8 @@ public class ViewFacade {
         }
         this.mainView = mainView;
         this.tileView = tileView;
-        this.meepleView = placmementView;
-        this.scoreboard = mainView.getScoreboard();
+        meepleView = placmementView;
+        scoreboard = mainView.getScoreboard();
     }
 
     /**
@@ -73,6 +73,16 @@ public class ViewFacade {
      */
     public void onTileView(Consumer<TileView> job) {
         schedule(() -> job.accept(tileView));
+    }
+
+    /**
+     * Executes a UI call immediately on the calling thread without scheduling it with the {@link EventQueue}. This avoids
+     * EventQueue overhead but means the job runs synchronously and not on the EDT. Use this for simple updates from game
+     * logic; prefer other onXView methods for thread-safe UI operations.
+     * @param job the unspecified UI call, for example to {@link GameMessage}
+     */
+    public void reroute(Runnable job) {
+        job.run();
     }
 
     /**
