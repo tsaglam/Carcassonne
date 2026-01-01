@@ -59,8 +59,8 @@ public class Tile {
 
     /**
      * Getter for spot where the tile is placed
-     * @return the grid spot, or null if it not placed yet.
-     * @see isPlaced
+     * @return the grid spot, or null if it is not placed yet.
+     * @see Tile#isPlaced()
      */
     public GridSpot getGridSpot() {
         return gridSpot;
@@ -236,7 +236,7 @@ public class Tile {
 
     public void placeMeeple(Player player, GridDirection position, Meeple meeple, GameSettings settings) {
         if (this.meeple != null || !allowsPlacingMeeple(position, player, settings)) {
-            throw new IllegalArgumentException("Tile can not have already a meeple placed on it: " + toString());
+            throw new IllegalArgumentException("Tile can not have already a meeple placed on it: " + this);
         }
         this.meeple = meeple;
         meeple.setLocation(gridSpot);

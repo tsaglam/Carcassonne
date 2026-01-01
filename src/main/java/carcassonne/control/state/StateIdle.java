@@ -24,57 +24,36 @@ public class StateIdle extends AbstractGameState {
         super(stateMachine, settings, views, playerAI);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#abortGame()
-     */
     @Override
     public void abortGame() {
         views.reroute(() -> GameMessage.showMessage("There is currently no game running."));
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#newRound()
-     */
     @Override
     public void newRound(int playerCount) {
         startNewRound(playerCount);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#placeMeeple()
-     */
     @Override
     public void placeMeeple(GridDirection position) {
         throw new IllegalStateException("Placing meeples in StateIdle is not allowed.");
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#placeTile()
-     */
     @Override
     public void placeTile(int x, int y) {
         // do nothing.
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#skip()
-     */
     @Override
     public void skip() {
         throw new IllegalStateException("There is nothing to skip in StateIdle.");
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#entry()
-     */
     @Override
     protected void entry() {
         views.onMainView(MainView::resetGrid);
     }
 
-    /**
-     * @see carcassonne.control.state.AbstractGameState#exit()
-     */
     @Override
     protected void exit() {
         // No exit functions.

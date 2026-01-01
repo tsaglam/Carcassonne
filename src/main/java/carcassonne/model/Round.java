@@ -107,8 +107,8 @@ public class Round {
     }
 
     /**
-     * creates the players objects and sets the first players as active players.
-     * @param playerCount is the number of players in the range of [1, <code>GameOptions.MAXIMAL_PLAYERS]</code>.
+     * creates the players objects and sets the first players as active players. The maximum is limited by
+     * GameOptions.MAXIMAL_PLAYERS.
      */
     private void createPlayers(GameSettings settings) {
         if (playerCount <= 1 || playerCount > GameSettings.MAXIMAL_PLAYERS) {

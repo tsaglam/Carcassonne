@@ -124,7 +124,7 @@ public class MainView extends JFrame implements NotifiableView {
     }
 
     /**
-     * Shows the UI and centers the scrollpane view.
+     * Shows the UI and centers the scroll pane view.
      */
     public void showUI() {
         setVisible(true);
@@ -158,7 +158,6 @@ public class MainView extends JFrame implements NotifiableView {
     /**
      * Zooms in if the maximum zoom level has not been reached.
      * @param mode determines the zoom mode, which affects image quality and performance.
-     * @param updateHightlights determines if the highlight tiles are also scaled.
      */
     public synchronized void zoomIn(ZoomMode mode) {
         if (zoomLevel < MAX_ZOOM_LEVEL) {
@@ -170,7 +169,7 @@ public class MainView extends JFrame implements NotifiableView {
 
     /**
      * Zooms out if the minimum zoom level has not been reached.
-     * @param updateHightlights determines if the highlight tiles are also scaled.
+     * @param mode determines the zoom mode, which affects image quality and performance.
      */
     public synchronized void zoomOut(ZoomMode mode) {
         if (zoomLevel > MIN_ZOOM_LEVEL) {
@@ -210,12 +209,12 @@ public class MainView extends JFrame implements NotifiableView {
     }
 
     /**
-     * Notifies the the main view about a (new) current player. This allows the UI to adapt color schemes to the player.
+     * Notifies the main view about a (new) current player. This allows the UI to adapt color schemes to the player.
      * @param currentPlayer is the current {@link Player}.
      */
     public void setCurrentPlayer(Player currentPlayer) {
         if (this.currentPlayer == null) {
-            scrollPane.validateAndCenter(); // ensures centered view on game start for heterogenous multi-monitor setups
+            scrollPane.validateAndCenter(); // ensures centered view on game start for heterogeneous multi-monitor setups
         }
         this.currentPlayer = currentPlayer;
         ImageIcon newHighlight = PaintShop.getColoredHighlight(currentPlayer, zoomLevel, false);
@@ -245,8 +244,6 @@ public class MainView extends JFrame implements NotifiableView {
 
     /**
      * Highlights a position on the grid to indicate that an AI player recently placed the tile.
-     * @param x is the x coordinate.
-     * @param y is the y coordinate.
      */
     public void resetPlacementHighlights() {
         tileLayer.resetPlacementHighlights();
@@ -313,7 +310,7 @@ public class MainView extends JFrame implements NotifiableView {
         setJMenuBar(menuBar);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        scrollPane = LookAndFeelUtil.createModifiedScrollpane();
+        scrollPane = LookAndFeelUtil.createModifiedScrollPane();
         scrollPane.addLayers(meepleLayer, tileLayer);
         scrollPane.addZoomListener(() -> zoomIn(FAST), () -> zoomOut(FAST));
         add(scrollPane, BorderLayout.CENTER);

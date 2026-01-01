@@ -248,7 +248,6 @@ public class GridSpot {
 
     /**
      * Method determines if tile recently was tagged by grid pattern checks on a specific position or not.
-     * @param tilePosition is the specific position.
      * @return true if it was tagged.
      */
     private Boolean isTagged(GridDirection direction) {

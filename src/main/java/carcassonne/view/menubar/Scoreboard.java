@@ -60,7 +60,7 @@ public class Scoreboard implements NotifiableView {
 
     /**
      * Grants access to the labels themselves.
-     * @return the array of labels.
+     * @return the list of labels.
      */
     public List<JLabel> getLabels() {
         return allLabels;
@@ -97,7 +97,7 @@ public class Scoreboard implements NotifiableView {
     }
 
     /**
-     * Grants access to a specific mouse listener of one players settings.
+     * Grants access to a specific mouse listener of one of the players settings.
      * @param playerNumber specifies the player.
      * @return the correlating mouse listener.
      */

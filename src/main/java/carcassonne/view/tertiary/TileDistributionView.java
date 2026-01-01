@@ -47,7 +47,7 @@ public class TileDistributionView extends JDialog {
 
     /**
      * Creates the UI and shows it.
-     * @param distribution is the {@link TileDistribution} to show in the UI.
+     * @param settings are the game settings.
      */
     public TileDistributionView(GameSettings settings) {
         this.settings = settings;
@@ -76,7 +76,7 @@ public class TileDistributionView extends JDialog {
      */
     public void updateStackSizePreview() {
         if (sizeLabel != null) {
-            Integer size = calculateStackSize(stackSizeMultiplier);
+            int size = calculateStackSize(stackSizeMultiplier);
             sizeLabel.setText(BRACKET + size + STACK_SIZE);
             validate();
         }
@@ -150,12 +150,10 @@ public class TileDistributionView extends JDialog {
 
     private List<JButton> createButtons() {
         JButton shuffleButton = new JButton(SHUFFLE);
-        shuffleButton.addMouseListener((MouseClickListener) event -> {
-            ThreadingUtil.runAndCallback(() -> {
-                applyChangesToDistribution();
-                distribution.shuffle();
-            }, this::updateFromDistribution);
-        });
+        shuffleButton.addMouseListener((MouseClickListener) event -> ThreadingUtil.runAndCallback(() -> {
+            applyChangesToDistribution();
+            distribution.shuffle();
+        }, this::updateFromDistribution));
         JButton resetButton = new JButton(RESET);
         resetButton.addMouseListener((MouseClickListener) event -> ThreadingUtil.runAndCallback(distribution::reset, this::updateFromDistribution));
         JButton acceptButton = new JButton(ACCEPT);

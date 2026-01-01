@@ -12,7 +12,7 @@ import carcassonne.model.terrain.TerrainType;
 
 /**
  * A pattern of connected terrain on tiles of the grid. A grid pattern contains information about the tiles of the
- * pattern and the players involved in the pattern. Also it counts the amount of meeples per player on the tiles of the
+ * pattern and the players involved in the pattern. Also, it counts the amount of meeples per player on the tiles of the
  * pattern.
  * @author Timur Saglam
  */
@@ -126,7 +126,7 @@ public class GridPattern {
      * Checks whether no player has set a meeple on the pattern.
      * @return true if the pattern is not occupied, false if not.
      */
-    public boolean isNotOccupied() {
+    public boolean isNotOccupied() { // TODO [HIGH] rename to isUnoccupied
         return involvedPlayers.isEmpty();
     }
 
@@ -156,11 +156,8 @@ public class GridPattern {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("GridPattern[type: ");
-        builder.append(patternType).append(", size: ").append(getSize()).append(", complete: ").append(complete);
-        builder.append(", disbursed: ").append(disbursed).append(", meeples: ").append(meepleList).append(", on: ");
-        builder.append(containedSpots.stream().map(it -> "(" + it.getX() + "|" + it.getY() + ")").toList());
-        return builder.toString();
+        return "GridPattern[type: " + patternType + ", size: " + getSize() + ", complete: " + complete + ", disbursed: " + disbursed + ", meeples: "
+                + meepleList + ", on: " + containedSpots.stream().map(it -> "(" + it.getX() + "|" + it.getY() + ")").toList();
     }
 
     private void distributePatternScore(boolean splitScore) {
@@ -214,7 +211,6 @@ public class GridPattern {
      * Checks the usual inputs on being null.
      * @param spot is any grid spot.
      * @param direction is any grid direction.
-     * @param grid is any grid.
      */
     protected void checkArgs(GridSpot spot, GridDirection direction) {
         if (spot == null || direction == null) {

@@ -26,7 +26,7 @@ public class TileDistribution {
     /**
      * Gives information about the quantity of a tile type in this distribution.
      * @param tileType is the specific tile type.
-     * @return number of tiles for this type type.
+     * @return number of tiles for this type.
      */
     public int getQuantity(TileType tileType) {
         if (distribution.containsKey(tileType)) {
@@ -49,7 +49,7 @@ public class TileDistribution {
      */
     public void createBackup() {
         restorationPoint.clear();
-        distribution.forEach(restorationPoint::put);
+        restorationPoint.putAll(distribution);
     }
 
     /**
@@ -58,7 +58,7 @@ public class TileDistribution {
      */
     public void restoreLastBackup() {
         distribution.clear();
-        restorationPoint.forEach(restorationPoint::put);
+        restorationPoint.putAll(restorationPoint);
     }
 
     /**
