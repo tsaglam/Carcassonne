@@ -1,0 +1,32 @@
+version: 2
+
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "08:00"
+      timezone: "UTC"
+    commit-message:
+      prefix: "Dependency"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "maven"
+    reviewers:
+      - "tsaglam"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "08:00"
+      timezone: "UTC"
+    commit-message:
+      prefix: "Dependency"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    reviewers:
+      - "tsaglam"
