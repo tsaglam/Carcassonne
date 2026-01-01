@@ -23,8 +23,8 @@ public class GridPattern {
     private final Map<Player, Integer> involvedPlayers;
     private final List<Meeple> meepleList;
     protected final TerrainType patternType;
-    protected int scoreMultiplier;
-    protected List<GridSpot> containedSpots;
+    protected final int scoreMultiplier;
+    protected final List<GridSpot> containedSpots;
 
     /**
      * Basic constructor taking only a tile type.

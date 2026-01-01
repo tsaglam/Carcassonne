@@ -44,14 +44,6 @@ public enum ImageLoadingUtil {
     }
 
     /**
-     * Convenience method that creates a high-DPI image for the image enumeral.
-     * @return the image, which has half of the width and height of the original file.
-     */
-    public Image createHighDpiImage() {
-        return createHighDpiImage(path);
-    }
-
-    /**
      * Convenience method that creates a high-DPI image icon for the image enumeral.
      * @return the image icon, which has half of the width and height of the original file.
      */
@@ -98,15 +90,6 @@ public enum ImageLoadingUtil {
     public static Image createHighDpiImage(Image image) {
         Image base = image.getScaledInstance(image.getWidth(null) / 2, image.getHeight(null) / 2, Image.SCALE_SMOOTH);
         return new BaseMultiResolutionImage(base, image);
-    }
-
-    /**
-     * Loads an image from a path and creates an image icon.
-     * @param path is the relative file path, omitting the resource folder path.
-     * @return the image icon.
-     */
-    public static ImageIcon createImageIcon(String path) {
-        return new ImageIcon(ImageLoadingUtil.class.getClassLoader().getResource(path));
     }
 
     /**

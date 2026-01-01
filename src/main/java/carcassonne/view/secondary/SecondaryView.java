@@ -24,9 +24,9 @@ public abstract class SecondaryView extends JDialog implements NotifiableView {
     private static final int INITIAL_X = 100;
     private static final int INITIAL_Y = 150;
     private static final long serialVersionUID = 4056347951568551115L;
-    protected ControllerFacade controller;
+    protected final ControllerFacade controller;
     protected Player currentPlayer;
-    protected JPanel dialogPanel;
+    protected final JPanel dialogPanel;
 
     /**
      * Constructor for the class. Sets the controller of the view and the window title.
