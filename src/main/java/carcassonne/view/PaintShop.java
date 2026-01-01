@@ -72,11 +72,7 @@ public final class PaintShop {
      * @return the highlighted tile.
      */
     public static ImageIcon getColoredHighlight(Player player, int size, boolean fastScaling) {
-        BufferedImage coloredImage = colorMaskBased(highlightBaseImage, highlightImage, player.getColor());
-        Image smallImage = scaleDown(coloredImage, size, fastScaling, coloredImage.getTransparency());
-        int largeSize = Math.min(size * HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
-        Image largeImage = scaleDown(coloredImage, largeSize, fastScaling, coloredImage.getTransparency());
-        return new ImageIcon(new BaseMultiResolutionImage(smallImage, largeImage));
+        return createPlayerColoredIcon(highlightBaseImage, player, size, fastScaling);
     }
 
     /**
@@ -90,11 +86,7 @@ public final class PaintShop {
     public static ImageIcon getColoredTile(Tile tile, Player player, int size, boolean fastScaling) {
         Image baseImage = ConcurrentTileImageScaler.getScaledImage(tile, GameSettings.TILE_RESOLUTION, fastScaling);
         BufferedImage bufferedBaseImage = bufferedImageOf(baseImage);
-        BufferedImage coloredImage = colorMaskBased(bufferedBaseImage, highlightImage, player.getColor());
-        Image small = scaleDown(coloredImage, size, fastScaling, coloredImage.getTransparency());
-        int largeSize = Math.min(size * HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
-        Image large = scaleDown(coloredImage, largeSize, fastScaling, coloredImage.getTransparency());
-        return new ImageIcon(new BaseMultiResolutionImage(small, large));
+        return createPlayerColoredIcon(bufferedBaseImage, player, size, fastScaling);
     }
 
     /**
@@ -188,6 +180,14 @@ public final class PaintShop {
             map.put(terrainType, meepleImage);
         }
         return map;
+    }
+
+    private static ImageIcon createPlayerColoredIcon(BufferedImage baseImage, Player player, int size, boolean fastScaling) {
+        BufferedImage coloredImage = colorMaskBased(baseImage, highlightImage, player.getColor());
+        Image smallImage = scaleDown(coloredImage, size, fastScaling, coloredImage.getTransparency());
+        int largeSize = Math.min(size * HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
+        Image largeImage = scaleDown(coloredImage, largeSize, fastScaling, coloredImage.getTransparency());
+        return new ImageIcon(new BaseMultiResolutionImage(smallImage, largeImage));
     }
 
     private static BufferedImage colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {

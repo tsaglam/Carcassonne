@@ -181,14 +181,6 @@ public class Tile {
     }
 
     /**
-     * Checks of tile is a monastery tile, which means it has monastery terrain in the middle of the tile.
-     * @return true if is a monastery.
-     */
-    public boolean isMonastery() {
-        return getTerrain(GridDirection.CENTER) == TerrainType.MONASTERY;
-    }
-
-    /**
      * Checks if the tile is already placed.
      * @return true if it is placed.
      */
