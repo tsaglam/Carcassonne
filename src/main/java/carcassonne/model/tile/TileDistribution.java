@@ -58,7 +58,7 @@ public class TileDistribution {
      */
     public void restoreLastBackup() {
         distribution.clear();
-        restorationPoint.putAll(restorationPoint);
+        distribution.putAll(restorationPoint);
     }
 
     /**
