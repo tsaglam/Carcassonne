@@ -157,7 +157,7 @@ public class GridPattern {
     @Override
     public String toString() {
         return "GridPattern[type: " + patternType + ", size: " + getSize() + ", complete: " + complete + ", disbursed: " + disbursed + ", meeples: "
-                + meepleList + ", on: " + containedSpots.stream().map(it -> "(" + it.getX() + "|" + it.getY() + ")").toList();
+                + meepleList + ", on: " + containedSpots.stream().map(it -> "(" + it.getX() + "|" + it.getY() + ")").toList() + "]";
     }
 
     private void distributePatternScore(boolean splitScore) {
