@@ -21,7 +21,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     private final StateMachine stateMachine;
     protected final GameSettings settings;
     protected final ViewFacade views;
-    protected final Round round;
+    protected Round round;
     protected TileStack tileStack;
     protected Grid grid;
     protected ArtificialIntelligence playerAI;
@@ -54,7 +54,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     public abstract void newRound(int playerCount);
 
     /**
-     * Method for the view to call if a user places a meeple on a tle.
+     * Method for the view to call if a user places a meeple on a tile.
      * @param position is the placement position.
      */
     public abstract void placeMeeple(GridDirection position);
