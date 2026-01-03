@@ -168,8 +168,8 @@ public class Player {
      * Checks if the hand of the player is full.
      * @return true if full.
      */
-    public boolean hasFullHand() {
-        return handOfTiles.size() == maximalTiles;
+    public boolean hasSpaceInHand() {
+        return handOfTiles.size() != maximalTiles;
     }
 
     /**

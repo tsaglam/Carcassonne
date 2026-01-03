@@ -67,14 +67,6 @@ public class Tile {
     }
 
     /**
-     * Getter for the tile image. The image depends on the orientation of the tile.
-     * @return the image depicting the tile.
-     */
-    public ImageIcon getIcon() {
-        return getScaledIcon(GameSettings.TILE_RESOLUTION, false);
-    }
-
-    /**
      * Getter for the scaled tile image. The image depends on the orientation of the tile.
      * @param edgeLength specifies the edge length of the image in pixels.
      * @return the image depicting the tile.

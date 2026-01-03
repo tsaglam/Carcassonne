@@ -128,7 +128,7 @@ public class StatePlacing extends AbstractGameState {
     @Override
     protected void entry() {
         Player player = round.getActivePlayer();
-        if (!player.hasFullHand() && !tileStack.isEmpty()) {
+        if (player.hasSpaceInHand() && !tileStack.isEmpty()) {
             player.addTile(tileStack.drawTile());
         }
         updateStackSize();

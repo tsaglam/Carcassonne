@@ -64,7 +64,7 @@ public class FieldsPattern extends GridPattern {
         for (GridDirection connectionDirection : getFieldConnections(position, spot.getTile())) { // ∀ connection points
             GridSpot neighbor = grid.getNeighbor(spot, connectionDirection); // get the neighbor
             GridDirection oppositeDirection = getFieldOpposite(position, connectionDirection); // get the connecting position on neighbor
-            if (neighbor != null && !neighbor.isIndirectlyTagged(oppositeDirection)) { // if not visited
+            if (neighbor != null && neighbor.isUntagged(oppositeDirection)) { // if not visited
                 neighbor.setTag(oppositeDirection, this); // mark as visited
                 add(neighbor); // add to pattern
                 buildPattern(neighbor, oppositeDirection); // continue building recursively

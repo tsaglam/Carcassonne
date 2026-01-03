@@ -17,14 +17,6 @@ public class ErrorReportingRunnable implements Runnable {
     /**
      * Creates an error-reporting task by wrapping any runnable.
      * @param wrappedTask is the wrapped runnable.
-     */
-    public ErrorReportingRunnable(Runnable wrappedTask) {
-        this(wrappedTask, EMPTY_MESSAGE);
-    }
-
-    /**
-     * Creates an error-reporting task by wrapping any runnable.
-     * @param wrappedTask is the wrapped runnable.
      * @param messagePrefix is a message prefix for the game message.
      */
     public ErrorReportingRunnable(Runnable wrappedTask, String messagePrefix) {

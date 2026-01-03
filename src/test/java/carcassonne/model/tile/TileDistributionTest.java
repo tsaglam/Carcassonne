@@ -2,7 +2,6 @@ package carcassonne.model.tile;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,12 +17,8 @@ public class TileDistributionTest {
     private TileDistribution distribution;
     private int originalMonasteryQuantity;
 
-    @BeforeAll
-    static void setUpBeforeClass() throws Exception {
-    }
-
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         distribution = new TileDistribution();
         originalMonasteryQuantity = distribution.getQuantity(TileType.Monastery);
     }
