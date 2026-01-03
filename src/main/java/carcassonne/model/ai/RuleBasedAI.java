@@ -117,7 +117,7 @@ public class RuleBasedAI implements ArtificialIntelligence {
     }
 
     /**
-     * The end is near if a player has equal or less moves left than meeples.
+     * The end is near if a player has equal or fewer moves left than meeples.
      */
     private boolean endIsNear(TileStack stack, Player player) {
         return stack.getSize() / (double) settings.getNumberOfPlayers() <= player.getFreeMeeples();

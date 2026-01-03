@@ -39,7 +39,7 @@ public class RuleBasedComparator implements Comparator<AbstractCarcassonneMove> 
         if (moveTypeDifference != 0) {
             return moveTypeDifference;
         }
-        // Rule 4: Finally, choose closest move to the center of the grid
+        // Rule 4: Finally, choose the closest move to the center of the grid
         return (int) (ROUNDING_FACTOR * (distanceToCenter(secondMove) - distanceToCenter(firstMove)));
 
     }

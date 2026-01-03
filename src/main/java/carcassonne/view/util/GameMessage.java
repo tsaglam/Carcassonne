@@ -56,7 +56,7 @@ public final class GameMessage {
     }
 
     public static void showGameInfo() {
-        JOptionPane.showMessageDialog(null, ABOUT, TITLE, JOptionPane.DEFAULT_OPTION, ImageLoadingUtil.SPLASH.createHighDpiImageIcon());
+        JOptionPane.showMessageDialog(null, ABOUT, TITLE, JOptionPane.PLAIN_MESSAGE, ImageLoadingUtil.SPLASH.createHighDpiImageIcon());
     }
 
     private static void show(String messageText, int type) {

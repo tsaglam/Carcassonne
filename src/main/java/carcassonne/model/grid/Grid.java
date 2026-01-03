@@ -119,11 +119,11 @@ public class Grid {
      * @return the neighboring {@link GridSpot} or null if there is no tile placed.
      */
     public GridSpot getNeighbor(GridSpot spot, GridDirection direction) {
-        List<GridSpot> neighbors = getNeighbors(spot, false, direction);
+        List<GridSpot> neighbors = getNeighbors(spot, direction);
         if (neighbors.isEmpty()) {
             return null; // return null if tile not placed or not on grid.
         }
-        return neighbors.get(0);
+        return neighbors.getFirst();
     }
 
     /**
@@ -289,8 +289,8 @@ public class Grid {
         return false; // has not found boundary
     }
 
-    private List<GridSpot> getNeighbors(GridSpot spot, boolean allowEmptySpots, GridDirection direction) {
-        return getNeighbors(spot, allowEmptySpots, List.of(direction));
+    private List<GridSpot> getNeighbors(GridSpot spot, GridDirection direction) {
+        return getNeighbors(spot, false, List.of(direction));
     }
 
     /**

@@ -23,11 +23,11 @@ public final class LookAndFeelUtil {
      * Creates a modified {@link JScrollPane} that uses the default {@link LookAndFeel} instead of the current one (e.g.
      * Nimbus). If the operating system is not Windows, a normal {@link JScrollPane} is created, as the Nimbus scroll bars
      * are not deeply broken on decent operating systems.
-     * @return the modified {@link JScrollPane} that always has good looking scroll bars.
+     * @return the modified {@link JScrollPane} that always has good-looking scroll bars.
      */
-    public static LayeredScrollPane createModifiedScrollpane() {
+    public static LayeredScrollPane createModifiedScrollPane() {
         if (System.getProperty(OS_NAME_PROPERTY).startsWith(WINDOWS)) {
-            return createScrollpaneWithFixedScrollbars();
+            return createScrollPaneWithFixedScrollbars();
         }
         return new LayeredScrollPane();
     }
@@ -36,7 +36,7 @@ public final class LookAndFeelUtil {
      * Switches the LookAndFeel to the default one, creates a JScrollPane with that LookAndFeel and then switches back to
      * the original LookAndFeel.
      */
-    private static LayeredScrollPane createScrollpaneWithFixedScrollbars() {
+    private static LayeredScrollPane createScrollPaneWithFixedScrollbars() {
         LayeredScrollPane modifiedScrollPane = null;
         try {
             LookAndFeel previousLF = UIManager.getLookAndFeel();

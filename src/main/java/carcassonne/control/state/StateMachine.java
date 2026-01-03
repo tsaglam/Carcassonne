@@ -37,7 +37,7 @@ public class StateMachine {
     }
 
     /**
-     * Returns the the current game state.
+     * Returns the current game state.
      * @return that state.
      */
     public AbstractGameState getCurrentState() {
@@ -48,7 +48,7 @@ public class StateMachine {
      * Schedules an asynchronous abort request, meaning the state machine aborts on the next state change. This method
      * should not be called on the state machine thread or executor service, as during AI vs. AI gameplay that request will
      * starve.
-     * @param abortOnStateChange set true to schedule an abort request, set to false to cancel it.
+     * @param abortOnStateChange set true to schedule an abort request, set false to cancel it.
      */
     public void setAbortRequested(boolean abortOnStateChange) {
         abortRequested = abortOnStateChange;

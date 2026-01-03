@@ -27,7 +27,7 @@ import carcassonne.view.util.MouseClickListener;
  */
 public class GameStatisticsView extends JDialog {
     private static final long serialVersionUID = 2862334382605282126L; // generated UID
-    private static final int ADDITIONAL_VERTICLE_SIZE = 100; // ensures that all text is readable
+    private static final int ADDITIONAL_VERTICAL_SIZE = 100; // ensures that all text is readable
     static final int SCORE_COLUMN = 5;
     static final Color HEADER_COLOR = new Color(220, 220, 220);
     static final Color BODY_COLOR = new Color(237, 237, 237);
@@ -39,7 +39,6 @@ public class GameStatisticsView extends JDialog {
      * Creates the view and extracts the data from the current round.
      * @param mainView is the main user interface.
      * @param round is the current round.
-     * @mainView is the main user interface.
      */
     public GameStatisticsView(MainView mainView, Round round) {
         super(mainView);
@@ -84,7 +83,7 @@ public class GameStatisticsView extends JDialog {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setMinimumSize(new Dimension(getSize().width + ADDITIONAL_VERTICLE_SIZE, getSize().height));
+        setMinimumSize(new Dimension(getSize().width + ADDITIONAL_VERTICAL_SIZE, getSize().height));
         setResizable(false);
         addWindowListener(new WindowAdapter() {
             @Override

@@ -14,7 +14,7 @@ public enum TerrainType {
     OTHER;
 
     /**
-     * Generates a list of the basic terrain types, which is every terrain except {@link OTHER}.
+     * Generates a list of the basic terrain types, which is every terrain except {@link TerrainType#OTHER}.
      * @return a list of CASTLE, ROAD, MONASTERY, FIELDS.
      */
     public static List<TerrainType> basicTerrain() {

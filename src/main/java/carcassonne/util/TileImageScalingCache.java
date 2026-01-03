@@ -19,7 +19,7 @@ public final class TileImageScalingCache {
     }
 
     /**
-     * Checks if there is an existing scaled tile image in this cache.
+     * Checks if there is an existing, scaled tile image in this cache.
      * @param tile is the tile whose scaled image is requested.
      * @param size is the edge with of the (quadratic) image.
      * @param previewAllowed determines if the cached image may be a preview render or should be a final render.
@@ -44,7 +44,7 @@ public final class TileImageScalingCache {
     }
 
     /**
-     * Places an scaled image in this cache to enable its reuse.
+     * Places a scaled image in this cache to enable its reuse.
      * @param image is the scaled image.
      * @param tile is the tile whose scaled image is requested.
      * @param size is the edge with of the scaled image.
@@ -71,7 +71,7 @@ public final class TileImageScalingCache {
     }
 
     /**
-     * Creates a primitive composite key for a tileType type, a size, and a orientation.
+     * Creates a primitive composite key for a tileType type, a size, and an orientation.
      */
     private static int createKey(Tile tile, int size) {
         return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation().ordinal() * SHIFT_VALUE * SHIFT_VALUE;

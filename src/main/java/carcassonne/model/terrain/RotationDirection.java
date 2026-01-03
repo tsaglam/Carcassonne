@@ -8,7 +8,7 @@ public enum RotationDirection {
     LEFT(-1),
     RIGHT(1);
 
-    int value;
+    final int value;
 
     RotationDirection(int value) {
         this.value = value;

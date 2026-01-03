@@ -53,14 +53,14 @@ public class GridSpot {
         // first, check for castle and road patterns:
         for (GridDirection direction : GridDirection.tilePositions()) {
             TerrainType terrain = tile.getTerrain(direction); // get terrain type.
-            if ((terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) && !isIndirectlyTagged(direction)) {
+            if ((terrain == TerrainType.CASTLE || terrain == TerrainType.ROAD) && isUntagged(direction)) {
                 results.add(new CastleAndRoadPattern(this, direction, terrain));
             }
         }
         // then, check fields:
         for (GridDirection direction : GridDirection.values()) {
             TerrainType terrain = tile.getTerrain(direction); // get terrain type.
-            if (terrain == TerrainType.FIELDS && !isIndirectlyTagged(direction)) {
+            if (terrain == TerrainType.FIELDS && isUntagged(direction)) {
                 results.add(new FieldsPattern(this, direction));
             }
         }
@@ -117,13 +117,13 @@ public class GridSpot {
      * @param tilePosition is the specific position.
      * @return true if not directly or indirectly tagged.
      */
-    public boolean isIndirectlyTagged(GridDirection tilePosition) {
+    public boolean isUntagged(GridDirection tilePosition) {
         for (GridDirection otherPosition : GridDirection.values()) {
             if (isTagged(otherPosition) && tile.hasConnection(tilePosition, otherPosition)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     /**
@@ -131,7 +131,7 @@ public class GridSpot {
      * connected to the specified position.
      * @param tilePosition is the specific position.
      * @param tagger is the specific grid pattern.
-     * @return true if not directly or indirectly tagged by the grid pattern.
+     * @return true if directly or indirectly tagged by the grid pattern.
      */
     public boolean isIndirectlyTaggedBy(GridDirection tilePosition, GridPattern tagger) {
         for (GridDirection otherPosition : GridDirection.values()) {
@@ -241,14 +241,13 @@ public class GridSpot {
     }
 
     private void addPatternIfMonastery(GridSpot spot, List<GridPattern> patternList) {
-        if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY && !spot.isIndirectlyTagged(CENTER)) {
+        if (spot.getTile().getTerrain(CENTER) == TerrainType.MONASTERY && spot.isUntagged(CENTER)) {
             patternList.add(new MonasteryPattern(spot));
         }
     }
 
     /**
      * Method determines if tile recently was tagged by grid pattern checks on a specific position or not.
-     * @param tilePosition is the specific position.
      * @return true if it was tagged.
      */
     private Boolean isTagged(GridDirection direction) {

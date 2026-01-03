@@ -59,7 +59,7 @@ public class TileTerrain {
 
     /**
      * Returns a set of grid directions, where meeples can be placed on this terrain.
-     * @return the list of meeple spots.
+     * @return the set of meeple spots.
      */
     public Set<GridDirection> getMeepleSpots() {
         return meepleSpots;
@@ -191,9 +191,9 @@ public class TileTerrain {
         if (from == towards) {
             return true; // is connected
         }
-        GridDirection inbetween = from.nextDirectionTo(side); // between this and next corner
-        GridDirection nextCorner = inbetween.nextDirectionTo(side); // next corner
-        if (hasNoCastleEntry(inbetween)) {
+        GridDirection inBetween = from.nextDirectionTo(side); // between this and next corner
+        GridDirection nextCorner = inBetween.nextDirectionTo(side); // next corner
+        if (hasNoCastleEntry(inBetween)) {
             return isImplicitlyConnected(nextCorner, towards, side);
         }
         return false;
@@ -216,7 +216,7 @@ public class TileTerrain {
                 }
             }
         }
-        meepleSpots.removeAll(removalList);
+        removalList.forEach(meepleSpots::remove);
     }
 
     /**
@@ -241,7 +241,7 @@ public class TileTerrain {
      * @param directions are the specified directions.
      */
     private void rotate(List<GridDirection> directions) {
-        TerrainType temporary = terrain.get(directions.get(directions.size() - 1)); // get last one
+        TerrainType temporary = terrain.get(directions.getLast()); // get last one
         for (GridDirection direction : directions) { // rotate terrain through temporary:
             temporary = terrain.put(direction, temporary);
         }

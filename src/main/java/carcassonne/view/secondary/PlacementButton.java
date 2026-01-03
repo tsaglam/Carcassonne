@@ -50,7 +50,7 @@ public class PlacementButton extends JButton {
         if (osName.startsWith(MAC) || WINDOWS_10.equals(osName)) {
             super.setEnabled(value); // normal function on mac os x
         } else {
-            // Hacky method, some variated code from the class javax.swing.AbstractButton.
+            // Hacky method, some adjusted code from the class javax.swing.AbstractButton.
             if (!value && model.isRollover()) {
                 model.setRollover(false);
             }

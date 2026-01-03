@@ -35,9 +35,6 @@ public class TileView extends SecondaryView {
     private static final String TOOL_TIP = "Tile of type ";
     private final int selectionSize;
     private final int defaultSize;
-    private JButton buttonRotateLeft;
-    private JButton buttonRotateRight;
-    private JButton buttonSkip;
     private List<JLabel> tileLabels;
     private List<Tile> tiles;
     private int selectionIndex;
@@ -143,9 +140,9 @@ public class TileView extends SecondaryView {
     // build the view content
     private void buildContent() {
         // create buttons:
-        buttonSkip = new JButton(ImageLoadingUtil.SKIP.createHighDpiImageIcon());
-        buttonRotateLeft = new JButton(ImageLoadingUtil.LEFT.createHighDpiImageIcon());
-        buttonRotateRight = new JButton(ImageLoadingUtil.RIGHT.createHighDpiImageIcon());
+        JButton buttonSkip = new JButton(ImageLoadingUtil.SKIP.createHighDpiImageIcon());
+        JButton buttonRotateLeft = new JButton(ImageLoadingUtil.LEFT.createHighDpiImageIcon());
+        JButton buttonRotateRight = new JButton(ImageLoadingUtil.RIGHT.createHighDpiImageIcon());
         // set tool tips:
         buttonSkip.setToolTipText("Don't place tile and skip turn");
         buttonRotateLeft.setToolTipText("Rotate left");
