@@ -52,9 +52,9 @@ public class GlobalKeyBindingManager {
 
     /**
      * Adds a new global key binding that can be added to input and action maps.
-     * @param inputToActionKey is the key that connects the key stroke and the action.
-     * @param keyStroke is the key stroke that defines the key to press.
-     * @param action is the action to be executed on the key stroke.
+     * @param inputToActionKey is the key that connects the keystroke and the action.
+     * @param keyStroke is the keystroke that defines the key to press.
+     * @param action is the action to be executed on the keystroke.
      */
     public void addKeyBinding(String inputToActionKey, KeyStroke keyStroke, Action action) {
         actions.put(inputToActionKey, action);

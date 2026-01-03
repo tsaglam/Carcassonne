@@ -15,7 +15,7 @@ abstract class CarcassonneTest {
     protected GameSettings settings;
 
     @BeforeEach
-    void setUp(TestInfo testInfo) throws Exception {
+    void setUp(TestInfo testInfo) {
         System.out.println("Starting Test: " + testInfo.getDisplayName());
         game = new TestGame(true);
         settings = game.getSettings();

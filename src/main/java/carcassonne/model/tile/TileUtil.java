@@ -1,5 +1,6 @@
 package carcassonne.model.tile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,9 +34,12 @@ public final class TileUtil {
         int rotations = 0;
         for (int rotation = 0; rotation < TileRotation.values().length; rotation++) {
             String path = GameSettings.TILE_FOLDER_PATH + type.name() + rotation + GameSettings.TILE_FILE_TYPE;
-            InputStream file = TileUtil.class.getClassLoader().getResourceAsStream(path);
-            if (file != null) {
-                rotations++;
+            try (InputStream file = TileUtil.class.getClassLoader().getResourceAsStream(path)) {
+                if (file != null) {
+                    rotations++;
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
             }
         }
         if (rotations == 0) {

@@ -126,8 +126,8 @@ public class MeepleDepiction {
     }
 
     // calculates the meeple size from the scaling factor, which also represents the tile size.
-    private final void updateMeepleSize(int scalingFactor) {
-        int limitedFactor = scalingFactor > MEEPLE_SCALING_THRESHOLD ? MEEPLE_SCALING_THRESHOLD : scalingFactor;
+    private void updateMeepleSize(int scalingFactor) {
+        int limitedFactor = Math.min(scalingFactor, MEEPLE_SCALING_THRESHOLD);
         meepleSize = INITIAL_MEEPLE_SIZE * limitedFactor / 100;
     }
 

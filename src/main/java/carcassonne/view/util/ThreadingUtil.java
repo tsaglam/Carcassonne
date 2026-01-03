@@ -22,7 +22,7 @@ public final class ThreadingUtil {
     public static void runInBackground(Runnable task) {
         SwingWorker<?, ?> worker = new SwingWorker<Boolean, Object>() {
             @Override
-            protected Boolean doInBackground() throws Exception {
+            protected Boolean doInBackground() {
                 task.run();
                 return true;
             }

@@ -20,7 +20,7 @@ public final class FastImageScaler {
     }
 
     /**
-     * Scales down a quadratic images to a image with a given size.
+     * Scales down a quadratic images to an image with a given size.
      * @param image is the original image.
      * @param targetSize is the desired edge length of the scaled image.
      * @return the scaled image.

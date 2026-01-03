@@ -59,19 +59,11 @@ public class Tile {
 
     /**
      * Getter for spot where the tile is placed
-     * @return the grid spot, or null if it not placed yet.
-     * @see isPlaced
+     * @return the grid spot, or null if it is not placed yet.
+     * @see Tile#isPlaced()
      */
     public GridSpot getGridSpot() {
         return gridSpot;
-    }
-
-    /**
-     * Getter for the tile image. The image depends on the orientation of the tile.
-     * @return the image depicting the tile.
-     */
-    public ImageIcon getIcon() {
-        return getScaledIcon(GameSettings.TILE_RESOLUTION, false);
     }
 
     /**
@@ -181,14 +173,6 @@ public class Tile {
     }
 
     /**
-     * Checks of tile is a monastery tile, which means it has monastery terrain in the middle of the tile.
-     * @return true if is a monastery.
-     */
-    public boolean isMonastery() {
-        return getTerrain(GridDirection.CENTER) == TerrainType.MONASTERY;
-    }
-
-    /**
      * Checks if the tile is already placed.
      * @return true if it is placed.
      */
@@ -236,7 +220,7 @@ public class Tile {
 
     public void placeMeeple(Player player, GridDirection position, Meeple meeple, GameSettings settings) {
         if (this.meeple != null || !allowsPlacingMeeple(position, player, settings)) {
-            throw new IllegalArgumentException("Tile can not have already a meeple placed on it: " + toString());
+            throw new IllegalArgumentException("Tile can not have already a meeple placed on it: " + this);
         }
         this.meeple = meeple;
         meeple.setLocation(gridSpot);

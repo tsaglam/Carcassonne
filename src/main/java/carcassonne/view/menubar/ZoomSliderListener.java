@@ -49,14 +49,6 @@ public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
     }
 
     /**
-     * Checks if events are blocked.
-     * @return the blockingEvents
-     */
-    public boolean isBlockingEvents() {
-        return blockingEvents;
-    }
-
-    /**
      * Blocks or unblocks all events.
      * @param blockingEvents specifies if events are blocked or not.
      */

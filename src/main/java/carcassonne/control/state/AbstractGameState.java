@@ -19,12 +19,12 @@ import carcassonne.view.main.MainView;
 public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human move states from AI moves?
 
     private final StateMachine stateMachine;
-    protected GameSettings settings;
-    protected ViewFacade views;
+    protected final GameSettings settings;
+    protected final ViewFacade views;
     protected Round round;
     protected TileStack tileStack;
     protected Grid grid;
-    protected ArtificialIntelligence playerAI;
+    protected final ArtificialIntelligence playerAI;
     protected static final String NO_MOVE = "No AI move is available!";
 
     /**
@@ -54,7 +54,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     public abstract void newRound(int playerCount);
 
     /**
-     * Method for the view to call if a user mans a tile with a Meeple.
+     * Method for the view to call if a user places a meeple on a tile.
      * @param position is the placement position.
      */
     public abstract void placeMeeple(GridDirection position);
@@ -121,7 +121,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
         highlightSurroundings(spot);
         for (int i = 0; i < round.getPlayerCount(); i++) {
             Player player = round.getPlayer(i);
-            while (!player.hasFullHand()) {
+            while (player.hasSpaceInHand()) {
                 player.addTile(tileStack.drawTile());
             }
         }

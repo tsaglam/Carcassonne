@@ -58,8 +58,8 @@ public class TileLayer extends JPanel {
      * @param preview determines if the tiles are rendered in preview mode (fast but ugly).
      */
     public void changeZoomLevel(int zoomLevel, boolean preview) {
-        tileLabels.parallelStream().forEach(it -> it.getTile().getScaledIcon(zoomLevel)); // pre-load scaled images
-        tileLabels.stream().forEach(it -> it.setTileSize(zoomLevel, preview));
+        tileLabels.parallelStream().forEach(it -> it.getTile().getScaledIcon(zoomLevel)); // preload scaled images
+        tileLabels.forEach(it -> it.setTileSize(zoomLevel, preview));
     }
 
     /**
@@ -96,12 +96,11 @@ public class TileLayer extends JPanel {
      * @param newHighlight is the new image.
      */
     public void refreshHighlight(ImageIcon newHighlight) {
-        tileLabels.stream().forEach(it -> it.setColoredHighlight(newHighlight));
+        tileLabels.forEach(it -> it.setColoredHighlight(newHighlight));
     }
 
     /**
      * Refreshes the placement highlights.
-     * @param newHighlight is the new image.
      */
     public void refreshPlacementHighlights() {
         placementHighlights.forEach(TileDepiction::refresh);
@@ -116,6 +115,6 @@ public class TileLayer extends JPanel {
      * Resets every tile label in this layer.
      */
     public void resetLayer() {
-        tileLabels.stream().forEach(TileDepiction::reset);
+        tileLabels.forEach(TileDepiction::reset);
     }
 }

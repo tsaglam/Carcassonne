@@ -12,7 +12,7 @@ public class PlayerColor extends Color {
     private static final int SATURATION = 1;
     private static final int BRIGHTNESS = 2;
     private static final float BRIGHTEN_FACTOR = 0.75f;
-    private static final double DESATURATION_FACTOR = 0.6;
+    private static final float DESATURATION_FACTOR = 0.6f;
 
     /**
      * Creates a new player color with RGB values between 0 and 255.
@@ -23,7 +23,7 @@ public class PlayerColor extends Color {
     }
 
     /**
-     * Creates a new player color based on a existing {@link Color}.
+     * Creates a new player color based on an existing {@link Color}.
      * @param color is the existing {@link Color}.
      */
     public PlayerColor(Color color) {
@@ -31,7 +31,7 @@ public class PlayerColor extends Color {
     }
 
     /**
-     * Returns the lighter and and desaturated version of the player color.
+     * Returns the lighter and desaturated version of the player color.
      * @return the light {@link Color}.
      */
     public Color lightColor() {

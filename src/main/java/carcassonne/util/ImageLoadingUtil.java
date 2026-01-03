@@ -44,14 +44,6 @@ public enum ImageLoadingUtil {
     }
 
     /**
-     * Convenience method that creates a high-DPI image for the image enumeral.
-     * @return the image, which has half of the width and height of the original file.
-     */
-    public Image createHighDpiImage() {
-        return createHighDpiImage(path);
-    }
-
-    /**
      * Convenience method that creates a high-DPI image icon for the image enumeral.
      * @return the image icon, which has half of the width and height of the original file.
      */
@@ -93,21 +85,11 @@ public enum ImageLoadingUtil {
     /**
      * Creates a high-DPI image from a high-res image.
      * @param image is the high resolution image used as the version with the highest resolution.
-     * @param transparency is the {@link Transparency} of the image.
      * @return the image, which has half of the width and height of the original file.
      */
     public static Image createHighDpiImage(Image image) {
         Image base = image.getScaledInstance(image.getWidth(null) / 2, image.getHeight(null) / 2, Image.SCALE_SMOOTH);
         return new BaseMultiResolutionImage(base, image);
-    }
-
-    /**
-     * Loads an image from a path and creates an image icon.
-     * @param path is the relative file path, omitting the resource folder path.
-     * @return the image icon.
-     */
-    public static ImageIcon createImageIcon(String path) {
-        return new ImageIcon(ImageLoadingUtil.class.getClassLoader().getResource(path));
     }
 
     /**
@@ -123,7 +105,7 @@ public enum ImageLoadingUtil {
     /**
      * Converts an image to a compatible image.
      * @param image is the image to convert.
-     * @param is the transparency of the image, can be received from buffered images with
+     * @param transparency the transparency of the image, can be received from buffered images with
      * {@link Transparency#getTransparency()}.
      * @return the compatible image.
      * @see GraphicsConfiguration#createCompatibleImage(int, int, int)
@@ -146,7 +128,7 @@ public enum ImageLoadingUtil {
             return ImageIO.read(PaintShop.class.getClassLoader().getResourceAsStream(path));
         } catch (IOException exception) {
             exception.printStackTrace();
-            GameMessage.showError("ERROR: Could not load image loacted at " + path);
+            GameMessage.showError("ERROR: Could not load image located at " + path);
             return new BufferedImage(PLACEHOLDER_IMAGE_SIZE, PLACEHOLDER_IMAGE_SIZE, BufferedImage.TYPE_INT_ARGB);
         }
     }

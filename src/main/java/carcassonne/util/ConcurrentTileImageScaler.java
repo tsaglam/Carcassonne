@@ -52,7 +52,7 @@ public final class ConcurrentTileImageScaler {
 
     /**
      * Returns the scaled multi-resolution image of a tile. This image therefore supports HighDPI graphics such as Retina on
-     * Mac OS. This method is thread safe and leverages caching.
+     * macOS. This method is thread safe and leverages caching.
      * @param tile is the tile whose image is required.
      * @param targetSize is the edge length of the (quadratic) image in pixels.
      * @param fastScaling specifies whether a fast scaling algorithm should be used.

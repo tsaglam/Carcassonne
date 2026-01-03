@@ -16,7 +16,7 @@ import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
 
 /**
- * {@link JPanel} encapsulates the the nine {@link MeepleDepiction}s of a specific {@link Tile}.
+ * {@link JPanel} encapsulates the nine {@link MeepleDepiction}s of a specific {@link Tile}.
  * @author Timur Saglam
  */
 public class MeepleDepictionPanel extends JPanel {

@@ -112,7 +112,7 @@ public abstract class AbstractCarcassonneMove implements Comparable<AbstractCarc
 
     /**
      * Specifies which rotation needs to be applied to the original tile in order to correctly place it.
-     * @return the rotation rotation for this move.
+     * @return the rotation for this move.
      */
     public TileRotation getRequiredTileRotation() {
         return tile.getRotation();
