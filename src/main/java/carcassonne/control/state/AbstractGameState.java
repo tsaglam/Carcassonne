@@ -24,7 +24,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     protected Round round;
     protected TileStack tileStack;
     protected Grid grid;
-    protected ArtificialIntelligence playerAI;
+    protected final ArtificialIntelligence playerAI;
     protected static final String NO_MOVE = "No AI move is available!";
 
     /**
@@ -121,7 +121,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
         highlightSurroundings(spot);
         for (int i = 0; i < round.getPlayerCount(); i++) {
             Player player = round.getPlayer(i);
-            while (!player.hasFullHand()) {
+            while (player.hasSpaceInHand()) {
                 player.addTile(tileStack.drawTile());
             }
         }
