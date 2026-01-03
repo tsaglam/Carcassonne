@@ -9,7 +9,7 @@ import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
 
 public interface ArtificialIntelligence {
-    /*
+    /**
      * @return returns the last calculated best move without recomputing it.
      */
     Optional<AbstractCarcassonneMove> getCurrentMove();
