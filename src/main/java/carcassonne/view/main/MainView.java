@@ -197,7 +197,7 @@ public class MainView extends JFrame implements NotifiableView {
      */
     public void updateToChangedZoomLevel(ZoomMode mode) {
         if (currentPlayer != null && mode == SMOOTH) { // only update highlights when there is an active round
-            tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, mode == FAST));
+            tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, false));
         } else {
             tileLayer.resetPlacementHighlights();
         }
