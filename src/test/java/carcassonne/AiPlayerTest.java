@@ -26,7 +26,6 @@ public class AiPlayerTest extends CarcassonneTest {
         System.out.println("Starting Test: " + testInfo.getDisplayName());
         game = new TestGame(true);
         settings = game.getSettings();
-        settings.setPlayerName("Neo", 0);
         settings.setPlayerComputerControlled(true, 0);
     }
 
