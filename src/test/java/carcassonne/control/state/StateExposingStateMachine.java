@@ -26,7 +26,7 @@ public class StateExposingStateMachine extends StateMachine {
     private Grid grid;
     private final boolean printGridOnTransitions;
     private String lastPrintedGrid;
-    private Class<? extends AbstractGameState> currenState;
+    private Class<? extends AbstractGameState> currentState;
 
     /**
      * Constructor using the specified view facade and game settings. A {@link RuleBasedAI} is automatically created based
@@ -39,7 +39,7 @@ public class StateExposingStateMachine extends StateMachine {
     public StateExposingStateMachine(ViewFacade views, GameSettings settings, boolean printGridOnTransitions) {
         super(views, new RuleBasedAI(settings), settings);
         this.printGridOnTransitions = printGridOnTransitions;
-        currenState = StateIdle.class;
+        currentState = StateIdle.class;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class StateExposingStateMachine extends StateMachine {
     @Override
     void changeState(Class<? extends AbstractGameState> stateType) {
         if (printGridOnTransitions && grid != null) {
-            String state = currenState.getSimpleName().replace(STATE_PREFIX, EMPTY_STRING);
+            String state = currentState.getSimpleName().replace(STATE_PREFIX, EMPTY_STRING);
             Player player = round.getActivePlayer();
             String playerDescription = round == null ? EMPTY_STRING
                     : PLAYER_FORMAT.formatted(player.getNumber(), player.getName(), player.getFreeMeeples(), player.getScore());
@@ -64,7 +64,7 @@ public class StateExposingStateMachine extends StateMachine {
                 lastPrintedGrid = currentGrid;
             }
         }
-        currenState = stateType;
+        currentState = stateType;
         super.changeState(stateType);
     }
 
