@@ -46,7 +46,7 @@ public class StateManning extends AbstractGameState {
     public void placeMeeple(GridDirection position) {
         if (!round.getActivePlayer().isComputerControlled()) {
             Tile tile = views.getSelectedTile();
-            views.onMainView(it -> it.resetMeeplePreview(tile));
+            views.onMainView(it -> it.resetMeeplePreview(tile.getGridSpot()));
             placeMeeple(position, tile);
         }
     }
@@ -79,7 +79,7 @@ public class StateManning extends AbstractGameState {
     private void skipPlacingMeeple() {
         if (!round.getActivePlayer().isComputerControlled()) {
             Tile tile = views.getSelectedTile();
-            views.onMainView(it -> it.resetMeeplePreview(tile));
+            views.onMainView(it -> it.resetMeeplePreview(tile.getGridSpot()));
         }
         processGridPatterns();
         startNextTurn();

@@ -1,7 +1,6 @@
 package carcassonne.view.main;
 
 import static carcassonne.view.main.ZoomMode.FAST;
-import static carcassonne.view.main.ZoomMode.SMOOTH;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,6 +15,7 @@ import javax.swing.WindowConstants;
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.NotifiableView;
@@ -108,12 +108,10 @@ public class MainView extends JFrame implements NotifiableView {
      * Resets the meeple preview on one specific {@link Tile}.
      * @param tile is the specific {@link Tile}.
      */
-    public void resetMeeplePreview(Tile tile) {
-        checkParameters(tile);
-        int x = tile.getGridSpot().getX();
-        int y = tile.getGridSpot().getY();
-        checkCoordinates(x, y);
-        meepleLayer.resetPanel(x, y);
+    public void resetMeeplePreview(GridSpot spot) {
+        checkParameters(spot);
+        checkCoordinates(spot.getX(), spot.getY());
+        meepleLayer.resetPanel(spot.getX(), spot.getY());
     }
 
     /**
@@ -196,8 +194,8 @@ public class MainView extends JFrame implements NotifiableView {
      * @param mode determines the zoom mode, which affects image quality and performance.
      */
     public void updateToChangedZoomLevel(ZoomMode mode) {
-        if (currentPlayer != null && mode == SMOOTH) { // only update highlights when there is an active round
-            tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, false));
+        if (currentPlayer != null) { // only update highlights when there is an active round
+            tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, mode == FAST));
         } else {
             tileLayer.resetPlacementHighlights();
         }
