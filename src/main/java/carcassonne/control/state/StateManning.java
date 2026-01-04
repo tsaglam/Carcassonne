@@ -34,6 +34,7 @@ public class StateManning extends AbstractGameState {
 
     @Override
     public void abortGame() {
+        processGridPatterns();
         changeState(StateGameOver.class);
     }
 
@@ -69,7 +70,7 @@ public class StateManning extends AbstractGameState {
             tile.placeMeeple(player, position, settings);
             views.onMainView(it -> it.setMeeple(tile, position, player));
             updateScores();
-            processGridPatterns();
+
             startNextTurn();
         } else {
             views.reroute(() -> GameMessage.showWarning("You can't place meeple directly on an occupied Castle or Road!"));
@@ -81,7 +82,6 @@ public class StateManning extends AbstractGameState {
             Tile tile = views.getSelectedTile();
             views.onMainView(it -> it.resetMeeplePreview(tile.getGridSpot()));
         }
-        processGridPatterns();
         startNextTurn();
     }
 
@@ -102,6 +102,7 @@ public class StateManning extends AbstractGameState {
 
     // starts the next turn and changes the state to state placing.
     private void startNextTurn() {
+        processGridPatterns();
         if (round.isOver()) {
             changeState(StateGameOver.class);
         } else {
@@ -141,7 +142,6 @@ public class StateManning extends AbstractGameState {
                         () -> GameMessage.showMessage("You have no Meeples left. Regain Meeples by completing patterns to place Meeples again."));
                 noMeeplesNotification[player.getNumber()] = true;
             }
-            processGridPatterns();
             startNextTurn();
         }
     }
