@@ -75,7 +75,7 @@ public class StatePlacing extends AbstractGameState {
         }
         round.nextTurn();
         views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
-        entry();
+        changeState(StatePlacing.class);
     }
 
     private void placeTile(Tile tile, int x, int y, boolean highlightPlacement) {
@@ -93,14 +93,11 @@ public class StatePlacing extends AbstractGameState {
 
     private void placeTileWithAI(Player player) {
         Optional<AbstractCarcassonneMove> bestMove = playerAI.calculateBestMoveFor(player.getHandOfTiles(), player, grid, tileStack);
-        if (bestMove.isEmpty()) {
-            skipPlacingTile();
-        }
-        bestMove.ifPresent(it -> {
+        bestMove.ifPresentOrElse(it -> {
             Tile tile = it.getOriginalTile();
             tile.rotateTo(it.getRequiredTileRotation());
             placeTile(tile, it.getX(), it.getY(), round.hasHumanPlayers());
-        });
+        }, this::skipPlacingTile);
     }
 
     private Optional<Tile> getTileToDrop() {
