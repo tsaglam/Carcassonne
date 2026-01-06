@@ -240,6 +240,10 @@ public class MainView extends JFrame implements NotifiableView {
         scrollPane.repaintLayers();
     }
 
+    /**
+     * Removes the highlight for the last tile placement of a specific (computer-controlled) player.
+     * @param player the player for which to remove the highlight.
+     */
     public void resetPlacementHighlight(Player player) {
         tileLayer.resetPlacementHighlightFor(player);
         scrollPane.repaintLayers();
