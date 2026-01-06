@@ -1,5 +1,6 @@
 package carcassonne.control.state;
 
+import carcassonne.model.Player;
 import carcassonne.model.Round;
 import carcassonne.model.ai.RuleBasedAI;
 import carcassonne.model.grid.Grid;
@@ -15,9 +16,9 @@ import carcassonne.view.ViewFacade;
  * whenever {@link #updateStates(Round, TileStack, Grid)} is invoked as part of the state machine lifecycle.
  */
 public class StateExposingStateMachine extends StateMachine {
-    private static final String STATE_CHANGE_MESSAGE = " --> Game shifts to: ";
+    private static final String STATE_CHANGE_MESSAGE = " --> State is ";
     private static final String STATE_PREFIX = "State";
-    private static final String SEPARATOR = ", ";
+    private static final String PLAYER_FORMAT = ", turn of player %d (%s with %d free meeples and %d points):";
     private static final String EMPTY_STRING = "";
 
     private Round round;
@@ -25,6 +26,7 @@ public class StateExposingStateMachine extends StateMachine {
     private Grid grid;
     private final boolean printGridOnTransitions;
     private String lastPrintedGrid;
+    private Class<? extends AbstractGameState> currentState;
 
     /**
      * Constructor using the specified view facade and game settings. A {@link RuleBasedAI} is automatically created based
@@ -37,6 +39,7 @@ public class StateExposingStateMachine extends StateMachine {
     public StateExposingStateMachine(ViewFacade views, GameSettings settings, boolean printGridOnTransitions) {
         super(views, new RuleBasedAI(settings), settings);
         this.printGridOnTransitions = printGridOnTransitions;
+        currentState = StateIdle.class;
     }
 
     @Override
@@ -49,16 +52,27 @@ public class StateExposingStateMachine extends StateMachine {
 
     @Override
     void changeState(Class<? extends AbstractGameState> stateType) {
-        super.changeState(stateType);
         if (printGridOnTransitions && grid != null) {
-            String currentGrid = GridPrinter.printGrid(grid);
-            if (!currentGrid.equals(lastPrintedGrid)) {
-                System.out.print(currentGrid);
-                lastPrintedGrid = currentGrid;
-            }
-            String state = stateType.getSimpleName().replace(STATE_PREFIX, EMPTY_STRING);
-            String player = round == null ? EMPTY_STRING : SEPARATOR + round.getActivePlayer();
-            System.out.println(STATE_CHANGE_MESSAGE + state + player);
+            printTurnInformation();
+            printGrid();
+        }
+        currentState = stateType;
+        super.changeState(stateType);
+    }
+
+    private void printTurnInformation() {
+        String state = currentState.getSimpleName().replace(STATE_PREFIX, EMPTY_STRING);
+        Player player = round.getActivePlayer();
+        String playerDescription = round == null ? EMPTY_STRING
+                : PLAYER_FORMAT.formatted(player.getNumber(), player.getName(), player.getFreeMeeples(), player.getScore());
+        System.out.println(STATE_CHANGE_MESSAGE + state + playerDescription);
+    }
+
+    private void printGrid() {
+        String currentGrid = GridPrinter.printGrid(grid);
+        if (!currentGrid.equals(lastPrintedGrid)) {
+            System.out.print(currentGrid);
+            lastPrintedGrid = currentGrid;
         }
     }
 

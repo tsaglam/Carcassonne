@@ -11,7 +11,6 @@ import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.ViewFacade;
-import carcassonne.view.main.MainView;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -70,12 +69,9 @@ public class StatePlacing extends AbstractGameState {
                 throw new IllegalStateException("Cannot drop tile " + it + "from player " + round.getActivePlayer());
             }
         });
-        if (!round.getActivePlayer().isComputerControlled()) {
-            views.onMainView(MainView::resetPlacementHighlights);
-        }
         round.nextTurn();
         views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
-        entry();
+        changeState(StatePlacing.class);
     }
 
     private void placeTile(Tile tile, int x, int y, boolean highlightPlacement) {
@@ -93,14 +89,11 @@ public class StatePlacing extends AbstractGameState {
 
     private void placeTileWithAI(Player player) {
         Optional<AbstractCarcassonneMove> bestMove = playerAI.calculateBestMoveFor(player.getHandOfTiles(), player, grid, tileStack);
-        if (bestMove.isEmpty()) {
-            skipPlacingTile();
-        }
-        bestMove.ifPresent(it -> {
+        bestMove.ifPresentOrElse(it -> {
             Tile tile = it.getOriginalTile();
             tile.rotateTo(it.getRequiredTileRotation());
             placeTile(tile, it.getX(), it.getY(), round.hasHumanPlayers());
-        });
+        }, this::skipPlacingTile);
     }
 
     private Optional<Tile> getTileToDrop() {
@@ -136,6 +129,7 @@ public class StatePlacing extends AbstractGameState {
             changeState(StateGameOver.class);
         } else if (player.isComputerControlled()) {
             waitForUI();
+            views.onMainView(it -> it.resetPlacementHighlight(player));
             placeTileWithAI(player);
         } else {
             views.onTileView(it -> it.setTiles(player));
