@@ -53,19 +53,27 @@ public class StateExposingStateMachine extends StateMachine {
     @Override
     void changeState(Class<? extends AbstractGameState> stateType) {
         if (printGridOnTransitions && grid != null) {
-            String state = currentState.getSimpleName().replace(STATE_PREFIX, EMPTY_STRING);
-            Player player = round.getActivePlayer();
-            String playerDescription = round == null ? EMPTY_STRING
-                    : PLAYER_FORMAT.formatted(player.getNumber(), player.getName(), player.getFreeMeeples(), player.getScore());
-            System.out.println(STATE_CHANGE_MESSAGE + state + playerDescription);
-            String currentGrid = GridPrinter.printGrid(grid);
-            if (!currentGrid.equals(lastPrintedGrid)) {
-                System.out.print(currentGrid);
-                lastPrintedGrid = currentGrid;
-            }
+            printTurnInformation();
+            printGrid();
         }
         currentState = stateType;
         super.changeState(stateType);
+    }
+
+    private void printTurnInformation() {
+        String state = currentState.getSimpleName().replace(STATE_PREFIX, EMPTY_STRING);
+        Player player = round.getActivePlayer();
+        String playerDescription = round == null ? EMPTY_STRING
+                : PLAYER_FORMAT.formatted(player.getNumber(), player.getName(), player.getFreeMeeples(), player.getScore());
+        System.out.println(STATE_CHANGE_MESSAGE + state + playerDescription);
+    }
+
+    private void printGrid() {
+        String currentGrid = GridPrinter.printGrid(grid);
+        if (!currentGrid.equals(lastPrintedGrid)) {
+            System.out.print(currentGrid);
+            lastPrintedGrid = currentGrid;
+        }
     }
 
     /**
