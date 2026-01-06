@@ -106,7 +106,7 @@ public class MainView extends JFrame implements NotifiableView {
 
     /**
      * Resets the meeple preview on one specific {@link Tile}.
-     * @param tile is the specific {@link Tile}.
+     * @param spot is the grid spot where the tile is placed.
      */
     public void resetMeeplePreview(GridSpot spot) {
         checkParameters(spot);
@@ -240,11 +240,8 @@ public class MainView extends JFrame implements NotifiableView {
         scrollPane.repaintLayers();
     }
 
-    /**
-     * Highlights a position on the grid to indicate that an AI player recently placed the tile.
-     */
-    public void resetPlacementHighlights() {
-        tileLayer.resetPlacementHighlights();
+    public void resetPlacementHighlight(Player player) {
+        tileLayer.resetPlacementHighlightFor(player);
         scrollPane.repaintLayers();
     }
 

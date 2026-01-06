@@ -11,7 +11,6 @@ import carcassonne.model.grid.GridSpot;
 import carcassonne.model.tile.Tile;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.ViewFacade;
-import carcassonne.view.main.MainView;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -70,9 +69,6 @@ public class StatePlacing extends AbstractGameState {
                 throw new IllegalStateException("Cannot drop tile " + it + "from player " + round.getActivePlayer());
             }
         });
-        if (!round.getActivePlayer().isComputerControlled()) {
-            views.onMainView(MainView::resetPlacementHighlights);
-        }
         round.nextTurn();
         views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
         changeState(StatePlacing.class);
@@ -133,6 +129,7 @@ public class StatePlacing extends AbstractGameState {
             changeState(StateGameOver.class);
         } else if (player.isComputerControlled()) {
             waitForUI();
+            views.onMainView(it -> it.resetPlacementHighlight(player));
             placeTileWithAI(player);
         } else {
             views.onTileView(it -> it.setTiles(player));
