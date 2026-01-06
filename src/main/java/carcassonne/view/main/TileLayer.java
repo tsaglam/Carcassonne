@@ -3,7 +3,9 @@ package carcassonne.view.main;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -20,7 +22,7 @@ import carcassonne.settings.GameSettings;
  */
 public class TileLayer extends JPanel {
     private static final long serialVersionUID = 1503933201337556131L;
-    private final List<TileDepiction> placementHighlights;
+    private final Map<Integer, TileDepiction> placementHighlights;
     private final transient List<TileDepiction> tileLabels;
     private final transient TileDepiction[][] tileDepictionGrid;
 
@@ -36,7 +38,7 @@ public class TileLayer extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         tileLabels = new ArrayList<>();
-        placementHighlights = new ArrayList<>();
+        placementHighlights = new HashMap<>();
         tileDepictionGrid = new TileDepiction[gridWidth][gridHeight]; // build array of labels.
         Tile defaultTile = new Tile(TileType.Null);
         Tile highlightTile = new Tile(TileType.Null);
@@ -77,7 +79,7 @@ public class TileLayer extends JPanel {
      * @param y is the y-coordinate of that tile.
      */
     public void highlightTile(int x, int y, Player player) {
-        placementHighlights.add(tileDepictionGrid[x][y]);
+        placementHighlights.put(player.getNumber(), tileDepictionGrid[x][y]);
         tileDepictionGrid[x][y].highlightPlacement(player);
     }
 
@@ -103,12 +105,26 @@ public class TileLayer extends JPanel {
      * Refreshes the placement highlights.
      */
     public void refreshPlacementHighlights() {
-        placementHighlights.forEach(TileDepiction::refresh);
+        placementHighlights.values().forEach(TileDepiction::refresh);
     }
 
+    /**
+     * Resets all placement highlights.
+     */
     public void resetPlacementHighlights() {
-        placementHighlights.forEach(TileDepiction::resetPlacementHighlight);
+        placementHighlights.values().forEach(TileDepiction::resetPlacementHighlight);
         placementHighlights.clear();
+    }
+
+    /**
+     * Resets the tile placement highlight for one computer-controlled player.
+     * @param player is that computer-controlled player.
+     */
+    public void resetPlacementHighlightFor(Player player) {
+        TileDepiction highlightedTile = placementHighlights.remove(player.getNumber());
+        if (highlightedTile != null) {
+            highlightedTile.resetPlacementHighlight();
+        }
     }
 
     /**
