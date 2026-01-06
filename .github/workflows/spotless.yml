@@ -25,6 +25,7 @@ jobs:
       with:
         java-version: 21
         distribution: 'temurin'
+        cache: 'maven'
 
     - name: Check with Spotless
       run: mvn clean spotless:check
