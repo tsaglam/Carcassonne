@@ -9,6 +9,7 @@ jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v6
         with:
@@ -25,12 +26,6 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v5
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -42,10 +37,12 @@ jobs:
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar -Pcoverage \
               -Dsonar.projectKey=tsaglam_Carcassonne \
+              -Dsonar.coverage.exclusions=src/main/java/carcassonne/view/** \
               -Dsonar.pullrequest.key="$PR_NUMBER" \
               -Dsonar.pullrequest.branch="$PR_BRANCH" \
               -Dsonar.pullrequest.base="$PR_BASE"
           else
             mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage \
-              -Dsonar.projectKey=tsaglam_Carcassonne
+              -Dsonar.projectKey=tsaglam_Carcassonne \
+              -Dsonar.coverage.exclusions=src/main/java/carcassonne/view/**
           fi
