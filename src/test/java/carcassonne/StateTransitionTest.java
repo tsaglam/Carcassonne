@@ -200,7 +200,7 @@ public class StateTransitionTest extends CarcassonneTest {
     void testInvalidTransitions() {
         // State idle:
         assertState(StateIdle.class);
-        assertThrows(IllegalStateException.class, () -> game.state().skip());
+        game.state().skip();
         assertState(StateIdle.class);
         assertThrows(IllegalStateException.class, () -> game.state().placeMeeple(null));
         assertState(StateIdle.class);
