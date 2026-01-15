@@ -106,7 +106,7 @@ public enum TileType { // TODO (MEDIUM) [STYLE] rename enum values and tile imag
      * @return all tile types except {@link TileType#Null}.
      */
     public static List<TileType> validTiles() {
-        return stream(values()).filter(it -> it != Null).toList();
+        return Arrays.stream(values()).filter(it -> it != Null).toList();
     }
 
     /**
@@ -114,7 +114,7 @@ public enum TileType { // TODO (MEDIUM) [STYLE] rename enum values and tile imag
      * @return the list of enabled tiles.
      */
     public static List<TileType> enabledTiles() {
-        return stream(values()).filter(it -> it != Null && it.getAmount() > 0).toList();
+        return Arrays.stream(values()).filter(it -> it != Null && it.getAmount() > 0).toList();
     }
 
 }
