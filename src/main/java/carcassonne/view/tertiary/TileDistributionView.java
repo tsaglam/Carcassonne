@@ -1,6 +1,7 @@
 package carcassonne.view.tertiary;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
@@ -10,13 +11,17 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import carcassonne.model.tile.TileDistribution;
+import carcassonne.model.tile.TileDistributionPreset;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.util.MouseClickListener;
@@ -32,8 +37,8 @@ public class TileDistributionView extends JDialog {
     private static final String MULTIPLIER = "Tile Stack Size Multiplier: ";
     private static final String BRACKET = "\t (";
     private static final String STACK_SIZE = " tiles on the stack)";
+    private static final String PRESETS_LABEL = "Tile Presets:";
     private static final String SHUFFLE = "Shuffle";
-    private static final String RESET = "Reset";
     private static final String ACCEPT = "Accept";
     private static final String TITLE = "Tile Distribution";
     private static final int GRID_WIDTH = 11;
@@ -100,8 +105,27 @@ public class TileDistributionView extends JDialog {
         constraints.gridwidth = 6;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         tilePanel.add(buildMultiplierPanel(), constraints);
+
+        // Add preset label and dropdown
         constraints.gridwidth = 1;
-        constraints.gridx = 8;
+        constraints.gridx = 6;
+        constraints.fill = GridBagConstraints.NONE;
+        JLabel presetLabel = new JLabel(PRESETS_LABEL);
+        presetLabel.setForeground(Color.WHITE);
+        presetLabel.setFont(presetLabel.getFont().deriveFont(java.awt.Font.BOLD));
+        presetLabel.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        tilePanel.add(presetLabel, constraints);
+
+        constraints.gridwidth = 2;
+        constraints.gridx = 7;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        JComboBox<TileDistributionPreset> presetDropdown = createPresetDropdown();
+        tilePanel.add(presetDropdown, constraints);
+
+        // Add buttons
+        constraints.gridwidth = 1;
+        constraints.gridx = 9;
+        constraints.fill = GridBagConstraints.NONE;
         for (JButton button : createButtons()) {
             tilePanel.add(button, constraints);
             constraints.gridx++;
@@ -130,7 +154,7 @@ public class TileDistributionView extends JDialog {
         ButtonGroup group = new ButtonGroup();
         sizeLabel = new JLabel();
         updateStackSizePreview();
-        for (int multiplier = 1; multiplier <= 4; multiplier++) {
+        for (int multiplier = 1; multiplier <= 6; multiplier++) {
             createMultiplierButton(multiplier, multiplierPanel, group);
         }
         multiplierPanel.add(sizeLabel);
@@ -148,14 +172,28 @@ public class TileDistributionView extends JDialog {
         multiplierPanel.add(button);
     }
 
+    private JComboBox<TileDistributionPreset> createPresetDropdown() {
+        JComboBox<TileDistributionPreset> presetComboBox = new JComboBox<>(TileDistributionPreset.values());
+        presetComboBox.setSelectedIndex(0);
+
+        presetComboBox.addActionListener(event -> {
+            TileDistributionPreset selected = (TileDistributionPreset) presetComboBox.getSelectedItem();
+            if (selected != null) {
+                ThreadingUtil.runAndCallback(() -> {
+                    distribution.reset();
+                    selected.applyTo(distribution);
+                }, this::updateFromDistribution);
+            }
+        });
+        return presetComboBox;
+    }
+
     private List<JButton> createButtons() {
         JButton shuffleButton = new JButton(SHUFFLE);
         shuffleButton.addMouseListener((MouseClickListener) event -> ThreadingUtil.runAndCallback(() -> {
             applyChangesToDistribution();
             distribution.shuffle();
         }, this::updateFromDistribution));
-        JButton resetButton = new JButton(RESET);
-        resetButton.addMouseListener((MouseClickListener) event -> ThreadingUtil.runAndCallback(distribution::reset, this::updateFromDistribution));
         JButton acceptButton = new JButton(ACCEPT);
         acceptButton.addMouseListener((MouseClickListener) event -> {
             dispose();
@@ -164,7 +202,7 @@ public class TileDistributionView extends JDialog {
                 applyChangesToDistribution();
             });
         });
-        return List.of(shuffleButton, resetButton, acceptButton);
+        return List.of(shuffleButton, acceptButton);
     }
 
     private void applyChangesToDistribution() {
