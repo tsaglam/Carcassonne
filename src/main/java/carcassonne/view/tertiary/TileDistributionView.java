@@ -1,6 +1,7 @@
 package carcassonne.view.tertiary;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
@@ -155,6 +156,10 @@ public class TileDistributionView extends JDialog {
 
         ButtonGroup buttonGroup = new ButtonGroup();
         stackSizeLabel = new JLabel();
+        Dimension size = new Dimension(160, 24);
+        stackSizeLabel.setPreferredSize(size);
+        stackSizeLabel.setMinimumSize(size);
+        stackSizeLabel.setMaximumSize(size);
         updateStackSizePreview();
 
         for (int multiplier = 1; multiplier <= MAX_MULTIPLIER; multiplier++) {
