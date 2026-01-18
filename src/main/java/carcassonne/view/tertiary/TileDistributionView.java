@@ -1,6 +1,7 @@
 package carcassonne.view.tertiary;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
@@ -11,39 +12,42 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import carcassonne.model.tile.TileDistribution;
+import carcassonne.model.tile.TileDistributionPreset;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.util.MouseClickListener;
 import carcassonne.view.util.ThreadingUtil;
 
 /**
- * User interface that shows all tiles and how often they are used in a standard game (two players, chaos mode
- * disabled.)
+ * User interface that shows all tiles and how often they are used in a standard game.
  * @author Timur Saglam
  */
 public class TileDistributionView extends JDialog {
     private static final long serialVersionUID = 1805511300999150753L;
-    private static final String MULTIPLIER = "Tile Stack Size Multiplier: ";
-    private static final String BRACKET = "\t (";
-    private static final String STACK_SIZE = " tiles on the stack)";
+    private static final String MULTIPLIER_LABEL = "Tile Stack Size Multiplier: ";
+    private static final String STACK_SIZE_PREFIX = "\t (";
+    private static final String STACK_SIZE_SUFFIX = " tiles on the stack)";
+    private static final String PRESETS_LABEL = "Tile Presets:";
     private static final String SHUFFLE = "Shuffle";
-    private static final String RESET = "Reset";
     private static final String ACCEPT = "Accept";
     private static final String TITLE = "Tile Distribution";
     private static final int GRID_WIDTH = 11;
     private static final int GRID_HEIGHT = 3;
     private static final int PADDING = 5;
+    private static final int MAX_MULTIPLIER = 6;
+
     private final TileDistribution distribution;
     private final List<TileQuantityPanel> quantityPanels;
     private final GameSettings settings;
     private int stackSizeMultiplier;
-    private JLabel sizeLabel;
+    private JLabel stackSizeLabel;
 
     /**
      * Creates the UI and shows it.
@@ -55,8 +59,198 @@ public class TileDistributionView extends JDialog {
         distribution.createBackup();
         quantityPanels = new ArrayList<>();
         stackSizeMultiplier = settings.getStackSizeMultiplier();
-        buildPanel();
-        buildWindow();
+        buildUI();
+        setupWindowListeners();
+    }
+
+    /**
+     * Recalculates the stack size preview.
+     */
+    public void updateStackSizePreview() {
+        if (stackSizeLabel != null) {
+            int totalSize = calculateTotalStackSize(stackSizeMultiplier);
+            stackSizeLabel.setText(STACK_SIZE_PREFIX + totalSize + STACK_SIZE_SUFFIX);
+            validate();
+        }
+    }
+
+    private void buildUI() {
+        JPanel mainPanel = createMainPanel();
+        GridBagConstraints constraints = createInitialConstraints();
+
+        addTilePanels(mainPanel, constraints);
+        addMultiplierPanel(mainPanel, constraints);
+        addPresetControls(mainPanel, constraints);
+        addActionButtons(mainPanel, constraints);
+
+        getContentPane().add(mainPanel);
+        configureWindow();
+    }
+
+    private JPanel createMainPanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.GRAY);
+        panel.setLayout(new GridBagLayout());
+        setBackground(Color.GRAY);
+        return panel;
+    }
+
+    private GridBagConstraints createInitialConstraints() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+        return constraints;
+    }
+
+    private void addTilePanels(JPanel mainPanel, GridBagConstraints constraints) {
+        for (TileType tileType : TileType.enabledTiles()) {
+            TileQuantityPanel panel = new TileQuantityPanel(tileType, distribution.getQuantity(tileType), this);
+            quantityPanels.add(panel);
+            mainPanel.add(panel, constraints);
+
+            constraints.gridx++;
+            if (constraints.gridx >= GRID_WIDTH) {
+                constraints.gridx = 0;
+                constraints.gridy++;
+            }
+        }
+    }
+
+    private void addMultiplierPanel(JPanel mainPanel, GridBagConstraints constraints) {
+        constraints.gridwidth = 6;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        mainPanel.add(buildMultiplierPanel(), constraints);
+    }
+
+    private void addPresetControls(JPanel mainPanel, GridBagConstraints constraints) {
+        constraints.gridwidth = 1;
+        constraints.gridx = 6;
+        constraints.fill = GridBagConstraints.NONE;
+        mainPanel.add(createPresetLabel(), constraints);
+
+        constraints.gridwidth = 2;
+        constraints.gridx = 7;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        mainPanel.add(createPresetDropdown(), constraints);
+    }
+
+    private void addActionButtons(JPanel mainPanel, GridBagConstraints constraints) {
+        constraints.gridwidth = 1;
+        constraints.gridx = 9;
+        constraints.fill = GridBagConstraints.NONE;
+
+        for (JButton button : createActionButtons()) {
+            mainPanel.add(button, constraints);
+            constraints.gridx++;
+        }
+    }
+
+    private JPanel buildMultiplierPanel() {
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
+        panel.setBackground(Color.LIGHT_GRAY);
+        panel.add(new JLabel(MULTIPLIER_LABEL));
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        stackSizeLabel = new JLabel();
+        Dimension size = new Dimension(160, 24);
+        stackSizeLabel.setPreferredSize(size);
+        stackSizeLabel.setMinimumSize(size);
+        stackSizeLabel.setMaximumSize(size);
+        updateStackSizePreview();
+
+        for (int multiplier = 1; multiplier <= MAX_MULTIPLIER; multiplier++) {
+            addMultiplierButton(panel, buttonGroup, multiplier);
+        }
+
+        panel.add(stackSizeLabel);
+        return panel;
+    }
+
+    private void addMultiplierButton(JPanel panel, ButtonGroup buttonGroup, int multiplier) {
+        JRadioButton button = new JRadioButton(multiplier + "x");
+        button.setSelected(settings.getStackSizeMultiplier() == multiplier);
+        button.addMouseListener((MouseClickListener) event -> {
+            stackSizeMultiplier = multiplier;
+            updateStackSizePreview();
+        });
+        buttonGroup.add(button);
+        panel.add(button);
+    }
+
+    private JLabel createPresetLabel() {
+        JLabel label = new JLabel(PRESETS_LABEL);
+        label.setForeground(Color.WHITE);
+        label.setFont(label.getFont().deriveFont(java.awt.Font.BOLD));
+        label.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        return label;
+    }
+
+    private JComboBox<TileDistributionPreset> createPresetDropdown() {
+        JComboBox<TileDistributionPreset> comboBox = new JComboBox<>(TileDistributionPreset.values());
+        new PresetDropdownHandler(comboBox, distribution, quantityPanels);
+        return comboBox;
+    }
+
+    private List<JButton> createActionButtons() {
+        JButton shuffleButton = createShuffleButton();
+        JButton acceptButton = createAcceptButton();
+        return List.of(shuffleButton, acceptButton);
+    }
+
+    private JButton createShuffleButton() {
+        JButton button = new JButton(SHUFFLE);
+        button.addMouseListener((MouseClickListener) event -> ThreadingUtil.runAndCallback(() -> {
+            applyUserChangesToDistribution();
+            distribution.shuffle();
+        }, this::updateFromDistribution));
+        return button;
+    }
+
+    private JButton createAcceptButton() {
+        JButton button = new JButton(ACCEPT);
+        button.addMouseListener((MouseClickListener) event -> {
+            dispose();
+            ThreadingUtil.runInBackground(() -> {
+                settings.setStackSizeMultiplier(stackSizeMultiplier);
+                applyUserChangesToDistribution();
+            });
+        });
+        return button;
+    }
+
+    private void applyUserChangesToDistribution() {
+        for (TileQuantityPanel panel : quantityPanels) {
+            int quantity = panel.getQuantity();
+            if (quantity >= 0) {
+                distribution.setQuantity(panel.getTileType(), quantity);
+            }
+        }
+    }
+
+    private void updateFromDistribution() {
+        for (TileQuantityPanel panel : quantityPanels) {
+            panel.setQuantity(distribution.getQuantity(panel.getTileType()));
+        }
+    }
+
+    private int calculateTotalStackSize(int multiplier) {
+        int totalSize = 0;
+        for (TileQuantityPanel panel : quantityPanels) {
+            int quantity = panel.getQuantity();
+            if (quantity >= 0) {
+                totalSize += quantity;
+            } else {
+                totalSize += distribution.getQuantity(panel.getTileType());
+            }
+        }
+        return totalSize * multiplier;
+    }
+
+    private void setupWindowListeners() {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent event) {
@@ -71,133 +265,7 @@ public class TileDistributionView extends JDialog {
         });
     }
 
-    /**
-     * Recalculates the stack size preview.
-     */
-    public void updateStackSizePreview() {
-        if (sizeLabel != null) {
-            int size = calculateStackSize(stackSizeMultiplier);
-            sizeLabel.setText(BRACKET + size + STACK_SIZE);
-            validate();
-        }
-    }
-
-    /*
-     * Builds the main panel and lays out its subcomponents in a grid.
-     */
-    private void buildPanel() {
-        JPanel tilePanel = new JPanel();
-        tilePanel.setBackground(Color.GRAY);
-        setBackground(Color.GRAY);
-        tilePanel.setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.weightx = 1;
-        constraints.weighty = 1;
-        builtTilePanels(tilePanel, constraints);
-        constraints.gridwidth = 6;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        tilePanel.add(buildMultiplierPanel(), constraints);
-        constraints.gridwidth = 1;
-        constraints.gridx = 8;
-        for (JButton button : createButtons()) {
-            tilePanel.add(button, constraints);
-            constraints.gridx++;
-        }
-        getContentPane().add(tilePanel);
-    }
-
-    private void builtTilePanels(JPanel tilePanel, GridBagConstraints constraints) {
-        for (TileType tileType : TileType.enabledTiles()) {
-            TileQuantityPanel quantityPanel = new TileQuantityPanel(tileType, distribution.getQuantity(tileType), this);
-            quantityPanels.add(quantityPanel);
-            tilePanel.add(quantityPanel, constraints);
-            constraints.gridx++;
-            if (constraints.gridx >= GRID_WIDTH) {
-                constraints.gridx = 0;
-                constraints.gridy++;
-            }
-        }
-    }
-
-    private JPanel buildMultiplierPanel() {
-        JPanel multiplierPanel = new JPanel();
-        multiplierPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
-        multiplierPanel.setBackground(Color.LIGHT_GRAY);
-        multiplierPanel.add(new JLabel(MULTIPLIER));
-        ButtonGroup group = new ButtonGroup();
-        sizeLabel = new JLabel();
-        updateStackSizePreview();
-        for (int multiplier = 1; multiplier <= 4; multiplier++) {
-            createMultiplierButton(multiplier, multiplierPanel, group);
-        }
-        multiplierPanel.add(sizeLabel);
-        return multiplierPanel;
-    }
-
-    private void createMultiplierButton(int multiplier, JPanel multiplierPanel, ButtonGroup group) {
-        JRadioButton button = new JRadioButton(multiplier + "x");
-        button.setSelected(settings.getStackSizeMultiplier() == multiplier);
-        button.addMouseListener((MouseClickListener) event -> {
-            stackSizeMultiplier = multiplier;
-            updateStackSizePreview();
-        });
-        group.add(button);
-        multiplierPanel.add(button);
-    }
-
-    private List<JButton> createButtons() {
-        JButton shuffleButton = new JButton(SHUFFLE);
-        shuffleButton.addMouseListener((MouseClickListener) event -> ThreadingUtil.runAndCallback(() -> {
-            applyChangesToDistribution();
-            distribution.shuffle();
-        }, this::updateFromDistribution));
-        JButton resetButton = new JButton(RESET);
-        resetButton.addMouseListener((MouseClickListener) event -> ThreadingUtil.runAndCallback(distribution::reset, this::updateFromDistribution));
-        JButton acceptButton = new JButton(ACCEPT);
-        acceptButton.addMouseListener((MouseClickListener) event -> {
-            dispose();
-            ThreadingUtil.runInBackground(() -> {
-                settings.setStackSizeMultiplier(stackSizeMultiplier);
-                applyChangesToDistribution();
-            });
-        });
-        return List.of(shuffleButton, resetButton, acceptButton);
-    }
-
-    private void applyChangesToDistribution() {
-        for (TileQuantityPanel panel : quantityPanels) {
-            if (panel.getQuantity() >= 0) {
-                distribution.setQuantity(panel.getTileType(), panel.getQuantity());
-            }
-        }
-    }
-
-    private void updateFromDistribution() {
-        for (TileQuantityPanel panel : quantityPanels) {
-            panel.setQuantity(distribution.getQuantity(panel.getTileType()));
-        }
-    }
-
-    private int calculateStackSize(int multiplier) {
-        int size = 0;
-        for (TileQuantityPanel panel : quantityPanels) {
-            if (panel.getQuantity() >= 0) {
-                size += panel.getQuantity();
-            } else {
-                size += distribution.getQuantity(panel.getTileType());
-            }
-
-        }
-        return size * multiplier;
-    }
-
-    /*
-     * Shows and resizes the window.
-     */
-    private void buildWindow() {
+    private void configureWindow() {
         setTitle(TITLE);
         setResizable(false);
         pack();
