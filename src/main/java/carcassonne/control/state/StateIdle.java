@@ -58,5 +58,4 @@ public class StateIdle extends AbstractGameState {
     protected void exit() {
         // No exit functions.
     }
-
 }

@@ -239,5 +239,4 @@ public class StateTransitionTest extends CarcassonneTest {
         game.skipPostGameStatistics();
         assertState(StateIdle.class);
     }
-
 }

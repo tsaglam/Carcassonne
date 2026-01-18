@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.basic.ComboPopup;
 
 import carcassonne.model.tile.TileDistribution;
 import carcassonne.model.tile.TileDistributionPreset;
@@ -22,22 +24,19 @@ public class PresetDropdownHandler {
     private final JComboBox<TileDistributionPreset> comboBox;
     private final TileDistribution distribution;
     private final List<TileQuantityPanel> quantityPanels;
-    private final Runnable updateCallback;
     private Map<TileType, Integer> originalQuantitiesBeforePreview;
+    private boolean isSelectingPreset = false;
 
     /**
      * Creates a handler for a preset dropdown.
      * @param comboBox the combo box to handle.
      * @param distribution the tile distribution to modify.
      * @param quantityPanels the panels displaying tile quantities.
-     * @param updateCallback callback to run after updates.
      */
-    public PresetDropdownHandler(JComboBox<TileDistributionPreset> comboBox, TileDistribution distribution, List<TileQuantityPanel> quantityPanels,
-            Runnable updateCallback) {
+    public PresetDropdownHandler(JComboBox<TileDistributionPreset> comboBox, TileDistribution distribution, List<TileQuantityPanel> quantityPanels) {
         this.comboBox = comboBox;
         this.distribution = distribution;
         this.quantityPanels = quantityPanels;
-        this.updateCallback = updateCallback;
         setupListeners();
     }
 
@@ -67,9 +66,9 @@ public class PresetDropdownHandler {
             }
 
             private void attachHoverListenerToPopup() {
-                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
-                if (popup instanceof javax.swing.plaf.basic.ComboPopup) {
-                    javax.swing.JList<?> list = ((javax.swing.plaf.basic.ComboPopup) popup).getList();
+                Object childComponent = comboBox.getUI().getAccessibleChild(comboBox, 0);
+                if (childComponent instanceof ComboPopup popup) {
+                    JList<?> list = popup.getList();
                     list.addMouseMotionListener(new MouseMotionAdapter() {
                         @Override
                         public void mouseMoved(java.awt.event.MouseEvent event) {
@@ -89,7 +88,11 @@ public class PresetDropdownHandler {
             private void cleanupAfterPopupClose() {
                 lastHovered = null;
                 originalQuantitiesBeforePreview = null;
-                clearAllPreviews();
+
+                if (!isSelectingPreset) {
+                    clearAllPreviews();
+                }
+                isSelectingPreset = false;
             }
         };
     }
@@ -106,23 +109,14 @@ public class PresetDropdownHandler {
             return;
         }
 
-        TileDistribution temporaryDistribution = createTemporaryDistribution(preset);
+        TileDistribution temporaryDistribution = new TileDistribution();
+        preset.applyTo(temporaryDistribution);
 
         for (TileQuantityPanel panel : quantityPanels) {
             int originalQuantity = originalQuantitiesBeforePreview.get(panel.getTileType());
             int previewQuantity = temporaryDistribution.getQuantity(panel.getTileType());
             panel.showPreviewHighlight(originalQuantity, previewQuantity);
         }
-    }
-
-    private TileDistribution createTemporaryDistribution(TileDistributionPreset preset) {
-        TileDistribution temporaryDistribution = new TileDistribution();
-        for (TileType type : TileType.enabledTiles()) {
-            temporaryDistribution.setQuantity(type, originalQuantitiesBeforePreview.get(type));
-        }
-        temporaryDistribution.reset();
-        preset.applyTo(temporaryDistribution);
-        return temporaryDistribution;
     }
 
     private void clearAllPreviews() {
@@ -137,13 +131,23 @@ public class PresetDropdownHandler {
             return;
         }
 
-        Map<TileType, Integer> quantitiesBeforeApplication = captureCurrentQuantities();
+        System.out.print("SELECTED: " + selected.getName());
+        isSelectingPreset = true; // avoids resetting preview and thus flickering
+
+        Map<TileType, Integer> quantitiesBeforeApplication;
+        if (originalQuantitiesBeforePreview != null) {
+            quantitiesBeforeApplication = new HashMap<>(originalQuantitiesBeforePreview);
+        } else {
+            quantitiesBeforeApplication = captureCurrentQuantities();
+        }
 
         ThreadingUtil.runAndCallback(() -> {
             distribution.reset();
             selected.applyTo(distribution);
         }, () -> {
-            updateCallback.run();
+            for (TileQuantityPanel panel : quantityPanels) {
+                panel.setQuantity(distribution.getQuantity(panel.getTileType()));
+            }
             highlightChangedTiles(quantitiesBeforeApplication);
         });
     }
