@@ -31,7 +31,7 @@ public enum TileDistributionPreset {
 
         // Set normal amounts for original tiles:
         it.setQuantity(TileType.CastleTube, 3);
-        it.setQuantity(TileType.RoadEnd, 8);
+        it.setQuantity(TileType.Road, 8);
         it.setQuantity(TileType.RoadCurve, 9);
         it.setQuantity(TileType.RoadJunctionSmall, 4);
     }),
