@@ -34,6 +34,7 @@ public class TileQuantityPanel extends JPanel {
     private final TileType type;
     private JTextField textField;
     private Timer highlightTimer;
+    private int originalQuantity = -1;
 
     /**
      * Creates a quantity panel for a certain tile type.
@@ -111,19 +112,27 @@ public class TileQuantityPanel extends JPanel {
         cancelExistingHighlight();
 
         if (currentQuantity != previewQuantity) {
+            // Store original quantity and temporarily show preview
+            if (originalQuantity == -1) {
+                originalQuantity = currentQuantity;
+            }
+            textField.setText(Integer.toString(previewQuantity));
+
             Color highlightColor = (previewQuantity > currentQuantity) ? HIGHLIGHT_INCREASE : HIGHLIGHT_DECREASE;
             setBackground(highlightColor);
         } else {
+            restoreOriginalQuantity();
             setBackground(NORMAL_BACKGROUND);
         }
         repaint();
     }
 
     /**
-     * Clears any preview highlighting and restores the normal background.
+     * Clears any preview highlighting and restores the normal background and original quantity.
      */
     public void clearPreviewHighlight() {
         cancelExistingHighlight();
+        restoreOriginalQuantity();
         setBackground(NORMAL_BACKGROUND);
         repaint();
     }
@@ -156,6 +165,13 @@ public class TileQuantityPanel extends JPanel {
     private void cancelExistingHighlight() {
         if (highlightTimer != null && highlightTimer.isRunning()) {
             highlightTimer.stop();
+        }
+    }
+
+    private void restoreOriginalQuantity() {
+        if (originalQuantity != -1) {
+            textField.setText(Integer.toString(originalQuantity));
+            originalQuantity = -1;
         }
     }
 }
