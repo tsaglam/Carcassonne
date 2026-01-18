@@ -38,23 +38,21 @@ public class TileQuantityPanel extends JPanel {
     private JTextField textField;
     private Timer highlightTimer;
     private int originalQuantity = -1;
-    private int fadeStep = 0;
-    private Color fadeFromColor;
-    private Color fadeToColor;
+    private int fadeStep;
 
     /**
      * Creates a quantity panel for a certain tile type.
      * @param type is the tile type.
      * @param initialQuantity is the initial quantity depicted in the text field.
-     * @param ui is the parent UI for callbacks.
+     * @param parentUI is the parent UI for callbacks.
      */
-    public TileQuantityPanel(TileType type, int initialQuantity, TileDistributionView ui) {
+    public TileQuantityPanel(TileType type, int initialQuantity, TileDistributionView parentUI) {
         this.type = type;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, BORDER_SIZE));
         setBackground(NORMAL_BACKGROUND);
         createTileLabel(type);
-        createTextField(initialQuantity, ui);
+        createTextField(initialQuantity, parentUI);
     }
 
     /**
@@ -102,7 +100,7 @@ public class TileQuantityPanel extends JPanel {
         setBackground(highlightColor);
         repaint();
 
-        startFadeAnimation(highlightColor, NORMAL_BACKGROUND);
+        startFadeAnimation(highlightColor);
     }
 
     /**
@@ -177,20 +175,18 @@ public class TileQuantityPanel extends JPanel {
         }
     }
 
-    private void startFadeAnimation(Color fromColor, Color toColor) {
+    private void startFadeAnimation(Color startColor) {
         fadeStep = 0;
-        fadeFromColor = fromColor;
-        fadeToColor = toColor;
 
         highlightTimer = new Timer(FADE_INTERVAL_MS, event -> {
             fadeStep++;
 
             if (fadeStep >= FADE_STEPS) {
-                setBackground(fadeToColor);
+                setBackground(NORMAL_BACKGROUND);
                 highlightTimer.stop();
             } else {
                 float progress = (float) fadeStep / (float) FADE_STEPS;
-                Color interpolatedColor = PaintShop.interpolateColor(fadeFromColor, fadeToColor, progress);
+                Color interpolatedColor = PaintShop.interpolateColor(startColor, NORMAL_BACKGROUND, progress);
                 setBackground(interpolatedColor);
             }
             repaint();

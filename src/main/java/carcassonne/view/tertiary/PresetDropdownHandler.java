@@ -1,7 +1,7 @@
 package carcassonne.view.tertiary;
 
 import java.awt.event.MouseMotionAdapter;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,7 +98,7 @@ public class PresetDropdownHandler {
     }
 
     private void storeOriginalQuantities() {
-        originalQuantitiesBeforePreview = new HashMap<>();
+        originalQuantitiesBeforePreview = new EnumMap<>(TileType.class);
         for (TileQuantityPanel panel : quantityPanels) {
             originalQuantitiesBeforePreview.put(panel.getTileType(), panel.getQuantity());
         }
@@ -126,34 +126,30 @@ public class PresetDropdownHandler {
     }
 
     private void handlePresetSelection() {
-        TileDistributionPreset selected = (TileDistributionPreset) comboBox.getSelectedItem();
-        if (selected == null) {
-            return;
-        }
+        if (comboBox.getSelectedItem() instanceof TileDistributionPreset preset) {
+            isSelectingPreset = true; // avoids resetting preview and thus flickering
 
-        System.out.print("SELECTED: " + selected.getName());
-        isSelectingPreset = true; // avoids resetting preview and thus flickering
-
-        Map<TileType, Integer> quantitiesBeforeApplication;
-        if (originalQuantitiesBeforePreview != null) {
-            quantitiesBeforeApplication = new HashMap<>(originalQuantitiesBeforePreview);
-        } else {
-            quantitiesBeforeApplication = captureCurrentQuantities();
-        }
-
-        ThreadingUtil.runAndCallback(() -> {
-            distribution.reset();
-            selected.applyTo(distribution);
-        }, () -> {
-            for (TileQuantityPanel panel : quantityPanels) {
-                panel.setQuantity(distribution.getQuantity(panel.getTileType()));
+            Map<TileType, Integer> quantitiesBeforeApplication;
+            if (originalQuantitiesBeforePreview != null) {
+                quantitiesBeforeApplication = new EnumMap<>(originalQuantitiesBeforePreview);
+            } else {
+                quantitiesBeforeApplication = captureCurrentQuantities();
             }
-            highlightChangedTiles(quantitiesBeforeApplication);
-        });
+
+            ThreadingUtil.runAndCallback(() -> {
+                distribution.reset();
+                preset.applyTo(distribution);
+            }, () -> {
+                for (TileQuantityPanel panel : quantityPanels) {
+                    panel.setQuantity(distribution.getQuantity(panel.getTileType()));
+                }
+                highlightChangedTiles(quantitiesBeforeApplication);
+            });
+        }
     }
 
     private Map<TileType, Integer> captureCurrentQuantities() {
-        Map<TileType, Integer> quantities = new HashMap<>();
+        Map<TileType, Integer> quantities = new EnumMap<>(TileType.class);
         for (TileQuantityPanel panel : quantityPanels) {
             quantities.put(panel.getTileType(), panel.getQuantity());
         }
