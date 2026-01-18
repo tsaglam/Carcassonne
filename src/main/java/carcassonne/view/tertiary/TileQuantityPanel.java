@@ -15,6 +15,7 @@ import javax.swing.text.NumberFormatter;
 
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
+import carcassonne.view.PaintShop;
 import carcassonne.view.util.MouseClickListener;
 
 /**
@@ -30,11 +31,16 @@ public class TileQuantityPanel extends JPanel {
     private static final Color HIGHLIGHT_INCREASE = new Color(34, 139, 34);
     private static final Color HIGHLIGHT_DECREASE = new Color(178, 34, 34);
     private static final int HIGHLIGHT_DURATION_MS = 1500;
+    private static final int FADE_INTERVAL_MS = 50;
+    private static final int FADE_STEPS = HIGHLIGHT_DURATION_MS / FADE_INTERVAL_MS; // Should be 30 steps
 
     private final TileType type;
     private JTextField textField;
     private Timer highlightTimer;
     private int originalQuantity = -1;
+    private int fadeStep = 0;
+    private Color fadeFromColor;
+    private Color fadeToColor;
 
     /**
      * Creates a quantity panel for a certain tile type.
@@ -94,13 +100,9 @@ public class TileQuantityPanel extends JPanel {
 
         Color highlightColor = (newQuantity > previousQuantity) ? HIGHLIGHT_INCREASE : HIGHLIGHT_DECREASE;
         setBackground(highlightColor);
+        repaint();
 
-        highlightTimer = new Timer(HIGHLIGHT_DURATION_MS, event -> {
-            setBackground(NORMAL_BACKGROUND);
-            repaint();
-        });
-        highlightTimer.setRepeats(false);
-        highlightTimer.start();
+        startFadeAnimation(highlightColor, NORMAL_BACKGROUND);
     }
 
     /**
@@ -173,5 +175,27 @@ public class TileQuantityPanel extends JPanel {
             textField.setText(Integer.toString(originalQuantity));
             originalQuantity = -1;
         }
+    }
+
+    private void startFadeAnimation(Color fromColor, Color toColor) {
+        fadeStep = 0;
+        fadeFromColor = fromColor;
+        fadeToColor = toColor;
+
+        highlightTimer = new Timer(FADE_INTERVAL_MS, event -> {
+            fadeStep++;
+
+            if (fadeStep >= FADE_STEPS) {
+                setBackground(fadeToColor);
+                highlightTimer.stop();
+            } else {
+                float progress = (float) fadeStep / (float) FADE_STEPS;
+                Color interpolatedColor = PaintShop.interpolateColor(fadeFromColor, fadeToColor, progress);
+                setBackground(interpolatedColor);
+            }
+            repaint();
+        });
+
+        highlightTimer.start();
     }
 }

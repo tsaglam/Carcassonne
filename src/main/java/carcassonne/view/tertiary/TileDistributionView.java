@@ -191,7 +191,7 @@ public class TileDistributionView extends JDialog {
 
     private JComboBox<TileDistributionPreset> createPresetDropdown() {
         JComboBox<TileDistributionPreset> comboBox = new JComboBox<>(TileDistributionPreset.values());
-        new PresetDropdownHandler(comboBox, distribution, quantityPanels, this::updateFromDistribution);
+        new PresetDropdownHandler(comboBox, distribution, quantityPanels);
         return comboBox;
     }
 
