@@ -10,6 +10,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.text.NumberFormatter;
 
 import carcassonne.model.tile.Tile;
@@ -25,19 +26,26 @@ public class TileQuantityPanel extends JPanel {
     private static final int TILE_SIZE = 100;
     private static final int BORDER_SIZE = 2;
     private static final String CLICK_TO_ROTATE = "Click to rotate the tile of type ";
+    private static final Color NORMAL_BACKGROUND = Color.GRAY;
+    private static final Color HIGHLIGHT_INCREASE = new Color(34, 139, 34);
+    private static final Color HIGHLIGHT_DECREASE = new Color(178, 34, 34);
+    private static final int HIGHLIGHT_DURATION_MS = 1500;
+
     private final TileType type;
     private JTextField textField;
+    private Timer highlightTimer;
 
     /**
      * Creates a quantity panel for a certain tile type.
      * @param type is the tile type.
      * @param initialQuantity is the initial quantity depicted in the text field.
+     * @param ui is the parent UI for callbacks.
      */
     public TileQuantityPanel(TileType type, int initialQuantity, TileDistributionView ui) {
         this.type = type;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, BORDER_SIZE));
-        setBackground(Color.LIGHT_GRAY);
+        setBackground(NORMAL_BACKGROUND);
         createTileLabel(type);
         createTextField(initialQuantity, ui);
     }
@@ -71,6 +79,55 @@ public class TileQuantityPanel extends JPanel {
         textField.setText(Integer.toString(quantity));
     }
 
+    /**
+     * Highlights the panel temporarily based on whether the quantity increased or decreased.
+     * @param previousQuantity the quantity before the change.
+     * @param newQuantity the quantity after the change.
+     */
+    public void highlightChange(int previousQuantity, int newQuantity) {
+        if (previousQuantity == newQuantity) {
+            return;
+        }
+
+        cancelExistingHighlight();
+
+        Color highlightColor = (newQuantity > previousQuantity) ? HIGHLIGHT_INCREASE : HIGHLIGHT_DECREASE;
+        setBackground(highlightColor);
+
+        highlightTimer = new Timer(HIGHLIGHT_DURATION_MS, event -> {
+            setBackground(NORMAL_BACKGROUND);
+            repaint();
+        });
+        highlightTimer.setRepeats(false);
+        highlightTimer.start();
+    }
+
+    /**
+     * Shows a preview highlight for a potential change without applying it.
+     * @param currentQuantity the current quantity.
+     * @param previewQuantity the quantity that would result from the change.
+     */
+    public void showPreviewHighlight(int currentQuantity, int previewQuantity) {
+        cancelExistingHighlight();
+
+        if (currentQuantity != previewQuantity) {
+            Color highlightColor = (previewQuantity > currentQuantity) ? HIGHLIGHT_INCREASE : HIGHLIGHT_DECREASE;
+            setBackground(highlightColor);
+        } else {
+            setBackground(NORMAL_BACKGROUND);
+        }
+        repaint();
+    }
+
+    /**
+     * Clears any preview highlighting and restores the normal background.
+     */
+    public void clearPreviewHighlight() {
+        cancelExistingHighlight();
+        setBackground(NORMAL_BACKGROUND);
+        repaint();
+    }
+
     private void createTileLabel(TileType type) {
         Tile tile = new Tile(type);
         JLabel label = new JLabel(tile.getScaledIcon(TILE_SIZE));
@@ -94,5 +151,11 @@ public class TileQuantityPanel extends JPanel {
         textField.addPropertyChangeListener(event -> ui.updateStackSizePreview());
         setQuantity(initialQuantity);
         add(textField, BorderLayout.SOUTH);
+    }
+
+    private void cancelExistingHighlight() {
+        if (highlightTimer != null && highlightTimer.isRunning()) {
+            highlightTimer.stop();
+        }
     }
 }
