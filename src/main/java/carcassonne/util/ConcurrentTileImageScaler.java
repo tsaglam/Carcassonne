@@ -51,18 +51,27 @@ public final class ConcurrentTileImageScaler {
     }
 
     /**
-     * Returns the scaled multi-resolution image of a tile. This image therefore supports HighDPI graphics such as Retina on
-     * macOS. This method is thread safe and leverages caching.
-     * @param tile is the tile whose image is required.
-     * @param targetSize is the edge length of the (quadratic) image in pixels.
-     * @param fastScaling specifies whether a fast scaling algorithm should be used.
-     * @return the scaled multi-resolution {@link Image}.
+     * Returns a scaled multi-resolution image of a tile supporting HighDPI displays (e.g., Retina). This method is
+     * thread-safe and leverages caching.
+     * @param tile the tile whose image is required
+     * @param targetSize the edge length of the quadratic image in pixels
+     * @param fastScaling whether to use a fast scaling algorithm
+     * @return the scaled multi-resolution {@link Image}
      */
     public static Image getScaledMultiResolutionImage(Tile tile, int targetSize, boolean fastScaling) {
-        int highDpiSize = Math.min(targetSize * GameSettings.HIGH_DPI_FACTOR, GameSettings.TILE_RESOLUTION);
-        Image highDpiImage = getScaledImage(tile, highDpiSize, fastScaling);
-        Image defaultImage = getScaledImage(tile, targetSize, fastScaling);
-        return new BaseMultiResolutionImage(defaultImage, highDpiImage);
+        double[] factors = GameSettings.HIGH_DPI_FACTORS;
+        Image[] images = new Image[factors.length + 1];
+
+        // Base resolution image
+        images[0] = getScaledImage(tile, targetSize, fastScaling);
+
+        // Higher resolution variants
+        for (int i = 0; i < factors.length; i++) {
+            int scaledSize = (int) Math.round(targetSize * factors[i]);
+            images[i + 1] = getScaledImage(tile, Math.min(scaledSize, GameSettings.TILE_RESOLUTION), fastScaling);
+        }
+
+        return new BaseMultiResolutionImage(images);
     }
 
     /**
