@@ -25,7 +25,7 @@ public class GameSettings {
     public static final int MAXIMAL_PLAYERS = 5;
     public static final int MAXIMAL_TILES_ON_HAND = 5;
     public static final int TILE_RESOLUTION = 500;
-    public static final int HIGH_DPI_FACTOR = 2; // maximum supported DPI factor.
+    public static final double[] HIGH_DPI_FACTORS = {1.25, 1.5, 1.75, 2.0}; // multi resolution image DPI factors.
     public static final int MAXIMAL_MEEPLES = 7;
 
     // STRING CONSTANTS
