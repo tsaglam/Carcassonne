@@ -137,7 +137,6 @@ public class PresetDropdownHandler {
             }
 
             ThreadingUtil.runAndCallback(() -> {
-                distribution.reset();
                 preset.applyTo(distribution);
             }, () -> {
                 for (TileQuantityPanel panel : quantityPanels) {
