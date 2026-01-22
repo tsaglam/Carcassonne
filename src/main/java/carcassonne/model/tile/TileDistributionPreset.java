@@ -96,6 +96,7 @@ public enum TileDistributionPreset {
      * @param distribution the distribution to modify.
      */
     public void applyTo(TileDistribution distribution) {
+        distribution.reset();
         applier.apply(distribution);
     }
 
