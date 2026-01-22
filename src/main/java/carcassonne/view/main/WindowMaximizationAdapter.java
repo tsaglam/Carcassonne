@@ -31,6 +31,5 @@ public class WindowMaximizationAdapter extends WindowAdapter {
             maximized = true;
             frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
         }
-
     }
 }
