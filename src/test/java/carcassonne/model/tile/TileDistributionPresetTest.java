@@ -25,6 +25,8 @@ public class TileDistributionPresetTest {
     void testResettingPreset() {
         int roadEndBefore = distribution.getQuantity(TileType.RoadEnd);
         int castleTubeBefore = distribution.getQuantity(TileType.CastleTube);
+        TileDistributionPreset.LAND_OF_CATHEDRALS.applyTo(distribution);
+        TileDistributionPreset.NO_MONASTERIES.applyTo(distribution);
         TileDistributionPreset.ORIGINAL.applyTo(distribution);
         distribution.reset();
         int roadEndAfter = distribution.getQuantity(TileType.RoadEnd);
