@@ -4,6 +4,7 @@ import static carcassonne.view.main.ZoomMode.FAST;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -314,8 +315,12 @@ public class MainView extends JFrame implements NotifiableView {
         scrollPane.addZoomListener(() -> zoomIn(FAST), () -> zoomOut(FAST));
         add(scrollPane, BorderLayout.CENTER);
         setMinimumSize(MINIMAL_WINDOW_SIZE);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) Math.max(screenSize.width * 0.6, MINIMAL_WINDOW_SIZE.getWidth());
+        int height = (int) Math.max(screenSize.height * 0.7, MINIMAL_WINDOW_SIZE.getHeight());
         addWindowListener(new WindowMaximizationAdapter(this));
         pack();
+        setPreferredSize(new Dimension(width, height)); // should be set after maximization
     }
 
     private void checkCoordinates(int x, int y) {
