@@ -318,9 +318,9 @@ public class MainView extends JFrame implements NotifiableView {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int) Math.max(screenSize.width * 0.6, MINIMAL_WINDOW_SIZE.getWidth());
         int height = (int) Math.max(screenSize.height * 0.7, MINIMAL_WINDOW_SIZE.getHeight());
+        setSize(new Dimension(width, height)); // should be set after maximization
         addWindowListener(new WindowMaximizationAdapter(this));
         pack();
-        setPreferredSize(new Dimension(width, height)); // should be set after maximization
     }
 
     private void checkCoordinates(int x, int y) {
