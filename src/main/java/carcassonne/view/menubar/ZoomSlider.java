@@ -17,7 +17,7 @@ public class ZoomSlider extends JSlider {
 
     // UI CONSTANTS:
     private static final int MAJOR_TICK = 64;
-    private static final int MINOR_TICK = 8;
+    private static final int MINOR_TICK = 4;
     private static final String ZOOM_OUT = "Zoom Out (-)";
     private static final String ZOOM_IN = "Zoom In (+)";
 
