@@ -80,8 +80,8 @@ public class GameSettings {
         numberOfPlayers = 2;
         tilesPerPlayer = 1;
         stackSizeMultiplier = 1;
-        gridWidth = 29;
-        gridHeight = 19;
+        gridWidth = 45;
+        gridHeight = 27;
         allowEnclaves = true;
         changeListeners = new ArrayList<>();
     }
