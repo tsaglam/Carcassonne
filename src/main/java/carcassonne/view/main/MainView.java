@@ -24,6 +24,7 @@ import carcassonne.view.PaintShop;
 import carcassonne.view.menubar.MainMenuBar;
 import carcassonne.view.menubar.Scoreboard;
 import carcassonne.view.util.LookAndFeelUtil;
+import carcassonne.view.util.ZoomConfig;
 
 /**
  * The main user interface, showing the grid and the menu bar.
@@ -31,13 +32,6 @@ import carcassonne.view.util.LookAndFeelUtil;
  */
 public class MainView extends JFrame implements NotifiableView {
     private static final long serialVersionUID = 5684446992452298030L; // generated UID
-
-    // ZOOM CONSTANTS:
-    private static final int DEFAULT_ZOOM_LEVEL = 125;
-    private static final int MAX_ZOOM_LEVEL = 300;
-    private static final int MIN_ZOOM_LEVEL = 25;
-    private static final int ZOOM_STEP_LARGE = 25;
-    private static final int ZOOM_STEP_SMALL = 5;
 
     // UI CONSTANTS:
     private static final Dimension MINIMAL_WINDOW_SIZE = new Dimension(640, 480);
@@ -61,7 +55,7 @@ public class MainView extends JFrame implements NotifiableView {
         this.controller = controller;
         gridWidth = controller.getSettings().getGridWidth();
         gridHeight = controller.getSettings().getGridHeight();
-        zoomLevel = DEFAULT_ZOOM_LEVEL;
+        zoomLevel = ZoomConfig.DEFAULT_LEVEL.pixels();
         buildFrame();
     }
 
@@ -159,8 +153,8 @@ public class MainView extends JFrame implements NotifiableView {
      * @param mode determines the zoom mode, which affects image quality and performance.
      */
     public synchronized void zoomIn(ZoomMode mode) {
-        if (zoomLevel < MAX_ZOOM_LEVEL) {
-            zoomLevel += mode == FAST ? ZOOM_STEP_SMALL : ZOOM_STEP_LARGE;
+        if (zoomLevel < ZoomConfig.MAX_LEVEL.pixels()) {
+            zoomLevel += mode == FAST ? ZoomConfig.STEP_SMALL.pixels() : ZoomConfig.STEP.pixels();
             updateToChangedZoomLevel(mode);
             menuBar.getZoomSlider().setValueSneakily(zoomLevel); // ensures the slider is updated when using key bindings.
         }
@@ -171,8 +165,8 @@ public class MainView extends JFrame implements NotifiableView {
      * @param mode determines the zoom mode, which affects image quality and performance.
      */
     public synchronized void zoomOut(ZoomMode mode) {
-        if (zoomLevel > MIN_ZOOM_LEVEL) {
-            zoomLevel -= mode == FAST ? ZOOM_STEP_SMALL : ZOOM_STEP_LARGE;
+        if (zoomLevel > ZoomConfig.MIN_LEVEL.pixels()) {
+            zoomLevel -= mode == FAST ? ZoomConfig.STEP_SMALL.pixels() : ZoomConfig.STEP.pixels();
             updateToChangedZoomLevel(mode);
             menuBar.getZoomSlider().setValueSneakily(zoomLevel); // ensures the slider is updated when using key bindings.
         }
@@ -184,7 +178,7 @@ public class MainView extends JFrame implements NotifiableView {
      * @param mode determines the zoom mode, which affects image quality and performance.
      */
     public synchronized void setZoom(int level, ZoomMode mode) {
-        if (level <= MAX_ZOOM_LEVEL && level >= MIN_ZOOM_LEVEL) {
+        if (level <= ZoomConfig.MAX_LEVEL.pixels() && level >= ZoomConfig.MIN_LEVEL.pixels()) {
             zoomLevel = level;
             updateToChangedZoomLevel(mode);
         }
