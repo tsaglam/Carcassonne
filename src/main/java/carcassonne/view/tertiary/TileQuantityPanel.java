@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.text.NumberFormat;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFormattedTextField;
@@ -38,7 +39,6 @@ public class TileQuantityPanel extends JPanel {
     private JTextField textField;
     private Timer highlightTimer;
     private int originalQuantity = -1;
-    private int fadeStep;
 
     /**
      * Creates a quantity panel for a certain tile type.
@@ -176,16 +176,16 @@ public class TileQuantityPanel extends JPanel {
     }
 
     private void startFadeAnimation(Color startColor) {
-        fadeStep = 0;
+        AtomicInteger fadeStep = new AtomicInteger(0);
 
         highlightTimer = new Timer(FADE_INTERVAL_MS, event -> {
-            fadeStep++;
+            int step = fadeStep.incrementAndGet();
 
-            if (fadeStep >= FADE_STEPS) {
+            if (step >= FADE_STEPS) {
                 setBackground(NORMAL_BACKGROUND);
                 highlightTimer.stop();
             } else {
-                float progress = (float) fadeStep / (float) FADE_STEPS;
+                float progress = (float) step / (float) FADE_STEPS;
                 Color interpolatedColor = PaintShop.interpolateColor(startColor, NORMAL_BACKGROUND, progress);
                 setBackground(interpolatedColor);
             }
