@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test cases for the {@link TileDistributionPreset}.
  */
-public class TileDistributionPresetTest {
+class TileDistributionPresetTest {
 
     private TileDistribution distribution;
 
