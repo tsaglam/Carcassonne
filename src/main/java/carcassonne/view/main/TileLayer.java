@@ -60,8 +60,12 @@ public class TileLayer extends JPanel {
      * @param preview determines if the tiles are rendered in preview mode (fast but ugly).
      */
     public void changeZoomLevel(int zoomLevel, boolean preview) {
-        tileLabels.parallelStream().forEach(it -> it.getTile().getScaledIcon(zoomLevel)); // preload scaled images
+        // Preload scaled images in parallel (no UI modification)
+        tileLabels.parallelStream().forEach(it -> it.getTile().getScaledIcon(zoomLevel));
+
+        setIgnoreRepaint(true);
         tileLabels.forEach(it -> it.setTileSize(zoomLevel, preview));
+        setIgnoreRepaint(false);
     }
 
     /**
