@@ -1,6 +1,5 @@
 package carcassonne.view.tertiary;
 
-import java.awt.event.MouseMotionAdapter;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,7 @@ public class PresetDropdownHandler {
     private final List<TileQuantityPanel> quantityPanels;
     private Map<TileType, Integer> originalQuantitiesBeforePreview;
     private boolean isSelectingPreset = false;
+    private PresetHoverListener hoverListener;
 
     /**
      * Creates a handler for a preset dropdown.
@@ -43,16 +43,21 @@ public class PresetDropdownHandler {
     private void setupListeners() {
         comboBox.addPopupMenuListener(createPopupMenuListener());
         comboBox.addActionListener(event -> handlePresetSelection());
+        Object child = comboBox.getUI().getAccessibleChild(comboBox, 0);
+        if (child instanceof ComboPopup popup) {
+            JList<?> list = popup.getList();
+            hoverListener = new PresetHoverListener(list, PresetDropdownHandler.this::previewPreset);
+            list.addMouseMotionListener(hoverListener);
+        }
     }
 
     private PopupMenuListener createPopupMenuListener() {
         return new PopupMenuListener() {
-            private TileDistributionPreset lastHovered = null;
 
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent event) {
                 storeOriginalQuantities();
-                attachHoverListenerToPopup();
+                hoverListener.activate();
             }
 
             @Override
@@ -65,30 +70,9 @@ public class PresetDropdownHandler {
                 cleanupAfterPopupClose();
             }
 
-            private void attachHoverListenerToPopup() {
-                Object childComponent = comboBox.getUI().getAccessibleChild(comboBox, 0);
-                if (childComponent instanceof ComboPopup popup) {
-                    JList<?> list = popup.getList();
-                    list.addMouseMotionListener(new MouseMotionAdapter() {
-                        @Override
-                        public void mouseMoved(java.awt.event.MouseEvent event) {
-                            int index = list.locationToIndex(event.getPoint());
-                            if (isValidPresetIndex(index)) {
-                                TileDistributionPreset preset = TileDistributionPreset.values()[index];
-                                if (preset != lastHovered) {
-                                    lastHovered = preset;
-                                    previewPreset(preset);
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-
             private void cleanupAfterPopupClose() {
-                lastHovered = null;
+                hoverListener.deactivate();
                 originalQuantitiesBeforePreview = null;
-
                 if (!isSelectingPreset) {
                     clearAllPreviews();
                 }
@@ -136,9 +120,7 @@ public class PresetDropdownHandler {
                 quantitiesBeforeApplication = captureCurrentQuantities();
             }
 
-            ThreadingUtil.runAndCallback(() -> {
-                preset.applyTo(distribution);
-            }, () -> {
+            ThreadingUtil.runAndCallback(() -> preset.applyTo(distribution), () -> {
                 for (TileQuantityPanel panel : quantityPanels) {
                     panel.setQuantity(distribution.getQuantity(panel.getTileType()));
                 }
@@ -161,9 +143,5 @@ public class PresetDropdownHandler {
             int newQuantity = panel.getQuantity();
             panel.highlightChange(previousQuantity, newQuantity);
         }
-    }
-
-    private boolean isValidPresetIndex(int index) {
-        return index >= 0 && index < TileDistributionPreset.values().length;
     }
 }

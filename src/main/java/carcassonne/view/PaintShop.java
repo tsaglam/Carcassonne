@@ -141,7 +141,7 @@ public final class PaintShop {
      * @param endColor the color at fraction {@code 1.0}
      * @param fraction the interpolation factor, typically in the range {@code [0.0, 1.0]}
      * @return the interpolated color depending on the fraction.
-     * @throws IllegalArgumentException if the fraction is outside the range {@code [0.0, 1.0}
+     * @throws IllegalArgumentException if the fraction is outside the range {@code [0.0, 1.0]}
      */
     public static Color interpolateColor(Color startColor, Color endColor, float fraction) {
         int red = (int) (startColor.getRed() + (endColor.getRed() - startColor.getRed()) * fraction);
