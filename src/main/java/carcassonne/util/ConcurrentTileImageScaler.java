@@ -39,13 +39,17 @@ public final class ConcurrentTileImageScaler {
         int lockKey = createKey(tile, targetSize);
         semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
         Semaphore lock = semaphores.get(lockKey);
+        boolean acquired = false;
         try {
             lock.acquire();
+            acquired = true;
             return getScaledImageUnsafe(tile, targetSize, fastScaling);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         } finally {
-            lock.release();
+            if (acquired) {
+                lock.release();
+            }
         }
         return null;
     }
