@@ -11,21 +11,21 @@ import javax.swing.event.PopupMenuListener;
 public class PresetPopupListener implements PopupMenuListener {
 
     private final PresetHoverListener hoverListener;
-    private final PresetPopupCallback callback;
+    private final PresetDropdownHandler handler;
 
     /**
      * Creates a popup listener for a preset dropdown.
      * @param hoverListener the hover listener to activate/deactivate.
-     * @param callback the callback for popup lifecycle events.
+     * @param handler the handler for popup lifecycle actions.
      */
-    public PresetPopupListener(PresetHoverListener hoverListener, PresetPopupCallback callback) {
+    public PresetPopupListener(PresetHoverListener hoverListener, PresetDropdownHandler handler) {
         this.hoverListener = hoverListener;
-        this.callback = callback;
+        this.handler = handler;
     }
 
     @Override
     public void popupMenuWillBecomeVisible(PopupMenuEvent event) {
-        callback.onPopupOpening();
+        handler.onPopupOpening();
         hoverListener.activate();
     }
 
@@ -41,21 +41,6 @@ public class PresetPopupListener implements PopupMenuListener {
 
     private void cleanupAfterPopupClose() {
         hoverListener.deactivate();
-        callback.onPopupClosing();
-    }
-
-    /**
-     * Callback interface for popup lifecycle events.
-     */
-    public interface PresetPopupCallback {
-        /**
-         * Called when the popup menu is about to open.
-         */
-        void onPopupOpening();
-
-        /**
-         * Called when the popup menu is closing or has been canceled.
-         */
-        void onPopupClosing();
+        handler.onPopupClosing();
     }
 }
