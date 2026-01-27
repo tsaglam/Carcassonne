@@ -8,7 +8,7 @@ import carcassonne.model.terrain.TerrainType;
  */
 public enum TileDistributionPreset {
 
-    AUTHORS_CHOICE("Timur's Homebrew Version", it -> {
+    AUTHORS_CHOICE("Author's Choice", it -> {
         // No change required from the default
     }),
 
