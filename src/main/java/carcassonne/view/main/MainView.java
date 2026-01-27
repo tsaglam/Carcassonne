@@ -4,7 +4,9 @@ import static carcassonne.view.main.ZoomMode.FAST;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Toolkit;
+import java.util.Objects;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -35,6 +37,7 @@ public class MainView extends JFrame implements NotifiableView {
 
     // UI CONSTANTS:
     private static final Dimension MINIMAL_WINDOW_SIZE = new Dimension(640, 480);
+    public static final double DEFAULT_SIZE_RATIO = 0.7;
 
     // FIELDS:
     private final ControllerFacade controller;
@@ -310,10 +313,11 @@ public class MainView extends JFrame implements NotifiableView {
         add(scrollPane, BorderLayout.CENTER);
         setMinimumSize(MINIMAL_WINDOW_SIZE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) Math.max(screenSize.width * 0.6, MINIMAL_WINDOW_SIZE.getWidth());
-        int height = (int) Math.max(screenSize.height * 0.7, MINIMAL_WINDOW_SIZE.getHeight());
-        setSize(new Dimension(width, height)); // should be set after maximization
-        addWindowListener(new WindowMaximizationAdapter(this));
+        int width = (int) Math.max(screenSize.width * DEFAULT_SIZE_RATIO, MINIMAL_WINDOW_SIZE.getWidth());
+        int height = (int) Math.max(screenSize.height * DEFAULT_SIZE_RATIO, MINIMAL_WINDOW_SIZE.getHeight());
+        setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
+        setPreferredSize(new Dimension(width, height));
+        addWindowListener(new WindowMaximizationAdapter(this)); // fix for Windows
         pack();
     }
 
@@ -325,9 +329,7 @@ public class MainView extends JFrame implements NotifiableView {
 
     private void checkParameters(Object... parameters) {
         for (Object parameter : parameters) {
-            if (parameter == null) {
-                throw new IllegalArgumentException("Parameters such as Tile, Meeple, and Player cannot be null!");
-            }
+            Objects.requireNonNull(parameter, "Parameters such as Tile, Meeple, and Player cannot be null!");
         }
     }
 }
