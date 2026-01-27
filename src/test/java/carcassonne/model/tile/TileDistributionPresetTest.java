@@ -82,7 +82,7 @@ class TileDistributionPresetTest {
         int castleWallAfterSecond = distribution.getQuantity(TileType.CastleWall);
 
         assertEquals(castleWallAfterFirst, castleWallAfterSecond,
-                "Applying CASTLE_HEAVY twice should double the tiles again (not idempotent by design)!");
+                "Applying CASTLE_HEAVY twice should not change the CastleWall count (preset must be idempotent)!");
     }
 
     @Test
