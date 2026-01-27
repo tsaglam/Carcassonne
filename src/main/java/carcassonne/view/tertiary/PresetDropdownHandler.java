@@ -6,8 +6,6 @@ import java.util.Map;
 
 import javax.swing.JComboBox;
 import javax.swing.JList;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.ComboPopup;
 
 import carcassonne.model.tile.TileDistribution;
@@ -25,7 +23,6 @@ public class PresetDropdownHandler {
     private final List<TileQuantityPanel> quantityPanels;
     private Map<TileType, Integer> originalQuantitiesBeforePreview;
     private boolean isSelectingPreset = false;
-    private PresetHoverListener hoverListener;
 
     /**
      * Creates a handler for a preset dropdown.
@@ -41,37 +38,28 @@ public class PresetDropdownHandler {
     }
 
     private void setupListeners() {
-        comboBox.addPopupMenuListener(createPopupMenuListener());
         comboBox.addActionListener(event -> handlePresetSelection());
+
         Object child = comboBox.getUI().getAccessibleChild(comboBox, 0);
         if (child instanceof ComboPopup popup) {
             JList<?> list = popup.getList();
-            hoverListener = new PresetHoverListener(list, PresetDropdownHandler.this::previewPreset);
+            PresetHoverListener hoverListener = new PresetHoverListener(list, this::previewPreset);
+            PresetPopupListener popupListener = new PresetPopupListener(hoverListener, createPopupCallback());
+
             list.addMouseMotionListener(hoverListener);
+            comboBox.addPopupMenuListener(popupListener);
         }
     }
 
-    private PopupMenuListener createPopupMenuListener() {
-        return new PopupMenuListener() {
-
+    private PresetPopupListener.PresetPopupCallback createPopupCallback() {
+        return new PresetPopupListener.PresetPopupCallback() {
             @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent event) {
+            public void onPopupOpening() {
                 storeOriginalQuantities();
-                hoverListener.activate();
             }
 
             @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
-                cleanupAfterPopupClose();
-            }
-
-            @Override
-            public void popupMenuCanceled(PopupMenuEvent event) {
-                cleanupAfterPopupClose();
-            }
-
-            private void cleanupAfterPopupClose() {
-                hoverListener.deactivate();
+            public void onPopupClosing() {
                 originalQuantitiesBeforePreview = null;
                 if (!isSelectingPreset) {
                     clearAllPreviews();
