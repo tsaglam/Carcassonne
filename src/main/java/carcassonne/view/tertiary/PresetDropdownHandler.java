@@ -37,46 +37,32 @@ public class PresetDropdownHandler {
         setupListeners();
     }
 
-    private void setupListeners() {
-        comboBox.addActionListener(event -> handlePresetSelection());
-
-        Object child = comboBox.getUI().getAccessibleChild(comboBox, 0);
-        if (child instanceof ComboPopup popup) {
-            JList<?> list = popup.getList();
-            PresetHoverListener hoverListener = new PresetHoverListener(list, this::previewPreset);
-            PresetPopupListener popupListener = new PresetPopupListener(hoverListener, createPopupCallback());
-
-            list.addMouseMotionListener(hoverListener);
-            comboBox.addPopupMenuListener(popupListener);
-        }
-    }
-
-    private PresetPopupListener.PresetPopupCallback createPopupCallback() {
-        return new PresetPopupListener.PresetPopupCallback() {
-            @Override
-            public void onPopupOpening() {
-                storeOriginalQuantities();
-            }
-
-            @Override
-            public void onPopupClosing() {
-                originalQuantitiesBeforePreview = null;
-                if (!isSelectingPreset) {
-                    clearAllPreviews();
-                }
-                isSelectingPreset = false;
-            }
-        };
-    }
-
-    private void storeOriginalQuantities() {
+    /**
+     * Called when the popup menu is about to open. Stores the current quantities for preview comparison.
+     */
+    public void onPopupOpening() {
         originalQuantitiesBeforePreview = new EnumMap<>(TileType.class);
         for (TileQuantityPanel panel : quantityPanels) {
             originalQuantitiesBeforePreview.put(panel.getTileType(), panel.getQuantity());
         }
     }
 
-    private void previewPreset(TileDistributionPreset preset) {
+    /**
+     * Called when the popup menu is closing. Clears preview state and restores original display if needed.
+     */
+    public void onPopupClosing() {
+        originalQuantitiesBeforePreview = null;
+        if (!isSelectingPreset) {
+            clearAllPreviews();
+        }
+        isSelectingPreset = false;
+    }
+
+    /**
+     * Previews a preset by temporarily showing what changes it would make.
+     * @param preset the preset to preview.
+     */
+    public void previewPreset(TileDistributionPreset preset) {
         if (originalQuantitiesBeforePreview == null) {
             return;
         }
@@ -88,6 +74,20 @@ public class PresetDropdownHandler {
             int originalQuantity = originalQuantitiesBeforePreview.get(panel.getTileType());
             int previewQuantity = temporaryDistribution.getQuantity(panel.getTileType());
             panel.showPreviewHighlight(originalQuantity, previewQuantity);
+        }
+    }
+
+    private void setupListeners() {
+        comboBox.addActionListener(event -> handlePresetSelection());
+
+        Object child = comboBox.getUI().getAccessibleChild(comboBox, 0);
+        if (child instanceof ComboPopup popup) {
+            JList<?> list = popup.getList();
+            PresetHoverListener hoverListener = new PresetHoverListener(list, this);
+            PresetPopupListener popupListener = new PresetPopupListener(hoverListener, this);
+
+            list.addMouseMotionListener(hoverListener);
+            comboBox.addPopupMenuListener(popupListener);
         }
     }
 

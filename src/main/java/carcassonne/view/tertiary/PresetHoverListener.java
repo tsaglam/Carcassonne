@@ -2,31 +2,44 @@ package carcassonne.view.tertiary;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+
 import javax.swing.JList;
 
 import carcassonne.model.tile.TileDistributionPreset;
 
 /**
  * Handles hover preview logic for preset dropdowns.
+ * @author Timur Saglam
  */
 public class PresetHoverListener extends MouseMotionAdapter {
 
     private final JList<?> comboBoxList;
-    private final PresetPreviewCallback callback;
+    private final PresetDropdownHandler handler;
 
     private boolean active = false;
     private TileDistributionPreset lastHovered = null;
 
-    public PresetHoverListener(JList<?> comboBoxList, PresetPreviewCallback callback) {
+    /**
+     * Creates a hover listener for a preset dropdown.
+     * @param comboBoxList the list component of the combo box.
+     * @param handler the handler for preview actions.
+     */
+    public PresetHoverListener(JList<?> comboBoxList, PresetDropdownHandler handler) {
         this.comboBoxList = comboBoxList;
-        this.callback = callback;
+        this.handler = handler;
     }
 
+    /**
+     * Activates the hover listener.
+     */
     public void activate() {
         active = true;
         lastHovered = null;
     }
 
+    /**
+     * Deactivates the hover listener.
+     */
     public void deactivate() {
         active = false;
         lastHovered = null;
@@ -43,15 +56,8 @@ public class PresetHoverListener extends MouseMotionAdapter {
             TileDistributionPreset preset = TileDistributionPreset.values()[index];
             if (preset != lastHovered) {
                 lastHovered = preset;
-                callback.previewPreset(preset);
+                handler.previewPreset(preset);
             }
         }
-    }
-
-    /**
-     * Small callback interface to avoid tight coupling.
-     */
-    public interface PresetPreviewCallback {
-        void previewPreset(TileDistributionPreset preset);
     }
 }
