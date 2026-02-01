@@ -9,6 +9,7 @@ import javax.swing.event.ChangeListener;
 
 import carcassonne.view.main.MainView;
 import carcassonne.view.main.ZoomMode;
+import carcassonne.view.util.ZoomConfig;
 
 /**
  * Smoothing event and mouse listener for the zoom slider, which smoothes the dragging by limiting the updates to
@@ -17,7 +18,7 @@ import carcassonne.view.main.ZoomMode;
  */
 public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
 
-    private static final double SMOOTHING_FACTOR = 8.0; // only update zoom with this step size.
+    private static final double SMOOTHING_FACTOR = ZoomConfig.STEP_SMALL.pixels();
     private final MainView mainView;
     private final JSlider slider;
     private int previousValue;
