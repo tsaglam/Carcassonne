@@ -31,7 +31,8 @@ public final class TileImageScalingCache {
         if (previewAllowed) {
             return cachedImages.containsKey(key);
         }
-        return cachedImages.containsKey(key) && !cachedImages.get(key).isPreview();
+        CachedImage image = cachedImages.get(key);
+        return image != null && !image.isPreview();
     }
 
     /**
@@ -41,7 +42,11 @@ public final class TileImageScalingCache {
      * @return the scaled image or null if there is none.
      */
     public static Image getScaledImage(Tile tile, int size) {
-        return cachedImages.get(createKey(tile, size)).image();
+        CachedImage cachedImage = cachedImages.get(createKey(tile, size));
+        if (cachedImage == null) {
+            return null;
+        }
+        return cachedImage.image();
     }
 
     /**
