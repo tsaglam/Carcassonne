@@ -41,7 +41,7 @@ public final class TileImageScalingCache {
      * @return the scaled image or null if there is none.
      */
     public static Image getScaledImage(Tile tile, int size) {
-        return cachedImages.get(createKey(tile, size)).getImage();
+        return cachedImages.get(createKey(tile, size)).image();
     }
 
     /**
