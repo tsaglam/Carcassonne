@@ -1,21 +1,23 @@
 package carcassonne.util;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import carcassonne.model.tile.TileRotation;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.view.util.ZoomConfig;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * JUnit 5 test for {@link ConcurrentTileImageScaler}. Tests thread-safety and correctness of concurrent image scaling
@@ -34,14 +36,14 @@ class ConcurrentTileImageScalerTest {
     private List<Tile> validTiles;
 
     @BeforeAll
-    static void headless() {
-        System.setProperty(AWT_HEADLESS_PROPERTY, Boolean.toString(true));
+    static void requireHeadfulAwt() {
+        assumeFalse(GraphicsEnvironment.isHeadless(), "Requires headful AWT to run.");
     }
 
     @BeforeEach
     void setUp() {
         validTiles = TileType.validTiles().stream().map(Tile::new).toList();
-        assertFalse(validTiles.isEmpty(), "Valid tiles list should not be empty");
+        assertFalse(validTiles.isEmpty(), "Valid tiles list should not be empty!");
     }
 
     @ParameterizedTest(name = "fast scaling = {0}")
@@ -70,28 +72,12 @@ class ConcurrentTileImageScalerTest {
 
         checkImageProperties(image1, TARGET_SIZE);
         checkImageProperties(image2, TARGET_SIZE);
-        assertSame(image1, image2, "Cached images should be the same instance");
+        assertSame(image1, image2, "Cached images should be the same instance!");
     }
 
     private static void checkImageProperties(Image image, int targetSize) {
         assertNotNull(image, "Scaled image should not be null");
-        assertEquals(targetSize, image.getWidth(null), "Image width should match target size");
-        assertEquals(targetSize, image.getHeight(null), "Image height should match target size");
-    }
-
-    private Tile getRandomTile(Random random) {
-        Tile tile = validTiles.get(random.nextInt(validTiles.size()));
-        List<TileRotation> rotations = new ArrayList<>(tile.getPossibleRotations());
-        if (!rotations.isEmpty()) {
-            int index = random.nextInt(rotations.size());
-            tile.rotateTo(rotations.get(index));
-        }
-        return tile;
-    }
-
-    private int getRandomSize(Random rng) {
-        int numSteps = (MAX_SIZE - MIN_SIZE) / STEP_SIZE;
-        int randomStep = rng.nextInt(numSteps + 1);
-        return MIN_SIZE + (randomStep * STEP_SIZE);
+        assertEquals(targetSize, image.getWidth(null), "Image width should match target size!");
+        assertEquals(targetSize, image.getHeight(null), "Image height should match target size!");
     }
 }
