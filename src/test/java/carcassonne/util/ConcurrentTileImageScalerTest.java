@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import carcassonne.model.tile.TileRotation;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import carcassonne.model.tile.Tile;
@@ -22,6 +23,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 class ConcurrentTileImageScalerTest {
 
+    public static final String AWT_HEADLESS_PROPERTY = "java.awt.headless";
     private static final int MIN_SIZE = ZoomConfig.MIN_LEVEL.pixels();
     private static final int MAX_SIZE = ZoomConfig.MAX_LEVEL.pixels();
     private static final int STEP_SIZE = ZoomConfig.STEP_SMALL.pixels();
@@ -30,6 +32,11 @@ class ConcurrentTileImageScalerTest {
     public static final int TARGET_SIZE = 128;
 
     private List<Tile> validTiles;
+
+    @BeforeAll
+    static void headless() {
+        System.setProperty(AWT_HEADLESS_PROPERTY, Boolean.toString(true));
+    }
 
     @BeforeEach
     void setUp() {
