@@ -1,7 +1,8 @@
 package carcassonne.util;
 
 import java.awt.Image;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Map;
 
 import carcassonne.model.tile.Tile;
 
@@ -12,7 +13,7 @@ import carcassonne.model.tile.Tile;
  */
 public final class TileImageScalingCache {
     private static final int SHIFT_VALUE = 1000;
-    private static final HashMap<Integer, CachedImage> cachedImages = new LRUHashMap<>();
+    private static final Map<Integer, CachedImage> cachedImages = Collections.synchronizedMap(new LRUHashMap<>());
 
     private TileImageScalingCache() {
         // private constructor ensures non-instantiability!
@@ -30,7 +31,8 @@ public final class TileImageScalingCache {
         if (previewAllowed) {
             return cachedImages.containsKey(key);
         }
-        return cachedImages.containsKey(key) && !cachedImages.get(key).isPreview();
+        CachedImage image = cachedImages.get(key);
+        return image != null && !image.isPreview();
     }
 
     /**
@@ -40,7 +42,11 @@ public final class TileImageScalingCache {
      * @return the scaled image or null if there is none.
      */
     public static Image getScaledImage(Tile tile, int size) {
-        return cachedImages.get(createKey(tile, size)).getImage();
+        CachedImage cachedImage = cachedImages.get(createKey(tile, size));
+        if (cachedImage == null) {
+            return null;
+        }
+        return cachedImage.image();
     }
 
     /**

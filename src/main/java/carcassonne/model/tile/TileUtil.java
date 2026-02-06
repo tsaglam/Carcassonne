@@ -2,8 +2,8 @@ package carcassonne.model.tile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import carcassonne.settings.GameSettings;
 
@@ -12,7 +12,7 @@ import carcassonne.settings.GameSettings;
  * @author Timur Saglam
  */
 public final class TileUtil {
-    private final static Map<TileType, Integer> rotations = new HashMap<>();
+    private final static Map<TileType, Integer> rotations = new ConcurrentHashMap<>();
 
     private TileUtil() {
         throw new IllegalStateException(); // private constructor for non-instantiability
@@ -20,6 +20,7 @@ public final class TileUtil {
 
     /**
      * Determines how often a tile of a specific {@link TileType} can be rotated before it returns to the first rotation.
+     * Method is thread-safe.
      * @param type is the specific {@link TileType}.
      * @return the number of possible rotations (between 1 and 3).
      */
