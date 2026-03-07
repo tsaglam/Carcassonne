@@ -6,6 +6,7 @@ import javax.swing.SwingConstants;
 
 import carcassonne.view.main.MainView;
 import carcassonne.view.main.ZoomMode;
+import carcassonne.view.util.ZoomConfig;
 
 /**
  * Custom {@link JSlider} for the zoom functionality. Additionally, this class creates the zoom in/out menu items.
@@ -14,14 +15,9 @@ import carcassonne.view.main.ZoomMode;
 public class ZoomSlider extends JSlider {
     private static final long serialVersionUID = -5518487902213410121L;
 
-    // SEMANTIC CONSTANTS:
-    private static final int MAXIMUM_VALUE = 300;
-    private static final int MINIMUM_VALUE = 25;
-    private static final int SLIDER_STEP_SIZE = 25;
-
     // UI CONSTANTS:
-    private static final int MAJOR_TICK = 50;
-    private static final int MINOR_TICK = 5;
+    private static final int MAJOR_TICK = 64;
+    private static final int MINOR_TICK = 8;
     private static final String ZOOM_OUT = "Zoom Out (-)";
     private static final String ZOOM_IN = "Zoom In (+)";
 
@@ -35,7 +31,7 @@ public class ZoomSlider extends JSlider {
      * @param mainView is the correlating main user interface.f
      */
     public ZoomSlider(MainView mainView) {
-        super(MINIMUM_VALUE, MAXIMUM_VALUE, mainView.getZoom());
+        super(ZoomConfig.MIN_LEVEL.pixels(), ZoomConfig.MAX_LEVEL.pixels(), mainView.getZoom());
         setPaintTicks(true);
         setOrientation(SwingConstants.VERTICAL);
         setMinorTickSpacing(MINOR_TICK);
@@ -47,11 +43,11 @@ public class ZoomSlider extends JSlider {
         zoomIn = new JMenuItem(ZOOM_IN);
         zoomOut = new JMenuItem(ZOOM_OUT);
         zoomIn.addActionListener(event -> {
-            setValueSneakily(getValue() + SLIDER_STEP_SIZE);
+            setValueSneakily(getValue() + ZoomConfig.STEP.pixels());
             mainView.zoomIn(ZoomMode.SMOOTH);
         });
         zoomOut.addActionListener(event -> {
-            setValueSneakily(getValue() - SLIDER_STEP_SIZE);
+            setValueSneakily(getValue() - ZoomConfig.STEP.pixels());
             mainView.zoomOut(ZoomMode.SMOOTH);
         });
     }
