@@ -136,6 +136,21 @@ public final class PaintShop {
     }
 
     /**
+     * Linearly interpolates between two colors in RGB space.
+     * @param startColor the color at fraction {@code 0.0}
+     * @param endColor the color at fraction {@code 1.0}
+     * @param fraction the interpolation factor, typically in the range {@code [0.0, 1.0]}
+     * @return the interpolated color depending on the fraction.
+     * @throws IllegalArgumentException if the fraction is outside the range {@code [0.0, 1.0]}
+     */
+    public static Color interpolateColor(Color startColor, Color endColor, float fraction) {
+        int red = (int) (startColor.getRed() + (endColor.getRed() - startColor.getRed()) * fraction);
+        int green = (int) (startColor.getGreen() + (endColor.getGreen() - startColor.getGreen()) * fraction);
+        int blue = (int) (startColor.getBlue() + (endColor.getBlue() - startColor.getBlue()) * fraction);
+        return new Color(red, green, blue);
+    }
+
+    /**
      * Blends to colors correctly based on alpha composition. Either blends both colors or applies the second on the first
      * one.
      * @param first is the first color to be applied.
