@@ -46,7 +46,7 @@ public class StateIdle extends AbstractGameState {
 
     @Override
     public void skip() {
-        throw new IllegalStateException("There is nothing to skip in StateIdle.");
+        // do nothing.
     }
 
     @Override
@@ -58,5 +58,4 @@ public class StateIdle extends AbstractGameState {
     protected void exit() {
         // No exit functions.
     }
-
 }
