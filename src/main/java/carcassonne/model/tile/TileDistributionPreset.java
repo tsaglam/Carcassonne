@@ -36,7 +36,7 @@ public enum TileDistributionPreset {
         it.setQuantity(TileType.RoadJunctionSmall, 4);
     }),
 
-    CASTLE_HEAVY("Castle Heavy", it -> {
+    CASTLE_HEAVY("Castle-Heavy", it -> {
         for (TileType type : TileType.enabledTiles()) {
             if (type.containsTerrain(TerrainType.CASTLE)) {
                 it.setQuantity(type, type.getAmount() * 2); // double all castle tiles
