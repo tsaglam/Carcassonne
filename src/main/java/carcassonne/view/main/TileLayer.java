@@ -105,7 +105,7 @@ public class TileLayer extends JPanel {
      * Temporarily disables colored tile mouseover highlight for possible placement spots (during zooming).
      */
     public void disableColoredHighlight() {
-        tileLabels.forEach(it -> it.toggleColoredHighlight(false));
+        tileLabels.forEach(it -> it.setColoredHighlightEnabled(false));
     }
 
     /**

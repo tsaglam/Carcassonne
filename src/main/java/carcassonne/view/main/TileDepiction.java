@@ -107,9 +107,10 @@ public class TileDepiction {
     }
 
     /**
-     * Disable colored tile mouseover highlights temporarily.
+     * Enables or disables colored tile mouseover highlights.
+     * @param coloredHighlightEnabled {@code true} to enable, {@code false} to disable.
      */
-    public void toggleColoredHighlight(boolean coloredHighlightEnabled) {
+    public void setColoredHighlightEnabled(boolean coloredHighlightEnabled) {
         this.coloredHighlightEnabled = coloredHighlightEnabled;
     }
 
