@@ -1,6 +1,7 @@
 package carcassonne.view.main;
 
 import static carcassonne.view.main.ZoomMode.FAST;
+import static carcassonne.view.main.ZoomMode.SMOOTH;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -195,7 +196,11 @@ public class MainView extends JFrame implements NotifiableView {
      */
     public void updateToChangedZoomLevel(ZoomMode mode) {
         if (currentPlayer != null) { // only update highlights when there is an active round
-            tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, mode == FAST));
+            if (mode == SMOOTH) {
+                tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, false));
+            } else {
+                tileLayer.disableColoredHighlight();
+            }
         } else {
             tileLayer.resetPlacementHighlights();
         }
