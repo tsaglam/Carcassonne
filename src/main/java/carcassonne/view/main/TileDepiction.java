@@ -25,6 +25,7 @@ public class TileDepiction {
     private ImageIcon coloredHighlight;
     private int tileSize;
     private Player recentlyPlaced;
+    private boolean coloredHighlightEnabled;
 
     /**
      * Simple constructor calling the <codeJLabel>JLabel(ImageIcon image)</code> constructor.
@@ -36,6 +37,7 @@ public class TileDepiction {
      * @param y sets the y coordinate.
      */
     public TileDepiction(int tileSize, Tile defaultTile, Tile highlightTile, ControllerFacade controller, int x, int y) {
+        coloredHighlightEnabled = true;
         this.defaultTile = defaultTile;
         this.highlightTile = highlightTile;
         this.tileSize = tileSize;
@@ -54,7 +56,7 @@ public class TileDepiction {
 
             @Override
             public void mouseEntered(MouseEvent event) {
-                if (highlightTile.equals(tile)) {
+                if (highlightTile.equals(tile) && coloredHighlightEnabled) {
                     label.setIcon(coloredHighlight);
                 }
             }
@@ -101,6 +103,14 @@ public class TileDepiction {
      */
     public void setColoredHighlight(ImageIcon coloredHighlight) {
         this.coloredHighlight = coloredHighlight;
+        this.coloredHighlightEnabled = true;
+    }
+
+    /**
+     * Disable colored tile mouseover highlights temporarily.
+     */
+    public void toggleColoredHighlight(boolean coloredHighlightEnabled) {
+        this.coloredHighlightEnabled = coloredHighlightEnabled;
     }
 
     /**
