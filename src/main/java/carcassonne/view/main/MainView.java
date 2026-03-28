@@ -192,17 +192,52 @@ public class MainView extends JFrame implements NotifiableView {
      * @param mode determines the zoom mode, which affects image quality and performance.
      */
     public void updateToChangedZoomLevel(ZoomMode mode) {
+
+        long start, end;
+
+        // ---- highlights ----
+        start = System.nanoTime();
         if (currentPlayer != null) { // only update highlights when there is an active round
-            tileLayer.refreshHighlight(PaintShop.getColoredHighlight(currentPlayer, zoomLevel, mode == FAST));
+            tileLayer.refreshHighlight(
+                    PaintShop.getColoredHighlight(currentPlayer, zoomLevel, mode == FAST)
+            );
         } else {
             tileLayer.resetPlacementHighlights();
         }
+        end = System.nanoTime();
+        System.out.println("Highlights update: " + (end - start) / 1_000_000.0 + " ms");
+
+        // ---- tile layer zoom ----
+        start = System.nanoTime();
         tileLayer.changeZoomLevel(zoomLevel, mode == FAST); // Executed in parallel for improved performance
-        meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
+        end = System.nanoTime();
+        System.out.println("Tile layer zoom: " + (end - start) / 1_000_000.0 + " ms");
+
+        // ---- meeple layer sync sizes ----
+        start = System.nanoTime();
+        meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel);
+        end = System.nanoTime();
+        System.out.println("Meeple sync sizes: " + (end - start) / 1_000_000.0 + " ms");
+
+        // ---- meeple layer zoom ----
+        start = System.nanoTime();
         meepleLayer.changeZoomLevel(zoomLevel);
+        end = System.nanoTime();
+        System.out.println("Meeple layer zoom: " + (end - start) / 1_000_000.0 + " ms");
+
+        // ---- scroll pane validate & center ----
+        start = System.nanoTime();
         scrollPane.validateAndCenter();
+        end = System.nanoTime();
+        System.out.println("ScrollPane validate & center: " + (end - start) / 1_000_000.0 + " ms");
+
+        // ---- repaint ----
+        start = System.nanoTime();
         scrollPane.repaintLayers(); // IMPORTANT: Prevents meeples from disappearing.
+        end = System.nanoTime();
+        System.out.println("Repaint layers: " + (end - start) / 1_000_000.0 + " ms");
     }
+
 
     /**
      * Notifies the main view about a (new) current player. This allows the UI to adapt color schemes to the player.

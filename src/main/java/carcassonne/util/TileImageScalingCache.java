@@ -1,8 +1,6 @@
 package carcassonne.util;
 
 import java.awt.Image;
-import java.util.Collections;
-import java.util.Map;
 
 import carcassonne.model.tile.Tile;
 
@@ -12,8 +10,8 @@ import carcassonne.model.tile.Tile;
  * @author Timur Saglam
  */
 public final class TileImageScalingCache {
-    private static final int SHIFT_VALUE = 1000;
-    private static final Map<Integer, CachedImage> cachedImages = Collections.synchronizedMap(new LRUHashMap<>());
+    // TODO set to 10k or 20k
+    private static final StripedLRUHashMap<Integer, CachedImage> cachedImages = new StripedLRUHashMap<Integer, CachedImage>(20000, 32);
 
     private TileImageScalingCache() {
         // private constructor ensures non-instantiability!
@@ -27,12 +25,11 @@ public final class TileImageScalingCache {
      * @return true if there is an existing image cached with the specified size.
      */
     public static boolean containsScaledImage(Tile tile, int size, boolean previewAllowed) {
-        int key = createKey(tile, size);
-        if (previewAllowed) {
-            return cachedImages.containsKey(key);
+        CachedImage image = cachedImages.get(createKey(tile, size));
+        if (image == null) {
+            return false;
         }
-        CachedImage image = cachedImages.get(key);
-        return image != null && !image.isPreview();
+        return previewAllowed || !image.isPreview();
     }
 
     /**
@@ -80,6 +77,6 @@ public final class TileImageScalingCache {
      * Creates a primitive composite key for a tileType type, a size, and an orientation.
      */
     private static int createKey(Tile tile, int size) {
-        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation().ordinal() * SHIFT_VALUE * SHIFT_VALUE;
+        return size | (tile.getType().ordinal() << 9) | (tile.getRotation().ordinal() << 15);
     }
 }

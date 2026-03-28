@@ -44,6 +44,8 @@ class ConcurrentTileImageScalerTest {
 
     private List<Tile> validTiles;
 
+    private static final Random RANDOM = new Random(1337);
+
     @BeforeAll
     static void requireHeadfulAwt() {
         assumeFalse(GraphicsEnvironment.isHeadless(), "Requires headful AWT to run.");
@@ -51,12 +53,14 @@ class ConcurrentTileImageScalerTest {
 
     @BeforeEach
     void setUp() {
+        TileImageScalingCache.clear();
+        
         validTiles = TileType.validTiles().stream().map(Tile::new).toList();
         assertFalse(validTiles.isEmpty(), "Valid tiles list should not be empty!");
     }
 
     @ParameterizedTest(name = "fast scaling = {0}")
-    @ValueSource(booleans = {true, false})
+    @ValueSource(booleans = {false, true})
     void testGetScaledImage_BasicFunctionality(boolean fastScaling) {
         Tile tile = validTiles.getFirst();
         Image image = ConcurrentTileImageScaler.getScaledImage(tile, TARGET_SIZE, fastScaling);
@@ -64,7 +68,7 @@ class ConcurrentTileImageScalerTest {
     }
 
     @ParameterizedTest(name = "fast scaling = {0}")
-    @ValueSource(booleans = {true, false})
+    @ValueSource(booleans = {false, true})
     void testGetScaledMultiResolutionImage_BasicFunctionality(boolean fastScaling) {
         Tile tile = validTiles.getFirst();
         Image image = ConcurrentTileImageScaler.getScaledMultiResolutionImage(tile, TARGET_SIZE, fastScaling);
@@ -72,7 +76,7 @@ class ConcurrentTileImageScalerTest {
     }
 
     @ParameterizedTest(name = "fast scaling = {0}")
-    @ValueSource(booleans = {true, false})
+    @ValueSource(booleans = {false, true})
     void testGetScaledImage_Caching(boolean fastScaling) {
         Tile tile = validTiles.getFirst();
 
@@ -91,20 +95,20 @@ class ConcurrentTileImageScalerTest {
     }
 
     @ParameterizedTest(name = "fast scaling = {0}")
-    @ValueSource(booleans = {true, false})
+    @ValueSource(booleans = {false, true})
     void testConcurrentScaling(boolean fastScaling) throws InterruptedException {
         try (ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT)) {
             CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
             AtomicInteger exceptionCount = new AtomicInteger(0);
             List<Tile> tiles = createTestTiles();
 
-            for (int i = 0; i < THREAD_COUNT; i++) {
+            for (int i = 0; i < THREAD_COUNT *2; i++) {
                 executor.submit(() -> {
                     try {
-                        Random random = new Random();
-                        for (int j = 0; j < OPERATIONS_PER_THREAD; j++) {
-                            Tile tile = tiles.get(random.nextInt(tiles.size()));
-                            int targetSize = MIN_SIZE + STEP_SIZE * random.nextInt((MAX_SIZE - MIN_SIZE) / STEP_SIZE + 1);
+
+                        for (int j = 0; j < OPERATIONS_PER_THREAD*2; j++) {
+                            Tile tile = tiles.get(RANDOM.nextInt(tiles.size()));
+                            int targetSize = MIN_SIZE + STEP_SIZE * RANDOM.nextInt((MAX_SIZE - MIN_SIZE) / STEP_SIZE + 1);
 
                             Image image = ConcurrentTileImageScaler.getScaledImage(tile, targetSize, fastScaling);
                             assertNotNull(image, "Scaled image should not be null");
@@ -127,8 +131,8 @@ class ConcurrentTileImageScalerTest {
     }
 
     @ParameterizedTest(name = "fast scaling = {0}")
-    @ValueSource(booleans = {true, false})
-    void testConcurrentMultiResolutionScaling(boolean fastScaling) throws InterruptedException {
+    @ValueSource(booleans = {false, true})
+    void testZConcurrentMultiResolutionScaling(boolean fastScaling) throws InterruptedException {
         try (ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT)) {
             CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
             AtomicInteger exceptionCount = new AtomicInteger(0);
@@ -137,10 +141,9 @@ class ConcurrentTileImageScalerTest {
             for (int i = 0; i < THREAD_COUNT; i++) {
                 executor.submit(() -> {
                     try {
-                        Random random = new Random();
                         for (int j = 0; j < OPERATIONS_PER_THREAD; j++) {
-                            Tile tile = tiles.get(random.nextInt(tiles.size()));
-                            int targetSize = MIN_SIZE + STEP_SIZE * random.nextInt((MAX_SIZE - MIN_SIZE) / STEP_SIZE + 1);
+                            Tile tile = tiles.get(RANDOM.nextInt(tiles.size()));
+                            int targetSize = MIN_SIZE + STEP_SIZE * RANDOM.nextInt((MAX_SIZE - MIN_SIZE) / STEP_SIZE + 1);
 
                             Image image = ConcurrentTileImageScaler.getScaledMultiResolutionImage(tile, targetSize, fastScaling);
                             assertNotNull(image, "Multi-resolution image should not be null");
