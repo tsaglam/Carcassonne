@@ -13,6 +13,9 @@ import javax.swing.JFrame;
  * @author Timur Saglam
  */
 public class WindowMaximizationAdapter extends WindowAdapter {
+    private static final String OS_NAME_KEY = "os.name";
+    private static final String WINDOWS = "Windows";
+
     private final JFrame frame;
     private boolean maximized;
 
@@ -27,10 +30,9 @@ public class WindowMaximizationAdapter extends WindowAdapter {
 
     @Override
     public void windowActivated(WindowEvent event) {
-        if (!maximized) {
+        if (!maximized && System.getProperty(OS_NAME_KEY).startsWith(WINDOWS)) {
             maximized = true;
             frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
         }
-
     }
 }

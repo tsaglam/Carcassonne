@@ -1,33 +1,20 @@
 package carcassonne.util;
 
 import java.awt.Image;
+import java.util.Objects;
 
 /**
- * Data objects to cache images with their scaling information.s
+ * Data object to cache images with their scaling information.
+ * @param image the cached image, cannot be null
+ * @param isPreview whether this image was scaled as a preview image or not
  * @author Timur Saglam
  */
-public class CachedImage {
-    private final Image image;
-    private final boolean preview;
+public record CachedImage(Image image, boolean isPreview) {
 
     /**
-     * Creates
-     * @param image the image to cache, cannot be null.
-     * @param preview whether this image was scaled as a preview image or not.
+     * Compact constructor with validation.
      */
-    public CachedImage(Image image, boolean preview) {
-        if (image == null) {
-            throw new IllegalArgumentException("Cached image cannot be null!");
-        }
-        this.image = image;
-        this.preview = preview;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public boolean isPreview() {
-        return preview;
+    public CachedImage {
+        Objects.requireNonNull(image, "Cached image cannot be null!");
     }
 }
