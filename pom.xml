@@ -57,6 +57,7 @@
                         <java>
                             <eclipse>
                                 <file>formatter.xml</file>
+                                <version>4.32</version>
                             </eclipse>
                             <removeUnusedImports/>
                         </java>
