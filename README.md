@@ -2,7 +2,7 @@
 	<img alt="carcassonne logo" src="src/main/resources/splash@200pct.png?raw=true" width="500">
 </p>
 
-[![CI status](https://github.com/tsaglam/Carcassonne/actions/workflows/CI.yml/badge.svg)](https://github.com/tsaglam/Carcassonne/actions)
+[![CI status](https://github.com/tsaglam/Carcassonne/actions/workflows/build.yml/badge.svg)](https://github.com/tsaglam/Carcassonne/actions)
 [![Latest Release](https://img.shields.io/github/release/tsaglam/Carcassonne.svg)](https://github.com/jplag/jplag/releases/latest)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/tsaglam/Carcassonne)](https://github.com/tsaglam/Carcassonne/pulse)
 [![License](https://img.shields.io/github/license/tsaglam/Carcassonne?color=informational)](https://github.com/tsaglam/Carcassonne/blob/main/LICENSE)
