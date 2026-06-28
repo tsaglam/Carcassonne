@@ -5,7 +5,7 @@
 [![CI status](https://github.com/tsaglam/Carcassonne/actions/workflows/CI.yml/badge.svg)](https://github.com/tsaglam/Carcassonne/actions)
 [![Latest Release](https://img.shields.io/github/release/tsaglam/Carcassonne.svg)](https://github.com/jplag/jplag/releases/latest)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/tsaglam/Carcassonne)](https://github.com/tsaglam/Carcassonne/pulse)
-[![License](https://img.shields.io/github/license/tsaglam/Carcassonne?color=informational)](https://github.com/tsaglam/Carcassonne/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/tsaglam/Carcassonne?color=informational)](https://github.com/tsaglam/Carcassonne/blob/main/LICENSE)
 
 This is a slightly adapted, digital version of the board game Carcassonne. <br>
 Carcassonne is a tile-based board game in a medieval setting created by [Klaus-Jürgen Wrede](https://www.kjwrede.de/) and published by [Hans im Glück](https://www.hans-im-glueck.de/).
