@@ -5,16 +5,19 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.WritableRaster;
+import java.awt.image.DataBufferInt;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ForkJoinPool;
 
 import javax.swing.ImageIcon;
 
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
+import carcassonne.model.tile.TileRotation;
+import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ConcurrentTileImageScaler;
 import carcassonne.util.FastImageScaler;
@@ -27,14 +30,15 @@ import carcassonne.util.ImageLoadingUtil;
  */
 public final class PaintShop {
     private static final int HIGH_DPI_FACTOR = 2;
-    private static final BufferedImage emblemImage = ImageLoadingUtil.EMBLEM.createBufferedImage();
+    private static final BufferedImage emblemImage = ensureIntArgb(ImageLoadingUtil.EMBLEM.createBufferedImage());
     private static final BufferedImage highlightBaseImage = ImageLoadingUtil.NULL_TILE.createBufferedImage();
-    private static final BufferedImage highlightImage = ImageLoadingUtil.HIGHLIGHT.createBufferedImage();
-    private static final Map<String, ImageIcon> cachedMeepleImages = new HashMap<>();
+    private static final BufferedImage highlightImage = ensureIntArgb(ImageLoadingUtil.HIGHLIGHT.createBufferedImage());
+    private static final int MAXIMAL_ALPHA = 255;
+    private static final int MAXIMUM_MEEPLE_CACHE_SIZE = 500;
+    private static final ConcurrentHashMap<String, ImageIcon> cachedMeepleImages = new ConcurrentHashMap<>();
     private static final Map<TerrainType, BufferedImage> templateMap = buildImageMap(true);
     private static final Map<TerrainType, BufferedImage> imageMap = buildImageMap(false);
     private static final String KEY_SEPARATOR = "|";
-    private static final int MAXIMAL_ALPHA = 255;
 
     private PaintShop() {
         // private constructor ensures non-instantiability!
@@ -47,12 +51,14 @@ public final class PaintShop {
      */
     public static Image addEmblem(BufferedImage originalTile) {
         BufferedImage copy = deepCopy(originalTile);
-        for (int x = 0; x < emblemImage.getWidth(); x++) {
-            for (int y = 0; y < emblemImage.getHeight(); y++) {
-                Color emblemPixel = new Color(emblemImage.getRGB(x, y), true);
-                Color imagePixel = new Color(copy.getRGB(x, y), true);
-                Color blendedColor = blend(imagePixel, emblemPixel, false);
-                copy.setRGB(x, y, blendedColor.getRGB());
+        int[] copyPixels = ((DataBufferInt) copy.getRaster().getDataBuffer()).getData();
+        int[] emblemPixels = ((DataBufferInt) emblemImage.getRaster().getDataBuffer()).getData();
+        for (int y = 0; y < emblemImage.getHeight(); y++) {
+            int copyOffset = y * copy.getWidth();
+            int emblemOffset = y * emblemImage.getWidth();
+            for (int x = 0; x < emblemImage.getWidth(); x++) {
+                int index = copyOffset + x;
+                copyPixels[index] = blend(copyPixels[index], emblemPixels[emblemOffset + x], false);
             }
         }
         return copy;
@@ -63,6 +69,20 @@ public final class PaintShop {
      */
     public static void clearCachedImages() {
         cachedMeepleImages.clear();
+    }
+
+    /**
+     * Pre-warms the tile image cache by loading and scaling all tile types at full resolution. Should be called once at
+     * startup to avoid first-render lag.
+     */
+    public static void prewarm() {
+        ForkJoinPool.commonPool().execute(() -> TileType.validTiles().parallelStream().forEach(type -> {
+            Tile tile = new Tile(type);
+            for (TileRotation rotation : TileRotation.values()) {
+                tile.rotateTo(rotation);
+                ConcurrentTileImageScaler.getScaledMultiResolutionImage(tile, GameSettings.TILE_RESOLUTION, false);
+            }
+        }));
     }
 
     /**
@@ -103,7 +123,7 @@ public final class PaintShop {
         }
         Image paintedMeeple = paintMeeple(meepleType, color.getRGB(), size * HIGH_DPI_FACTOR);
         ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(paintedMeeple));
-        cachedMeepleImages.put(key, icon);
+        putMeepleInCache(key, icon);
         return icon;
     }
 
@@ -131,7 +151,7 @@ public final class PaintShop {
         }
         Image preview = imageMap.get(meepleType).getScaledInstance(size * HIGH_DPI_FACTOR, size * HIGH_DPI_FACTOR, Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(preview));
-        cachedMeepleImages.put(key, icon);
+        putMeepleInCache(key, icon);
         return icon;
     }
 
@@ -158,16 +178,31 @@ public final class PaintShop {
      * @param blendEqually applies the second on the first one of true, blends on alpha values if false.
      * @return the blended color.
      */
-    private static Color blend(Color first, Color second, boolean blendEqually) {
-        double totalAlpha = blendEqually ? first.getAlpha() + second.getAlpha() : MAXIMAL_ALPHA;
-        double firstWeight = blendEqually ? first.getAlpha() : MAXIMAL_ALPHA - second.getAlpha();
-        firstWeight /= totalAlpha;
-        double secondWeight = second.getAlpha() / totalAlpha;
-        double red = firstWeight * first.getRed() + secondWeight * second.getRed();
-        double green = firstWeight * first.getGreen() + secondWeight * second.getGreen();
-        double blue = firstWeight * first.getBlue() + secondWeight * second.getBlue();
-        int alpha = Math.max(first.getAlpha(), second.getAlpha());
-        return new Color((int) red, (int) green, (int) blue, alpha);
+    private static int blend(int first, int second, boolean blendEqually) {
+        int alpha1 = (first >> 24) & 0xFF;
+        int red1 = (first >> 16) & 0xFF;
+        int green1 = (first >> 8) & 0xFF;
+        int blue1 = first & 0xFF;
+        int alpha2 = (second >> 24) & 0xFF;
+        int red2 = (second >> 16) & 0xFF;
+        int green2 = (second >> 8) & 0xFF;
+        int blue2 = second & 0xFF;
+        int resultAlpha = Math.max(alpha1, alpha2);
+        int resultRed, resultGreen, resultBlue;
+        if (blendEqually) {
+            int totalAlpha = alpha1 + alpha2;
+            if (totalAlpha == 0) {
+                return 0;
+            }
+            resultRed = (red1 * alpha1 + red2 * alpha2) / totalAlpha;
+            resultGreen = (green1 * alpha1 + green2 * alpha2) / totalAlpha;
+            resultBlue = (blue1 * alpha1 + blue2 * alpha2) / totalAlpha;
+        } else {
+            resultRed = (red1 * (MAXIMAL_ALPHA - alpha2) + red2 * alpha2) / MAXIMAL_ALPHA;
+            resultGreen = (green1 * (MAXIMAL_ALPHA - alpha2) + green2 * alpha2) / MAXIMAL_ALPHA;
+            resultBlue = (blue1 * (MAXIMAL_ALPHA - alpha2) + blue2 * alpha2) / MAXIMAL_ALPHA;
+        }
+        return (resultAlpha << 24) | (resultRed << 16) | (resultGreen << 8) | resultBlue;
     }
 
     /**
@@ -192,7 +227,7 @@ public final class PaintShop {
         Map<TerrainType, BufferedImage> map = new HashMap<>();
         for (TerrainType terrainType : TerrainType.values()) {
             BufferedImage meepleImage = ImageLoadingUtil.createBufferedImage(GameSettings.getMeeplePath(terrainType, isTemplate));
-            map.put(terrainType, meepleImage);
+            map.put(terrainType, ensureIntArgb(meepleImage));
         }
         return map;
     }
@@ -207,13 +242,14 @@ public final class PaintShop {
 
     private static BufferedImage colorMaskBased(BufferedImage imageToColor, BufferedImage maskImage, Color targetColor) {
         BufferedImage image = deepCopy(imageToColor);
-        for (int x = 0; x < maskImage.getWidth(); x++) {
-            for (int y = 0; y < maskImage.getHeight(); y++) {
-                Color maskPixel = new Color(maskImage.getRGB(x, y), true);
-                Color targetPixel = new Color(targetColor.getRed(), targetColor.getGreen(), targetColor.getBlue(), maskPixel.getAlpha());
-                Color imagePixel = new Color(image.getRGB(x, y), true);
-                Color blendedColor = blend(imagePixel, targetPixel, true);
-                image.setRGB(x, y, blendedColor.getRGB());
+        int[] imagePixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+        int[] maskPixels = ((DataBufferInt) maskImage.getRaster().getDataBuffer()).getData();
+        for (int y = 0; y < maskImage.getHeight(); y++) {
+            int offset = y * maskImage.getWidth();
+            for (int x = 0; x < maskImage.getWidth(); x++) {
+                int index = offset + x;
+                int maskAlpha = (maskPixels[index] >> 24) & 0xFF;
+                imagePixels[index] = blend(imagePixels[index], (maskAlpha << 24) | (targetColor.getRGB() & 0x00FFFFFF), true);
             }
         }
         return image;
@@ -227,22 +263,55 @@ public final class PaintShop {
         return meepleType + KEY_SEPARATOR + size + KEY_SEPARATOR;
     }
 
+    private static void putMeepleInCache(String key, ImageIcon icon) {
+        cachedMeepleImages.put(key, icon);
+        if (cachedMeepleImages.size() > MAXIMUM_MEEPLE_CACHE_SIZE) {
+            cachedMeepleImages.remove(cachedMeepleImages.keySet().iterator().next());
+        }
+    }
+
     // copies an image to avoid side effects.
     private static BufferedImage deepCopy(BufferedImage image) {
-        ColorModel model = image.getColorModel();
-        boolean isAlphaPremultiplied = model.isAlphaPremultiplied();
-        WritableRaster raster = image.copyData(image.getRaster().createCompatibleWritableRaster());
-        return ImageLoadingUtil.makeCompatible(new BufferedImage(model, raster, isAlphaPremultiplied, null));
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage copy = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        if (image.getType() == BufferedImage.TYPE_INT_ARGB) {
+            int[] src = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+            int[] dst = ((DataBufferInt) copy.getRaster().getDataBuffer()).getData();
+            System.arraycopy(src, 0, dst, 0, src.length);
+        } else {
+            Graphics2D graphics = copy.createGraphics();
+            graphics.drawImage(image, 0, 0, null);
+            graphics.dispose();
+        }
+        return copy;
+    }
+
+    // ensures a BufferedImage is TYPE_INT_ARGB for direct pixel array access.
+    private static BufferedImage ensureIntArgb(BufferedImage image) {
+        if (image.getType() == BufferedImage.TYPE_INT_ARGB) {
+            return image;
+        }
+        BufferedImage converted = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = converted.createGraphics();
+        graphics.drawImage(image, 0, 0, null);
+        graphics.dispose();
+        return converted;
     }
 
     // Colors a meeple with RGB color.
     private static Image paintMeeple(TerrainType meepleType, int color, int size) {
         BufferedImage image = deepCopy(imageMap.get(meepleType));
+        int[] imagePixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
         BufferedImage template = templateMap.get(meepleType);
-        for (int x = 0; x < template.getWidth(); x++) {
-            for (int y = 0; y < template.getHeight(); y++) {
-                if (template.getRGB(x, y) == Color.BLACK.getRGB()) {
-                    image.setRGB(x, y, color);
+        int[] templatePixels = ((DataBufferInt) template.getRaster().getDataBuffer()).getData();
+        int blackRGB = Color.BLACK.getRGB();
+        for (int y = 0; y < template.getHeight(); y++) {
+            int offset = y * template.getWidth();
+            for (int x = 0; x < template.getWidth(); x++) {
+                int index = offset + x;
+                if (templatePixels[index] == blackRGB) {
+                    imagePixels[index] = color;
                 }
             }
         }
