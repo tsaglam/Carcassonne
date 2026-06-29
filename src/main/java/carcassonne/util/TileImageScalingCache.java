@@ -2,16 +2,16 @@ package carcassonne.util;
 
 import java.awt.Image;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import carcassonne.model.tile.Tile;
 
 /**
- * Caches scaled images of tiles to improve the performance. When zooming in or out all static images are only rendered
- * ones per zoom level.
+ * Caches scaled images of tiles to improve the performance. Uses {@link ConcurrentHashMap#compute} to avoid duplicate
+ * computation of the same tile-size combination under concurrent access.
  * @author Timur Saglam
  */
 public final class TileImageScalingCache {
-    private static final int SHIFT_VALUE = 1000;
     private static final ConcurrentHashMap<Integer, CachedImage> cachedImages = new ConcurrentHashMap<>();
 
     private TileImageScalingCache() {
@@ -19,33 +19,33 @@ public final class TileImageScalingCache {
     }
 
     /**
-     * Checks if there is an existing, scaled tile image in this cache.
+     * Retrieves an existing scaled image in this cache. Lock-free read.
      * @param tile is the tile whose scaled image is requested.
      * @param size is the edge with of the (quadratic) image.
-     * @param previewAllowed determines if the cached image may be a preview render or should be a final render.
-     * @return true if there is an existing image cached with the specified size.
+     * @return the cached image record or null if there is none.
      */
-    public static boolean containsScaledImage(Tile tile, int size, boolean previewAllowed) {
-        int key = createKey(tile, size);
-        if (previewAllowed) {
-            return cachedImages.containsKey(key);
-        }
-        CachedImage image = cachedImages.get(key);
-        return image != null && !image.isPreview();
+    public static CachedImage getCached(Tile tile, int size) {
+        return cachedImages.get(createKey(tile, size));
     }
 
     /**
-     * Retrieves an existing scaled image in this cache.
-     * @param tile is the tile whose scaled image is requested.
-     * @param size is the edge with of the (quadratic) image.
-     * @return the scaled image or null if there is none.
+     * Retrieves or computes a scaled image for the given tile and size. Prevents duplicate computation under concurrent
+     * access: if multiple threads request the same key simultaneously, only one computes; others receive the result.
+     * @param tile the tile
+     * @param size the edge length
+     * @param preview whether the image is a preview (fast) or final render
+     * @param supplier the computation to run if miss
+     * @return the scaled image
      */
-    public static Image getScaledImage(Tile tile, int size) {
-        CachedImage cachedImage = cachedImages.get(createKey(tile, size));
-        if (cachedImage == null) {
-            return null;
-        }
-        return cachedImage.image();
+    public static Image computeIfAbsent(Tile tile, int size, boolean preview, Supplier<Image> supplier) {
+        int key = createKey(tile, size);
+        CachedImage result = cachedImages.compute(key, (existingKey, existing) -> {
+            if (existing != null && (preview || !existing.isPreview())) {
+                return existing;
+            }
+            return new CachedImage(supplier.get(), preview);
+        });
+        return result.image();
     }
 
     /**
@@ -75,9 +75,9 @@ public final class TileImageScalingCache {
     }
 
     /**
-     * Creates a primitive composite key for a tileType type, a size, and an orientation.
+     * Creates a primitive composite key for a tile type, a size, and an orientation using bit packing.
      */
     private static int createKey(Tile tile, int size) {
-        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation().ordinal() * SHIFT_VALUE * SHIFT_VALUE;
+        return size | (tile.getType().ordinal() << 9) | (tile.getRotation().ordinal() << 15);
     }
 }

@@ -72,8 +72,8 @@ public final class PaintShop {
     }
 
     /**
-     * Pre-warms the tile image cache by loading and scaling all tile types at full resolution.
-     * Should be called once at startup to avoid first-render lag.
+     * Pre-warms the tile image cache by loading and scaling all tile types at full resolution. Should be called once at
+     * startup to avoid first-render lag.
      */
     public static void prewarm() {
         ThreadingUtil.runInBackground(() -> TileType.validTiles().parallelStream().forEach(type -> {
@@ -118,8 +118,9 @@ public final class PaintShop {
      */
     public static ImageIcon getColoredMeeple(TerrainType meepleType, Color color, int size) {
         String key = createKey(color, meepleType, size);
-        if (cachedMeepleImages.containsKey(key)) {
-            return cachedMeepleImages.get(key);
+        ImageIcon cached = cachedMeepleImages.get(key);
+        if (cached != null) {
+            return cached;
         }
         Image paintedMeeple = paintMeeple(meepleType, color.getRGB(), size * HIGH_DPI_FACTOR);
         ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(paintedMeeple));
@@ -146,8 +147,9 @@ public final class PaintShop {
      */
     public static ImageIcon getPreviewMeeple(TerrainType meepleType, int size) {
         String key = createKey(meepleType, size);
-        if (cachedMeepleImages.containsKey(key)) {
-            return cachedMeepleImages.get(key);
+        ImageIcon cached = cachedMeepleImages.get(key);
+        if (cached != null) {
+            return cached;
         }
         Image preview = imageMap.get(meepleType).getScaledInstance(size * HIGH_DPI_FACTOR, size * HIGH_DPI_FACTOR, Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(ImageLoadingUtil.createHighDpiImage(preview));
