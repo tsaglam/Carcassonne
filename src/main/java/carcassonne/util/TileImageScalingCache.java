@@ -2,13 +2,11 @@ package carcassonne.util;
 
 import java.awt.Image;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 
 import carcassonne.model.tile.Tile;
 
 /**
- * Caches scaled images of tiles to improve the performance. Uses {@link ConcurrentHashMap#compute} to avoid duplicate
- * computation of the same tile-size combination under concurrent access.
+ * Caches scaled images of tiles to improve the performance. Backed by {@link ConcurrentHashMap} for lock-free reads.
  * @author Timur Saglam
  */
 public final class TileImageScalingCache {
@@ -26,26 +24,6 @@ public final class TileImageScalingCache {
      */
     public static CachedImage getCached(Tile tile, int size) {
         return cachedImages.get(createKey(tile, size));
-    }
-
-    /**
-     * Retrieves or computes a scaled image for the given tile and size. Prevents duplicate computation under concurrent
-     * access: if multiple threads request the same key simultaneously, only one computes; others receive the result.
-     * @param tile the tile
-     * @param size the edge length
-     * @param preview whether the image is a preview (fast) or final render
-     * @param supplier the computation to run if miss
-     * @return the scaled image
-     */
-    public static Image computeIfAbsent(Tile tile, int size, boolean preview, Supplier<Image> supplier) {
-        int key = createKey(tile, size);
-        CachedImage result = cachedImages.compute(key, (existingKey, existing) -> {
-            if (existing != null && (preview || !existing.isPreview())) {
-                return existing;
-            }
-            return new CachedImage(supplier.get(), preview);
-        });
-        return result.image();
     }
 
     /**
