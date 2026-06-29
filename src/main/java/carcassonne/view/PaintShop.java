@@ -9,7 +9,6 @@ import java.awt.image.DataBufferInt;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ForkJoinPool;
 
 import javax.swing.ImageIcon;
 
@@ -22,6 +21,7 @@ import carcassonne.settings.GameSettings;
 import carcassonne.util.ConcurrentTileImageScaler;
 import carcassonne.util.FastImageScaler;
 import carcassonne.util.ImageLoadingUtil;
+import carcassonne.view.util.ThreadingUtil;
 
 /**
  * This is the Carcassonne paint shop! It paints meeple images and tile highlights! It is implemented as a utility class
@@ -72,11 +72,11 @@ public final class PaintShop {
     }
 
     /**
-     * Pre-warms the tile image cache by loading and scaling all tile types at full resolution. Should be called once at
-     * startup to avoid first-render lag.
+     * Pre-warms the tile image cache by loading and scaling all tile types at full resolution.
+     * Should be called once at startup to avoid first-render lag.
      */
     public static void prewarm() {
-        ForkJoinPool.commonPool().execute(() -> TileType.validTiles().parallelStream().forEach(type -> {
+        ThreadingUtil.runInBackground(() -> TileType.validTiles().parallelStream().forEach(type -> {
             Tile tile = new Tile(type);
             for (TileRotation rotation : TileRotation.values()) {
                 tile.rotateTo(rotation);

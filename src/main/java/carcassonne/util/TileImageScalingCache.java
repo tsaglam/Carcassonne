@@ -1,8 +1,7 @@
 package carcassonne.util;
 
 import java.awt.Image;
-import java.util.Collections;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import carcassonne.model.tile.Tile;
 
@@ -13,7 +12,7 @@ import carcassonne.model.tile.Tile;
  */
 public final class TileImageScalingCache {
     private static final int SHIFT_VALUE = 1000;
-    private static final Map<Integer, CachedImage> cachedImages = Collections.synchronizedMap(new LRUHashMap<>());
+    private static final ConcurrentHashMap<Integer, CachedImage> cachedImages = new ConcurrentHashMap<>();
 
     private TileImageScalingCache() {
         // private constructor ensures non-instantiability!
@@ -61,8 +60,7 @@ public final class TileImageScalingCache {
     }
 
     /**
-     * Clears the cache, removing all stored tile images. This call might be unsafe with concurrent calls, as there are no
-     * guarantees for clearing while putting.
+     * Clears the cache, removing all stored tile images.
      */
     public static void clear() {
         cachedImages.clear();
