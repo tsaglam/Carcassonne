@@ -331,9 +331,6 @@ public final class PaintShop {
     }
 
     private static Image scaleDown(Image image, int size, boolean fastScaling) {
-        if (fastScaling) {
-            return FastImageScaler.scaleDown(image, size);
-        }
-        return image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
+        return FastImageScaler.scale(image, size, fastScaling);
     }
 }

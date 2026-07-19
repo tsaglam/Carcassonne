@@ -64,7 +64,7 @@ public final class TileImageScalingCache {
     /**
      * Creates a primitive composite key for a tile type, a size, and an orientation using bit packing.
      */
-    private static int createKey(Tile tile, int size) {
+    static int createKey(Tile tile, int size) {
         return size | (tile.getType().ordinal() << 9) | (tile.getImageIndex() << 15);
     }
 }

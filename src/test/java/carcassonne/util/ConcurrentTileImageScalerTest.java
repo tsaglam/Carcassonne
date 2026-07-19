@@ -133,7 +133,7 @@ class ConcurrentTileImageScalerTest {
 
     @ParameterizedTest(name = "fast scaling = {0}")
     @ValueSource(booleans = {true, false})
-    void testZConcurrentMultiResolutionScaling(boolean fastScaling) throws InterruptedException {
+    void testConcurrentMultiResolutionScaling(boolean fastScaling) throws InterruptedException {
         try (ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT)) {
             CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
             AtomicInteger exceptionCount = new AtomicInteger(0);

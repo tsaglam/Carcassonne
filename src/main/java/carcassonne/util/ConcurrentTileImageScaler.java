@@ -14,9 +14,8 @@ import carcassonne.settings.GameSettings;
 import carcassonne.view.PaintShop;
 
 /**
- * Tile scaling utility class optimized for concurrent zoom preloading. Lock-free cache reads via
- * {@link TileImageScalingCache#getCached} route cache hits around per-key semaphores. Only cache misses acquire the
- * semaphore to prevent duplicate scaling during zoom where many grid positions share the same tile type and size.
+ * Thread-safe tile image scaling with a lock-free cache-hit fast path. Cache misses acquire a per-key semaphore to
+ * prevent duplicate work when many grid positions request the same tile at the same size.
  * @author Timur Saglam
  */
 public final class ConcurrentTileImageScaler {
@@ -65,7 +64,7 @@ public final class ConcurrentTileImageScaler {
     }
 
     private static Image getScaledImageLocked(Tile tile, int targetSize, boolean fastScaling) {
-        int lockKey = createLockKey(tile, targetSize);
+        int lockKey = TileImageScalingCache.createKey(tile, targetSize);
         Semaphore lock = scalingMutexes.computeIfAbsent(lockKey, k -> new Semaphore(SINGLE_PERMIT));
         lock.acquireUninterruptibly();
         try {
@@ -81,7 +80,7 @@ public final class ConcurrentTileImageScaler {
             return cached.image();
         }
         Image largerImage = getOriginalImage(tile);
-        Image scaledImage = scaleImage(largerImage, targetSize, fastScaling);
+        Image scaledImage = FastImageScaler.scale(largerImage, targetSize, fastScaling);
         TileImageScalingCache.putScaledImage(scaledImage, tile, targetSize, fastScaling);
         return scaledImage;
     }
@@ -91,7 +90,7 @@ public final class ConcurrentTileImageScaler {
         if (cached != null && !cached.isPreview()) {
             return cached.image();
         }
-        int lockKey = createOriginalLockKey(tile);
+        int lockKey = TileImageScalingCache.createKey(tile, TILE_RESOLUTION);
         Semaphore lock = loadingMutexes.computeIfAbsent(lockKey, k -> new Semaphore(SINGLE_PERMIT));
         lock.acquireUninterruptibly();
         try {
@@ -112,20 +111,5 @@ public final class ConcurrentTileImageScaler {
         } finally {
             lock.release();
         }
-    }
-
-    private static Image scaleImage(Image image, int size, boolean fastScaling) {
-        if (fastScaling) {
-            return FastImageScaler.scaleDown(image, size);
-        }
-        return image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
-    }
-
-    private static int createOriginalLockKey(Tile tile) {
-        return TILE_RESOLUTION | (tile.getType().ordinal() << 9) | (tile.getImageIndex() << 15);
-    }
-
-    private static int createLockKey(Tile tile, int size) {
-        return size | (tile.getType().ordinal() << 9) | (tile.getImageIndex() << 15);
     }
 }
