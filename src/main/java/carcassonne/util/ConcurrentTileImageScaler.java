@@ -15,9 +15,8 @@ import carcassonne.view.PaintShop;
 
 /**
  * Tile scaling utility class optimized for concurrent zoom preloading. Lock-free cache reads via
- * {@link TileImageScalingCache#getCached} route cache hits around per-key semaphores. Only cache
- * misses acquire the semaphore to prevent duplicate scaling during zoom where many grid positions
- * share the same tile type and size.
+ * {@link TileImageScalingCache#getCached} route cache hits around per-key semaphores. Only cache misses acquire the
+ * semaphore to prevent duplicate scaling during zoom where many grid positions share the same tile type and size.
  * @author Timur Saglam
  */
 public final class ConcurrentTileImageScaler {
