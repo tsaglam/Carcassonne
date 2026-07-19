@@ -196,7 +196,9 @@ public final class PaintShop {
         int green2 = (second >> 8) & 0xFF;
         int blue2 = second & 0xFF;
         int resultAlpha = Math.max(alpha1, alpha2);
-        int resultRed, resultGreen, resultBlue;
+        int resultRed;
+        int resultGreen;
+        int resultBlue;
         if (blendEqually) {
             int totalAlpha = alpha1 + alpha2;
             if (totalAlpha == 0) {
