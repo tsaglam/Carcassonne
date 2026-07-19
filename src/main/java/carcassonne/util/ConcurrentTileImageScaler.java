@@ -67,8 +67,7 @@ public final class ConcurrentTileImageScaler {
 
     private static Image getScaledImageLocked(Tile tile, int targetSize, boolean fastScaling) {
         int lockKey = createLockKey(tile, targetSize);
-        scalingMutexes.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
-        Semaphore lock = scalingMutexes.get(lockKey);
+        Semaphore lock = scalingMutexes.computeIfAbsent(lockKey, k -> new Semaphore(SINGLE_PERMIT));
         lock.acquireUninterruptibly();
         try {
             return getScaledImageUnsafe(tile, targetSize, fastScaling);
@@ -94,8 +93,7 @@ public final class ConcurrentTileImageScaler {
             return cached.image();
         }
         int lockKey = createOriginalLockKey(tile);
-        loadingMutexes.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
-        Semaphore lock = loadingMutexes.get(lockKey);
+        Semaphore lock = loadingMutexes.computeIfAbsent(lockKey, k -> new Semaphore(SINGLE_PERMIT));
         lock.acquireUninterruptibly();
         try {
             cached = TileImageScalingCache.getCached(tile, TILE_RESOLUTION);
@@ -125,7 +123,7 @@ public final class ConcurrentTileImageScaler {
     }
 
     private static int createOriginalLockKey(Tile tile) {
-        return TILE_RESOLUTION | (tile.getType().ordinal() << 9) | (tile.getRotation().ordinal() << 15);
+        return TILE_RESOLUTION | (tile.getType().ordinal() << 9) | (tile.getImageIndex() << 15);
     }
 
     private static int createLockKey(Tile tile, int size) {

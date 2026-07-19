@@ -2,6 +2,7 @@ package carcassonne.util;
 
 import java.awt.Image;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import carcassonne.model.tile.Tile;
 
@@ -10,7 +11,9 @@ import carcassonne.model.tile.Tile;
  * @author Timur Saglam
  */
 public final class TileImageScalingCache {
+    private static final int MAXIMUM_SIZE = 10_000;
     private static final ConcurrentHashMap<Integer, CachedImage> cachedImages = new ConcurrentHashMap<>();
+    private static final AtomicInteger putCounter = new AtomicInteger();
 
     private TileImageScalingCache() {
         // private constructor ensures non-instantiability!
@@ -35,6 +38,12 @@ public final class TileImageScalingCache {
      */
     public static void putScaledImage(Image image, Tile tile, int size, boolean preview) {
         cachedImages.put(createKey(tile, size), new CachedImage(image, preview));
+        if ((putCounter.incrementAndGet() & 63) == 0 && cachedImages.size() > MAXIMUM_SIZE) {
+            int toRemove = MAXIMUM_SIZE / 20;
+            for (int i = 0; i < toRemove; i++) {
+                cachedImages.remove(cachedImages.keySet().iterator().next());
+            }
+        }
     }
 
     /**
@@ -56,6 +65,6 @@ public final class TileImageScalingCache {
      * Creates a primitive composite key for a tile type, a size, and an orientation using bit packing.
      */
     private static int createKey(Tile tile, int size) {
-        return size | (tile.getType().ordinal() << 9) | (tile.getRotation().ordinal() << 15);
+        return size | (tile.getType().ordinal() << 9) | (tile.getImageIndex() << 15);
     }
 }

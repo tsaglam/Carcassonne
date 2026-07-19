@@ -7,7 +7,9 @@ import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.ImageIcon;
@@ -31,7 +33,7 @@ import carcassonne.view.util.ThreadingUtil;
 public final class PaintShop {
     private static final int HIGH_DPI_FACTOR = 2;
     private static final BufferedImage emblemImage = ensureIntArgb(ImageLoadingUtil.EMBLEM.createBufferedImage());
-    private static final BufferedImage highlightBaseImage = ImageLoadingUtil.NULL_TILE.createBufferedImage();
+    private static final BufferedImage highlightBaseImage = ensureIntArgb(ImageLoadingUtil.NULL_TILE.createBufferedImage());
     private static final BufferedImage highlightImage = ensureIntArgb(ImageLoadingUtil.HIGHLIGHT.createBufferedImage());
     private static final int MAXIMAL_ALPHA = 255;
     private static final int MAXIMUM_MEEPLE_CACHE_SIZE = 500;
@@ -78,8 +80,12 @@ public final class PaintShop {
     public static void prewarm() {
         ThreadingUtil.runInBackground(() -> TileType.validTiles().parallelStream().forEach(type -> {
             Tile tile = new Tile(type);
+            Set<Integer> seen = new HashSet<>();
             for (TileRotation rotation : TileRotation.values()) {
                 tile.rotateTo(rotation);
+                if (!seen.add(tile.getImageIndex())) {
+                    continue;
+                }
                 ConcurrentTileImageScaler.getScaledMultiResolutionImage(tile, GameSettings.TILE_RESOLUTION, false);
             }
         }));
