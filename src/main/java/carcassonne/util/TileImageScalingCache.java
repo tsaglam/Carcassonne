@@ -1,52 +1,32 @@
 package carcassonne.util;
 
 import java.awt.Image;
-import java.util.Collections;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import carcassonne.model.tile.Tile;
 
 /**
- * Caches scaled images of tiles to improve the performance. When zooming in or out all static images are only rendered
- * ones per zoom level.
+ * Caches scaled images of tiles to improve the performance. Backed by {@link ConcurrentHashMap} for lock-free reads.
  * @author Timur Saglam
  */
 public final class TileImageScalingCache {
-    private static final int SHIFT_VALUE = 1000;
-    private static final Map<Integer, CachedImage> cachedImages = Collections.synchronizedMap(new LRUHashMap<>());
+    private static final int MAXIMUM_SIZE = 10_000;
+    private static final ConcurrentHashMap<Integer, CachedImage> cachedImages = new ConcurrentHashMap<>();
+    private static final AtomicInteger putCounter = new AtomicInteger();
 
     private TileImageScalingCache() {
         // private constructor ensures non-instantiability!
     }
 
     /**
-     * Checks if there is an existing, scaled tile image in this cache.
+     * Retrieves an existing scaled image in this cache. Lock-free read.
      * @param tile is the tile whose scaled image is requested.
      * @param size is the edge with of the (quadratic) image.
-     * @param previewAllowed determines if the cached image may be a preview render or should be a final render.
-     * @return true if there is an existing image cached with the specified size.
+     * @return the cached image record or null if there is none.
      */
-    public static boolean containsScaledImage(Tile tile, int size, boolean previewAllowed) {
-        int key = createKey(tile, size);
-        if (previewAllowed) {
-            return cachedImages.containsKey(key);
-        }
-        CachedImage image = cachedImages.get(key);
-        return image != null && !image.isPreview();
-    }
-
-    /**
-     * Retrieves an existing scaled image in this cache.
-     * @param tile is the tile whose scaled image is requested.
-     * @param size is the edge with of the (quadratic) image.
-     * @return the scaled image or null if there is none.
-     */
-    public static Image getScaledImage(Tile tile, int size) {
-        CachedImage cachedImage = cachedImages.get(createKey(tile, size));
-        if (cachedImage == null) {
-            return null;
-        }
-        return cachedImage.image();
+    public static CachedImage getCached(Tile tile, int size) {
+        return cachedImages.get(createKey(tile, size));
     }
 
     /**
@@ -58,11 +38,16 @@ public final class TileImageScalingCache {
      */
     public static void putScaledImage(Image image, Tile tile, int size, boolean preview) {
         cachedImages.put(createKey(tile, size), new CachedImage(image, preview));
+        if ((putCounter.incrementAndGet() & 63) == 0 && cachedImages.size() > MAXIMUM_SIZE) {
+            int toRemove = MAXIMUM_SIZE / 20;
+            for (int i = 0; i < toRemove; i++) {
+                cachedImages.remove(cachedImages.keySet().iterator().next());
+            }
+        }
     }
 
     /**
-     * Clears the cache, removing all stored tile images. This call might be unsafe with concurrent calls, as there are no
-     * guarantees for clearing while putting.
+     * Clears the cache, removing all stored tile images.
      */
     public static void clear() {
         cachedImages.clear();
@@ -77,9 +62,9 @@ public final class TileImageScalingCache {
     }
 
     /**
-     * Creates a primitive composite key for a tileType type, a size, and an orientation.
+     * Creates a primitive composite key for a tile type, a size, and an orientation using bit packing.
      */
-    private static int createKey(Tile tile, int size) {
-        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getRotation().ordinal() * SHIFT_VALUE * SHIFT_VALUE;
+    static int createKey(Tile tile, int size) {
+        return size | (tile.getType().ordinal() << 9) | (tile.getImageIndex() << 15);
     }
 }

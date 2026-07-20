@@ -8,7 +8,8 @@ public enum ZoomConfig {
     MIN_LEVEL(16),
     DEFAULT_LEVEL(128),
     STEP(32),
-    STEP_SMALL(8);
+    STEP_SMALL(8),
+    SMOOTHING_FACTOR(4);
 
     private final int pixels;
 

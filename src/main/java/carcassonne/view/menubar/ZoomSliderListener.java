@@ -18,7 +18,7 @@ import carcassonne.view.util.ZoomConfig;
  */
 public class ZoomSliderListener extends MouseAdapter implements ChangeListener {
 
-    private static final double SMOOTHING_FACTOR = ZoomConfig.STEP_SMALL.pixels();
+    private static final double SMOOTHING_FACTOR = ZoomConfig.SMOOTHING_FACTOR.pixels();
     private final MainView mainView;
     private final JSlider slider;
     private int previousValue;

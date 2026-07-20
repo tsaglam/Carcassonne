@@ -14,14 +14,13 @@ import carcassonne.settings.GameSettings;
 import carcassonne.view.PaintShop;
 
 /**
- * Tile scaling utility class that is optimized for concurrent use. It uses a sophisticated locking mechanism and
- * leverages the image caching capabilities of the {@link TileImageScalingCache} and the image scaling capabilities of
- * the {@link FastImageScaler}.
+ * Thread-safe tile image scaling with a lock-free cache-hit fast path. Cache misses acquire a per-key semaphore to
+ * prevent duplicate work when many grid positions request the same tile at the same size.
  * @author Timur Saglam
  */
 public final class ConcurrentTileImageScaler {
-    private static final ConcurrentMap<Integer, Semaphore> semaphores = new ConcurrentHashMap<>();
-    private static final int SHIFT_VALUE = 1000;
+    private static final ConcurrentMap<Integer, Semaphore> scalingMutexes = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Integer, Semaphore> loadingMutexes = new ConcurrentHashMap<>();
     private static final int SINGLE_PERMIT = 1;
 
     private ConcurrentTileImageScaler() {
@@ -29,34 +28,22 @@ public final class ConcurrentTileImageScaler {
     }
 
     /**
-     * Returns the scaled image of a tile. This method is thread safe and leverages caching.
+     * Returns the scaled image of a tile. Lock-free for cache hits.
      * @param tile is the tile whose image is required.
      * @param targetSize is the edge length of the (quadratic) image in pixels.
      * @param fastScaling specifies whether a fast scaling algorithm should be used.
      * @return the scaled {@link Image}.
      */
     public static Image getScaledImage(Tile tile, int targetSize, boolean fastScaling) {
-        int lockKey = createKey(tile, targetSize);
-        semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
-        Semaphore lock = semaphores.get(lockKey);
-        boolean acquired = false;
-        try {
-            lock.acquire();
-            acquired = true;
-            return getScaledImageUnsafe(tile, targetSize, fastScaling);
-        } catch (InterruptedException exception) {
-            exception.printStackTrace();
-        } finally {
-            if (acquired) {
-                lock.release();
-            }
+        CachedImage cached = TileImageScalingCache.getCached(tile, targetSize);
+        if (cached != null && (fastScaling || !cached.isPreview())) {
+            return cached.image();
         }
-        return null;
+        return getScaledImageLocked(tile, targetSize, fastScaling);
     }
 
     /**
-     * Returns a scaled multi-resolution image of a tile supporting HighDPI displays (e.g., Retina). This method is
-     * thread-safe and leverages caching.
+     * Returns a scaled multi-resolution image of a tile supporting HighDPI displays (e.g., Retina).
      * @param tile the tile whose image is required
      * @param targetSize the edge length of the quadratic image in pixels
      * @param fastScaling whether to use a fast scaling algorithm
@@ -66,10 +53,8 @@ public final class ConcurrentTileImageScaler {
         double[] factors = GameSettings.HIGH_DPI_FACTORS;
         Image[] images = new Image[factors.length + 1];
 
-        // Base resolution image
         images[0] = getScaledImage(tile, targetSize, fastScaling);
 
-        // Higher resolution variants
         for (int i = 0; i < factors.length; i++) {
             int scaledSize = (int) Math.round(targetSize * factors[i]);
             images[i + 1] = getScaledImage(tile, Math.min(scaledSize, GameSettings.TILE_RESOLUTION), fastScaling);
@@ -78,83 +63,53 @@ public final class ConcurrentTileImageScaler {
         return new BaseMultiResolutionImage(images);
     }
 
-    /**
-     * Either scales the full resolution image to the required size or retrieves the cached scaled image. This method is not
-     * thread safe.
-     */
-    private static Image getScaledImageUnsafe(Tile tile, int targetSize, boolean fastScaling) {
-        if (TileImageScalingCache.containsScaledImage(tile, targetSize, fastScaling)) {
-            return TileImageScalingCache.getScaledImage(tile, targetSize);
+    private static Image getScaledImageLocked(Tile tile, int targetSize, boolean fastScaling) {
+        int lockKey = TileImageScalingCache.createKey(tile, targetSize);
+        Semaphore lock = scalingMutexes.computeIfAbsent(lockKey, k -> new Semaphore(SINGLE_PERMIT));
+        lock.acquireUninterruptibly();
+        try {
+            return getScaledImageUnsafe(tile, targetSize, fastScaling);
+        } finally {
+            lock.release();
         }
-        Image largerImage = getOriginalImage(tile, targetSize);
-        Image scaledImage = scaleImage(largerImage, targetSize, fastScaling);
+    }
+
+    private static Image getScaledImageUnsafe(Tile tile, int targetSize, boolean fastScaling) {
+        CachedImage cached = TileImageScalingCache.getCached(tile, targetSize);
+        if (cached != null && (fastScaling || !cached.isPreview())) {
+            return cached.image();
+        }
+        Image largerImage = getOriginalImage(tile);
+        Image scaledImage = FastImageScaler.scale(largerImage, targetSize, fastScaling);
         TileImageScalingCache.putScaledImage(scaledImage, tile, targetSize, fastScaling);
         return scaledImage;
     }
 
-    /**
-     * Gets a full-size image for a specific tile. Uses caching to reuse image icons.
-     */
-    private static Image getOriginalImage(Tile tile, int targetSize) {
-        int lockKey = createKey(tile, TILE_RESOLUTION);
-        semaphores.putIfAbsent(lockKey, new Semaphore(SINGLE_PERMIT));
-        Semaphore lock = semaphores.get(lockKey);
+    private static Image getOriginalImage(Tile tile) {
+        CachedImage cached = TileImageScalingCache.getCached(tile, TILE_RESOLUTION);
+        if (cached != null && !cached.isPreview()) {
+            return cached.image();
+        }
+        int lockKey = TileImageScalingCache.createKey(tile, TILE_RESOLUTION);
+        Semaphore lock = loadingMutexes.computeIfAbsent(lockKey, k -> new Semaphore(SINGLE_PERMIT));
+        lock.acquireUninterruptibly();
         try {
-            if (targetSize != TILE_RESOLUTION) {
-                lock.acquire();
+            cached = TileImageScalingCache.getCached(tile, TILE_RESOLUTION);
+            if (cached != null && !cached.isPreview()) {
+                return cached.image();
             }
-            return getOriginalImageUnsafe(tile);
-        } catch (InterruptedException exception) {
-            exception.printStackTrace();
+            String imagePath = GameSettings.TILE_FOLDER_PATH + tile.getType().name() + tile.getImageIndex() + GameSettings.TILE_FILE_TYPE;
+            Image image;
+            if (tile.hasEmblem()) {
+                BufferedImage loaded = ImageLoadingUtil.createBufferedImage(imagePath);
+                image = PaintShop.addEmblem(loaded);
+            } else {
+                image = ImageLoadingUtil.createBufferedImage(imagePath);
+            }
+            TileImageScalingCache.putScaledImage(image, tile, TILE_RESOLUTION, false);
+            return image;
         } finally {
-            if (targetSize != TILE_RESOLUTION) {
-                lock.release();
-            }
+            lock.release();
         }
-        return null;
-    }
-
-    /**
-     * Loads an image for a specific tile. Uses caching to reuse image icons. This method is not thread safe.
-     */
-    private static Image getOriginalImageUnsafe(Tile tile) {
-        String imagePath = GameSettings.TILE_FOLDER_PATH + tile.getType().name() + tile.getImageIndex() + GameSettings.TILE_FILE_TYPE;
-        if (TileImageScalingCache.containsScaledImage(tile, TILE_RESOLUTION, false)) {
-            return TileImageScalingCache.getScaledImage(tile, TILE_RESOLUTION);
-        }
-        if (tile.hasEmblem()) {
-            return loadImageAndPaintEmblem(tile, imagePath);
-        }
-        Image image = ImageLoadingUtil.createBufferedImage(imagePath);
-        TileImageScalingCache.putScaledImage(image, tile, TILE_RESOLUTION, false);
-        return image;
-    }
-
-    /**
-     * Loads a tile image for a tile with a certain rotation index and paints its emblem.
-     */
-    private static Image loadImageAndPaintEmblem(Tile tile, String imagePath) {
-        BufferedImage image = ImageLoadingUtil.createBufferedImage(imagePath);
-        Image paintedImage = PaintShop.addEmblem(image);
-        TileImageScalingCache.putScaledImage(paintedImage, tile, TILE_RESOLUTION, false);
-        return paintedImage;
-    }
-
-    /**
-     * Scales the full resolution image to the required size with either the fast or the smooth scaling algorithm. This
-     * method is not thread safe.
-     */
-    private static Image scaleImage(Image image, int size, boolean fastScaling) {
-        if (fastScaling) {
-            return FastImageScaler.scaleDown(image, size);
-        }
-        return image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
-    }
-
-    /**
-     * Creates a primitive composite key for the tile depiction with a specific edge length.
-     */
-    private static int createKey(Tile tile, int size) {
-        return size + tile.getType().ordinal() * SHIFT_VALUE + tile.getImageIndex() * SHIFT_VALUE * SHIFT_VALUE;
     }
 }
