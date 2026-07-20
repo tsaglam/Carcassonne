@@ -15,6 +15,20 @@ import java.awt.image.BufferedImage;
  */
 public final class FastImageScaler {
 
+    /**
+     * Scales a quadratic image to the given size using either a fast downscaling algorithm or smooth raster scaling.
+     * @param image is the original image.
+     * @param targetSize is the desired edge length.
+     * @param fast if true, uses {@link #scaleDown}; otherwise uses {@link Image#SCALE_SMOOTH}.
+     * @return the scaled image.
+     */
+    public static Image scale(Image image, int targetSize, boolean fast) {
+        if (fast) {
+            return scaleDown(image, targetSize);
+        }
+        return image.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
+    }
+
     private FastImageScaler() {
         // private constructor ensures non-instantiability!
     }

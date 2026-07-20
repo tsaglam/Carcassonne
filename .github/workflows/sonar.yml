@@ -35,14 +35,14 @@ jobs:
           PR_BASE: ${{ github.base_ref }}
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar -Pcoverage \
+            xvfb-run mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar -Pcoverage \
               -Dsonar.projectKey=tsaglam_Carcassonne \
               -Dsonar.coverage.exclusions=src/main/java/carcassonne/view/** \
               -Dsonar.pullrequest.key="$PR_NUMBER" \
               -Dsonar.pullrequest.branch="$PR_BRANCH" \
               -Dsonar.pullrequest.base="$PR_BASE"
           else
-            mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage \
+            xvfb-run mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage \
               -Dsonar.projectKey=tsaglam_Carcassonne \
               -Dsonar.coverage.exclusions=src/main/java/carcassonne/view/**
           fi

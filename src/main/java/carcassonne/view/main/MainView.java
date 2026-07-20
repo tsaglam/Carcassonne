@@ -202,7 +202,7 @@ public class MainView extends JFrame implements NotifiableView {
         } else {
             tileLayer.resetPlacementHighlights();
         }
-        tileLayer.changeZoomLevel(zoomLevel, mode == FAST); // Executed in parallel for improved performance
+        tileLayer.changeZoomLevel(zoomLevel, mode == FAST);
         meepleLayer.synchronizeLayerSizes(gridWidth, gridHeight, zoomLevel); // IMPORTANT: Ensures that the meeples are on the tiles.
         meepleLayer.changeZoomLevel(zoomLevel);
         scrollPane.validateAndCenter();
