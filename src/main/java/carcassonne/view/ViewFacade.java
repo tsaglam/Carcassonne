@@ -119,11 +119,15 @@ public class ViewFacade {
     }
 
     /**
-     * Indicates whether there are jobs that are queued but are not completed yet.
-     * @return true if there is at least one unfinished job.
+     * Blocks the calling thread until all previously scheduled jobs have completed on the EDT.
+     * @throws InterruptedException if the current thread is interrupted while waiting.
      */
-    public boolean isBusy() {
-        return jobCounter > 0;
+    public void waitUntilIdle() throws InterruptedException {
+        synchronized (this) {
+            while (jobCounter > 0) {
+                wait();
+            }
+        }
     }
 
     /**
@@ -137,6 +141,9 @@ public class ViewFacade {
             job.run();
             synchronized (this) {
                 jobCounter--;
+                if (jobCounter == 0) {
+                    notifyAll();
+                }
             }
         });
     }
