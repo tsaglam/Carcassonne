@@ -55,12 +55,12 @@ public class ControllerAdapter implements ControllerFacade {
 
     @Override
     public GlobalKeyBindingManager getKeyBindings() {
-        return controller.getKeyBindings(); // TODO (HIGH) [THREADING] Should this be on view thread?
+        return controller.getKeyBindings();
     }
 
     @Override
     public GameSettings getSettings() {
-        return controller.getSettings(); // TODO (HIGH) [THREADING] Should this be on view thread?
+        return controller.getSettings();
     }
 
     private void runInBackground(Runnable task) {
