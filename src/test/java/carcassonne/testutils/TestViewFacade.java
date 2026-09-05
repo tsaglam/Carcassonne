@@ -88,8 +88,8 @@ public class TestViewFacade extends ViewFacade {
     }
 
     @Override
-    public boolean isBusy() {
-        return false; // in tests, everything is synchronous
+    public void waitUntilIdle() {
+        // in tests, everything is synchronous
     }
 
     private void logCallToUserInterface(Class<?> uiClass, Consumer<?> job) {
