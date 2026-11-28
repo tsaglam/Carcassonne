@@ -23,7 +23,7 @@ public class HandOfTilesTest extends CarcassonneTest {
     @Test
     @DisplayName("Dealing hands from a stack that is too small")
     void testDealingFromSmallStack() {
-        startRoundWithSmallStack();
+        startRoundWithSmallStack(2);
 
         for (int i = 0; i < game.getRound().getPlayerCount(); i++) {
             Player player = game.getRound().getPlayer(i);
@@ -34,7 +34,7 @@ public class HandOfTilesTest extends CarcassonneTest {
     @Test
     @DisplayName("Playing out a round with players without tiles")
     void testPlayingOutSmallStack() {
-        startRoundWithSmallStack();
+        startRoundWithSmallStack(3);
 
         for (int turn = 0; turn < MAXIMAL_TURNS && game.getState() == StatePlacing.class; turn++) {
             game.skipTilePlacement();
@@ -42,12 +42,12 @@ public class HandOfTilesTest extends CarcassonneTest {
         assertState(StateGameOver.class);
     }
 
-    private void startRoundWithSmallStack() {
+    private void startRoundWithSmallStack(int players) {
         for (TileType type : TileType.validTiles()) {
             settings.getTileDistribution().setQuantity(type, 0);
         }
         settings.getTileDistribution().setQuantity(TileType.Road, STACK_SIZE);
         settings.setTilesPerPlayer(GameSettings.MAXIMAL_TILES_ON_HAND);
-        game.newRound(2, 5, 5);
+        game.newRound(players, 5, 5);
     }
 }
