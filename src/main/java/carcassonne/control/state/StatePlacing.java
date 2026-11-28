@@ -19,7 +19,7 @@ import carcassonne.view.util.GameMessage;
  */
 public class StatePlacing extends AbstractGameState {
 
-    private static final int SLEEP_DURATION = 10;
+    private static final String INTERRUPTED_ERROR = "UI update interrupted:";
 
     /**
      * Constructor of the state.
@@ -108,13 +108,12 @@ public class StatePlacing extends AbstractGameState {
     }
 
     private void waitForUI() {
-        while (views.isBusy()) {
-            try {
-                Thread.sleep(SLEEP_DURATION);
-            } catch (InterruptedException exception) {
-                exception.printStackTrace();
-                views.reroute(() -> GameMessage.showError(exception.getCause().getMessage()));
-            }
+        try {
+            views.waitUntilIdle();
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+            Thread.currentThread().interrupt();
+            views.reroute(() -> GameMessage.showError(INTERRUPTED_ERROR + System.lineSeparator() + exception.getMessage()));
         }
     }
 
