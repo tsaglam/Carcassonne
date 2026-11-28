@@ -110,8 +110,12 @@ public class Tile {
         return type;
     }
 
+    /**
+     * Returns the rotations that result in distinct orientations of this tile, which depends on its symmetry.
+     * @return the distinct rotations, between one and four.
+     */
     public Collection<TileRotation> getPossibleRotations() {
-        return EnumSet.allOf(TileRotation.class).stream().filter(it -> it.ordinal() < rotationLimit - 1).toList();
+        return EnumSet.allOf(TileRotation.class).stream().filter(it -> it.ordinal() < rotationLimit).toList();
     }
 
     /**
