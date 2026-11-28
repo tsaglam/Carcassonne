@@ -35,6 +35,9 @@ public final class ConcurrentTileImageScaler {
      * @return the scaled {@link Image}.
      */
     public static Image getScaledImage(Tile tile, int targetSize, boolean fastScaling) {
+        if (targetSize == TILE_RESOLUTION) {
+            return getOriginalImage(tile); // never replace the original with a scaled copy
+        }
         CachedImage cached = TileImageScalingCache.getCached(tile, targetSize);
         if (cached != null && (fastScaling || !cached.isPreview())) {
             return cached.image();

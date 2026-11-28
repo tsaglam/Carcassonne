@@ -1,64 +1,64 @@
 package carcassonne.util;
 
+import static carcassonne.settings.GameSettings.TILE_RESOLUTION;
+
 import java.awt.Image;
+import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import carcassonne.model.tile.Tile;
 
 /**
- * Caches scaled images of tiles to improve the performance. Backed by {@link ConcurrentHashMap} for lock-free reads.
+ * Caches scaled images of tiles to improve the performance. Scaled images are kept in a bounded least recently used
+ * cache. The original images (at {@link carcassonne.settings.GameSettings#TILE_RESOLUTION}) from which all scaled
+ * images are derived are kept separately and are never evicted.
  * @author Timur Saglam
  */
 public final class TileImageScalingCache {
-    private static final int MAXIMUM_SIZE = 10_000;
-    private static final ConcurrentHashMap<Integer, CachedImage> cachedImages = new ConcurrentHashMap<>();
-    private static final AtomicInteger putCounter = new AtomicInteger();
+    static final int MAXIMUM_SIZE = 2000;
+    private static final Map<Integer, CachedImage> scaledImages = Collections.synchronizedMap(new LRUHashMap<>(MAXIMUM_SIZE));
+    private static final Map<Integer, CachedImage> originalImages = new ConcurrentHashMap<>();
 
     private TileImageScalingCache() {
         // private constructor ensures non-instantiability!
     }
 
     /**
-     * Retrieves an existing scaled image in this cache. Lock-free read.
+     * Retrieves an existing scaled image in this cache.
      * @param tile is the tile whose scaled image is requested.
      * @param size is the edge with of the (quadratic) image.
      * @return the cached image record or null if there is none.
      */
     public static CachedImage getCached(Tile tile, int size) {
-        return cachedImages.get(createKey(tile, size));
+        return selectMap(size).get(createKey(tile, size));
     }
 
     /**
-     * Places a scaled image in this cache to enable its reuse.
+     * Places a scaled image in this cache to enable its reuse. Images with the original tile resolution are never evicted.
      * @param image is the scaled image.
      * @param tile is the tile whose scaled image is requested.
      * @param size is the edge with of the scaled image.
      * @param preview determines if the image is a preview render or final render.
      */
     public static void putScaledImage(Image image, Tile tile, int size, boolean preview) {
-        cachedImages.put(createKey(tile, size), new CachedImage(image, preview));
-        if ((putCounter.incrementAndGet() & 63) == 0 && cachedImages.size() > MAXIMUM_SIZE) {
-            int toRemove = MAXIMUM_SIZE / 20;
-            for (int i = 0; i < toRemove; i++) {
-                cachedImages.remove(cachedImages.keySet().iterator().next());
-            }
-        }
+        selectMap(size).put(createKey(tile, size), new CachedImage(image, preview));
     }
 
     /**
-     * Clears the cache, removing all stored tile images.
+     * Clears the cache, removing all stored tile images, including the original images.
      */
     public static void clear() {
-        cachedImages.clear();
+        scaledImages.clear();
+        originalImages.clear();
     }
 
     /**
-     * Returns the number of cached elements in this cache.
+     * Returns the number of cached elements in this cache, including the original images.
      * @return the number of cached elements.
      */
     public static int size() {
-        return cachedImages.size();
+        return scaledImages.size() + originalImages.size();
     }
 
     /**
@@ -66,5 +66,9 @@ public final class TileImageScalingCache {
      */
     static int createKey(Tile tile, int size) {
         return size | (tile.getType().ordinal() << 9) | (tile.getImageIndex() << 15);
+    }
+
+    private static Map<Integer, CachedImage> selectMap(int size) {
+        return size == TILE_RESOLUTION ? originalImages : scaledImages;
     }
 }

@@ -2,6 +2,7 @@ package carcassonne.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,6 +10,7 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,6 +28,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileRotation;
 import carcassonne.model.tile.TileType;
+import carcassonne.settings.GameSettings;
 import carcassonne.view.util.ZoomConfig;
 
 /**
@@ -84,6 +87,22 @@ class ConcurrentTileImageScalerTest {
         checkImageProperties(image1);
         checkImageProperties(image2);
         assertSame(image1, image2, "Cached images should be the same instance!");
+    }
+
+    @ParameterizedTest(name = "fast scaling = {0}")
+    @ValueSource(booleans = {true, false})
+    void testGetScaledImage_OriginalResolutionReturnsOriginal(boolean fastScaling) {
+        Tile tile = validTiles.getFirst();
+
+        Image image1 = ConcurrentTileImageScaler.getScaledImage(tile, GameSettings.TILE_RESOLUTION, fastScaling);
+        Image image2 = ConcurrentTileImageScaler.getScaledImage(tile, GameSettings.TILE_RESOLUTION, !fastScaling);
+        CachedImage original = TileImageScalingCache.getCached(tile, GameSettings.TILE_RESOLUTION);
+
+        assertSame(image1, image2, "Original image should be returned regardless of the scaling mode!");
+        assertNotNull(original, "Original image should be cached!");
+        assertSame(image1, original.image(), "Original image should not be replaced by a scaled copy!");
+        assertFalse(original.isPreview(), "Original image should not be marked as preview!");
+        assertInstanceOf(BufferedImage.class, image1, "Original image should be the decoded image, not a lazy scaled copy!");
     }
 
     private static void checkImageProperties(Image image) {
