@@ -19,6 +19,8 @@ import carcassonne.view.util.GameMessage;
  */
 public class StatePlacing extends AbstractGameState {
 
+    private static final String INTERRUPTED_ERROR = "UI update interrupted:";
+
     /**
      * Constructor of the state.
      * @param stateMachine is the state machine managing this state.
@@ -111,7 +113,7 @@ public class StatePlacing extends AbstractGameState {
         } catch (InterruptedException exception) {
             exception.printStackTrace();
             Thread.currentThread().interrupt();
-            views.reroute(() -> GameMessage.showError("UI update interrupted:" + System.lineSeparator() + exception.getMessage()));
+            views.reroute(() -> GameMessage.showError(INTERRUPTED_ERROR + System.lineSeparator() + exception.getMessage()));
         }
     }
 
