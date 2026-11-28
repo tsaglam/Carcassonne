@@ -138,11 +138,14 @@ public class ViewFacade {
             jobCounter++;
         }
         EventQueue.invokeLater(() -> {
-            job.run();
-            synchronized (this) {
-                jobCounter--;
-                if (jobCounter == 0) {
-                    notifyAll();
+            try {
+                job.run();
+            } finally { // a failing job must not block the waiting thread forever
+                synchronized (this) {
+                    jobCounter--;
+                    if (jobCounter == 0) {
+                        notifyAll();
+                    }
                 }
             }
         });
