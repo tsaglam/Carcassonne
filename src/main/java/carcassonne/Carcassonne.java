@@ -24,10 +24,12 @@ public final class Carcassonne {
     private static final String METAL_PIPELINE_KEY = "sun.java2d.metal";
     private static final String FALSE = "false";
     private static final String VENDOR_KEY = "java.vendor";
+    private static final String EMPTY = "";
 
     /**
-     * Runtime vendors whose Metal rendering pipeline stalls the event dispatch thread on macOS. Add a vendor after
-     * confirming the stall.
+     * Runtime vendors whose Metal rendering pipeline stalls the user interface on macOS: the AppKit thread blocks in
+     * <code>CAMetalLayer nextDrawable</code> while holding the AWT lock, so the event dispatch thread waits. Add a vendor
+     * after confirming the stall.
      */
     private static final List<String> RUNTIME_VENDORS_WITH_METAL_STALL = List.of("Oracle Corporation", "Homebrew");
 
@@ -53,7 +55,7 @@ public final class Carcassonne {
      */
     private static void disableMetalOnMac() {
         if (System.getProperty(OS_NAME_KEY).startsWith(MAC) && System.getProperty(METAL_PIPELINE_KEY) == null
-                && RUNTIME_VENDORS_WITH_METAL_STALL.contains(System.getProperty(VENDOR_KEY))) {
+                && RUNTIME_VENDORS_WITH_METAL_STALL.contains(System.getProperty(VENDOR_KEY, EMPTY))) {
             System.setProperty(METAL_PIPELINE_KEY, FALSE);
         }
     }
