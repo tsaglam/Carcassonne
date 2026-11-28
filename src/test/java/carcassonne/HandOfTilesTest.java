@@ -20,6 +20,7 @@ public class HandOfTilesTest extends CarcassonneTest {
 
     private static final int STACK_SIZE = 3;
     private static final int MAXIMAL_TURNS = 20;
+    private static final int HUMAN_PLAYERS = 3;
 
     @Test
     @DisplayName("Dealing hands from a stack that is too small")
@@ -38,7 +39,10 @@ public class HandOfTilesTest extends CarcassonneTest {
     @Test
     @DisplayName("Playing out a round with players without tiles")
     void testPlayingOutSmallStack() {
-        startRoundWithSmallStack(3);
+        for (int player = 0; player < HUMAN_PLAYERS; player++) {
+            settings.setPlayerComputerControlled(false, player); // the stall only affects human players
+        }
+        startRoundWithSmallStack(HUMAN_PLAYERS);
 
         for (int turn = 0; turn < MAXIMAL_TURNS && game.getState() == StatePlacing.class; turn++) {
             game.skipTilePlacement();
