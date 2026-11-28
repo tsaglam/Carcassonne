@@ -90,6 +90,7 @@ public class MeepleView extends SecondaryView {
 
     /**
      * Computes the current placement options for the meepleButtons, without touching the buttons.
+     * @return the button updates for each grid direction.
      */
     private Map<GridDirection, PlacementButtonUpdate> computePlacementButtonUpdates() {
         Map<GridDirection, PlacementButtonUpdate> updates = new HashMap<>();
@@ -107,7 +108,8 @@ public class MeepleView extends SecondaryView {
     }
 
     /**
-     * Updates the meepleButtons to reflect the current placement options.
+     * Updates the meepleButtons to reflect the current placement options and shows the view.
+     * @param updates are the button updates for each grid direction.
      */
     private void applyPlacementButtonUpdates(Map<GridDirection, PlacementButtonUpdate> updates) {
         for (Map.Entry<GridDirection, PlacementButtonUpdate> entry : updates.entrySet()) {
