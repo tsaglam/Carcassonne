@@ -22,9 +22,9 @@ public final class Carcassonne {
     private static final String MAC = "Mac";
     private static final String OS_NAME_KEY = "os.name";
     private static final String METAL_PIPELINE_KEY = "sun.java2d.metal";
-    private static final String FALSE = "false";
+    private static final String METAL_DISABLED = "false";
     private static final String VENDOR_KEY = "java.vendor";
-    private static final String EMPTY = "";
+    private static final String UNKNOWN_VENDOR = "";
 
     /**
      * Runtime vendors whose Metal rendering pipeline stalls the user interface on macOS: the AppKit thread blocks in
@@ -55,8 +55,8 @@ public final class Carcassonne {
      */
     private static void disableMetalOnMac() {
         if (System.getProperty(OS_NAME_KEY).startsWith(MAC) && System.getProperty(METAL_PIPELINE_KEY) == null
-                && RUNTIME_VENDORS_WITH_METAL_STALL.contains(System.getProperty(VENDOR_KEY, EMPTY))) {
-            System.setProperty(METAL_PIPELINE_KEY, FALSE);
+                && RUNTIME_VENDORS_WITH_METAL_STALL.contains(System.getProperty(VENDOR_KEY, UNKNOWN_VENDOR))) {
+            System.setProperty(METAL_PIPELINE_KEY, METAL_DISABLED);
         }
     }
 
