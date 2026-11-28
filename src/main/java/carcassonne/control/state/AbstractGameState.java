@@ -121,7 +121,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
         highlightSurroundings(spot);
         for (int i = 0; i < round.getPlayerCount(); i++) {
             Player player = round.getPlayer(i);
-            while (player.hasSpaceInHand()) {
+            while (player.hasSpaceInHand() && !tileStack.isEmpty()) {
                 player.addTile(tileStack.drawTile());
             }
         }

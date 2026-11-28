@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The stack of tiles for a game.
@@ -112,9 +113,9 @@ public class TileStack {
 
     private void rotateRandomly() {
         for (Tile tile : tiles) {
-            for (int i = 0; i < Math.round(Math.random() * 4 - 0.5); i++) {
-                tile.rotateRight(); // Random orientation with equal chance for each orientation.
-            }
+            // Random orientation with equal chance for each orientation.
+            int rotations = ThreadLocalRandom.current().nextInt(TileRotation.values().length);
+            tile.rotateTo(TileRotation.values()[rotations]);
         }
     }
 }

@@ -124,6 +124,10 @@ public class StatePlacing extends AbstractGameState {
         updateStackSize();
         if (round.isOver()) {
             changeState(StateGameOver.class);
+        } else if (player.hasEmptyHand()) {
+            round.nextTurn(); // players without tiles are skipped
+            views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
+            changeState(StatePlacing.class);
         } else if (player.isComputerControlled()) {
             waitForUI();
             views.onMainView(it -> it.resetPlacementHighlight(player));
