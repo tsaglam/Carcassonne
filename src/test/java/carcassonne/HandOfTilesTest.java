@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import carcassonne.control.state.StateGameOver;
+import carcassonne.control.state.StatePlacing;
 import carcassonne.model.Player;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
@@ -16,21 +18,36 @@ import carcassonne.settings.GameSettings;
 public class HandOfTilesTest extends CarcassonneTest {
 
     private static final int STACK_SIZE = 3;
+    private static final int MAXIMAL_TURNS = 20;
 
     @Test
     @DisplayName("Dealing hands from a stack that is too small")
     void testDealingFromSmallStack() {
-        for (TileType type : TileType.validTiles()) {
-            settings.getTileDistribution().setQuantity(type, 0);
-        }
-        settings.getTileDistribution().setQuantity(TileType.Road, STACK_SIZE);
-        settings.setTilesPerPlayer(GameSettings.MAXIMAL_TILES_ON_HAND);
-
-        game.newRound(2, 5, 5);
+        startRoundWithSmallStack();
 
         for (int i = 0; i < game.getRound().getPlayerCount(); i++) {
             Player player = game.getRound().getPlayer(i);
             assertFalse(player.getHandOfTiles().contains(null), "Hand of player " + i + " contains null tiles: " + player.getHandOfTiles());
         }
+    }
+
+    @Test
+    @DisplayName("Playing out a round with players without tiles")
+    void testPlayingOutSmallStack() {
+        startRoundWithSmallStack();
+
+        for (int turn = 0; turn < MAXIMAL_TURNS && game.getState() == StatePlacing.class; turn++) {
+            game.skipTilePlacement();
+        }
+        assertState(StateGameOver.class);
+    }
+
+    private void startRoundWithSmallStack() {
+        for (TileType type : TileType.validTiles()) {
+            settings.getTileDistribution().setQuantity(type, 0);
+        }
+        settings.getTileDistribution().setQuantity(TileType.Road, STACK_SIZE);
+        settings.setTilesPerPlayer(GameSettings.MAXIMAL_TILES_ON_HAND);
+        game.newRound(2, 5, 5);
     }
 }
