@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import carcassonne.control.ControllerFacade;
@@ -24,7 +26,8 @@ import carcassonne.view.util.ThreadingUtil;
  */
 public class MeepleView extends SecondaryView {
     private static final long serialVersionUID = 1449264387665531286L;
-    private Map<GridDirection, JButton> meepleButtons;
+    private final Map<GridDirection, JButton> meepleButtons;
+    private final Map<TerrainType, ImageIcon> placementButtonIcons;
     private Color defaultButtonColor;
     private Tile tile;
 
@@ -35,6 +38,8 @@ public class MeepleView extends SecondaryView {
      */
     public MeepleView(ControllerFacade controller, MainView ui) {
         super(controller, ui);
+        meepleButtons = new HashMap<>();
+        placementButtonIcons = new ConcurrentHashMap<>();
         buildButtonSkip();
         buildButtonGrid();
         pack();
@@ -52,7 +57,7 @@ public class MeepleView extends SecondaryView {
         }
         this.tile = tile;
         setCurrentPlayer(currentPlayer);
-        ThreadingUtil.runAndCallback(this::updatePlacementButtons, this::showUI);
+        ThreadingUtil.runAndCallback(this::computePlacementButtonUpdates, this::applyPlacementButtonUpdates);
     }
 
     // build button grid
@@ -60,7 +65,6 @@ public class MeepleView extends SecondaryView {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = 1;
-        meepleButtons = new HashMap<>();
         int index = 0;
         for (GridDirection direction : GridDirection.byRow()) {
             JButton button = new PlacementButton(controller, direction);
@@ -85,25 +89,37 @@ public class MeepleView extends SecondaryView {
     }
 
     /**
-     * Updates the meepleButtons to reflect the current placement options.
+     * Computes the current placement options for the meepleButtons, without touching the buttons.
      */
-    private void updatePlacementButtons() {
+    private Map<GridDirection, PlacementButtonUpdate> computePlacementButtonUpdates() {
+        Map<GridDirection, PlacementButtonUpdate> updates = new HashMap<>();
         for (GridDirection direction : GridDirection.values()) {
             TerrainType terrain = tile.getTerrain(direction);
             boolean placeable = tile.hasMeepleSpot(direction) && controller.getSettings().getMeepleRule(terrain);
-            JButton button = meepleButtons.get(direction);
-            if (placeable) {
-                button.setIcon(ImageLoadingUtil.createHighDpiImageIcon(GameSettings.getMeeplePath(terrain, false)));
-            } else {
-                button.setIcon(ImageLoadingUtil.createHighDpiImageIcon(GameSettings.getMeeplePath(TerrainType.OTHER, false)));
-            }
-            if (placeable && tile.allowsPlacingMeeple(direction, currentPlayer, controller.getSettings())) {
-                button.setEnabled(true);
-                button.setBackground(defaultButtonColor);
-            } else {
-                button.setEnabled(false);
-                button.setBackground(currentPlayer.getColor().lightColor());
-            }
+            TerrainType iconTerrain = placeable ? terrain : TerrainType.OTHER;
+            ImageIcon icon = placementButtonIcons.computeIfAbsent(iconTerrain,
+                    it -> ImageLoadingUtil.createHighDpiImageIcon(GameSettings.getMeeplePath(it, false)));
+            boolean enabled = placeable && tile.allowsPlacingMeeple(direction, currentPlayer, controller.getSettings());
+            Color background = enabled ? defaultButtonColor : currentPlayer.getColor().lightColor();
+            updates.put(direction, new PlacementButtonUpdate(icon, enabled, background));
         }
+        return updates;
+    }
+
+    /**
+     * Updates the meepleButtons to reflect the current placement options.
+     */
+    private void applyPlacementButtonUpdates(Map<GridDirection, PlacementButtonUpdate> updates) {
+        for (Map.Entry<GridDirection, PlacementButtonUpdate> entry : updates.entrySet()) {
+            JButton button = meepleButtons.get(entry.getKey());
+            PlacementButtonUpdate update = entry.getValue();
+            button.setIcon(update.icon());
+            button.setEnabled(update.enabled());
+            button.setBackground(update.background());
+        }
+        showUI();
+    }
+
+    private record PlacementButtonUpdate(ImageIcon icon, boolean enabled, Color background) {
     }
 }
