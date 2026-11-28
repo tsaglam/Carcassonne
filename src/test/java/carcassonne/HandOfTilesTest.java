@@ -1,5 +1,6 @@
 package carcassonne;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.DisplayName;
@@ -25,10 +26,13 @@ public class HandOfTilesTest extends CarcassonneTest {
     void testDealingFromSmallStack() {
         startRoundWithSmallStack(2);
 
+        int dealtTiles = 0;
         for (int i = 0; i < game.getRound().getPlayerCount(); i++) {
             Player player = game.getRound().getPlayer(i);
             assertFalse(player.getHandOfTiles().contains(null), "Hand of player " + i + " contains null tiles: " + player.getHandOfTiles());
+            dealtTiles += player.getHandOfTiles().size();
         }
+        assertEquals(STACK_SIZE, dealtTiles);
     }
 
     @Test
