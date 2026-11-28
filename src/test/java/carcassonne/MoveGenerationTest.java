@@ -1,6 +1,5 @@
 package carcassonne;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
@@ -33,7 +32,8 @@ public class MoveGenerationTest extends CarcassonneTest {
         assertTrue(grid.getSpot(1, 0).isPlaceable(tile, settings.isAllowingEnclaves()));
 
         Collection<? extends AbstractCarcassonneMove> moves = grid.getPossibleMoves(tile, player, settings);
-        assertFalse(moves.isEmpty(), "No moves generated for " + tile.getType() + " although it can be placed on (1|0)");
+        boolean containsMove = moves.stream().anyMatch(it -> it.getX() == 1 && it.getY() == 0);
+        assertTrue(containsMove, "No move generated for " + tile.getType() + " although it can be placed on (1|0)");
     }
 
     @Test
