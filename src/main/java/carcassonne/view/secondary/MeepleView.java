@@ -2,6 +2,7 @@ package carcassonne.view.secondary;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -93,7 +94,7 @@ public class MeepleView extends SecondaryView {
      * @return the button updates for each grid direction.
      */
     private Map<GridDirection, PlacementButtonUpdate> computePlacementButtonUpdates() {
-        Map<GridDirection, PlacementButtonUpdate> updates = new HashMap<>();
+        Map<GridDirection, PlacementButtonUpdate> updates = new EnumMap<>(GridDirection.class);
         for (GridDirection direction : GridDirection.values()) {
             TerrainType terrain = tile.getTerrain(direction);
             boolean placeable = tile.hasMeepleSpot(direction) && controller.getSettings().getMeepleRule(terrain);
