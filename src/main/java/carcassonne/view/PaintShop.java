@@ -7,9 +7,7 @@ import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.ImageIcon;
@@ -17,13 +15,10 @@ import javax.swing.ImageIcon;
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.Tile;
-import carcassonne.model.tile.TileRotation;
-import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ConcurrentTileImageScaler;
 import carcassonne.util.FastImageScaler;
 import carcassonne.util.ImageLoadingUtil;
-import carcassonne.view.util.ThreadingUtil;
 
 /**
  * This is the Carcassonne paint shop! It paints meeple images and tile highlights! It is implemented as a utility class
@@ -71,24 +66,6 @@ public final class PaintShop {
      */
     public static void clearCachedImages() {
         cachedMeepleImages.clear();
-    }
-
-    /**
-     * Pre-warms the tile image cache by loading and scaling all tile types at full resolution. Should be called once at
-     * startup to avoid first-render lag.
-     */
-    public static void prewarm() {
-        ThreadingUtil.runInBackground(() -> TileType.validTiles().parallelStream().forEach(type -> {
-            Tile tile = new Tile(type);
-            Set<Integer> seen = new HashSet<>();
-            for (TileRotation rotation : TileRotation.values()) {
-                tile.rotateTo(rotation);
-                if (!seen.add(tile.getImageIndex())) {
-                    continue;
-                }
-                ConcurrentTileImageScaler.getScaledMultiResolutionImage(tile, GameSettings.TILE_RESOLUTION, false);
-            }
-        }));
     }
 
     /**
