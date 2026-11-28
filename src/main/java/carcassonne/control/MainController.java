@@ -9,7 +9,6 @@ import carcassonne.model.ai.RuleBasedAI;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
-import carcassonne.view.PaintShop;
 import carcassonne.view.ViewFacade;
 import carcassonne.view.main.MainView;
 import carcassonne.view.secondary.MeepleView;
@@ -115,10 +114,7 @@ public class MainController implements ControllerFacade {
      * Shows the main user interface.
      */
     public void startGame() {
-        EventQueue.invokeLater(() -> {
-            mainView.showUI();
-            PaintShop.prewarm();
-        });
+        EventQueue.invokeLater(() -> mainView.showUI());
     }
 
     /**
